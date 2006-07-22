@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "PTM\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PTMSetup", "PTMSetup\PTMSetup.vdproj", "{B269F1FD-B03A-4528-8980-12359AA03B6C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.ActiveCfg = Debug|.NET
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.Build.0 = Debug|.NET
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.ActiveCfg = Release|.NET
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.Build.0 = Release|.NET
+		{B269F1FD-B03A-4528-8980-12359AA03B6C}.Debug.ActiveCfg = Debug
+		{B269F1FD-B03A-4528-8980-12359AA03B6C}.Release.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		happy.JPG = happy.JPG
+		happyuser.ico = happyuser.ico
+		people.ico = people.ico
+		ptm.ico = ptm.ico
+		ptm.mdb = ptm.mdb
+		ptm2.ICO = ptm2.ICO
+		ptm3.ICO = ptm3.ICO
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
