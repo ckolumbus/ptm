@@ -92,7 +92,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\Archivos de programa\TestDriven.NET 2.0\NUnit\nunit.framework.dll"
+                    HintPath = "..\tools\NUnit\nunit.framework.dll"
                 />
             </References>
         </Build>
