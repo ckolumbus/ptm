@@ -1,7 +1,8 @@
 <?xml version="1.0" standalone="yes" ?>
 <xs:schema id="PTMDataset" targetNamespace="http://www.tempuri.org/PTMDataset.xsd" xmlns:mstns="http://www.tempuri.org/PTMDataset.xsd"
 	xmlns="http://www.tempuri.org/PTMDataset.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified">
+	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop"
+	attributeFormDefault="qualified" elementFormDefault="qualified">
 	<xs:element name="PTMDataset" msdata:IsDataSet="true">
 		<xs:complexType>
 			<xs:choice maxOccurs="unbounded">
@@ -19,7 +20,7 @@
 				<xs:element name="ApplicationsLog">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="Id" msdata:AutoIncrement="true" type="xs:int" />
+							<xs:element name="Id" msdata:AutoIncrement="false" type="xs:int" msprop:nullValue="_null" />
 							<xs:element name="ProcessId" type="xs:int" minOccurs="0" />
 							<xs:element name="TaskLogId" type="xs:int" minOccurs="0" />
 							<xs:element name="Name" type="xs:string" minOccurs="0" />
@@ -60,15 +61,15 @@
 			<xs:selector xpath=".//mstns:Tasks" />
 			<xs:field xpath="mstns:Id" />
 		</xs:unique>
-		<xs:keyref name="TasksTasks" refer="Constraint1" msdata:DeleteRule="Cascade">
+		<xs:keyref name="TasksTasks" refer="mstns:Constraint1" msdata:DeleteRule="Cascade">
 			<xs:selector xpath=".//mstns:Tasks" />
 			<xs:field xpath="mstns:ParentId" />
 		</xs:keyref>
-		<xs:keyref name="TasksLogApplicationsLog" refer="PTMDatasetKey2" msdata:DeleteRule="Cascade">
+		<xs:keyref name="TasksLogApplicationsLog" refer="mstns:PTMDatasetKey2" msdata:DeleteRule="Cascade">
 			<xs:selector xpath=".//mstns:ApplicationsLog" />
 			<xs:field xpath="mstns:TaskLogId" />
 		</xs:keyref>
-		<xs:keyref name="TasksTasksLog" refer="Constraint1" msdata:DeleteRule="Cascade">
+		<xs:keyref name="TasksTasksLog" refer="mstns:Constraint1" msdata:DeleteRule="Cascade">
 			<xs:selector xpath=".//mstns:TasksLog" />
 			<xs:field xpath="mstns:TaskId" />
 		</xs:keyref>

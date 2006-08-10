@@ -689,10 +689,10 @@ namespace PTM.Data {
                 this.Rows.Add(row);
             }
             
-            public ApplicationsLogRow AddApplicationsLogRow(int ProcessId, TasksLogRow parentTasksLogRowByTasksLogApplicationsLog, string Name, string Caption, string ApplicationFullPath, System.DateTime LastUpdateTime, int UserProcessorTime, int ActiveTime) {
+            public ApplicationsLogRow AddApplicationsLogRow(int Id, int ProcessId, TasksLogRow parentTasksLogRowByTasksLogApplicationsLog, string Name, string Caption, string ApplicationFullPath, System.DateTime LastUpdateTime, int UserProcessorTime, int ActiveTime) {
                 ApplicationsLogRow rowApplicationsLogRow = ((ApplicationsLogRow)(this.NewRow()));
                 rowApplicationsLogRow.ItemArray = new object[] {
-                        null,
+                        Id,
                         ProcessId,
                         parentTasksLogRowByTasksLogApplicationsLog[0],
                         Name,
@@ -757,7 +757,6 @@ namespace PTM.Data {
                 this.Columns.Add(this.columnActiveTime);
                 this.Constraints.Add(new UniqueConstraint("PTMDatasetKey4", new DataColumn[] {
                                 this.columnId}, true));
-                this.columnId.AutoIncrement = true;
                 this.columnId.AllowDBNull = false;
                 this.columnId.Unique = true;
             }
