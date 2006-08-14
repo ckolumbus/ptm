@@ -27,7 +27,6 @@ namespace PTM.Test.Business
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.AreEqual(1, UnitOfWork.PtmDataset.Tasks.Count);
 			Assert.IsTrue(DefaultTasks.DefaultTasksDataTable.Count>0);
 		}
 

@@ -60,7 +60,9 @@ namespace PTM.Data
 			userNameData = userName;
 			string dataSource = GetDataSource();
 			connectionString = this.desingOleDbConnection.ConnectionString.Replace(this.desingOleDbConnection.DataSource, dataSource);
-			this.productionOleDbConnection = new OleDbConnection(connectionString);
+			this.productionOleDbConnection = this.desingOleDbConnection;
+			//this.productionOleDbConnection = new OleDbConnection(connectionString);
+			this.productionOleDbConnection.ConnectionString = connectionString;
 			
 //			connections = new OleDbConnection[3]{new OleDbConnection(connectionString), new OleDbConnection(connectionString), new OleDbConnection(connectionString)};
 //			this.tasksDataAdapter.SelectCommand.Connection = connections[0];
@@ -124,16 +126,6 @@ namespace PTM.Data
 			{
 				if (components != null)
 					components.Dispose();
-				
-				this.productionOleDbConnection.Close();
-				this.productionOleDbConnection.Dispose();
-
-//				foreach (OleDbConnection connection in connections)
-//				{
-//					connection.Close();
-//					connection.Dispose();
-//				}
-
 			}
 			base.Dispose(disposing);
 		}
@@ -545,14 +537,6 @@ namespace PTM.Data
 		{
 			base.OnPaint(e);
 		}
-
-//		public int LastId
-//		{
-//			get { return lastId; }
-//			set { lastId = value; }
-//		}
-
-//		private int lastId;
 
 		private void tasksLogDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
 		{
