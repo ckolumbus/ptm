@@ -34,6 +34,7 @@ namespace PTM
 		private StatisticsControl statisticsControl;
 		private MenuItem menuItem2;
 		private MenuItem aboutMenuItem;
+		private System.Windows.Forms.MenuItem menuItem3;
 		private IContainer components;
 
 		public MainForm()
@@ -113,6 +114,7 @@ namespace PTM
 			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
 			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
@@ -132,19 +134,20 @@ namespace PTM
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.exitMenuItem,
-																											 this.saveMenuItem});
+																											 this.saveMenuItem,
+																											 this.menuItem3,
+																											 this.exitMenuItem});
 			this.menuItem1.Text = "File";
 			// 
 			// exitMenuItem
 			// 
-			this.exitMenuItem.Index = 0;
-			this.exitMenuItem.Text = "Exit";
+			this.exitMenuItem.Index = 2;
+			this.exitMenuItem.Text = "&Exit People Task Manager";
 			this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
 			// 
 			// saveMenuItem
 			// 
-			this.saveMenuItem.Index = 1;
+			this.saveMenuItem.Index = 0;
 			this.saveMenuItem.Text = "Save";
 			this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
 			// 
@@ -256,6 +259,13 @@ namespace PTM
 			this.statisticsControl.Name = "statisticsControl";
 			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 1;
+			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F3;
+			this.menuItem3.Text = "Explore &Tasks...";
+			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
 			// 
 			// MainForm
 			// 
@@ -401,6 +411,8 @@ namespace PTM
 		{
 			UnitOfWork.Update();
 		}
+		
+		
 		#region MainMenu
 
 		private void exitMenuItem_Click(object sender, EventArgs e)
@@ -421,7 +433,15 @@ namespace PTM
 			about.ShowDialog(this);
 		}
 		
+		
+		private void menuItem3_Click(object sender, System.EventArgs e)
+		{
+			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
+			taskHForm.ShowDialog(this);
+		}
+
 		#endregion
+
 
 	}
 }

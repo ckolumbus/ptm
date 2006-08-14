@@ -49,6 +49,8 @@ namespace PTM.Data
 		private Container components = null;
 
 		private string userNameData;
+		private string connectionString;
+		//private OleDbConnection[] connections;
 
 		public DataAdapterManager(string userName)
 		{
@@ -57,12 +59,26 @@ namespace PTM.Data
 
 			userNameData = userName;
 			string dataSource = GetDataSource();
-
-			this.productionOleDbConnection = this.desingOleDbConnection;
-			this.productionOleDbConnection.ConnectionString = this.productionOleDbConnection.ConnectionString.Replace(this.productionOleDbConnection.DataSource, dataSource);
+			connectionString = this.desingOleDbConnection.ConnectionString.Replace(this.desingOleDbConnection.DataSource, dataSource);
+			this.productionOleDbConnection = new OleDbConnection(connectionString);
+			
+//			connections = new OleDbConnection[3]{new OleDbConnection(connectionString), new OleDbConnection(connectionString), new OleDbConnection(connectionString)};
+//			this.tasksDataAdapter.SelectCommand.Connection = connections[0];
+//			this.tasksDataAdapter.UpdateCommand.Connection = connections[0];
+//			this.tasksDataAdapter.DeleteCommand.Connection = connections[0];
+//			this.tasksDataAdapter.InsertCommand.Connection = connections[0];
+//			
+//			this.tasksLogDataAdapter.SelectCommand.Connection = connections[1];
+//			this.tasksLogDataAdapter.UpdateCommand.Connection = connections[1];
+//			this.tasksLogDataAdapter.DeleteCommand.Connection = connections[1];
+//			this.tasksLogDataAdapter.InsertCommand.Connection = connections[1];
+//			
+//			this.applicationsLogDataAdapter.SelectCommand.Connection = connections[2];
+//			this.applicationsLogDataAdapter.UpdateCommand.Connection = connections[2];
+//			this.applicationsLogDataAdapter.DeleteCommand.Connection = connections[2];
+//			this.applicationsLogDataAdapter.InsertCommand.Connection = connections[2];	
 			
 		}
-
 
 		private string GetDataSource()
 		{
@@ -108,6 +124,16 @@ namespace PTM.Data
 			{
 				if (components != null)
 					components.Dispose();
+				
+				this.productionOleDbConnection.Close();
+				this.productionOleDbConnection.Dispose();
+
+//				foreach (OleDbConnection connection in connections)
+//				{
+//					connection.Close();
+//					connection.Dispose();
+//				}
+
 			}
 			base.Dispose(disposing);
 		}
@@ -456,7 +482,7 @@ namespace PTM.Data
 																																																																									new System.Data.Common.DataColumnMapping("KeyValue", "KeyValue"),
 																																																																									new System.Data.Common.DataColumnMapping("ListValue", "ListValue")})});
 			this.configurationDataAdapter.UpdateCommand = this.oleDbUpdateCommand6;
-			this.configurationDataAdapter.RowUpdated += new System.Data.OleDb.OleDbRowUpdatedEventHandler(this.configurationDataAdapter_RowUpdated_1);
+			this.configurationDataAdapter.RowUpdated += new System.Data.OleDb.OleDbRowUpdatedEventHandler(this.configurationDataAdapter_RowUpdated);
 			// 
 			// oleDbDeleteCommand6
 			// 
@@ -530,21 +556,20 @@ namespace PTM.Data
 
 		private void tasksLogDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
 		{
-			int lastId = -1;
-			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", this.productionOleDbConnection);
+			int lastId;
+			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", e.Command.Connection);
 
 			if (e.StatementType == StatementType.Insert)
 			{
 				lastId = (int)idCMD.ExecuteScalar();
 				e.Row["Id"] = lastId;
 			}
-
 		}
 
 		private void applicationsLogDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
 		{
-			int lastId = -1;
-			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", this.productionOleDbConnection);
+			int lastId;
+			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", e.Command.Connection);
 
 			if (e.StatementType == StatementType.Insert)
 			{
@@ -556,21 +581,23 @@ namespace PTM.Data
 
 		private void tasksDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
 		{
-			int lastId=-1;
-			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", this.productionOleDbConnection);
-
-			if (e.StatementType == StatementType.Insert)
+			lock(e.Command.Connection)
 			{
-				lastId = (int)idCMD.ExecuteScalar();
-				e.Row["Id"] = lastId;
-			}
+				int lastId;
+				OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", e.Command.Connection);
 
+				if (e.StatementType == StatementType.Insert)
+				{
+					lastId = (int)idCMD.ExecuteScalar();
+					e.Row["Id"] = lastId;
+				}
+			}
 		}
 
-		private void configurationDataAdapter_RowUpdated_1(object sender, OleDbRowUpdatedEventArgs e)
+		private void configurationDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
 		{
-			int lastId=-1;
-			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", this.productionOleDbConnection);
+			int lastId;
+			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", e.Command.Connection);
 
 			if (e.StatementType == StatementType.Insert)
 			{
@@ -579,6 +606,5 @@ namespace PTM.Data
 			}
 		}
 
-		
 	}
 }

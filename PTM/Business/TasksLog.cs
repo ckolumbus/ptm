@@ -68,16 +68,6 @@ namespace PTM.Business
 		{
 			PTMDataset.TasksLogRow row;
 			row = taskLogsTable.FindById(tasksLogRow.Id);
-//			if(row == null)
-//			{
-//				
-//				tasksLogAdapter.SelectCommand = new OleDbCommand("SELECT * FROM TasksLog WHERE " + taskLogsTable.IdColumn.ColumnName + " = " +
-//				                                tasksLogRow.Id, tasksLogAdapter.SelectCommand.Connection);
-//				
-//				tasksLogAdapter.Fill(taskLogsTable);
-//				row = taskLogsTable.FindById(tasksLogRow.Id);
-//				SaveTasksLogs();
-//			}
 			row.ItemArray = tasksLogRow.ItemArray;
 
 			if(TasksLogRowChanged!=null)

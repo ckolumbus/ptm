@@ -12,20 +12,20 @@ namespace PTM.View.Forms
 		private Panel panel1;
 		private Timer timer;
 		private IContainer components;
-		public const int WAIT_TIME = 350;
+		public const int WAIT_TIME = 10;
 		private int waitCount = 0;
 		private Label currentTaskLabel;
 		private Label label1;
 		private Button yesButton;
 		private Button noButton;
 
-		private enum Status
-		{
-			Init,
-			Asking,
-			Closing,
-			Close
-		}
+//		private enum Status
+//		{
+//			Init,
+//			Asking,
+//			Closing,
+//			Close
+//		}
 
 		public enum NotifyResult
 		{
@@ -35,7 +35,7 @@ namespace PTM.View.Forms
 			Cancel
 		}
 
-		private Status status;
+		//private Status status;
 
 		public NotifyForm(string currentTask)
 		{
@@ -148,7 +148,6 @@ namespace PTM.View.Forms
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "NotifyForm";
-			this.Opacity = 0;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "NotifyForm";
@@ -168,27 +167,34 @@ namespace PTM.View.Forms
 
 		private void timer_Tick(object sender, EventArgs e)
 		{
-			if (status == Status.Init)
-			{
-				this.Opacity += 0.5;
-				if (this.Opacity >= 1)
-					status = Status.Asking;
-			}
-			else if (status == Status.Asking)
-			{
-				this.waitCount ++;
-				if (this.waitCount >= NotifyForm.WAIT_TIME)
-					status = Status.Closing;
-			}
-			else if (status == Status.Closing)
-			{
-				this.Opacity -= 0.5;
-				if (this.Opacity <= 0.00)
-				{
-					status = Status.Close;
-				}
-			}
-			else if (status == Status.Close)
+//			if (status == Status.Init)
+//			{
+//				this.Opacity += 0.5;
+//				if (this.Opacity >= 1)
+//					status = Status.Asking;
+//			}
+//			else if (status == Status.Asking)
+//			{
+//				this.waitCount ++;
+//				if (this.waitCount >= NotifyForm.WAIT_TIME)
+//					status = Status.Closing;
+//			}
+//			else if (status == Status.Closing)
+//			{
+//				this.Opacity -= 0.5;
+//				if (this.Opacity <= 0.00)
+//				{
+//					status = Status.Close;
+//				}
+//			}
+//			else if (status == Status.Close)
+//			{
+//				this.timer.Stop();
+//				this.Close();
+//			}
+			
+			this.waitCount ++;
+			if (this.waitCount >= NotifyForm.WAIT_TIME)
 			{
 				this.timer.Stop();
 				this.Close();
@@ -202,7 +208,7 @@ namespace PTM.View.Forms
 			this.Left = screenWidth - this.Width;
 			this.Top = screenHeight - this.Height;
 			this.timer.Start();
-			this.status = Status.Init;
+			//this.status = Status.Init;
 		}
 
 		private void noButton_Click(object sender, EventArgs e)

@@ -99,8 +99,6 @@ namespace PTM.Business
 					else
 						row = rows[0];
 
-					applicationsLogTable.BeginLoadData();
-					row.BeginEdit();
 					row.TaskLogId = TasksLog.CurrentTaskLog.Id;
 					row.ProcessId = currentProcess.Id;
 					row.Name = currentProcess.MainModule.ModuleName;
@@ -121,10 +119,8 @@ namespace PTM.Business
 
 					if (row.RowState == DataRowState.Detached)
 						applicationsLogTable.AddApplicationsLogRow(row);
-					row.EndEdit();
-					applicationsLogTable.EndLoadData();
+
 					lastProcess = currentProcess;
-					//return row;
 					return;
 				}
 			}

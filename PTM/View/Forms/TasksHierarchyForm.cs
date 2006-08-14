@@ -141,8 +141,11 @@ namespace PTM.View.Forms
 			this.button1.Text = "Save As...";
 			this.button1.Visible = false;
 			// 
-			// tasksTreeViewControl1
+			// tasksTreeViewControl
 			// 
+			this.tasksTreeViewControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.tasksTreeViewControl.Location = new System.Drawing.Point(8, 32);
 			this.tasksTreeViewControl.Name = "tasksTreeViewControl";
 			this.tasksTreeViewControl.Size = new System.Drawing.Size(248, 280);
