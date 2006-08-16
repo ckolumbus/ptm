@@ -63,7 +63,7 @@ namespace PTM.View.Controls
 			addTaskButton.Click+=new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick+=new EventHandler(taskList_DoubleClick);
 			//tasksLogTimer.Elapsed+=new ElapsedEventHandler(tasksLogTimer_Elapsed);
-			//TasksLogHelper.TaskLogTimer.Elapsed+=new ElapsedEventHandler(timer_Elapsed);
+			//TasksLogHelper.TaskLogTimer.TasksLogDurationCountElapsed+=new ElapsedEventHandler(timer_Elapsed);
 
 			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);

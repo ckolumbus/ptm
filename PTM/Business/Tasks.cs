@@ -15,7 +15,7 @@ namespace PTM.Business
 		private static PTMDataset.TasksDataTable tasksDataTable;
 		private static PTMDataset.TasksDataTable tasksDataTableInstance;
 		private static PTMDataset.TasksRow currentTaskRow;
-		private static PTMDataset.TasksRow rootTaskRow = null;
+		private static PTMDataset.TasksRow rootTaskRow;
 		private const string DEFAULT_ROOT_TASK_NAME = "My Job";
 
 		private Tasks()
@@ -47,6 +47,7 @@ namespace PTM.Business
 		#region Public Methods
 		internal static void Initialize(PTMDataset.TasksDataTable table, DbDataAdapter adapter)
 		{
+			rootTaskRow = null;
 			dataAdapter = adapter;
 			tasksDataTable = table;
 			tasksDataTableInstance = new PTMDataset.TasksDataTable();
@@ -136,7 +137,7 @@ namespace PTM.Business
 			if(TasksRowDeleting!=null)
 				TasksRowDeleting(null, new PTMDataset.TasksRowChangeEvent(tasksRow, DataRowAction.Delete));
 		}
-		internal static PTMDataset.TasksRow[] GetChildTasks(PTMDataset.TasksRow tasksRow)
+		public static PTMDataset.TasksRow[] GetChildTasks(PTMDataset.TasksRow tasksRow)
 		{
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
@@ -150,7 +151,7 @@ namespace PTM.Business
 			return new PTMDataset.TasksRow[] {};
 		}
 
-		internal static string GetFullPath(PTMDataset.TasksRow row)
+		public static string GetFullPath(PTMDataset.TasksRow row)
 		{
 			ArrayList parents = new ArrayList();
 			PTMDataset.TasksRow curRow = row;

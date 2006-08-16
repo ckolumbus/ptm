@@ -340,7 +340,7 @@ namespace PTM.View.Controls
 				ClearContent();
 			UnitOfWork.Update();
 	
-				appsSummaryDataset = SummaryHelper.GetApplicationsSummary(
+				appsSummaryDataset = Summary.GetApplicationsSummary(
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue), 
 					dateTimePicker.Value.Date, dateTimePicker.Value.Date.AddDays(1));
 				int appActiveTime = 0;

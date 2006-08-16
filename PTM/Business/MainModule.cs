@@ -31,7 +31,7 @@ namespace PTM.Business
 			Tasks.Initialize(ds.Tasks, adapterManager.tasksDataAdapter);
 			TasksLog.Initialize(ds.TasksLog, adapterManager.tasksLogDataAdapter);
 			ApplicationsLog.Initialize(ds.ApplicationsLog, adapterManager.applicationsLogDataAdapter);
-			SummaryHelper.Initialize(adapterManager.taskSumaryDataAdapter, adapterManager.applicationsSummaryDataAdapter);
+			Summary.Initialize(adapterManager.taskSumaryDataAdapter, adapterManager.applicationsSummaryDataAdapter);
 		}
 	
 		

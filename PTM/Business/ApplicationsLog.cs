@@ -186,8 +186,6 @@ namespace PTM.Business
 				ApplicationsLogRowChanged(sender, e);
 		}
 
-		#endregion
-
 		private static void TasksLog_TasksLogRowChanged(object sender, PTM.Data.PTMDataset.TasksLogRowChangeEvent e)
 		{
 			if(e.Action == DataRowAction.Add)
@@ -208,5 +206,8 @@ namespace PTM.Business
 			applicationsTimer.Stop();
 			SaveApplicationsLog();
 		}
+		#endregion
+
+
 	}
 }

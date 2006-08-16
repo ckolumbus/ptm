@@ -76,7 +76,7 @@ namespace PTM.View.Controls
 			this.dateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 			
-			TasksLog.Elapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			TasksLog.TasksLogDurationCountElapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
 		}
 
 		/// <summary> 
@@ -296,7 +296,7 @@ namespace PTM.View.Controls
 //			{
 				Clear();
 			UnitOfWork.Update();
-				SummaryDataset.TasksSummaryDataTable summaryDataTable = SummaryHelper.GetTaskSummary( 
+				SummaryDataset.TasksSummaryDataTable summaryDataTable = Summary.GetTaskSummary( 
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue),
 					dateTimePicker.Value.Date, dateTimePicker.Value.Date.AddDays(1));
 				

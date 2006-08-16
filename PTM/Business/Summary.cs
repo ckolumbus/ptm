@@ -7,15 +7,13 @@ using PTM.Data;
 namespace PTM.Business
 {
 	/// <summary>
-	/// Summary description for SummaryHelper.
+	/// Summary description for Summary.
 	/// </summary>
-	internal sealed class SummaryHelper
+	internal sealed class Summary
 	{
-		private SummaryHelper()
+		private Summary()
 		{
 		}
-
-		//private static SummaryDataset summaryDataset = new SummaryDataset();
 
 		private const string NOT_DETAILED = "Not Detailed";
 		private static SummaryDataset.ApplicationsSummaryDataTable applicationsSummary = null;

@@ -26,7 +26,7 @@ namespace PTM.View.Controls
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			//applicationsTimer.Elapsed+=new ElapsedEventHandler(applicationsTimer_Elapsed);
+			//applicationsTimer.TasksLogDurationCountElapsed+=new ElapsedEventHandler(applicationsTimer_Elapsed);
 			ApplicationsLog.ApplicationsLogRowChanged+=new PTMDataset.ApplicationsLogRowChangeEventHandler(ApplicationsLogTable_ApplicationsLogRowChanged);
 			applicationsList.SmallImageList = IconsManager.IconsList;
 		}

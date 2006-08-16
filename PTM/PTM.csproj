@@ -143,7 +143,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Business\SummaryHelper.cs"
+                    RelPath = "Business\Summary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -30,7 +30,7 @@ namespace PTM.Business
 		#endregion
 
 		#region Public Methods
-		internal static void Initialize(PTMDataset.TasksLogDataTable dataTable, OleDbDataAdapter adapter)
+		public static void Initialize(PTMDataset.TasksLogDataTable dataTable, OleDbDataAdapter adapter)
 		{
 			tasksLogAdapter = adapter;
 			taskLogsTable = dataTable;
@@ -117,7 +117,7 @@ namespace PTM.Business
 
 		#region Events
 		public static event PTMDataset.TasksLogRowChangeEventHandler TasksLogRowChanged;
-		public static event ElapsedEventHandler Elapsed;
+		public static event ElapsedEventHandler TasksLogDurationCountElapsed;
 		public static event System.EventHandler AfterStartLogging;
 		public static event System.EventHandler AfterStopLogging;
 		private static void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -132,8 +132,8 @@ namespace PTM.Business
 			{
 				TasksLogRowChanged(null, new PTMDataset.TasksLogRowChangeEvent(CloneRow(currentTaskLog), DataRowAction.Change));
 			}
-			if(Elapsed!=null)
-				Elapsed(sender, e);
+			if(TasksLogDurationCountElapsed!=null)
+				TasksLogDurationCountElapsed(sender, e);
 		}
 
 		#endregion
