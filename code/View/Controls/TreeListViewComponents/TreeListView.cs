@@ -1065,12 +1065,13 @@ namespace PTM.View.Controls.TreeListViewComponents
 			private void CustomDraw(ref Message m)
 			{
 				int iRow, iCol; bool bSelected;
-				unsafe
-				{
-					try
-					{
-						APIsStructs.NMLVCUSTOMDRAW * nmlvcd = (APIsStructs.NMLVCUSTOMDRAW *)m.LParam.ToPointer();
-						switch((APIsEnums.CustomDrawDrawStateFlags)nmlvcd->nmcd.dwDrawStage)
+//				unsafe
+//				{
+						//Changed from original code, for not to use unsafe code.
+						//APIsStructs.NMLVCUSTOMDRAW * nmlvcd = (APIsStructs.NMLVCUSTOMDRAW *)m.LParam.ToPointer();
+						APIsStructs.NMLVCUSTOMDRAW nmlvcd = (APIsStructs.NMLVCUSTOMDRAW)Marshal.PtrToStructure(m.LParam, typeof(APIsStructs.NMLVCUSTOMDRAW));
+						
+						switch((APIsEnums.CustomDrawDrawStateFlags)nmlvcd.nmcd.dwDrawStage)
 						{
 							case APIsEnums.CustomDrawDrawStateFlags.PREPAINT:
 								m.Result = (IntPtr)APIsEnums.CustomDrawReturnFlags.NOTIFYITEMDRAW;
@@ -1080,8 +1081,8 @@ namespace PTM.View.Controls.TreeListViewComponents
 								break;
 							case APIsEnums.CustomDrawDrawStateFlags.ITEMPREPAINT |
 								APIsEnums.CustomDrawDrawStateFlags.SUBITEM:
-								iRow = (int)nmlvcd->nmcd.dwItemSpec;
-								iCol = (int)nmlvcd->iSubItem;
+								iRow = (int)nmlvcd.nmcd.dwItemSpec;
+								iCol = (int)nmlvcd.iSubItem;
 								bSelected = base.Items[iRow].Selected;// && this.Focused;
 								TreeListViewItem item = GetTreeListViewItemFromIndex(iRow);
 								if(bSelected && _useXPHighLightStyle)
@@ -1089,8 +1090,9 @@ namespace PTM.View.Controls.TreeListViewComponents
 									Color color = Focused ? ColorUtil.VSNetSelectionColor : ColorUtil.VSNetSelectionUnfocusedColor;
 									if(HideSelection && !Focused) color = BackColor;
 									if(FullRowSelect || iCol == 0)
-										nmlvcd->clrTextBk = (int)ColorUtil.RGB(color.R, color.G, color.B);
-									nmlvcd->nmcd.uItemState &= ~(uint)APIsEnums.CustomDrawItemStateFlags.SELECTED;
+										nmlvcd.clrTextBk = (int)ColorUtil.RGB(color.R, color.G, color.B);
+									nmlvcd.nmcd.uItemState &= ~(uint)APIsEnums.CustomDrawItemStateFlags.SELECTED;
+									Marshal.StructureToPtr(nmlvcd, m.LParam, true);
 									if(iCol == 0) item.DrawFocusCues();
 								}
 								if(iCol == 0)
@@ -1102,9 +1104,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 								m.Result = (IntPtr)APIsEnums.CustomDrawReturnFlags.NEWFONT;
 								break;
 						}
-					}
-					catch{}
-				}
+				//}
 			}
 			#endregion
 			#region Draw Items Parts

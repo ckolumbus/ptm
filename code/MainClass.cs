@@ -106,8 +106,8 @@ namespace PTM
 			SplashForm splash = new SplashForm();
 			splash.Show();
 			splash.Refresh();
-			Application.EnableVisualStyles();
-			Application.DoEvents();
+			//Application.EnableVisualStyles();
+			//Application.DoEvents();
 			MainModule.Initialize(new PTMDataset(), ConfigurationSettings.AppSettings["UserName"]);
 			MainForm main = new MainForm();
 			splash.Close();

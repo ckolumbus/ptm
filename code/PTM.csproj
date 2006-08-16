@@ -17,14 +17,14 @@
                 DelaySign = "false"
                 OutputType = "WinExe"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(SolutionDir)database\ptm.mdb $(TargetDir)"
+                PostBuildEvent = "copy $(SolutionDir)database\ptm.mdb $(TargetDir)&#xd;&#xa;copy $(ProjectDir)app.manifest $(TargetDir)&#xd;&#xa;$(SolutionDir)tools\thememe\thememe.exe ptm.exe app.manifest"
                 RootNamespace = "PTM"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = "PTM.MainClass"
             >
                 <Config
                     Name = "Debug"
-                    AllowUnsafeBlocks = "true"
+                    AllowUnsafeBlocks = "false"
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
@@ -101,6 +101,10 @@
                 <File
                     RelPath = "App.config"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "app.manifest"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"

@@ -280,6 +280,7 @@ namespace PTM.View.Controls
 																											  this.DateTaskHeader,
 																											  this.TaskLogIdHeader,
 																											  this.TaskIdHeader});
+			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 8);
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(392, 264);
