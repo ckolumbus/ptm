@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "..\ptm3.ICO"
+                ApplicationIcon = "..\art\ptm3.ICO"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "PTM"
                 AssemblyOriginatorKeyFile = ""
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "WinExe"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(SolutionDir)ptm.mdb $(TargetDir)"
+                PostBuildEvent = "copy $(SolutionDir)database\ptm.mdb $(TargetDir)"
                 RootNamespace = "PTM"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = "PTM.MainClass"
@@ -275,11 +275,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "View\API\APIsClipboard.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "View\API\APIsComctl32.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -295,21 +290,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "View\API\APIsMenu.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsShell.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsShlwapi.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "View\API\APIsStructs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -320,27 +300,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "View\API\APIsUxTheme.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsWndProc.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "View\API\ColorUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\COMInterfaces.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\TextUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

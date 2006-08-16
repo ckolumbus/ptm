@@ -64,22 +64,6 @@ namespace PTM.Data
 			//this.productionOleDbConnection = new OleDbConnection(connectionString);
 			this.productionOleDbConnection.ConnectionString = connectionString;
 			
-//			connections = new OleDbConnection[3]{new OleDbConnection(connectionString), new OleDbConnection(connectionString), new OleDbConnection(connectionString)};
-//			this.tasksDataAdapter.SelectCommand.Connection = connections[0];
-//			this.tasksDataAdapter.UpdateCommand.Connection = connections[0];
-//			this.tasksDataAdapter.DeleteCommand.Connection = connections[0];
-//			this.tasksDataAdapter.InsertCommand.Connection = connections[0];
-//			
-//			this.tasksLogDataAdapter.SelectCommand.Connection = connections[1];
-//			this.tasksLogDataAdapter.UpdateCommand.Connection = connections[1];
-//			this.tasksLogDataAdapter.DeleteCommand.Connection = connections[1];
-//			this.tasksLogDataAdapter.InsertCommand.Connection = connections[1];
-//			
-//			this.applicationsLogDataAdapter.SelectCommand.Connection = connections[2];
-//			this.applicationsLogDataAdapter.UpdateCommand.Connection = connections[2];
-//			this.applicationsLogDataAdapter.DeleteCommand.Connection = connections[2];
-//			this.applicationsLogDataAdapter.InsertCommand.Connection = connections[2];	
-			
 		}
 
 		private string GetDataSource()

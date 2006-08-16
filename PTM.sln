@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "PTM\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -15,13 +15,7 @@ Global
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		happy.JPG = happy.JPG
-		happyuser.ico = happyuser.ico
-		people.ico = people.ico
-		ptm.ico = ptm.ico
-		ptm.mdb = ptm.mdb
-		ptm2.ICO = ptm2.ICO
-		ptm3.ICO = ptm3.ICO
+		database\ptm.mdb = database\ptm.mdb
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
