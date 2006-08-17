@@ -62,9 +62,7 @@ namespace PTM.Test.Business
 			int id = Tasks.AddTasksRow(taskrow);
 
 			PTMDataset.TasksLogRow row;
-			row = TasksLog.NewTasksLogRow();
-			row.TaskId = id;
-			row.Id = TasksLog.AddTasksLogRow(row);
+			row = TasksLog.AddTasksLog(id);
 			Assert.AreEqual(id, Tasks.CurrentTaskRow.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowAddedCount);
 
@@ -91,33 +89,59 @@ namespace PTM.Test.Business
 			taskrow2.Id = Tasks.AddTasksRow(taskrow2);
 
 			PTMDataset.TasksLogRow row;
-			row = TasksLog.NewTasksLogRow();
-			row.TaskId = taskrow1.Id;
-			row.Id = TasksLog.AddTasksLogRow(row);
+			row = TasksLog.AddTasksLog(taskrow1.Id);
 			
 			row.TaskId = taskrow2.Id;
-			TasksLog.UpdateTaskLog(row);
+			TasksLog.UpdateTaskLog(row.Id, row.TaskId);
 			
 			Assert.AreEqual(taskrow2.Id, Tasks.CurrentTaskRow.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowUpdatedCount);
 		}
 
 		[Test]
+		public void DeleteTaskLogTest()
+		{
+			PTMDataset.TasksRow taskrow1;
+			taskrow1 = Tasks.NewTasksRow();
+			taskrow1.Description = "TaskTest1";
+			taskrow1.ParentId = Tasks.RootTasksRow.Id;
+			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
+			
+			PTMDataset.TasksLogRow row1;
+			row1 = TasksLog.AddTasksLog(taskrow1.Id);
+			
+			TasksLog.DeleteTaskLog(row1.Id);
+			PTMDataset.TasksLogRow deletedRow;
+			deletedRow = TasksLog.FindById(row1.Id);
+			PTMDataset.TasksRow idleTaskRow;
+			idleTaskRow = Tasks.FindById(deletedRow.TaskId);
+			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
+			Assert.AreEqual((int)DefaultTask.Idle, idleTaskRow.DefaultTaskId);
+			
+			TasksLog.UpdateTaskLog(row1.Id, row1.TaskId);
+			PTMDataset.TasksLogRow updatedRow;
+			updatedRow = TasksLog.FindById(row1.Id);
+			Assert.AreEqual(taskrow1.Id, updatedRow.TaskId);
+			
+			TasksLog.DeleteTaskLog(row1.Id);
+			deletedRow = TasksLog.FindById(row1.Id);
+			idleTaskRow = Tasks.FindById(deletedRow.TaskId);
+			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
+			Assert.AreEqual((int)DefaultTask.Idle, idleTaskRow.DefaultTaskId);
+			
+		}
+		[Test]
 		public void LoogingTest()
 		{
 			TasksLog.StartLogging();
 			
 			PTMDataset.TasksLogRow row1;
-			row1 = TasksLog.NewTasksLogRow();
-			row1.TaskId = Tasks.RootTasksRow.Id;
-			row1.Id = TasksLog.AddTasksLogRow(row1);
+			row1 = TasksLog.AddTasksLog(Tasks.RootTasksRow.Id);
 			
 			Thread.Sleep(3000);
 			
 			PTMDataset.TasksLogRow row2;
-			row2 = TasksLog.NewTasksLogRow();
-			row2.TaskId = Tasks.RootTasksRow.Id;
-			row2.Id = TasksLog.AddTasksLogRow(row2);
+			row2 = TasksLog.AddTasksLog(Tasks.RootTasksRow.Id);
 			
 			Thread.Sleep(2000);
 			

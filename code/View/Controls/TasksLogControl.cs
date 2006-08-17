@@ -46,8 +46,8 @@ namespace PTM.View.Controls
 		private ColumnHeader Time;
 		private ColumnHeader Duration;
 		private ColumnHeader Id;
-		private System.Windows.Forms.Button endTaskButton;
 		private System.Windows.Forms.Button switchToButton;
+		private System.Windows.Forms.Button deleteButton;
 		private ColumnHeader Id2;
 
 		public TasksLogControl()
@@ -124,7 +124,7 @@ namespace PTM.View.Controls
 			this.Id = new System.Windows.Forms.ColumnHeader();
 			this.Id2 = new System.Windows.Forms.ColumnHeader();
 			this.switchToButton = new System.Windows.Forms.Button();
-			this.endTaskButton = new System.Windows.Forms.Button();
+			this.deleteButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
 			this.SuspendLayout();
@@ -137,7 +137,7 @@ namespace PTM.View.Controls
 			this.editButton.Name = "editButton";
 			this.editButton.Size = new System.Drawing.Size(72, 23);
 			this.editButton.TabIndex = 8;
-			this.editButton.Text = "Edit...";
+			this.editButton.Text = "&Edit...";
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
 			// 
 			// addTaskButton
@@ -148,7 +148,7 @@ namespace PTM.View.Controls
 			this.addTaskButton.Name = "addTaskButton";
 			this.addTaskButton.Size = new System.Drawing.Size(72, 23);
 			this.addTaskButton.TabIndex = 7;
-			this.addTaskButton.Text = "&New Task...";
+			this.addTaskButton.Text = "&New Log...";
 			// 
 			// TaskDescriptionHeader
 			// 
@@ -321,20 +321,20 @@ namespace PTM.View.Controls
 			this.switchToButton.Text = "&Switch To";
 			this.switchToButton.Click += new System.EventHandler(this.switchToButton_Click);
 			// 
-			// endTaskButton
+			// deleteButton
 			// 
-			this.endTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.endTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.endTaskButton.Location = new System.Drawing.Point(88, 280);
-			this.endTaskButton.Name = "endTaskButton";
-			this.endTaskButton.Size = new System.Drawing.Size(72, 23);
-			this.endTaskButton.TabIndex = 12;
-			this.endTaskButton.Text = "End Task";
-			this.endTaskButton.Click += new System.EventHandler(this.endTaskButton_Click);
+			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.deleteButton.Location = new System.Drawing.Point(88, 280);
+			this.deleteButton.Name = "deleteButton";
+			this.deleteButton.Size = new System.Drawing.Size(72, 23);
+			this.deleteButton.TabIndex = 12;
+			this.deleteButton.Text = "&Delete";
+			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
 			// TasksLogControl
 			// 
-			this.Controls.Add(this.endTaskButton);
+			this.Controls.Add(this.deleteButton);
 			this.Controls.Add(this.switchToButton);
 			this.Controls.Add(this.taskList);
 			this.Controls.Add(this.editButton);
@@ -369,40 +369,18 @@ namespace PTM.View.Controls
 
 		private void AddDefaultTaskLog(int taskParentId, DefaultTask defaultTask)
 		{
-
-			string description = defaultTask.ToString(CultureInfo.InvariantCulture);
-			PTMDataset.TasksRow[] childRows;
-			childRows = Tasks.GetChildTasks(Tasks.FindById(taskParentId));
-			foreach (PTMDataset.TasksRow childRow in childRows)
-			{
-				if (string.Compare(childRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
-				{
-					AddTaskLog(childRow.Id, Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue, CultureInfo.InvariantCulture));
-					return;
-				}
-			}
-			
-			foreach (PTMDataset.TasksRow defaultRow in DefaultTasks.DefaultTasksDataTable)
-			{
-				if (string.Compare(defaultRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
-				{
-					PTMDataset.TasksRow row = Tasks.NewTasksRow();
-					row.BeginEdit();
-					row.ItemArray = defaultRow.ItemArray;
-					row.ParentId = taskParentId;
-					row.Id = Tasks.AddTasksRow(row);
-					AddTaskLog(row.Id, Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue));
-					return;
-				}
-			}
-			throw new InvalidOperationException();
+			TasksLog.AddDefaultTaskLog(taskParentId, defaultTask);
+			ResetNotifyTimer(Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue));
 		}
 
 		private void AddTaskLog(int taskId , int defaultMins)
 		{
-			PTMDataset.TasksLogRow row = TasksLog.NewTasksLogRow();
-			row.TaskId= taskId;
-			row.Id = TasksLog.AddTasksLogRow(row);
+			TasksLog.AddTasksLog(taskId);
+			ResetNotifyTimer(defaultMins);
+		}
+
+		private void ResetNotifyTimer(int defaultMins)
+		{
 			notifyTimer.Stop();
 			notifyTimer.Interval = 1000*60*defaultMins;
 			notifyTimer.Start();
@@ -410,6 +388,8 @@ namespace PTM.View.Controls
 
 		private void EditSelectedTaskLog()
 		{
+			if(!isValidEditableLog())
+				return;
 			int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
 			string duration= taskList.SelectedItems[0].SubItems[DurationTaskHeader.Index].Text;
 			
@@ -419,13 +399,24 @@ namespace PTM.View.Controls
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
-					PTMDataset.TasksLogRow logRow;
-					logRow = TasksLog.FindById(taskLogId);
-					logRow.TaskId = taskLogForm.SelectedTaskRow.Id;
-					TasksLog.UpdateTaskLog(logRow);
+					TasksLog.UpdateTaskLog(taskLogId, taskLogForm.SelectedTaskRow.Id);
 				}
 			}
 		}
+		
+		private void DeleteSelectedTaskLog()
+		{
+			if(!isValidEditableLog())
+				return;
+			
+				for(int i = 0; i < taskList.SelectedItems.Count; i++)
+				{
+					int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
+					TasksLog.DeleteTaskLog(taskLogId);
+				}
+			
+		}
+		
 		private void addTaskButton_Click(object sender, EventArgs e)
 		{
 			NewTaskLog(false);
@@ -436,22 +427,29 @@ namespace PTM.View.Controls
 			EditSelectedTaskLog();
 		}
 
-
 		private void taskList_DoubleClick(object sender, EventArgs e)
 		{
 			EditSelectedTaskLog();
 		}
 		
-		private void endTaskButton_Click(object sender, System.EventArgs e)
+		private void deleteButton_Click(object sender, System.EventArgs e)
 		{
-			AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.Idle);
+			DeleteSelectedTaskLog();
+		}
+		
+		private bool isValidEditableLog()
+		{
+			if(this.taskList.SelectedItems.Count==0)
+				return false;
+			if(taskList.SelectedItems[0].Parent!=null)
+				return false;
+			
+			return true;
 		}
 		
 		private void switchToButton_Click(object sender, System.EventArgs e)
 		{
-			if(this.taskList.SelectedItems.Count==0)
-				return;
-			if(taskList.SelectedItems[0].Parent!=null)
+			if(!isValidEditableLog())
 				return;
 			
 			int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);

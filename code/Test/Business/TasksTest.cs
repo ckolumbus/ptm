@@ -222,9 +222,8 @@ namespace PTM.Test.Business
 			row.Description = "TaskTest";
 			row.ParentId = Tasks.RootTasksRow.Id;
 			row.Id = Tasks.AddTasksRow(row);
-			PTMDataset.TasksLogRow log = TasksLog.NewTasksLogRow();
-			log.TaskId = row.Id;
-			TasksLog.AddTasksLogRow(log);
+			PTMDataset.TasksLogRow log;
+			TasksLog.AddTasksLog(row.Id);
 			Tasks.DeleteTaskRow(row);
 		}
 		
@@ -251,9 +250,8 @@ namespace PTM.Test.Business
 			row2.ParentId = row1.Id;
 			row2.Id = Tasks.AddTasksRow(row2);
 
-			PTMDataset.TasksLogRow log = TasksLog.NewTasksLogRow();
-			log.TaskId = row2.Id;
-			TasksLog.AddTasksLogRow(log);
+			PTMDataset.TasksLogRow log;
+			TasksLog.AddTasksLog(row2.Id);
 			Tasks.DeleteTaskRow(row1);
 		}
 
