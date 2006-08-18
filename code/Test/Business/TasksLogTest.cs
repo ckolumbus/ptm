@@ -4,6 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using PTM.Business;
 using PTM.Data;
+using PTM.Infos;
 
 namespace PTM.Test.Business
 {
@@ -39,17 +40,17 @@ namespace PTM.Test.Business
 			afterStopLogging = 0;
 			tasksLogDurationCountElapsed = 0;
 			
-			TasksLog.TasksLogRowChanged+=new PTM.Data.PTMDataset.TasksLogRowChangeEventHandler(TasksLog_TasksLogRowChanged);
-			TasksLog.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
-			TasksLog.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);
-			TasksLog.TasksLogDurationCountElapsed+=new System.Timers.ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
+			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
+			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);
+			Logs.TasksLogDurationCountElapsed+=new System.Timers.ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
 		}
 
 		[Test]
 		public void InitializeTest()
 		{
 			Assert.AreEqual(0,UnitOfWork.PtmDataset.TasksLog.Count);
-			Assert.IsNull(TasksLog.CurrentTaskLog);
+			Assert.IsNull(Logs.CurrentLog);
 		}
 
 		[Test]
@@ -61,16 +62,16 @@ namespace PTM.Test.Business
 			taskrow.ParentId = Tasks.RootTasksRow.Id;
 			int id = Tasks.AddTasksRow(taskrow);
 
-			PTMDataset.TasksLogRow row;
-			row = TasksLog.AddTasksLog(id);
+			Log log;
+			log = Logs.AddTasksLog(id);
 			Assert.AreEqual(id, Tasks.CurrentTaskRow.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowAddedCount);
 
-			PTMDataset.TasksLogRow addedRow;
-			addedRow = TasksLog.FindById(row.Id);
-			Assert.AreEqual(0, addedRow.Duration);
-			Assert.AreEqual(DateTime.Today, addedRow.InsertTime.Date);
-			Assert.AreEqual(id, addedRow.TaskId);
+			Log addedLog;
+			addedLog = Logs.FindById(log.Id);
+			Assert.AreEqual(0, addedLog.Duration);
+			Assert.AreEqual(DateTime.Today, addedLog.InsertTime.Date);
+			Assert.AreEqual(id, addedLog.TaskId);
 		}
 		
 		[Test]
@@ -88,11 +89,11 @@ namespace PTM.Test.Business
 			taskrow2.ParentId = Tasks.RootTasksRow.Id;
 			taskrow2.Id = Tasks.AddTasksRow(taskrow2);
 
-			PTMDataset.TasksLogRow row;
-			row = TasksLog.AddTasksLog(taskrow1.Id);
+			Log logRow;
+			logRow = Logs.AddTasksLog(taskrow1.Id);
 			
-			row.TaskId = taskrow2.Id;
-			TasksLog.UpdateTaskLog(row.Id, row.TaskId);
+			logRow.TaskId = taskrow2.Id;
+			Logs.UpdateLogTaskId(logRow.Id, logRow.TaskId);
 			
 			Assert.AreEqual(taskrow2.Id, Tasks.CurrentTaskRow.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowUpdatedCount);
@@ -107,48 +108,62 @@ namespace PTM.Test.Business
 			taskrow1.ParentId = Tasks.RootTasksRow.Id;
 			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
 			
-			PTMDataset.TasksLogRow row1;
-			row1 = TasksLog.AddTasksLog(taskrow1.Id);
+			Log row1;
+			row1 = Logs.AddTasksLog(taskrow1.Id);
 			
-			TasksLog.DeleteTaskLog(row1.Id);
-			PTMDataset.TasksLogRow deletedRow;
-			deletedRow = TasksLog.FindById(row1.Id);
+			Logs.DeleteTaskLog(row1.Id);
+			Log deletedRow;
+			deletedRow = Logs.FindById(row1.Id);
 			PTMDataset.TasksRow idleTaskRow;
 			idleTaskRow = Tasks.FindById(deletedRow.TaskId);
 			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
 			Assert.AreEqual((int)DefaultTask.Idle, idleTaskRow.DefaultTaskId);
 			
-			TasksLog.UpdateTaskLog(row1.Id, row1.TaskId);
-			PTMDataset.TasksLogRow updatedRow;
-			updatedRow = TasksLog.FindById(row1.Id);
+			Logs.UpdateLogTaskId(row1.Id, row1.TaskId);
+			Log updatedRow;
+			updatedRow = Logs.FindById(row1.Id);
 			Assert.AreEqual(taskrow1.Id, updatedRow.TaskId);
 			
-			TasksLog.DeleteTaskLog(row1.Id);
-			deletedRow = TasksLog.FindById(row1.Id);
+			Logs.DeleteTaskLog(row1.Id);
+			deletedRow = Logs.FindById(row1.Id);
 			idleTaskRow = Tasks.FindById(deletedRow.TaskId);
 			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
 			Assert.AreEqual((int)DefaultTask.Idle, idleTaskRow.DefaultTaskId);
 			
 		}
 		[Test]
+		public void AddDefaultTaskLogTest()
+		{
+			Log log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.CheckingMail);
+			PTMDataset.TasksRow task;
+			task = Tasks.FindById(log.TaskId);
+			Assert.AreEqual(true, task.IsDefaultTask);
+			Assert.AreEqual((int)DefaultTask.CheckingMail, task.DefaultTaskId);
+			log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.CheckingMail);
+			task = Tasks.FindById(log.TaskId);
+			Assert.AreEqual(true, task.IsDefaultTask);
+			Assert.AreEqual((int)DefaultTask.CheckingMail, task.DefaultTaskId);
+		}
+		
+		[Test]
 		public void LoogingTest()
 		{
-			TasksLog.StartLogging();
+			Logs.StartLogging();
 			
-			PTMDataset.TasksLogRow row1;
-			row1 = TasksLog.AddTasksLog(Tasks.RootTasksRow.Id);
+			Log row1;
+			row1 = Logs.AddTasksLog(Tasks.RootTasksRow.Id);
 			
 			Thread.Sleep(3000);
 			
-			PTMDataset.TasksLogRow row2;
-			row2 = TasksLog.AddTasksLog(Tasks.RootTasksRow.Id);
+			Log row2;
+			row2 = Logs.AddTasksLog(Tasks.RootTasksRow.Id);
 			
 			Thread.Sleep(2000);
 			
-			TasksLog.StopLogging();
+			Logs.StopLogging();
 			
-			row1 = TasksLog.FindById(row1.Id);
-			row2 = TasksLog.FindById(row2.Id);
+			row1 = Logs.FindById(row1.Id);
+			row2 = Logs.FindById(row2.Id);
 			
 			Assert.IsTrue(row1.Duration==3, row1.Duration.ToString());
 			
@@ -163,20 +178,12 @@ namespace PTM.Test.Business
 		[TearDown]
 		public void TearDown()
 		{
-			TasksLog.TasksLogRowChanged-=new PTM.Data.PTMDataset.TasksLogRowChangeEventHandler(TasksLog_TasksLogRowChanged);
-			TasksLog.AfterStartLogging-=new EventHandler(TasksLog_AfterStartLogging);
-			TasksLog.AfterStopLogging-=new EventHandler(TasksLog_AfterStopLogging);
-			TasksLog.TasksLogDurationCountElapsed-=new System.Timers.ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
+			Logs.LogChanged-=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			Logs.AfterStartLogging-=new EventHandler(TasksLog_AfterStartLogging);
+			Logs.AfterStopLogging-=new EventHandler(TasksLog_AfterStopLogging);
+			Logs.TasksLogDurationCountElapsed-=new System.Timers.ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
 			DataAdapterManager m = new DataAdapterManager("test");
 			m.DeleteDataSource();
-		}
-
-		private void TasksLog_TasksLogRowChanged(object sender, PTM.Data.PTMDataset.TasksLogRowChangeEvent e)
-		{
-			if(e.Action == DataRowAction.Add)
-				tasksLogRowChangedEvent_RowAddedCount++;
-			else if(e.Action == DataRowAction.Change)
-				tasksLogRowChangedEvent_RowUpdatedCount++;
 		}
 
 		private void TasksLog_AfterStartLogging(object sender, EventArgs e)
@@ -192,6 +199,14 @@ namespace PTM.Test.Business
 		private void TasksLog_TasksLogDurationCountElapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			tasksLogDurationCountElapsed++;
+		}
+
+		private void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		{
+			if(e.Action == DataRowAction.Add)
+				tasksLogRowChangedEvent_RowAddedCount++;
+			else if(e.Action == DataRowAction.Change)
+				tasksLogRowChangedEvent_RowUpdatedCount++;
 		}
 	}
 }

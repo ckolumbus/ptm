@@ -29,7 +29,7 @@ namespace PTM.Business
 			ConfigurationHelper.Initialize(adapterManager.configurationDataAdapter, adapterManager.defaultTaskDataAdapter);
 			DefaultTasks.Initialize();
 			Tasks.Initialize(ds.Tasks, adapterManager.tasksDataAdapter);
-			TasksLog.Initialize(ds.TasksLog, adapterManager.tasksLogDataAdapter);
+			Logs.Initialize();
 			ApplicationsLog.Initialize(ds.ApplicationsLog, adapterManager.applicationsLogDataAdapter);
 			Summary.Initialize(adapterManager.taskSumaryDataAdapter, adapterManager.applicationsSummaryDataAdapter);
 		}

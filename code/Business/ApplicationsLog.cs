@@ -40,9 +40,9 @@ namespace PTM.Business
 			applicationsLogTable = dataTable;
 			applicationsTimer.Elapsed+=new ElapsedEventHandler(ApplicationsTimer_Elapsed);
 			applicationsLogTable.ApplicationsLogRowChanged+=new PTMDataset.ApplicationsLogRowChangeEventHandler(applicationsLogTable_ApplicationsLogRowChanged);
-			TasksLog.TasksLogRowChanged+=new PTM.Data.PTMDataset.TasksLogRowChangeEventHandler(TasksLog_TasksLogRowChanged);
-			TasksLog.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
-			TasksLog.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);			
+			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
+			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);			
 		}
 
 		#endregion
@@ -92,14 +92,14 @@ namespace PTM.Business
 				{
 					PTMDataset.ApplicationsLogRow row;
 					string select = applicationsLogTable.ProcessIdColumn.ColumnName + "=" + currentProcess.Id;
-					select += "AND " + applicationsLogTable.TaskLogIdColumn.ColumnName + "=" + TasksLog.CurrentTaskLog.Id;
+					select += "AND " + applicationsLogTable.TaskLogIdColumn.ColumnName + "=" + Logs.CurrentLog.Id;
 					PTMDataset.ApplicationsLogRow[] rows = (PTMDataset.ApplicationsLogRow[]) applicationsLogTable.Select(select);
 					if (rows.Length == 0)
 						row = applicationsLogTable.NewApplicationsLogRow();
 					else
 						row = rows[0];
 
-					row.TaskLogId = TasksLog.CurrentTaskLog.Id;
+					row.TaskLogId = Logs.CurrentLog.Id;
 					row.ProcessId = currentProcess.Id;
 					row.Name = currentProcess.MainModule.ModuleName;
 					row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
@@ -144,17 +144,19 @@ namespace PTM.Business
 			return false;
 		}
 
-//		private static void SaveApplicationsLogRow(PTMDataset.ApplicationsLogRow row)
-//		{
-//			PTMDataset.ApplicationsLogRow[] rows = new PTMDataset.ApplicationsLogRow[] {row};
-//			dataAdapter.Update(rows);
-//			row.AcceptChanges();
-//		}
-
 		private static void SaveApplicationsLog()
 		{
 			dataAdapter.Update(applicationsLogTable);
 			applicationsLogTable.AcceptChanges();
+		}
+		
+		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		{
+			if(e.Action == DataRowAction.Add)
+			{
+				SaveApplicationsLog();
+				applicationsLogTable.Clear();
+			}
 		}
 
 		#endregion
@@ -184,15 +186,6 @@ namespace PTM.Business
 //			}
 			if(ApplicationsLogRowChanged!=null)
 				ApplicationsLogRowChanged(sender, e);
-		}
-
-		private static void TasksLog_TasksLogRowChanged(object sender, PTM.Data.PTMDataset.TasksLogRowChangeEvent e)
-		{
-			if(e.Action == DataRowAction.Add)
-			{
-				SaveApplicationsLog();
-				applicationsLogTable.Clear();
-			}
 		}
 
 		private static void TasksLog_AfterStartLogging(object sender, EventArgs e)

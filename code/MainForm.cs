@@ -379,7 +379,7 @@ namespace PTM
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			this.tasksLogControl.NewTaskLog(true);
-			TasksLog.StartLogging();
+			Logs.StartLogging();
 		}
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -402,7 +402,7 @@ namespace PTM
 
 		private void Exit(object sender, EventArgs e)
 		{
-			TasksLog.StopLogging();
+			Logs.StopLogging();
 			Save();
 			Application.Exit();
 		}

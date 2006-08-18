@@ -76,7 +76,7 @@ namespace PTM.View.Controls
 			this.dateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 			
-			TasksLog.TasksLogDurationCountElapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			Logs.TasksLogDurationCountElapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
 		}
 
 		/// <summary> 

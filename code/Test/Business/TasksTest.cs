@@ -223,7 +223,7 @@ namespace PTM.Test.Business
 			row.ParentId = Tasks.RootTasksRow.Id;
 			row.Id = Tasks.AddTasksRow(row);
 			PTMDataset.TasksLogRow log;
-			TasksLog.AddTasksLog(row.Id);
+			Logs.AddTasksLog(row.Id);
 			Tasks.DeleteTaskRow(row);
 		}
 		
@@ -251,7 +251,7 @@ namespace PTM.Test.Business
 			row2.Id = Tasks.AddTasksRow(row2);
 
 			PTMDataset.TasksLogRow log;
-			TasksLog.AddTasksLog(row2.Id);
+			Logs.AddTasksLog(row2.Id);
 			Tasks.DeleteTaskRow(row1);
 		}
 

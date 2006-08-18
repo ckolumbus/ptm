@@ -8,6 +8,7 @@ using System.Timers;
 using System.Windows.Forms;
 using PTM.Business;
 using PTM.Data;
+using PTM.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 
@@ -67,7 +68,7 @@ namespace PTM.View.Controls
 
 			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			TasksLog.TasksLogRowChanged+=new PTMDataset.TasksLogRowChangeEventHandler(TaskLogsTable_TasksLogRowChanged);
+			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogRowChanged+=new PTMDataset.ApplicationsLogRowChangeEventHandler(ApplicationsLogTable_ApplicationsLogRowChanged);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
@@ -369,13 +370,13 @@ namespace PTM.View.Controls
 
 		private void AddDefaultTaskLog(int taskParentId, DefaultTask defaultTask)
 		{
-			TasksLog.AddDefaultTaskLog(taskParentId, defaultTask);
+			Logs.AddDefaultTaskLog(taskParentId, defaultTask);
 			ResetNotifyTimer(Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue));
 		}
 
 		private void AddTaskLog(int taskId , int defaultMins)
 		{
-			TasksLog.AddTasksLog(taskId);
+			Logs.AddTasksLog(taskId);
 			ResetNotifyTimer(defaultMins);
 		}
 
@@ -399,7 +400,7 @@ namespace PTM.View.Controls
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
-					TasksLog.UpdateTaskLog(taskLogId, taskLogForm.SelectedTaskRow.Id);
+					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskRow.Id);
 				}
 			}
 		}
@@ -412,7 +413,7 @@ namespace PTM.View.Controls
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
-					TasksLog.DeleteTaskLog(taskLogId);
+					Logs.DeleteTaskLog(taskLogId);
 				}
 			
 		}
@@ -671,16 +672,16 @@ namespace PTM.View.Controls
 				}
 		}
 
-		private void TaskLogsTable_TasksLogRowChanged(object sender, PTMDataset.TasksLogRowChangeEvent e)
+		private void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
 		{
 			if(e.Action == DataRowAction.Change)
 			{
 				foreach (TreeListViewItem item in this.taskList.Items)
 				{
-					if (item.SubItems[TaskLogIdHeader.Index].Text == e.Row.Id.ToString(CultureInfo.InvariantCulture))
+					if (item.SubItems[TaskLogIdHeader.Index].Text == e.Log.Id.ToString(CultureInfo.InvariantCulture))
 					{
-						PTMDataset.TasksRow taskRow = Tasks.FindById(e.Row.TaskId);
-						SetListItemValues(item,e.Row, taskRow);
+						PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
+						SetListItemValues(item,e.Log, taskRow);
 						break;
 					}
 				}
@@ -688,34 +689,34 @@ namespace PTM.View.Controls
 
 			else if(e.Action == DataRowAction.Add)
 			{
-				PTMDataset.TasksRow taskRow = Tasks.FindById(e.Row.TaskId);
+				PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"00:00:00", DateTime.Now.ToShortTimeString(), "",""});
-				SetListItemValues(itemA,e.Row, taskRow);
+				SetListItemValues(itemA,e.Log, taskRow);
 				taskList.Items.Insert(0,itemA);
 				this.notifyIcon.Text = taskRow.Description;			
 			}
 		}
 
-		private void SetListItemValues(ListViewItem item, PTMDataset.TasksLogRow taskLogRow ,PTMDataset.TasksRow taskRow)
+		private void SetListItemValues(ListViewItem item, Log log ,PTMDataset.TasksRow taskRow)
 		{
 			if(item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
 			{
 				item.Text = taskRow.Description;
 			}
-			item.SubItems[TaskLogIdHeader.Index].Text = taskLogRow.Id.ToString(CultureInfo.InvariantCulture);
+			item.SubItems[TaskLogIdHeader.Index].Text = log.Id.ToString(CultureInfo.InvariantCulture);
 			item.SubItems[TaskIdHeader.Index].Text = taskRow.Id.ToString(CultureInfo.InvariantCulture);
-			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(taskLogRow.Duration);
+			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
 			
 			if (taskRow.IsDefaultTask)
 			{
 				item.ImageIndex = IconsManager.GetIndex(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
-				if(taskLogRow.Id == TasksLog.CurrentTaskLog.Id)
+				if(log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon = IconsManager.GetIcon(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
 			}
 			else
 			{
 				item.ImageIndex = IconsManager.GetIndex("0");
-				if(taskLogRow.Id == TasksLog.CurrentTaskLog.Id)
+				if(log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon =  IconsManager.GetIcon("0");
 			}
 		}

@@ -1,85 +1,77 @@
 using System;
+using System.Collections;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Globalization;
 using System.Timers;
 using PTM.Data;
+using PTM.Infos;
 
 namespace PTM.Business
 {
-	/// <summary>
-	/// Summary description for TaskNotificationsHelper.
-	/// </summary>
-	internal sealed class TasksLog
+	internal sealed class Logs
 	{
-		private TasksLog()
+		private Logs()
 		{
 		}
 
-		private static OleDbDataAdapter tasksLogAdapter;
-		private static PTMDataset.TasksLogDataTable taskLogsTable;
-		private static PTMDataset.TasksLogDataTable taskLogsTableInstace;
-		private static PTMDataset.TasksLogRow currentTaskLog;
+		private static Log currentLog;
 		private static Timer taskLogTimer;
 
 		#region Properties
-		internal static PTMDataset.TasksLogRow CurrentTaskLog
+		public static Log CurrentLog
 		{
-			get { return CloneRow(currentTaskLog); }
+			get { return currentLog; }
 		}
 		#endregion
 
 		#region Public Methods
-		public static void Initialize(PTMDataset.TasksLogDataTable dataTable, OleDbDataAdapter adapter)
+		public static void Initialize()
 		{
-			tasksLogAdapter = adapter;
-			taskLogsTable = dataTable;
-			taskLogsTableInstace = new PTMDataset.TasksLogDataTable();
-			currentTaskLog = null;
+			currentLog = null;
 			taskLogTimer = new Timer(1000);
 			taskLogTimer.Elapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
 		}
-//		public static PTMDataset.TasksLogRow NewTasksLogRow()
-//		{
-//			return taskLogsTableInstace.NewTasksLogRow();
-//		}
-
-		public static PTMDataset.TasksLogRow AddTasksLog(int taskId)
+		public static Log AddTasksLog(int taskId)
 		{
-			PTMDataset.TasksLogRow row;
-			row = taskLogsTable.NewTasksLogRow();
-			row.Duration = 0;
-			row.InsertTime = DateTime.Now;
-			row.TaskId = taskId;
-			taskLogsTable.AddTasksLogRow(row);
-			SaveTasksLogs();
-			currentTaskLog = row;
-			if(TasksLogRowChanged!=null)
-			{
-				TasksLogRowChanged(null, new PTMDataset.TasksLogRowChangeEvent(CloneRow(row), DataRowAction.Add));
-			}
-			return CloneRow(row);
-		}
-
-		public static void UpdateTaskLog(int id, int taskId)
-		{
-			PTMDataset.TasksLogRow row;
-			row = taskLogsTable.FindById(id);
-			row.TaskId = taskId;
+			UpdateCurrentLogDuration();
 			
-			if(TasksLogRowChanged!=null)
+			Log log = new Log();
+			log.Duration = 0;
+			log.InsertTime = DateTime.Now;
+			log.TaskId = taskId;
+			
+			log.Id  = DataAdapterManager.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId, UpdateTime) VALUES (?, ?, ?, ?)", 
+				new string[]{"Duration", "InsertTime", "TaskId", "UpdateTime"}, new object[] {log.Duration, log.InsertTime, log.TaskId, DBNull.Value});
+					
+			currentLog = log;
+			if(LogChanged!=null)
 			{
-				TasksLogRowChanged(null, new PTMDataset.TasksLogRowChangeEvent(CloneRow(row), DataRowAction.Change));
+				LogChanged(new LogChangeEventArgs(log, DataRowAction.Add));
+			}
+			return log;
+		}
+
+		public static void UpdateLogTaskId(int id, int taskId)
+		{
+			Log log;
+			log = FindById(id);
+			log.TaskId = taskId;
+			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + id);
+			if(LogChanged!=null)
+			{
+				LogChanged(new LogChangeEventArgs(log, DataRowAction.Change));
 			}
 		}
+		
 		public static void DeleteTaskLog(int id)
 		{
-			PTMDataset.TasksLogRow logRow;
-			logRow = taskLogsTable.FindById(id);
+			Log log;
+			log = FindById(id);
 			
 			PTMDataset.TasksRow taskRow;
-			taskRow = Tasks.FindById(logRow.TaskId);
+			taskRow = Tasks.FindById(log.TaskId);
 			
 			string description = DefaultTask.Idle.ToString(CultureInfo.InvariantCulture);
 			PTMDataset.TasksRow[] childRows;
@@ -110,14 +102,14 @@ namespace PTM.Business
 			}
 			if(defaultTaskId !=-1)
 			{
-				UpdateTaskLog(id, defaultTaskId);
+				UpdateLogTaskId(id, defaultTaskId);
 			}
 			else
 			{
 				throw new ApplicationException("An unexpected error has been ocurred in the application during deleting a log.");
 			}
 		}
-		public static PTMDataset.TasksLogRow AddDefaultTaskLog(int taskParentId, DefaultTask defaultTask)
+		public static Log AddDefaultTaskLog(int taskParentId, DefaultTask defaultTask)
 		{
 
 			string description = defaultTask.ToString(CultureInfo.InvariantCulture);
@@ -145,11 +137,20 @@ namespace PTM.Business
 			}
 			throw new InvalidOperationException();
 		}
-		public static PTMDataset.TasksLogRow FindById(int taskLogId)
+		public static Log FindById(int taskLogId)
 		{
-			PTMDataset.TasksLogRow findedRow;
-			findedRow = taskLogsTable.FindById(taskLogId);
-			return CloneRow(findedRow);
+//			if(currentLog!=null && currentLog.Id == taskLogId)
+//				return currentLog;
+			Hashtable hash;
+			hash = DataAdapterManager.ExecuteGetHastTable("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + taskLogId);
+			if(hash==null)
+				return null;
+			Log log = new Log();
+			log.Id = taskLogId;
+			log.TaskId = (int) hash["TaskId"];
+			log.Duration = (int) hash["Duration"];
+			log.InsertTime = (DateTime) hash["InsertTime"];
+			return log;
 		}
 		public static void StartLogging()
 		{
@@ -161,53 +162,69 @@ namespace PTM.Business
 		public static void StopLogging()
 		{
 			taskLogTimer.Stop();
-			SaveTasksLogs();
+			UpdateCurrentLogDuration();
 			if(AfterStopLogging!=null)
 				AfterStopLogging(null, null);
 		}
 		#endregion
 
 		#region Private Methods
-		private static PTMDataset.TasksLogRow CloneRow(PTMDataset.TasksLogRow tasksLogRow)
+		private static void UpdateCurrentLogDuration()
 		{
-			if(tasksLogRow==null)
-				return null;
-			PTMDataset.TasksLogRow row;
-			row =  taskLogsTableInstace.NewTasksLogRow();
-			row.ItemArray = tasksLogRow.ItemArray;
-			return row;
+			if(currentLog==null)
+				return;
+			
+			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET Duration = ? WHERE Id = " + Logs.currentLog.Id, 
+				new string[]{"Duration"}, new object[]{Logs.currentLog.Duration});
+			if(LogChanged!=null)
+			{
+				LogChanged(new LogChangeEventArgs(Logs.currentLog, DataRowAction.Change));
+			}
 		}
-		private static void SaveTasksLogs()
-		{
-			tasksLogAdapter.Update(taskLogsTable);
-			taskLogsTable.AcceptChanges();
-		}
-
-		#endregion
-
-		#region Events
-		public static event PTMDataset.TasksLogRowChangeEventHandler TasksLogRowChanged;
-		public static event ElapsedEventHandler TasksLogDurationCountElapsed;
-		public static event System.EventHandler AfterStartLogging;
-		public static event System.EventHandler AfterStopLogging;
+		
 		private static void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if(currentTaskLog == null)
+			if(currentLog == null)
 				return;
 
-			TimeSpan t = new TimeSpan(0, 0, currentTaskLog.Duration);
+			TimeSpan t = new TimeSpan(0, 0, currentLog.Duration);
 			t = t.Add(new TimeSpan(0, 0, 1));
-			currentTaskLog.Duration = Convert.ToInt32(t.TotalSeconds);
-			if(TasksLogRowChanged!=null)
+			currentLog.Duration = Convert.ToInt32(t.TotalSeconds);
+			if(LogChanged!=null)
 			{
-				TasksLogRowChanged(null, new PTMDataset.TasksLogRowChangeEvent(CloneRow(currentTaskLog), DataRowAction.Change));
+				LogChanged(new LogChangeEventArgs(currentLog, DataRowAction.Change));
 			}
 			if(TasksLogDurationCountElapsed!=null)
 				TasksLogDurationCountElapsed(sender, e);
 		}
-
 		#endregion
 
-
+		#region Events
+		public delegate void LogChangeEventHandler(LogChangeEventArgs e);
+		public class LogChangeEventArgs : EventArgs
+		{
+			private Log log;
+			private DataRowAction action;
+			public LogChangeEventArgs(Log log, DataRowAction action)
+			{
+				this.log = log;
+				this.action = action;
+			}
+			public Log Log
+			{
+				get { return log; }
+			}
+			
+			public DataRowAction Action
+			{
+				get { return action; }
+			}
+		}
+		
+		public static event LogChangeEventHandler LogChanged;
+		public static event ElapsedEventHandler TasksLogDurationCountElapsed;
+		public static event System.EventHandler AfterStartLogging;
+		public static event System.EventHandler AfterStopLogging;
+		#endregion
 	}
 }

@@ -53,7 +53,7 @@ namespace PTM.Business
 			tasksDataTableInstance = new PTMDataset.TasksDataTable();
 			LoadAllTasks();
 			currentTaskRow = null;
-			TasksLog.TasksLogRowChanged+=new PTMDataset.TasksLogRowChangeEventHandler(taskLogsTable_TasksLogRowChanged);
+			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			tasksDataTable.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowChanged);
 			tasksDataTable.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowDeleting);
 		}
@@ -321,17 +321,16 @@ namespace PTM.Business
 			}
 		}
 
-		private static void ManageTaskLogRowChanged(PTMDataset.TasksLogRowChangeEvent e)
+		private static void ManageTaskLogRowChanged(PTM.Business.Logs.LogChangeEventArgs e)
 		{
-			if(e.Row.Id == TasksLog.CurrentTaskLog.Id)
+			if(e.Log.Id == Logs.CurrentLog.Id)
 			{
-				if(Tasks.currentTaskRow == null || e.Row.TaskId != Tasks.currentTaskRow.Id)
+				if(Tasks.currentTaskRow == null || e.Log.TaskId != Tasks.currentTaskRow.Id)
 				{
-					Tasks.currentTaskRow = Tasks.tasksDataTable.FindById(e.Row.TaskId);
+					Tasks.currentTaskRow = Tasks.tasksDataTable.FindById(e.Log.TaskId);
 					if(Tasks.currentTaskRow.IsStartDateNull())
 					{
 						Tasks.currentTaskRow.StartDate = DateTime.Now;
-						//SaveTaskRow(Tasks.currentTaskRow);
 						SaveTasks();
 					}					
 				}
@@ -370,12 +369,12 @@ namespace PTM.Business
 //				TasksRowDeleting(sender, e);
 		}
 
-		private static void taskLogsTable_TasksLogRowChanged(object sender, PTMDataset.TasksLogRowChangeEvent e)
-			{
-				ManageTaskLogRowChanged(e);
-			}
 
 		#endregion
 
+		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		{
+			ManageTaskLogRowChanged(e);
+		}
 	}
 }
