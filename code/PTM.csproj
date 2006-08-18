@@ -142,6 +142,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Business\Logs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Business\MainModule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -153,11 +158,6 @@
                 />
                 <File
                     RelPath = "Business\Tasks.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Business\TasksLog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
