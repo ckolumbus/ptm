@@ -42,10 +42,9 @@ namespace PTM
 			InitializeComponent();
 			this.Text += Application.ProductVersion;
 			this.tasksLogControl.Exit+=new EventHandler(Exit);
-
 			LoadIconsFromResources();
-
 		}
+
 		private void LoadIconsFromResources()
 		{
 			ResourceManager resourceManager = new ResourceManager ("PTM.View.Controls.Icons", GetType().Assembly);
@@ -62,7 +61,6 @@ namespace PTM
 				i++;
 			}while(resIcon!=null);
 		}
-
 
 		/// <summary>
 		/// Clean up any resources being used.

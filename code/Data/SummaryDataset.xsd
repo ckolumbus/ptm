@@ -31,7 +31,7 @@
 				</xs:element>
 			</xs:choice>
 		</xs:complexType>
-		<xs:key name="SummaryDatasetKey1" msdata:PrimaryKey="true">
+		<xs:key name="SummaryDatasetKey1">
 			<xs:selector xpath=".//mstns:TasksSummary" />
 			<xs:field xpath="mstns:TaskId" />
 		</xs:key>

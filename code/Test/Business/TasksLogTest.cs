@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Data;
 using System.Threading;
 using NUnit.Framework;
@@ -49,7 +50,6 @@ namespace PTM.Test.Business
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.AreEqual(0,UnitOfWork.PtmDataset.TasksLog.Count);
 			Assert.IsNull(Logs.CurrentLog);
 		}
 
@@ -63,7 +63,7 @@ namespace PTM.Test.Business
 			int id = Tasks.AddTasksRow(taskrow);
 
 			Log log;
-			log = Logs.AddTasksLog(id);
+			log = Logs.AddLog(id);
 			Assert.AreEqual(id, Tasks.CurrentTaskRow.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowAddedCount);
 
@@ -90,7 +90,7 @@ namespace PTM.Test.Business
 			taskrow2.Id = Tasks.AddTasksRow(taskrow2);
 
 			Log logRow;
-			logRow = Logs.AddTasksLog(taskrow1.Id);
+			logRow = Logs.AddLog(taskrow1.Id);
 			
 			logRow.TaskId = taskrow2.Id;
 			Logs.UpdateLogTaskId(logRow.Id, logRow.TaskId);
@@ -109,9 +109,9 @@ namespace PTM.Test.Business
 			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
 			
 			Log row1;
-			row1 = Logs.AddTasksLog(taskrow1.Id);
+			row1 = Logs.AddLog(taskrow1.Id);
 			
-			Logs.DeleteTaskLog(row1.Id);
+			Logs.DeleteLog(row1.Id);
 			Log deletedRow;
 			deletedRow = Logs.FindById(row1.Id);
 			PTMDataset.TasksRow idleTaskRow;
@@ -124,7 +124,7 @@ namespace PTM.Test.Business
 			updatedRow = Logs.FindById(row1.Id);
 			Assert.AreEqual(taskrow1.Id, updatedRow.TaskId);
 			
-			Logs.DeleteTaskLog(row1.Id);
+			Logs.DeleteLog(row1.Id);
 			deletedRow = Logs.FindById(row1.Id);
 			idleTaskRow = Tasks.FindById(deletedRow.TaskId);
 			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
@@ -151,12 +151,12 @@ namespace PTM.Test.Business
 			Logs.StartLogging();
 			
 			Log row1;
-			row1 = Logs.AddTasksLog(Tasks.RootTasksRow.Id);
+			row1 = Logs.AddLog(Tasks.RootTasksRow.Id);
 			
 			Thread.Sleep(3000);
 			
 			Log row2;
-			row2 = Logs.AddTasksLog(Tasks.RootTasksRow.Id);
+			row2 = Logs.AddLog(Tasks.RootTasksRow.Id);
 			
 			Thread.Sleep(2000);
 			
@@ -174,6 +174,25 @@ namespace PTM.Test.Business
 			Assert.AreEqual(5, tasksLogDurationCountElapsed);
 		}
 		
+		[Test]
+		public void GetLogsByDayTest()
+		{
+			PTMDataset.TasksRow taskrow1;
+			taskrow1 = Tasks.NewTasksRow();
+			taskrow1.Description = "TaskTest1";
+			taskrow1.ParentId = Tasks.RootTasksRow.Id;
+			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
+			
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			
+			ArrayList list = Logs.GetLogsByDay(DateTime.Today);
+			Assert.AreEqual(5, list.Count);
+			
+		}
 		
 		[TearDown]
 		public void TearDown()

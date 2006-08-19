@@ -423,7 +423,8 @@ namespace PTM.Data
 			// 
 			// oleDbSelectCommand5
 			// 
-			this.oleDbSelectCommand5.CommandText = @"SELECT TasksLog.TaskId, Tasks.Description, SUM(TasksLog.Duration) AS TotalTime, COUNT(TasksLog.Id) AS TotalLogged, Tasks.IsDefaultTask, Tasks.DefaultTaskId FROM (TasksLog INNER JOIN Tasks ON TasksLog.TaskId = Tasks.Id) GROUP BY TasksLog.TaskId, Tasks.Description, TasksLog.InsertTime, Tasks.IsDefaultTask, Tasks.DefaultTaskId HAVING (TasksLog.InsertTime >= ?) AND (TasksLog.InsertTime < ?) ORDER BY SUM(TasksLog.Duration) DESC";
+			//this.oleDbSelectCommand5.CommandText = @"SELECT Tasks.Id, Tasks.Description, SUM(TasksLog.Duration) AS TotalTime, COUNT(TasksLog.Id) AS TotalLogged, Tasks.IsDefaultTask, Tasks.DefaultTaskId FROM (TasksLog INNER JOIN Tasks ON TasksLog.TaskId = Tasks.Id) GROUP BY Tasks.Id, Tasks.Description, Tasks.IsDefaultTask, Tasks.DefaultTaskId HAVING (TasksLog.InsertTime >= ?) AND (TasksLog.InsertTime < ?) ORDER BY SUM(TasksLog.Duration) DESC";
+			this.oleDbSelectCommand5.CommandText = @"SELECT Tasks.Id, Tasks.Description, SUM(TasksLog.Duration) AS TotalTime, COUNT(TasksLog.Id) AS TotalLogged, Tasks.IsDefaultTask, Tasks.DefaultTaskId FROM (TasksLog INNER JOIN Tasks ON TasksLog.TaskId = Tasks.Id) WHERE (TasksLog.InsertTime >= ?) AND (TasksLog.InsertTime < ?) GROUP BY Tasks.Id, Tasks.Description, Tasks.IsDefaultTask, Tasks.DefaultTaskId ORDER BY SUM(TasksLog.Duration) DESC";
 			this.oleDbSelectCommand5.Connection = this.desingOleDbConnection;
 			this.oleDbSelectCommand5.Parameters.Add(new System.Data.OleDb.OleDbParameter("InsertTime", System.Data.OleDb.OleDbType.DBDate, 0, "InsertTime"));
 			this.oleDbSelectCommand5.Parameters.Add(new System.Data.OleDb.OleDbParameter("InsertTime1", System.Data.OleDb.OleDbType.DBDate, 0, "InsertTime"));
@@ -577,7 +578,7 @@ namespace PTM.Data
 		}
 
 		private static string connectionString;
-		public static  OleDbCommand GetNewCommand(string cmdText)
+		private static  OleDbCommand GetNewCommand(string cmdText)
 		{
 			if(connectionString==null)
 			{
@@ -634,14 +635,14 @@ namespace PTM.Data
 			if(paramValue.GetType() == typeof(int))
 				return OleDbType.Integer;
 			if(paramValue.GetType() == typeof(DateTime))
-				return OleDbType.DBDate;
+				return OleDbType.Date;
 			if(paramValue.GetType() == typeof(string))
 				return OleDbType.VarWChar;
 			
 			throw new DataException("Type Db type not found:" + paramValue.ToString());
 		}
 
-		public static Hashtable ExecuteGetHastTable(string cmdText)
+		public static Hashtable ExecuteGetFirstRow(string cmdText)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
@@ -663,7 +664,39 @@ namespace PTM.Data
 				cmd.Connection.Close();
 			}
 		}
-
+		public static ArrayList ExecuteGetRows(string cmdText, string[] paramNames,  object[] paramValues)
+		{
+			OleDbCommand cmd;
+			cmd = GetNewCommand(cmdText);
+			for(int i = 0; i<paramValues.Length;i++)
+			{
+				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
+				param.Value = paramValues[i];
+				param.SourceColumn = paramNames[i];
+				cmd.Parameters.Add(param);
+			}
+			try
+			{			
+				cmd.Connection.Open();
+				OleDbDataReader reader = cmd.ExecuteReader();
+				if(!reader.HasRows)
+					return null;
+				ArrayList list = new ArrayList();
+				while(reader.Read())
+				{
+					Hashtable hash = new Hashtable();
+					for(int i=0;i<reader.FieldCount;i++)
+						hash.Add(reader.GetName(i), reader[i]);
+					list.Add(hash);
+				}
+				reader.Close();
+				return list;
+			}
+			finally
+			{
+				cmd.Connection.Close();
+			}
+		}
 		public static int ExecuteInsert(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;

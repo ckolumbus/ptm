@@ -33,7 +33,7 @@ namespace PTM.Business
 			taskLogTimer = new Timer(1000);
 			taskLogTimer.Elapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
 		}
-		public static Log AddTasksLog(int taskId)
+		public static Log AddLog(int taskId)
 		{
 			UpdateCurrentLogDuration();
 			
@@ -58,14 +58,15 @@ namespace PTM.Business
 			Log log;
 			log = FindById(id);
 			log.TaskId = taskId;
-			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + id);
+			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + ", UpdateTime = ? WHERE Id = " + id, 
+				new string[]{"UpdateTime"}, new object[]{DateTime.Now});
 			if(LogChanged!=null)
 			{
 				LogChanged(new LogChangeEventArgs(log, DataRowAction.Change));
 			}
 		}
 		
-		public static void DeleteTaskLog(int id)
+		public static void DeleteLog(int id)
 		{
 			Log log;
 			log = FindById(id);
@@ -119,7 +120,7 @@ namespace PTM.Business
 			{
 				if (string.Compare(childRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
 				{
-					return AddTasksLog(childRow.Id);
+					return AddLog(childRow.Id);
 				}
 			}
 			
@@ -132,21 +133,21 @@ namespace PTM.Business
 					row.ItemArray = defaultRow.ItemArray;
 					row.ParentId = taskParentId;
 					row.Id = Tasks.AddTasksRow(row);
-					return AddTasksLog(row.Id);
+					return AddLog(row.Id);
 				}
 			}
 			throw new InvalidOperationException();
 		}
-		public static Log FindById(int taskLogId)
+		public static Log FindById(int id)
 		{
-//			if(currentLog!=null && currentLog.Id == taskLogId)
+//			if(currentLog!=null && currentLog.Id == id)
 //				return currentLog;
 			Hashtable hash;
-			hash = DataAdapterManager.ExecuteGetHastTable("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + taskLogId);
+			hash = DataAdapterManager.ExecuteGetFirstRow("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + id);
 			if(hash==null)
 				return null;
 			Log log = new Log();
-			log.Id = taskLogId;
+			log.Id = id;
 			log.TaskId = (int) hash["TaskId"];
 			log.Duration = (int) hash["Duration"];
 			log.InsertTime = (DateTime) hash["InsertTime"];
@@ -166,6 +167,29 @@ namespace PTM.Business
 			if(AfterStopLogging!=null)
 				AfterStopLogging(null, null);
 		}
+		public static ArrayList GetLogsByDay(DateTime day)
+		{
+			DateTime date = day.Date;
+			ArrayList hashList = DataAdapterManager.ExecuteGetRows(
+				"Select Id, TaskId, Duration, InsertTime  from TasksLog where InsertTime >= ? and InsertTime <= ? order by InsertTime", 
+				new string[]{"InsertTimeFrom", "InsertTimeTo"}, new object[]{date, date.AddDays(1).AddSeconds(-1)});
+			
+			if(hashList == null)
+				return null;
+
+			ArrayList list = new ArrayList();
+			foreach (Hashtable hashtable in hashList)
+			{
+				Log log = new Log();
+				log.Id = (int) hashtable["Id"];;
+				log.TaskId = (int) hashtable["TaskId"];
+				log.Duration = (int) hashtable["Duration"];
+				log.InsertTime = (DateTime) hashtable["InsertTime"];
+				list.Add(log);
+			}
+			return list;
+		}
+		
 		#endregion
 
 		#region Private Methods
@@ -174,8 +198,8 @@ namespace PTM.Business
 			if(currentLog==null)
 				return;
 			
-			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET Duration = ? WHERE Id = " + Logs.currentLog.Id, 
-				new string[]{"Duration"}, new object[]{Logs.currentLog.Duration});
+			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET Duration = ?, UpdateTime = ? WHERE Id = " + Logs.currentLog.Id, 
+				new string[]{"Duration", "UpdateTime"}, new object[]{Logs.currentLog.Duration, DateTime.Now});
 			if(LogChanged!=null)
 			{
 				LogChanged(new LogChangeEventArgs(Logs.currentLog, DataRowAction.Change));

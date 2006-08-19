@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Drawing;
+using System.Globalization;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace PTM.View
@@ -13,7 +15,7 @@ namespace PTM.View
 		private static ImageList iconsList = new ImageList();
 		private static ArrayList iconsArray = new ArrayList();
 		private static Hashtable iconsMapTable = new Hashtable();
-
+		
 		public static ImageList IconsList
 		{
 			get { return iconsList; }

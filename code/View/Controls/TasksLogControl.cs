@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -21,7 +22,6 @@ namespace PTM.View.Controls
 	{
 		private Button editButton;
 		private Button addTaskButton;
-		private ColumnHeader DateTaskHeader;
 		private ColumnHeader TaskDescriptionHeader;
 		private ColumnHeader DurationTaskHeader;
 		private System.Timers.Timer notifyAnswerTimer;
@@ -40,8 +40,6 @@ namespace PTM.View.Controls
 		private MenuItem menuItem3;
 		private MenuItem menuItem4;
 		private MenuItem menuItem10;
-		private ColumnHeader TaskIdHeader;
-		private ColumnHeader TaskLogIdHeader;
 		private TreeListView taskList;
 		private ColumnHeader Description;
 		private ColumnHeader Time;
@@ -50,6 +48,8 @@ namespace PTM.View.Controls
 		private System.Windows.Forms.Button switchToButton;
 		private System.Windows.Forms.Button deleteButton;
 		private ColumnHeader Id2;
+		private System.Windows.Forms.ColumnHeader StartTimeHeader;
+		//private ArrayList logList;
 
 		public TasksLogControl()
 		{
@@ -63,8 +63,6 @@ namespace PTM.View.Controls
 			notifyIcon.Click+=new EventHandler(notifyIcon_Click);
 			addTaskButton.Click+=new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick+=new EventHandler(taskList_DoubleClick);
-			//tasksLogTimer.Elapsed+=new ElapsedEventHandler(tasksLogTimer_Elapsed);
-			//TasksLogHelper.TaskLogTimer.TasksLogDurationCountElapsed+=new ElapsedEventHandler(timer_Elapsed);
 
 			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
@@ -72,8 +70,27 @@ namespace PTM.View.Controls
 			ApplicationsLog.ApplicationsLogRowChanged+=new PTMDataset.ApplicationsLogRowChangeEventHandler(ApplicationsLogTable_ApplicationsLogRowChanged);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
+			//this.Load+=new EventHandler(TasksLogControl_Load);
 			
-	}
+			
+		}
+
+		private void AddLogToList(Log log)
+		{
+			PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
+			TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+			SetListItemValues(itemA,log, taskRow);
+			taskList.Items.Insert(0,itemA);
+		}
+		
+		private void LoadTodayLog()
+		{
+			ArrayList list = Logs.GetLogsByDay(DateTime.Today);
+			foreach (Log log in list)
+			{
+				AddLogToList(log);
+			}
+		}
 
 		protected override void Dispose( bool disposing )
 		{
@@ -99,10 +116,8 @@ namespace PTM.View.Controls
 			this.editButton = new System.Windows.Forms.Button();
 			this.addTaskButton = new System.Windows.Forms.Button();
 			this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
-			this.DateTaskHeader = new System.Windows.Forms.ColumnHeader();
+			this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
 			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
-			this.TaskLogIdHeader = new System.Windows.Forms.ColumnHeader();
-			this.TaskIdHeader = new System.Windows.Forms.ColumnHeader();
 			this.notifyAnswerTimer = new System.Timers.Timer();
 			this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
 			this.exitContextMenuItem = new System.Windows.Forms.MenuItem();
@@ -156,25 +171,15 @@ namespace PTM.View.Controls
 			this.TaskDescriptionHeader.Text = "Task Description";
 			this.TaskDescriptionHeader.Width = 226;
 			// 
-			// DateTaskHeader
+			// StartTimeHeader
 			// 
-			this.DateTaskHeader.Text = "Start Time";
-			this.DateTaskHeader.Width = 80;
+			this.StartTimeHeader.Text = "Start Time";
+			this.StartTimeHeader.Width = 80;
 			// 
 			// DurationTaskHeader
 			// 
 			this.DurationTaskHeader.Text = "Duration";
 			this.DurationTaskHeader.Width = 80;
-			// 
-			// TaskLogIdHeader
-			// 
-			this.TaskLogIdHeader.Text = "Log";
-			this.TaskLogIdHeader.Width = 0;
-			// 
-			// TaskIdHeader
-			// 
-			this.TaskIdHeader.Text = "Id";
-			this.TaskIdHeader.Width = 0;
 			// 
 			// notifyAnswerTimer
 			// 
@@ -278,9 +283,7 @@ namespace PTM.View.Controls
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																											  this.TaskDescriptionHeader,
 																											  this.DurationTaskHeader,
-																											  this.DateTaskHeader,
-																											  this.TaskLogIdHeader,
-																											  this.TaskIdHeader});
+																											  this.StartTimeHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 8);
 			this.taskList.Name = "taskList";
@@ -376,7 +379,7 @@ namespace PTM.View.Controls
 
 		private void AddTaskLog(int taskId , int defaultMins)
 		{
-			Logs.AddTasksLog(taskId);
+			Logs.AddLog(taskId);
 			ResetNotifyTimer(defaultMins);
 		}
 
@@ -391,7 +394,8 @@ namespace PTM.View.Controls
 		{
 			if(!isValidEditableLog())
 				return;
-			int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
+			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+			//int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
 			string duration= taskList.SelectedItems[0].SubItems[DurationTaskHeader.Index].Text;
 			
 			TaskLogForm taskLogForm = new TaskLogForm(taskId, duration);
@@ -399,7 +403,8 @@ namespace PTM.View.Controls
 			{
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
-					int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
+					int taskLogId = ((Log) taskList.SelectedItems[0].Tag).Id;
+					//int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
 					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskRow.Id);
 				}
 			}
@@ -412,8 +417,9 @@ namespace PTM.View.Controls
 			
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
-					int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
-					Logs.DeleteTaskLog(taskLogId);
+					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
+					//int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
+					Logs.DeleteLog(taskLogId);
 				}
 			
 		}
@@ -452,8 +458,8 @@ namespace PTM.View.Controls
 		{
 			if(!isValidEditableLog())
 				return;
-			
-			int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
+			int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
+			//int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
 			AddTaskLog(taskId, 
 				Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue, CultureInfo.InvariantCulture));
 
@@ -477,7 +483,7 @@ namespace PTM.View.Controls
 					this.editButton.Enabled = false;
 					return;
 				}
-				int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
+				int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
 				for(int i = 1 ; i<this.taskList.SelectedItems.Count;i++)
 				{
 					if(taskList.SelectedItems[i].Parent!=null)
@@ -485,7 +491,7 @@ namespace PTM.View.Controls
 						this.editButton.Enabled = false;
 						return;
 					}
-					if(Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture)!=taskId)
+					if(((Log)taskList.SelectedItems[i].Tag).TaskId!=taskId)
 					{
 						this.editButton.Enabled = false;
 						return;
@@ -650,7 +656,7 @@ namespace PTM.View.Controls
 			{
 				foreach (ListViewItem item in this.taskList.Items)
 				{
-					if (item.SubItems[TaskIdHeader.Index].Text == e.Row.Id.ToString(CultureInfo.InvariantCulture))
+					if (((Log)item.Tag).TaskId == e.Row.Id)
 					{
 						item.SubItems[TaskDescriptionHeader.Index].Text = e.Row.Description;
 					}
@@ -664,7 +670,7 @@ namespace PTM.View.Controls
 				{			
 					foreach (ListViewItem item in this.taskList.Items)
 					{
-						if (item.SubItems[TaskIdHeader.Index].Text == e.Row.Id.ToString(CultureInfo.InvariantCulture))
+						if (((Log)item.Tag).TaskId == e.Row.Id)
 						{
 							item.Remove();
 						}
@@ -678,7 +684,7 @@ namespace PTM.View.Controls
 			{
 				foreach (TreeListViewItem item in this.taskList.Items)
 				{
-					if (item.SubItems[TaskLogIdHeader.Index].Text == e.Log.Id.ToString(CultureInfo.InvariantCulture))
+					if (((Log)item.Tag).Id == e.Log.Id)
 					{
 						PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 						SetListItemValues(item,e.Log, taskRow);
@@ -690,7 +696,7 @@ namespace PTM.View.Controls
 			else if(e.Action == DataRowAction.Add)
 			{
 				PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
-				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"00:00:00", DateTime.Now.ToShortTimeString(), "",""});
+				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
 				SetListItemValues(itemA,e.Log, taskRow);
 				taskList.Items.Insert(0,itemA);
 				this.notifyIcon.Text = taskRow.Description;			
@@ -703,22 +709,22 @@ namespace PTM.View.Controls
 			{
 				item.Text = taskRow.Description;
 			}
-			item.SubItems[TaskLogIdHeader.Index].Text = log.Id.ToString(CultureInfo.InvariantCulture);
-			item.SubItems[TaskIdHeader.Index].Text = taskRow.Id.ToString(CultureInfo.InvariantCulture);
 			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
+			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
 			
 			if (taskRow.IsDefaultTask)
 			{
 				item.ImageIndex = IconsManager.GetIndex(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
-				if(log.Id == Logs.CurrentLog.Id)
+				if(Logs.CurrentLog!=null && log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon = IconsManager.GetIcon(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
 			}
 			else
 			{
 				item.ImageIndex = IconsManager.GetIndex("0");
-				if(log.Id == Logs.CurrentLog.Id)
+				if(Logs.CurrentLog!=null && log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon =  IconsManager.GetIcon("0");
 			}
+			item.Tag = log;
 		}
 
 		private void ApplicationsLogTable_ApplicationsLogRowChanged(object sender, PTMDataset.ApplicationsLogRowChangeEvent e)
@@ -739,8 +745,7 @@ namespace PTM.View.Controls
 			TreeListViewItem lvi = null;
 			foreach (TreeListViewItem item in this.taskList.Items[0].Items)
 			{
-				if (Convert.ToInt32(item.SubItems[TaskLogIdHeader.Index].Text, 
-					CultureInfo.InvariantCulture) == appRow.Id)
+				if (((Log)item.Tag).Id == appRow.Id)
 				{
 					lvi = item;
 					lvi.SubItems[TaskDescriptionHeader.Index].Text = caption;
@@ -758,5 +763,9 @@ namespace PTM.View.Controls
 
 		#endregion
 
+		private void TasksLogControl_Load(object sender, EventArgs e)
+		{
+			LoadTodayLog();
+		}
 	}
 }
