@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Timer = System.Timers.Timer;
 
 namespace PTM.View.Forms
 {
@@ -14,10 +15,9 @@ namespace PTM.View.Forms
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label lblVersion;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.ProgressBar progressBar;
+		private System.ComponentModel.IContainer components;
 
 		public SplashForm()
 		{
@@ -26,6 +26,8 @@ namespace PTM.View.Forms
 			//
 			InitializeComponent();
 			lblVersion.Text += Application.ProductVersion;
+			
+			
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
@@ -57,6 +59,9 @@ namespace PTM.View.Forms
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblVersion = new System.Windows.Forms.Label();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.progressBar = new System.Windows.Forms.ProgressBar();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -71,8 +76,9 @@ namespace PTM.View.Forms
 			// 
 			// label1
 			// 
+			this.label1.BackColor = System.Drawing.Color.White;
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label1.ForeColor = System.Drawing.Color.Lime;
+			this.label1.ForeColor = System.Drawing.Color.Brown;
 			this.label1.Location = new System.Drawing.Point(80, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(184, 24);
@@ -81,29 +87,64 @@ namespace PTM.View.Forms
 			// 
 			// lblVersion
 			// 
-			this.lblVersion.ForeColor = System.Drawing.Color.Lime;
+			this.lblVersion.BackColor = System.Drawing.Color.White;
+			this.lblVersion.ForeColor = System.Drawing.Color.Black;
 			this.lblVersion.Location = new System.Drawing.Point(88, 48);
 			this.lblVersion.Name = "lblVersion";
 			this.lblVersion.TabIndex = 3;
 			this.lblVersion.Text = "v.";
 			// 
+			// panel1
+			// 
+			this.panel1.BackColor = System.Drawing.Color.White;
+			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.Controls.Add(this.progressBar);
+			this.panel1.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(272, 112);
+			this.panel1.TabIndex = 4;
+			// 
+			// progressBar
+			// 
+			this.progressBar.Location = new System.Drawing.Point(8, 80);
+			this.progressBar.Name = "progressBar";
+			this.progressBar.Size = new System.Drawing.Size(256, 23);
+			this.progressBar.TabIndex = 0;
+			// 
 			// SplashForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(272, 86);
+			this.BackColor = System.Drawing.SystemColors.Control;
+			this.ClientSize = new System.Drawing.Size(272, 112);
 			this.Controls.Add(this.lblVersion);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
+			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "SplashForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.TransparencyKey = System.Drawing.Color.Lime;
+			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
+		public void SetLoadProgress(int percent)
+		{
+			if(percent>100)
+				return;
+			this.progressBar.Value = percent;
+			this.Refresh();
+			Application.DoEvents();
+		}
+
+		public void AddProgress(int percent)
+		{
+			SetLoadProgress(this.progressBar.Value+10);
+		}
 	}
 }

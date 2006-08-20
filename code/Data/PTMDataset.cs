@@ -438,7 +438,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableApplicationsLog.ProcessIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -452,7 +452,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableApplicationsLog.TaskLogIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -466,7 +466,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableApplicationsLog.NameColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -480,7 +480,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableApplicationsLog.CaptionColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -494,7 +494,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableApplicationsLog.ApplicationFullPathColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -508,7 +508,7 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableApplicationsLog.LastUpdateTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -522,7 +522,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableApplicationsLog.UserProcessorTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -536,7 +536,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableApplicationsLog.ActiveTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -889,7 +889,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.DefaultTaskIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -903,7 +903,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableTasks.DescriptionColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -926,7 +926,7 @@ namespace PTM.Data {
                         return ((bool)(this[this.tableTasks.IsDefaultTaskColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -940,7 +940,7 @@ namespace PTM.Data {
                         return ((bool)(this[this.tableTasks.IsFinishedColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -954,7 +954,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.ParentIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -968,7 +968,7 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableTasks.StartDateColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -982,7 +982,7 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableTasks.StopDateColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -996,7 +996,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.TotalTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {

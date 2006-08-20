@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
 using System.Globalization;
 using System.Timers;
 using PTM.Data;
@@ -190,10 +188,7 @@ namespace PTM.Business
 			return list;
 		}
 		
-		#endregion
-
-		#region Private Methods
-		private static void UpdateCurrentLogDuration()
+		public static void UpdateCurrentLogDuration()
 		{
 			if(currentLog==null)
 				return;
@@ -205,6 +200,10 @@ namespace PTM.Business
 				LogChanged(new LogChangeEventArgs(Logs.currentLog, DataRowAction.Change));
 			}
 		}
+
+		#endregion
+
+		#region Private Methods
 		
 		private static void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
@@ -247,8 +246,8 @@ namespace PTM.Business
 		
 		public static event LogChangeEventHandler LogChanged;
 		public static event ElapsedEventHandler TasksLogDurationCountElapsed;
-		public static event System.EventHandler AfterStartLogging;
-		public static event System.EventHandler AfterStopLogging;
+		public static event EventHandler AfterStartLogging;
+		public static event EventHandler AfterStopLogging;
 		#endregion
 	}
 }

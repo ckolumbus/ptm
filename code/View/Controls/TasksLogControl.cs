@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
-using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Business;
@@ -12,6 +10,7 @@ using PTM.Data;
 using PTM.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
+using Timer = System.Timers.Timer;
 
 namespace PTM.View.Controls
 {
@@ -24,10 +23,10 @@ namespace PTM.View.Controls
 		private Button addTaskButton;
 		private ColumnHeader TaskDescriptionHeader;
 		private ColumnHeader DurationTaskHeader;
-		private System.Timers.Timer notifyAnswerTimer;
+		private Timer notifyAnswerTimer;
 		private ContextMenu notifyContextMenu;
 		private MenuItem exitContextMenuItem;
-		private System.Timers.Timer notifyTimer;
+		private Timer notifyTimer;
 		private NotifyIcon notifyIcon;
 		private IContainer components;
 		private MenuItem menuItem1;
@@ -41,15 +40,9 @@ namespace PTM.View.Controls
 		private MenuItem menuItem4;
 		private MenuItem menuItem10;
 		private TreeListView taskList;
-		private ColumnHeader Description;
-		private ColumnHeader Time;
-		private ColumnHeader Duration;
-		private ColumnHeader Id;
-		private System.Windows.Forms.Button switchToButton;
-		private System.Windows.Forms.Button deleteButton;
-		private ColumnHeader Id2;
-		private System.Windows.Forms.ColumnHeader StartTimeHeader;
-		//private ArrayList logList;
+		private Button switchToButton;
+		private Button deleteButton;
+		private ColumnHeader StartTimeHeader;
 
 		public TasksLogControl()
 		{
@@ -66,11 +59,11 @@ namespace PTM.View.Controls
 
 			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			ApplicationsLog.ApplicationsLogRowChanged+=new PTMDataset.ApplicationsLogRowChangeEventHandler(ApplicationsLogTable_ApplicationsLogRowChanged);
+			Logs.LogChanged+=new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			ApplicationsLog.ApplicationsLogChanged+=new PTM.Business.ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
-			//this.Load+=new EventHandler(TasksLogControl_Load);
+			this.Load+=new EventHandler(TasksLogControl_Load);
 			
 			
 		}
@@ -134,11 +127,11 @@ namespace PTM.View.Controls
 			this.notifyTimer = new System.Timers.Timer();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-			this.Description = new System.Windows.Forms.ColumnHeader();
-			this.Time = new System.Windows.Forms.ColumnHeader();
-			this.Duration = new System.Windows.Forms.ColumnHeader();
-			this.Id = new System.Windows.Forms.ColumnHeader();
-			this.Id2 = new System.Windows.Forms.ColumnHeader();
+//			this.Description = new System.Windows.Forms.ColumnHeader();
+//			this.Time = new System.Windows.Forms.ColumnHeader();
+//			this.Duration = new System.Windows.Forms.ColumnHeader();
+//			this.Id = new System.Windows.Forms.ColumnHeader();
+			//this.Id2 = new System.Windows.Forms.ColumnHeader();
 			this.switchToButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
@@ -293,26 +286,26 @@ namespace PTM.View.Controls
 			// 
 			// Description
 			// 
-			this.Description.Text = "Description";
-			this.Description.Width = 230;
-			// 
-			// Time
-			// 
-			this.Time.Text = "Time";
-			this.Time.Width = 80;
-			// 
-			// Duration
-			// 
-			this.Duration.Text = "Duration";
-			this.Duration.Width = 78;
-			// 
-			// Id
-			// 
-			this.Id.Width = 0;
+//			this.Description.Text = "Description";
+//			this.Description.Width = 230;
+//			// 
+//			// Time
+//			// 
+//			this.Time.Text = "Time";
+//			this.Time.Width = 80;
+//			// 
+//			// Duration
+//			// 
+//			this.Duration.Text = "Duration";
+//			this.Duration.Width = 78;
+//			// 
+//			// Id
+//			// 
+//			this.Id.Width = 0;
 			// 
 			// Id2
 			// 
-			this.Id2.Width = 0;
+			//this.Id2.Width = 0;
 			// 
 			// switchToButton
 			// 
@@ -439,7 +432,7 @@ namespace PTM.View.Controls
 			EditSelectedTaskLog();
 		}
 		
-		private void deleteButton_Click(object sender, System.EventArgs e)
+		private void deleteButton_Click(object sender, EventArgs e)
 		{
 			DeleteSelectedTaskLog();
 		}
@@ -454,7 +447,7 @@ namespace PTM.View.Controls
 			return true;
 		}
 		
-		private void switchToButton_Click(object sender, System.EventArgs e)
+		private void switchToButton_Click(object sender, EventArgs e)
 		{
 			if(!isValidEditableLog())
 				return;
@@ -465,7 +458,7 @@ namespace PTM.View.Controls
 
 		}
 
-		private void taskList_SelectedIndexChanged(object sender, System.EventArgs e)
+		private void taskList_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if(this.taskList.SelectedItems.Count<=0)
 				this.editButton.Enabled = false;
@@ -573,13 +566,9 @@ namespace PTM.View.Controls
 		public event EventHandler Exit;
 		private void exitContextMenuItem_Click(object sender, EventArgs e)
 		{
-			//this.tasksLogTimer.Stop();
-			//LogTimer.timer.Stop();
 			this.notifyTimer.Stop();
 			this.notifyAnswerTimer.Stop();
 			this.notifyIcon.Visible = false;
-			this.notifyIcon.Icon.Dispose();
-			this.notifyIcon.Dispose();
 			this.Exit(this, e);
 		}
 
@@ -678,7 +667,7 @@ namespace PTM.View.Controls
 				}
 		}
 
-		private void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
 			if(e.Action == DataRowAction.Change)
 			{
@@ -705,6 +694,7 @@ namespace PTM.View.Controls
 
 		private void SetListItemValues(ListViewItem item, Log log ,PTMDataset.TasksRow taskRow)
 		{
+			item.Tag = log;
 			if(item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
 			{
 				item.Text = taskRow.Description;
@@ -724,41 +714,49 @@ namespace PTM.View.Controls
 				if(Logs.CurrentLog!=null && log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon =  IconsManager.GetIcon("0");
 			}
-			item.Tag = log;
+			
 		}
 
-		private void ApplicationsLogTable_ApplicationsLogRowChanged(object sender, PTMDataset.ApplicationsLogRowChangeEvent e)
-		{
-			if(e.Action == DataRowAction.Change)
-			{
-				this.UpdateApplicationsList(e.Row);
-			}
-		}
-
-		private void UpdateApplicationsList(PTMDataset.ApplicationsLogRow appRow)
+		private void UpdateApplicationsList(ApplicationLog appRow)
 		{
 			if (appRow == null) {return;}
 
 			TimeSpan active =  new TimeSpan(0,0,appRow.ActiveTime);
 			string activeTime = ViewHelper.TimeSpanToTimeString(active);
 			string caption = appRow.Caption.Length != 0 ? appRow.Caption : appRow.Name;
-			TreeListViewItem lvi = null;
-			foreach (TreeListViewItem item in this.taskList.Items[0].Items)
+			//TreeListViewItem lvi = null;
+			foreach (TreeListViewItem logItem in this.taskList.Items)
 			{
-				if (((Log)item.Tag).Id == appRow.Id)
+//				if(item.Tag==null)
+//					return;
+				if (((Log)logItem.Tag).Id == appRow.TaskLogId)
 				{
-					lvi = item;
-					lvi.SubItems[TaskDescriptionHeader.Index].Text = caption;
-					lvi.SubItems[DurationTaskHeader.Index].Text = activeTime;
-					break;
+					foreach (TreeListViewItem appItem in logItem.Items)
+					{
+						if(((ApplicationLog)appItem.Tag).Id == appRow.Id)
+						{
+							appItem.Tag = appRow;
+							appItem.SubItems[TaskDescriptionHeader.Index].Text = caption;
+							appItem.SubItems[DurationTaskHeader.Index].Text = activeTime;
+							return;
+						}
+					}
+					TreeListViewItem lvi = new TreeListViewItem(caption, new string[] {activeTime, "", appRow.Id.ToString(CultureInfo.InvariantCulture)});
+					lvi.Tag = appRow;
+					lvi.ImageIndex = IconsManager.AddIconFromFile(appRow.ApplicationFullPath);
+					logItem.Items.Add(lvi);
+					//this.taskList.Refresh();
 				}
 			}
-			if (lvi == null)
-			{
-				lvi = new TreeListViewItem(caption, new string[] {activeTime, "", appRow.Id.ToString(CultureInfo.InvariantCulture)});
-				lvi.ImageIndex = IconsManager.AddIconFromFile(appRow.ApplicationFullPath);
-				this.taskList.Items[0].Items.Add(lvi);
-			}
+		}
+
+		private void ApplicationsLog_ApplicationsLogChanged(PTM.Business.ApplicationsLog.ApplicationLogChangeEventArgs e)
+		{
+			this.UpdateApplicationsList(e.ApplicationLog);
+//			if(e.Action == DataRowAction.Change)
+//			{
+//				
+//			}
 		}
 
 		#endregion
@@ -767,5 +765,7 @@ namespace PTM.View.Controls
 		{
 			LoadTodayLog();
 		}
+
+
 	}
 }

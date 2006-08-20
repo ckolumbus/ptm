@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Timers;
 using PTM.Data;
+using PTM.Infos;
 using PTM.View;
 using Timer = System.Timers.Timer;
 
@@ -20,8 +21,7 @@ namespace PTM.Business
 		private static DbDataAdapter dataAdapter;
 		private static Process[] processes;
 		private static PTMDataset.ApplicationsLogDataTable applicationsLogTable;
-		private static Process currentProcess;
-		private static Process lastProcess;
+		//private static Process currentProcess;
 		private static Timer applicationsTimer;
 		private static Thread loggingThread;
 
@@ -29,20 +29,25 @@ namespace PTM.Business
 		#endregion
 
 		#region Public Methods
-		internal static void Initialize(PTMDataset.ApplicationsLogDataTable dataTable, DbDataAdapter adapter)
+		public static void Initialize(DbDataAdapter adapter)
 		{
 			processes = Process.GetProcesses();
 			loggingThread = null;
-			currentProcess = null;
-			lastProcess = null;
+			//currentProcess = null;
 			applicationsTimer = new Timer(1000);
 			dataAdapter = adapter;
-			applicationsLogTable = dataTable;
-			applicationsTimer.Elapsed+=new ElapsedEventHandler(ApplicationsTimer_Elapsed);
-			applicationsLogTable.ApplicationsLogRowChanged+=new PTMDataset.ApplicationsLogRowChangeEventHandler(applicationsLogTable_ApplicationsLogRowChanged);
+			//applicationsLogTable = dataTable;
+			
+			applicationsTimer.Elapsed+=new ElapsedEventHandler(ApplicationsTimer_Elapsed);			
 			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
+			//Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);			
+		}
+
+		public static void SaveApplicationsLog()
+		{
+			dataAdapter.Update(applicationsLogTable);
+			applicationsLogTable.AcceptChanges();
 		}
 
 		#endregion
@@ -53,11 +58,7 @@ namespace PTM.Business
 			try
 			{
 				applicationsTimer.Stop();
-				currentProcess = null;
-
-				if (processes == null)
-					processes = Process.GetProcesses();
-
+				
 				IntPtr hwnd = ViewHelper.GetForegroundWindow();
 				//TODO: Hacer que no tome en cuenta el taskbar
 				if (hwnd.ToInt32() == 0)
@@ -70,22 +71,11 @@ namespace PTM.Business
 				if (pwnd.ToInt32() == 0)
 					pwnd = hwnd;
 
-				IntPtr processId = ViewHelper.GetWindowThreadProcessId(pwnd, IntPtr.Zero);
-
-				foreach (Process process in processes)
-				{
-					if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
-					{
-						currentProcess = process;
-						currentProcess.Refresh();
-						break;
-					}
-				}
+				Process currentProcess;
+				currentProcess = GetCurrentProcess(pwnd);
 
 				if (currentProcess == null)
 				{
-					processes = Process.GetProcesses();
-					lastProcess = currentProcess;
 					return;
 				}
 				else
@@ -95,45 +85,69 @@ namespace PTM.Business
 					select += "AND " + applicationsLogTable.TaskLogIdColumn.ColumnName + "=" + Logs.CurrentLog.Id;
 					PTMDataset.ApplicationsLogRow[] rows = (PTMDataset.ApplicationsLogRow[]) applicationsLogTable.Select(select);
 					if (rows.Length == 0)
+					{
 						row = applicationsLogTable.NewApplicationsLogRow();
-					else
-						row = rows[0];
-
-					row.TaskLogId = Logs.CurrentLog.Id;
-					row.ProcessId = currentProcess.Id;
-					row.Name = currentProcess.MainModule.ModuleName;
-					row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
-					row.ApplicationFullPath = currentProcess.MainModule.FileName;
-					row.Caption = currentProcess.MainWindowTitle;
-
-					if (row.RowState == DataRowState.Detached)
-					{
+						row.TaskLogId = Logs.CurrentLog.Id;
+						row.ProcessId = currentProcess.Id;
+						row.Name = currentProcess.MainModule.ModuleName;
+						row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
+						row.ApplicationFullPath = currentProcess.MainModule.FileName;
+						row.Caption = currentProcess.MainWindowTitle;
+						row.Id = -1;
 						row.ActiveTime = 0;
-					}
-					else if (lastProcess != null && lastProcess.Id == currentProcess.Id)
-					{
-						row.ActiveTime = Convert.ToInt32(new TimeSpan(0, 0, row.ActiveTime).Add(DateTime.Now - row.LastUpdateTime).TotalSeconds);
-					}
-
-					row.LastUpdateTime = DateTime.Now;
-
-					if (row.RowState == DataRowState.Detached)
+						row.LastUpdateTime = DateTime.Now;
 						applicationsLogTable.AddApplicationsLogRow(row);
+						SaveApplicationsLog();
+						RaiseApplicationLogChangeEvent(new PTMDataset.ApplicationsLogRowChangeEvent(row, DataRowAction.Add));
+					}
+					else
+					{
+						row = rows[0];
+						row.Caption = currentProcess.MainWindowTitle;
+						row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
+						row.ActiveTime = Convert.ToInt32(new TimeSpan(0, 0, row.ActiveTime).Add(DateTime.Now - row.LastUpdateTime).TotalSeconds);
+						row.LastUpdateTime = DateTime.Now;
+						RaiseApplicationLogChangeEvent(new PTMDataset.ApplicationsLogRowChangeEvent(row, DataRowAction.Change));
+					}
 
-					lastProcess = currentProcess;
 					return;
 				}
-			}
-			catch
-			{
-				lastProcess = null;
-				return;
 			}
 			finally
 			{
 				applicationsTimer.Start();
 			}
 		}
+
+		private static Process GetCurrentProcess(IntPtr pwnd)
+		{
+			IntPtr processId = ViewHelper.GetWindowThreadProcessId(pwnd, IntPtr.Zero);
+			Process currentProcess=null;
+			foreach (Process process in processes)
+			{
+				if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
+				{
+					currentProcess = process;
+					currentProcess.Refresh();
+					break;
+				}
+			}
+			if(currentProcess == null)
+			{
+				processes = Process.GetProcesses();
+				foreach (Process process in processes)
+				{
+					if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
+					{
+						currentProcess = process;
+						currentProcess.Refresh();
+						break;
+					}
+				}
+			}
+			return currentProcess;
+		}
+
 		private static bool HasThreadId(Process process, IntPtr processId)
 		{
 			foreach (ProcessThread  pt in process.Threads)
@@ -144,30 +158,27 @@ namespace PTM.Business
 			return false;
 		}
 
-		private static void SaveApplicationsLog()
-		{
-			dataAdapter.Update(applicationsLogTable);
-			applicationsLogTable.AcceptChanges();
-		}
 		
 		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
 		{
 			if(e.Action == DataRowAction.Add)
 			{
-				SaveApplicationsLog();
-				applicationsLogTable.Clear();
+				if(applicationsLogTable==null)
+					applicationsLogTable = new PTMDataset.ApplicationsLogDataTable();
+				else if(applicationsLogTable.Rows.Count>0)
+				{
+					SaveApplicationsLog();
+					applicationsLogTable = new PTMDataset.ApplicationsLogDataTable();
+				}
+				UpdateActiveProcess();
 			}
 		}
 
-		#endregion
-
-		#region Events
-		public static  event PTMDataset.ApplicationsLogRowChangeEventHandler ApplicationsLogRowChanged;
 		private static void ApplicationsTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			InvokeLoggingThread();
+			UpdateActiveProcess();
+			//InvokeLoggingThread();
 		}
-
 		private static void InvokeLoggingThread()
 		{
 			if(loggingThread!=null && loggingThread.IsAlive)
@@ -177,28 +188,58 @@ namespace PTM.Business
 			loggingThread.Start();
 		}
 
-		private static void applicationsLogTable_ApplicationsLogRowChanged(object sender, PTMDataset.ApplicationsLogRowChangeEvent e)
-		{
-//			if(e.Action == DataRowAction.Add)
-//			{
-//				SaveApplicationsLogRow(e.Row);
-//				e.Row.AcceptChanges();
-//			}
-			if(ApplicationsLogRowChanged!=null)
-				ApplicationsLogRowChanged(sender, e);
-		}
-
-		private static void TasksLog_AfterStartLogging(object sender, EventArgs e)
-		{
-			InvokeLoggingThread();
-			applicationsTimer.Start();
-		}
+//		private static void TasksLog_AfterStartLogging(object sender, EventArgs e)
+//		{
+//			//InvokeLoggingThread();
+//            UpdateActiveProcess();
+//		}
 
 		private static void TasksLog_AfterStopLogging(object sender, EventArgs e)
 		{
 			applicationsTimer.Stop();
 			SaveApplicationsLog();
 		}
+
+		#endregion
+
+		#region Events
+		public static  event ApplicationLogChangeEventHandler ApplicationsLogChanged;
+		public delegate void ApplicationLogChangeEventHandler(ApplicationLogChangeEventArgs e);
+		public class ApplicationLogChangeEventArgs : EventArgs
+		{
+			private ApplicationLog applicationLog;
+			private DataRowAction action;
+			public ApplicationLogChangeEventArgs(ApplicationLog applicationLog, DataRowAction action)
+			{
+				this.applicationLog = applicationLog;
+				this.action = action;
+			}
+			public ApplicationLog ApplicationLog
+			{
+				get { return applicationLog; }
+			}
+			
+			public DataRowAction Action
+			{
+				get { return action; }
+			}
+		}
+
+		private static void RaiseApplicationLogChangeEvent(PTMDataset.ApplicationsLogRowChangeEvent e)
+		{
+			if(ApplicationsLogChanged!=null)
+			{
+				ApplicationLog applicationLog = new ApplicationLog();
+				applicationLog.Id = e.Row.Id;
+				applicationLog.Name = e.Row.Name;
+				applicationLog.ActiveTime = e.Row.ActiveTime;
+				applicationLog.ApplicationFullPath = e.Row.ApplicationFullPath;
+				applicationLog.Caption = e.Row.Caption;
+				applicationLog.TaskLogId = e.Row.TaskLogId;
+				ApplicationsLogChanged(new ApplicationLogChangeEventArgs(applicationLog, e.Action));
+			}
+		}
+
 		#endregion
 
 

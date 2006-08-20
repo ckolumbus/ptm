@@ -23,8 +23,6 @@ namespace PTM.Data {
         
         private ApplicationsSummaryDataTable tableApplicationsSummary;
         
-        private TasksSummaryDataTable tableTasksSummary;
-        
         public SummaryDataset() {
             this.InitClass();
             System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -39,9 +37,6 @@ namespace PTM.Data {
                 ds.ReadXmlSchema(new XmlTextReader(new System.IO.StringReader(strSchema)));
                 if ((ds.Tables["ApplicationsSummary"] != null)) {
                     this.Tables.Add(new ApplicationsSummaryDataTable(ds.Tables["ApplicationsSummary"]));
-                }
-                if ((ds.Tables["TasksSummary"] != null)) {
-                    this.Tables.Add(new TasksSummaryDataTable(ds.Tables["TasksSummary"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -69,14 +64,6 @@ namespace PTM.Data {
             }
         }
         
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public TasksSummaryDataTable TasksSummary {
-            get {
-                return this.tableTasksSummary;
-            }
-        }
-        
         public override DataSet Clone() {
             SummaryDataset cln = ((SummaryDataset)(base.Clone()));
             cln.InitVars();
@@ -97,9 +84,6 @@ namespace PTM.Data {
             ds.ReadXml(reader);
             if ((ds.Tables["ApplicationsSummary"] != null)) {
                 this.Tables.Add(new ApplicationsSummaryDataTable(ds.Tables["ApplicationsSummary"]));
-            }
-            if ((ds.Tables["TasksSummary"] != null)) {
-                this.Tables.Add(new TasksSummaryDataTable(ds.Tables["TasksSummary"]));
             }
             this.DataSetName = ds.DataSetName;
             this.Prefix = ds.Prefix;
@@ -123,10 +107,6 @@ namespace PTM.Data {
             if ((this.tableApplicationsSummary != null)) {
                 this.tableApplicationsSummary.InitVars();
             }
-            this.tableTasksSummary = ((TasksSummaryDataTable)(this.Tables["TasksSummary"]));
-            if ((this.tableTasksSummary != null)) {
-                this.tableTasksSummary.InitVars();
-            }
         }
         
         private void InitClass() {
@@ -138,15 +118,9 @@ namespace PTM.Data {
             this.EnforceConstraints = true;
             this.tableApplicationsSummary = new ApplicationsSummaryDataTable();
             this.Tables.Add(this.tableApplicationsSummary);
-            this.tableTasksSummary = new TasksSummaryDataTable();
-            this.Tables.Add(this.tableTasksSummary);
         }
         
         private bool ShouldSerializeApplicationsSummary() {
-            return false;
-        }
-        
-        private bool ShouldSerializeTasksSummary() {
             return false;
         }
         
@@ -157,8 +131,6 @@ namespace PTM.Data {
         }
         
         public delegate void ApplicationsSummaryRowChangeEventHandler(object sender, ApplicationsSummaryRowChangeEvent e);
-        
-        public delegate void TasksSummaryRowChangeEventHandler(object sender, TasksSummaryRowChangeEvent e);
         
         [System.Diagnostics.DebuggerStepThrough()]
         public class ApplicationsSummaryDataTable : DataTable, System.Collections.IEnumerable {
@@ -357,7 +329,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableApplicationsSummary.TaskIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -371,7 +343,7 @@ namespace PTM.Data {
                         return ((System.Double)(this[this.tableApplicationsSummary.TotalActiveTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -385,7 +357,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableApplicationsSummary.TotalApplicationsLogColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -399,7 +371,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableApplicationsSummary.NameColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -413,7 +385,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableApplicationsSummary.ApplicationFullPathColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -475,358 +447,6 @@ namespace PTM.Data {
             }
             
             public ApplicationsSummaryRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            public DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        [System.Diagnostics.DebuggerStepThrough()]
-        public class TasksSummaryDataTable : DataTable, System.Collections.IEnumerable {
-            
-            private DataColumn columnTaskId;
-            
-            private DataColumn columnDescription;
-            
-            private DataColumn columnTotalTime;
-            
-            private DataColumn columnTotalLogged;
-            
-            private DataColumn columnIsDefaultTask;
-            
-            private DataColumn columnDefaultTaskId;
-            
-            internal TasksSummaryDataTable() : 
-                    base("TasksSummary") {
-                this.InitClass();
-            }
-            
-            internal TasksSummaryDataTable(DataTable table) : 
-                    base(table.TableName) {
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-                this.DisplayExpression = table.DisplayExpression;
-            }
-            
-            [System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            internal DataColumn TaskIdColumn {
-                get {
-                    return this.columnTaskId;
-                }
-            }
-            
-            internal DataColumn DescriptionColumn {
-                get {
-                    return this.columnDescription;
-                }
-            }
-            
-            internal DataColumn TotalTimeColumn {
-                get {
-                    return this.columnTotalTime;
-                }
-            }
-            
-            internal DataColumn TotalLoggedColumn {
-                get {
-                    return this.columnTotalLogged;
-                }
-            }
-            
-            internal DataColumn IsDefaultTaskColumn {
-                get {
-                    return this.columnIsDefaultTask;
-                }
-            }
-            
-            internal DataColumn DefaultTaskIdColumn {
-                get {
-                    return this.columnDefaultTaskId;
-                }
-            }
-            
-            public TasksSummaryRow this[int index] {
-                get {
-                    return ((TasksSummaryRow)(this.Rows[index]));
-                }
-            }
-            
-            public event TasksSummaryRowChangeEventHandler TasksSummaryRowChanged;
-            
-            public event TasksSummaryRowChangeEventHandler TasksSummaryRowChanging;
-            
-            public event TasksSummaryRowChangeEventHandler TasksSummaryRowDeleted;
-            
-            public event TasksSummaryRowChangeEventHandler TasksSummaryRowDeleting;
-            
-            public void AddTasksSummaryRow(TasksSummaryRow row) {
-                this.Rows.Add(row);
-            }
-            
-            public TasksSummaryRow AddTasksSummaryRow(int TaskId, string Description, System.Double TotalTime, int TotalLogged, bool IsDefaultTask, int DefaultTaskId) {
-                TasksSummaryRow rowTasksSummaryRow = ((TasksSummaryRow)(this.NewRow()));
-                rowTasksSummaryRow.ItemArray = new object[] {
-                        TaskId,
-                        Description,
-                        TotalTime,
-                        TotalLogged,
-                        IsDefaultTask,
-                        DefaultTaskId};
-                this.Rows.Add(rowTasksSummaryRow);
-                return rowTasksSummaryRow;
-            }
-            
-            public System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            public override DataTable Clone() {
-                TasksSummaryDataTable cln = ((TasksSummaryDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            protected override DataTable CreateInstance() {
-                return new TasksSummaryDataTable();
-            }
-            
-            internal void InitVars() {
-                this.columnTaskId = this.Columns["TaskId"];
-                this.columnDescription = this.Columns["Description"];
-                this.columnTotalTime = this.Columns["TotalTime"];
-                this.columnTotalLogged = this.Columns["TotalLogged"];
-                this.columnIsDefaultTask = this.Columns["IsDefaultTask"];
-                this.columnDefaultTaskId = this.Columns["DefaultTaskId"];
-            }
-            
-            private void InitClass() {
-                this.columnTaskId = new DataColumn("TaskId", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnTaskId);
-                this.columnDescription = new DataColumn("Description", typeof(string), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnDescription);
-                this.columnTotalTime = new DataColumn("TotalTime", typeof(System.Double), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnTotalTime);
-                this.columnTotalLogged = new DataColumn("TotalLogged", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnTotalLogged);
-                this.columnIsDefaultTask = new DataColumn("IsDefaultTask", typeof(bool), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnIsDefaultTask);
-                this.columnDefaultTaskId = new DataColumn("DefaultTaskId", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnDefaultTaskId);
-                this.Constraints.Add(new UniqueConstraint("SummaryDatasetKey1", new DataColumn[] {
-                                this.columnTaskId}, false));
-                this.columnTaskId.AllowDBNull = false;
-                this.columnTaskId.Unique = true;
-            }
-            
-            public TasksSummaryRow NewTasksSummaryRow() {
-                return ((TasksSummaryRow)(this.NewRow()));
-            }
-            
-            protected override DataRow NewRowFromBuilder(DataRowBuilder builder) {
-                return new TasksSummaryRow(builder);
-            }
-            
-            protected override System.Type GetRowType() {
-                return typeof(TasksSummaryRow);
-            }
-            
-            protected override void OnRowChanged(DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.TasksSummaryRowChanged != null)) {
-                    this.TasksSummaryRowChanged(this, new TasksSummaryRowChangeEvent(((TasksSummaryRow)(e.Row)), e.Action));
-                }
-            }
-            
-            protected override void OnRowChanging(DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.TasksSummaryRowChanging != null)) {
-                    this.TasksSummaryRowChanging(this, new TasksSummaryRowChangeEvent(((TasksSummaryRow)(e.Row)), e.Action));
-                }
-            }
-            
-            protected override void OnRowDeleted(DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.TasksSummaryRowDeleted != null)) {
-                    this.TasksSummaryRowDeleted(this, new TasksSummaryRowChangeEvent(((TasksSummaryRow)(e.Row)), e.Action));
-                }
-            }
-            
-            protected override void OnRowDeleting(DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.TasksSummaryRowDeleting != null)) {
-                    this.TasksSummaryRowDeleting(this, new TasksSummaryRowChangeEvent(((TasksSummaryRow)(e.Row)), e.Action));
-                }
-            }
-            
-            public void RemoveTasksSummaryRow(TasksSummaryRow row) {
-                this.Rows.Remove(row);
-            }
-        }
-        
-        [System.Diagnostics.DebuggerStepThrough()]
-        public class TasksSummaryRow : DataRow {
-            
-            private TasksSummaryDataTable tableTasksSummary;
-            
-            internal TasksSummaryRow(DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableTasksSummary = ((TasksSummaryDataTable)(this.Table));
-            }
-            
-            public int TaskId {
-                get {
-                    return ((int)(this[this.tableTasksSummary.TaskIdColumn]));
-                }
-                set {
-                    this[this.tableTasksSummary.TaskIdColumn] = value;
-                }
-            }
-            
-            public string Description {
-                get {
-                    try {
-                        return ((string)(this[this.tableTasksSummary.DescriptionColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasksSummary.DescriptionColumn] = value;
-                }
-            }
-            
-            public System.Double TotalTime {
-                get {
-                    try {
-                        return ((System.Double)(this[this.tableTasksSummary.TotalTimeColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasksSummary.TotalTimeColumn] = value;
-                }
-            }
-            
-            public int TotalLogged {
-                get {
-                    try {
-                        return ((int)(this[this.tableTasksSummary.TotalLoggedColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasksSummary.TotalLoggedColumn] = value;
-                }
-            }
-            
-            public bool IsDefaultTask {
-                get {
-                    try {
-                        return ((bool)(this[this.tableTasksSummary.IsDefaultTaskColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasksSummary.IsDefaultTaskColumn] = value;
-                }
-            }
-            
-            public int DefaultTaskId {
-                get {
-                    try {
-                        return ((int)(this[this.tableTasksSummary.DefaultTaskIdColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasksSummary.DefaultTaskIdColumn] = value;
-                }
-            }
-            
-            public bool IsDescriptionNull() {
-                return this.IsNull(this.tableTasksSummary.DescriptionColumn);
-            }
-            
-            public void SetDescriptionNull() {
-                this[this.tableTasksSummary.DescriptionColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsTotalTimeNull() {
-                return this.IsNull(this.tableTasksSummary.TotalTimeColumn);
-            }
-            
-            public void SetTotalTimeNull() {
-                this[this.tableTasksSummary.TotalTimeColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsTotalLoggedNull() {
-                return this.IsNull(this.tableTasksSummary.TotalLoggedColumn);
-            }
-            
-            public void SetTotalLoggedNull() {
-                this[this.tableTasksSummary.TotalLoggedColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsIsDefaultTaskNull() {
-                return this.IsNull(this.tableTasksSummary.IsDefaultTaskColumn);
-            }
-            
-            public void SetIsDefaultTaskNull() {
-                this[this.tableTasksSummary.IsDefaultTaskColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsDefaultTaskIdNull() {
-                return this.IsNull(this.tableTasksSummary.DefaultTaskIdColumn);
-            }
-            
-            public void SetDefaultTaskIdNull() {
-                this[this.tableTasksSummary.DefaultTaskIdColumn] = System.Convert.DBNull;
-            }
-        }
-        
-        [System.Diagnostics.DebuggerStepThrough()]
-        public class TasksSummaryRowChangeEvent : EventArgs {
-            
-            private TasksSummaryRow eventRow;
-            
-            private DataRowAction eventAction;
-            
-            public TasksSummaryRowChangeEvent(TasksSummaryRow row, DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            public TasksSummaryRow Row {
                 get {
                     return this.eventRow;
                 }

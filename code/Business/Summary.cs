@@ -1,8 +1,8 @@
 using System;
-using System.Data;
+using System.Collections;
 using System.Data.OleDb;
-using System.Globalization;
 using PTM.Data;
+using PTM.Infos;
 
 namespace PTM.Business
 {
@@ -17,81 +17,96 @@ namespace PTM.Business
 
 		private const string NOT_DETAILED = "Not Detailed";
 		private static SummaryDataset.ApplicationsSummaryDataTable applicationsSummary = null;
-		private static OleDbDataAdapter summaryAdapter;
 		private static OleDbDataAdapter applicationsSummaryAdapter;
 
-		public static void Initialize(OleDbDataAdapter summaryDataAdapter, OleDbDataAdapter applicationsSummaryDataAdapter)
+		public static void Initialize(OleDbDataAdapter applicationsSummaryDataAdapter)
 		{
-			summaryAdapter = summaryDataAdapter;
 			applicationsSummaryAdapter = applicationsSummaryDataAdapter;
 		}
 
-		internal static SummaryDataset.TasksSummaryDataTable GetTaskSummary(PTMDataset.TasksRow parentRow, DateTime initialDate, DateTime finalDate)
+
+		public static ArrayList GetTaskSummary(PTMDataset.TasksRow parentRow, DateTime initialDate, DateTime finalDate)
 		{
-			SummaryDataset summaryDataset = new SummaryDataset();
-			SummaryDataset returnDataset = new SummaryDataset();
 
-			summaryAdapter.SelectCommand.Parameters["InsertTime"].Value = initialDate;
-			summaryAdapter.SelectCommand.Parameters["InsertTime1"].Value = finalDate;
-			summaryAdapter.Fill(summaryDataset.TasksSummary);
-			if (parentRow == null)
-				return summaryDataset.TasksSummary;
+			Logs.UpdateCurrentLogDuration();
+			ArrayList summaryList;
+			ArrayList returnList = new ArrayList();
 
-			while (summaryDataset.TasksSummary.Rows.Count > 0)
+			summaryList = ExecuteTaskSummary(initialDate, finalDate);
+
+//			if (parentRow == null)
+//				return summaryDataset.TasksSummary;
+
+			while (summaryList.Count > 0)
 			{
-				SummaryDataset.TasksSummaryRow sumRow = (SummaryDataset.TasksSummaryRow) summaryDataset.TasksSummary.Rows[0];
+				TaskSummary sumRow = (TaskSummary) summaryList[0];
 				PTMDataset.TasksRow row = Tasks.FindById(sumRow.TaskId);
+				sumRow.Description = row.Description;
+				sumRow.IsDefaultTask = row.IsDefaultTask;
+				if (sumRow.IsDefaultTask)
+					sumRow.DefaultTaskId = row.DefaultTaskId;
+
 				if (row.Id != parentRow.Id)
 				{
 					if(row.IsParentIdNull())
 					{
-						summaryDataset.TasksSummary.Rows.Remove(sumRow);
-						summaryDataset.TasksSummary.AcceptChanges();
+						summaryList.Remove(sumRow);
+						continue;
 					}
 
 					if (row.ParentId == parentRow.Id)
 					{
-						SummaryDataset.TasksSummaryRow retrow = returnDataset.TasksSummary.FindByTaskId(sumRow.TaskId);
+						TaskSummary retrow = FindTaskSummaryByTaskId(returnList, sumRow.TaskId);
 						if (retrow == null)
-							returnDataset.TasksSummary.ImportRow(sumRow);
+							returnList.Add(sumRow);
 						else
 						{
 							retrow.TotalTime += sumRow.TotalTime;
-							retrow.TotalLogged += sumRow.TotalLogged;
 						}
 					}
 					else
 					{
-						SummaryDataset.TasksSummaryRow psumRow = summaryDataset.TasksSummary.FindByTaskId(row.ParentId);
+						TaskSummary psumRow = FindTaskSummaryByTaskId(summaryList, row.ParentId);
 						if (psumRow == null)
 						{
 							PTMDataset.TasksRow prow = Tasks.FindById(row.ParentId);
 							psumRow = sumRow;
 							psumRow.TaskId = prow.Id;
-							psumRow.Description = prow.Description;
-							psumRow.IsDefaultTask = prow.IsDefaultTask;
-							if (psumRow.IsDefaultTask)
-								psumRow.DefaultTaskId = prow.DefaultTaskId;
 							continue;
 						}
 						psumRow.TotalTime += sumRow.TotalTime;
-						psumRow.TotalLogged += sumRow.TotalLogged;
 					}
 				}
 				else
 				{
 					sumRow.Description = NOT_DETAILED;
-					returnDataset.TasksSummary.ImportRow(sumRow);
+					returnList.Add(sumRow);
 				}
-				summaryDataset.TasksSummary.Rows.Remove(sumRow);
-				summaryDataset.TasksSummary.AcceptChanges();
+				summaryList.Remove(sumRow);
 			}
-			return returnDataset.TasksSummary;
+			return returnList;
 		}
 
+		private static ArrayList ExecuteTaskSummary(DateTime initialDate, DateTime finalDate)
+		{
+			ArrayList summaryList = new ArrayList();
+			ArrayList list = DataAdapterManager.ExecuteGetRows("SELECT TasksLog.TaskId, Sum(TasksLog.Duration) AS TotalTime FROM TasksLog " + 
+				"WHERE (((TasksLog.InsertTime)>=? And (TasksLog.InsertTime)<=?))" + 
+				"GROUP BY TasksLog.TaskId;", new string[]{"InsertTimeFrom", "InsertTimeTo"}, new object[]{initialDate, finalDate});
+	
+			foreach (Hashtable hashtable in list)
+			{
+				TaskSummary sum = new TaskSummary();
+				sum.TaskId = (int) hashtable["TaskId"];
+				sum.TotalTime = (double) hashtable["TotalTime"];
+				summaryList.Add(sum);
+			}
+			return summaryList;
+		}
 
 		internal static SummaryDataset.ApplicationsSummaryDataTable GetApplicationsSummary(PTMDataset.TasksRow parentRow, DateTime ini, DateTime end)
 		{
+			ApplicationsLog.SaveApplicationsLog();
 			applicationsSummary = new SummaryDataset.ApplicationsSummaryDataTable();
 			GetRecursiveSummary(parentRow, ini, end);
 			return applicationsSummary;
@@ -126,6 +141,16 @@ namespace PTM.Business
 			{
 				GetRecursiveSummary(childRow, ini, end);
 			}
+		}
+
+		public static TaskSummary FindTaskSummaryByTaskId(ArrayList taskSummaryList, int taskId)
+		{
+			foreach (TaskSummary taskSummary in taskSummaryList)
+			{
+				if(taskSummary.TaskId == taskId)
+					return taskSummary;
+			}
+			return null;
 		}
 	}
 }

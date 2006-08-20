@@ -15,6 +15,8 @@ namespace PTM.View.Forms
 		private Label label3;
 		private PictureBox pictureBox2;
 		private Label lblVersion;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label4;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -61,6 +63,8 @@ namespace PTM.View.Forms
 			this.lblVersion = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -86,7 +90,7 @@ namespace PTM.View.Forms
 			// 
 			this.button1.BackColor = System.Drawing.SystemColors.Control;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button1.Location = new System.Drawing.Point(232, 64);
+			this.button1.Location = new System.Drawing.Point(264, 96);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(64, 23);
 			this.button1.TabIndex = 2;
@@ -119,10 +123,28 @@ namespace PTM.View.Forms
 			this.pictureBox2.TabIndex = 5;
 			this.pictureBox2.TabStop = false;
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(80, 80);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(176, 23);
+			this.label2.TabIndex = 6;
+			this.label2.Text = "http://sourceforge.net/projects/ptm";
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(80, 104);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(176, 23);
+			this.label4.TabIndex = 7;
+			this.label4.Text = "cestradac@users.sourceforge.net";
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(312, 94);
+			this.ClientSize = new System.Drawing.Size(334, 129);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.pictureBox2);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.lblVersion);

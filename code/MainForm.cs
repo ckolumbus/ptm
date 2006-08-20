@@ -40,9 +40,11 @@ namespace PTM
 		public MainForm()
 		{
 			InitializeComponent();
+			Application.DoEvents();
 			this.Text += Application.ProductVersion;
 			this.tasksLogControl.Exit+=new EventHandler(Exit);
 			LoadIconsFromResources();
+			Application.DoEvents();
 		}
 
 		private void LoadIconsFromResources()
@@ -401,7 +403,10 @@ namespace PTM
 		private void Exit(object sender, EventArgs e)
 		{
 			Logs.StopLogging();
+			Application.DoEvents();
+			this.Close();
 			Save();
+			Application.DoEvents();
 			Application.Exit();
 		}
 

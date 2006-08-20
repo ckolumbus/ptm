@@ -234,7 +234,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Infos\ApplicationLog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Infos\Log.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Infos\TaskSummary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -245,6 +255,11 @@
                 />
                 <File
                     RelPath = "Test\Business\DefaultTasksTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\Business\SummaryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -312,16 +327,6 @@
                     RelPath = "View\API\ColorUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\ApplicationsLogControl.cs"
-                    SubType = "UserControl"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\ApplicationsLogControl.resx"
-                    DependentUpon = "ApplicationsLogControl.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "View\Controls\Icons.resx"

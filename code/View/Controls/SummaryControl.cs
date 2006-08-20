@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -7,6 +8,7 @@ using System.Timers;
 using System.Windows.Forms;
 using PTM.Business;
 using PTM.Data;
+using PTM.Infos;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -292,30 +294,33 @@ namespace PTM.View.Controls
 
 		public void UpdateList()
 		{
-//			try
-//			{
-				Clear();
-			UnitOfWork.Update();
-				SummaryDataset.TasksSummaryDataTable summaryDataTable = Summary.GetTaskSummary( 
+			try
+			{
+			Clear();
+			this.Refresh();
+			System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
+			ArrayList summaryList = Summary.GetTaskSummary( 
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue),
 					dateTimePicker.Value.Date, dateTimePicker.Value.Date.AddDays(1));
 				
 				totalTime = 0;
-				foreach (SummaryDataset.TasksSummaryRow row in summaryDataTable.Rows)
+//				foreach (TaskSummary row in summaryList)
+//				{
+//					totalTime+= row.TotalTime;
+//				}
+				foreach (TaskSummary summary in summaryList)
 				{
-					totalTime+= row.TotalTime;
-				}
-				foreach (SummaryDataset.TasksSummaryRow row in summaryDataTable.Rows)
-				{
+					totalTime+= summary.TotalTime;
 //					double percent =  0;
 //					if(totalTime>0)
 //						percent = row.TotalTime / totalTime;
-					TimeSpan duration = new TimeSpan(0, 0, Convert.ToInt32(row.TotalTime));
-					ListViewItem lvi = new ListViewItem(new string[] {row.Description, ViewHelper.TimeSpanToTimeString(duration), 0.ToString("0.0%", CultureInfo.InvariantCulture), row.TaskId.ToString(CultureInfo.InvariantCulture)});
+					
+					TimeSpan duration = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalTime));
+					ListViewItem lvi = new ListViewItem(new string[] {summary.Description, ViewHelper.TimeSpanToTimeString(duration), 0.ToString("0.0%", CultureInfo.InvariantCulture), summary.TaskId.ToString(CultureInfo.InvariantCulture)});
 					lvi.ImageIndex = 0;
-					if (row.IsDefaultTask)
+					if (summary.IsDefaultTask)
 					{
-						lvi.ImageIndex = row.DefaultTaskId;
+						lvi.ImageIndex = summary.DefaultTaskId;
 					}
 					else
 					{
@@ -334,11 +339,12 @@ namespace PTM.View.Controls
 //				{
 //					//overTimeValue.Text = "0.0 hrs.";
 //				}
-//			}
-//			catch (Exception ex)
-//			{
-//				MessageBox.Show(ex.Message);
-//			}
+
+			}
+			finally
+			{
+				System.Windows.Forms.Cursor.Current = Cursors.Default;
+			}
 		}
 
 		private void CalculatePercent()
@@ -357,7 +363,6 @@ namespace PTM.View.Controls
 		{
 			indicator1.Value = Convert.ToInt32(Math.Min(30600 , totalTime));
 			indicator1.TextValue = new TimeSpan(0,0, Convert.ToInt32(totalTime, CultureInfo.InvariantCulture)).TotalHours.ToString("0.00", CultureInfo.InvariantCulture) + " hrs.";
-
 		}
 
 //		private string TimeSpanToString(TimeSpan ts)
@@ -376,7 +381,7 @@ namespace PTM.View.Controls
 //				parentTaskComboBox.SelectedValue = TasksHelper.RootTasksRow.Id;
 //			}
 			//TasksLogHelper.TaskLogsTable.RowChanged+=new System.Data.DataRowChangeEventHandler(TaskLogsTable_RowChanged);
-			this.parentTaskComboBox.Focus();
+			//this.parentTaskComboBox.Focus();
 			
 		}
 

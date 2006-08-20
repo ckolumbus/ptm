@@ -316,29 +316,16 @@ namespace PTM.View.Controls
 			GetTaskDetail();
 		}
 
-//		private void GetTasks()
-//		{
-//			ClearContent();
-//			tasksSummaryDataset = SummaryHelper.GetTaskSummary(null, dateTimePicker.Value.Date, dateTimePicker.Value.Date.AddDays(1));
-//	
-//			this.taskComboBox.DataSource = tasksSummaryDataset;
-//			this.taskComboBox.ValueMember = tasksSummaryDataset.TaskIdColumn.ColumnName;
-//			this.taskComboBox.DisplayMember = tasksSummaryDataset.DescriptionColumn.ColumnName;
-//			if(this.taskComboBox.Items.Count>0)
-//			{
-//				this.taskComboBox.SelectedIndex = 0;
-//				GetTaskDetail();
-//			}
-//			else
-//				this.taskComboBox.SelectedIndex = -1;
-//		}
-
 		private void GetTaskDetail()
 		{
-//			try
-//			{
+			try
+			{
+
 				ClearContent();
-			UnitOfWork.Update();
+				this.Refresh();
+				System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
+
+				//UnitOfWork.Update();
 	
 				appsSummaryDataset = Summary.GetApplicationsSummary(
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue), 
@@ -360,19 +347,14 @@ namespace PTM.View.Controls
 					this.applicationsList.Items.Add(lvi);
 				}
 				AppsActiveTimeValue.Text =  ViewHelper.TimeSpanToTimeString(new TimeSpan(0,0,appActiveTime));
+				
+			}
+			finally
+			{
+				System.Windows.Forms.Cursor.Current = Cursors.Default;
+			}
 			}
 
-//			catch(Exception ex)
-//			{
-//				MessageBox.Show(ex.Message);
-//			}
-//		private void taskComboBox_SelectedIndexChanged(object sender, EventArgs e)
-//		{
-//			try{Convert.ToInt32(this.taskComboBox.SelectedValue);}
-//			catch{return;}
-//			
-//			GetTaskDetail();
-//		}
 
 		private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{

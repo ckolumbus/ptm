@@ -17,23 +17,7 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="TasksSummary">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="TaskId" type="xs:int" minOccurs="0" />
-							<xs:element name="Description" type="xs:string" minOccurs="0" />
-							<xs:element name="TotalTime" type="xs:double" minOccurs="0" />
-							<xs:element name="TotalLogged" type="xs:int" minOccurs="0" />
-							<xs:element name="IsDefaultTask" type="xs:boolean" minOccurs="0" />
-							<xs:element name="DefaultTaskId" type="xs:int" minOccurs="0" />
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
 			</xs:choice>
 		</xs:complexType>
-		<xs:key name="SummaryDatasetKey1">
-			<xs:selector xpath=".//mstns:TasksSummary" />
-			<xs:field xpath="mstns:TaskId" />
-		</xs:key>
 	</xs:element>
 </xs:schema>

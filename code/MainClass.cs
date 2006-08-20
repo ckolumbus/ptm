@@ -99,27 +99,40 @@ namespace PTM
 			//Application.Run(new MainForm());
 		}
 
+		static SplashForm splash = new SplashForm();
 
 		internal static void Initialize()
 		{
 			Application.CurrentCulture = CultureInfo.InvariantCulture;
-			SplashForm splash = new SplashForm();
+			
 			splash.Show();
-			splash.Refresh();
+			System.Timers.Timer timer = new System.Timers.Timer();
+			timer.Interval = 1000;
+			timer.Elapsed+=new System.Timers.ElapsedEventHandler(timer_Elapsed);
+			timer.Start();
+			//splash.Refresh();
 			//Application.EnableVisualStyles();
 			//Application.DoEvents();
-			MainModule.Initialize(new PTMDataset(), ConfigurationSettings.AppSettings["UserName"]);
-			MainForm main = new MainForm();
-			splash.Close();
 			Application.DoEvents();
-//			try
-//			{
-				Application.Run(main);
-//			}
-//			catch(Exception ex)
-//			{
-//				MessageBox.Show(ex.Message);
-//			}
+			MainModule.Initialize(new PTMDataset(), ConfigurationSettings.AppSettings["UserName"]);
+			splash.SetLoadProgress(50);
+			splash.Refresh();
+			Application.DoEvents();
+			MainForm main = new MainForm();
+			splash.SetLoadProgress(100);
+			splash.Refresh();
+			Application.DoEvents();
+			splash.Close();
+			splash = null;
+			Application.DoEvents();
+			Application.Run(main);
+		}
+
+		private static void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			splash.AddProgress(10);
+			splash.Refresh();
+			Application.DoEvents();
 		}
 	}
 }

@@ -26,14 +26,14 @@ namespace PTM.Data
 		{
 				ptmDataset.Tasks.BeginLoadData();
 				//ptmDataset.TasksLog.BeginLoadData();
-				ptmDataset.ApplicationsLog.BeginLoadData();
+				//ptmDataset.ApplicationsLog.BeginLoadData();
 				dataAdapterManager.tasksDataAdapter.Update(ptmDataset.Tasks);
 				//dataAdapterManager.tasksLogDataAdapter.Update(ptmDataset.TasksLog);
-				dataAdapterManager.applicationsLogDataAdapter.Update(ptmDataset.ApplicationsLog);
+				//dataAdapterManager.applicationsLogDataAdapter.Update(ptmDataset.ApplicationsLog);
 				ptmDataset.AcceptChanges();
 				ptmDataset.Tasks.EndLoadData();
 				//ptmDataset.TasksLog.EndLoadData();
-				ptmDataset.ApplicationsLog.EndLoadData();
+				//ptmDataset.ApplicationsLog.EndLoadData();
 		}
 	}
 }

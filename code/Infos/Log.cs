@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace PTM.Infos
 {
@@ -16,6 +17,13 @@ namespace PTM.Infos
 		private int duration;
 		private DateTime insertTime;
 
+
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
 		public DateTime InsertTime
 		{
 			get { return insertTime; }
@@ -28,12 +36,7 @@ namespace PTM.Infos
 			set { duration = value; }
 		}
 
-		public int Id
-		{
-			get { return id; }
-			set { id = value; }
-		}
-
+		
 		public int TaskId
 		{
 			get { return taskId; }

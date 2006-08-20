@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using PTM.Data;
 
 namespace PTM.Business
@@ -25,35 +26,22 @@ namespace PTM.Business
 		public static void Initialize(PTMDataset ds, string userName)
 		{
 			DataAdapterManager adapterManager = new DataAdapterManager(userName);
+			Application.DoEvents();
 			UnitOfWork.Initialize(ds, adapterManager);
+			Application.DoEvents();
 			ConfigurationHelper.Initialize(adapterManager.configurationDataAdapter, adapterManager.defaultTaskDataAdapter);
+			Application.DoEvents();
 			DefaultTasks.Initialize();
+			Application.DoEvents();
 			Tasks.Initialize(ds.Tasks, adapterManager.tasksDataAdapter);
+			Application.DoEvents();
 			Logs.Initialize();
-			ApplicationsLog.Initialize(ds.ApplicationsLog, adapterManager.applicationsLogDataAdapter);
-			Summary.Initialize(adapterManager.taskSumaryDataAdapter, adapterManager.applicationsSummaryDataAdapter);
+			Application.DoEvents();
+			ApplicationsLog.Initialize(adapterManager.applicationsLogDataAdapter);
+			Application.DoEvents();
+			Summary.Initialize(adapterManager.applicationsSummaryDataAdapter);
+			Application.DoEvents();
 		}
-	
-		
-
-//		protected static PTMDataset.TasksDataTable GetTasksTable()
-//		{
-//			return UnitOfWork.PtmDataset.Tasks;
-//		}
-//
-//		protected static PTMDataset.TasksLogDataTable GetTasksLogDataTable()
-//		{
-//			return UnitOfWork.PtmDataset.TasksLog;
-//		}
-//
-//		protected static PTMDataset.ApplicationsLogDataTable GetApplicationsLogDataTable()
-//		{
-//			return UnitOfWork.PtmDataset.ApplicationsLog;
-//		}
-
-
-
-
 
 	}
 }
