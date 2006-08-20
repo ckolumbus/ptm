@@ -21,8 +21,9 @@ namespace PTM.Business
 		private static DbDataAdapter dataAdapter;
 		private static Process[] processes;
 		private static PTMDataset.ApplicationsLogDataTable applicationsLogTable;
-		//private static Process currentProcess;
+		private static Process lastProcess;
 		private static Timer applicationsTimer;
+		private static DateTime lastCallTime;
 		private static Thread loggingThread;
 
 		#region Properties
@@ -33,7 +34,7 @@ namespace PTM.Business
 		{
 			processes = Process.GetProcesses();
 			loggingThread = null;
-			//currentProcess = null;
+			lastProcess = null;
 			applicationsTimer = new Timer(1000);
 			dataAdapter = adapter;
 			//applicationsLogTable = dataTable;
@@ -41,7 +42,7 @@ namespace PTM.Business
 			applicationsTimer.Elapsed+=new ElapsedEventHandler(ApplicationsTimer_Elapsed);			
 			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			//Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
-			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);			
+			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);
 		}
 
 		public static void SaveApplicationsLog()
@@ -55,8 +56,10 @@ namespace PTM.Business
 		#region Private Methods
 		private static void UpdateActiveProcess()
 		{
+			Process currentProcess=null;
 			try
 			{
+				DateTime initCallTime = DateTime.Now;
 				applicationsTimer.Stop();
 				
 				IntPtr hwnd = ViewHelper.GetForegroundWindow();
@@ -71,7 +74,7 @@ namespace PTM.Business
 				if (pwnd.ToInt32() == 0)
 					pwnd = hwnd;
 
-				Process currentProcess;
+				
 				currentProcess = GetCurrentProcess(pwnd);
 
 				if (currentProcess == null)
@@ -80,12 +83,12 @@ namespace PTM.Business
 				}
 				else
 				{
-					PTMDataset.ApplicationsLogRow row;
 					string select = applicationsLogTable.ProcessIdColumn.ColumnName + "=" + currentProcess.Id;
 					select += "AND " + applicationsLogTable.TaskLogIdColumn.ColumnName + "=" + Logs.CurrentLog.Id;
 					PTMDataset.ApplicationsLogRow[] rows = (PTMDataset.ApplicationsLogRow[]) applicationsLogTable.Select(select);
 					if (rows.Length == 0)
 					{
+						PTMDataset.ApplicationsLogRow row;
 						row = applicationsLogTable.NewApplicationsLogRow();
 						row.TaskLogId = Logs.CurrentLog.Id;
 						row.ProcessId = currentProcess.Id;
@@ -94,7 +97,7 @@ namespace PTM.Business
 						row.ApplicationFullPath = currentProcess.MainModule.FileName;
 						row.Caption = currentProcess.MainWindowTitle;
 						row.Id = -1;
-						row.ActiveTime = 0;
+						row.ActiveTime = Convert.ToInt32((DateTime.Now-initCallTime).TotalSeconds);
 						row.LastUpdateTime = DateTime.Now;
 						applicationsLogTable.AddApplicationsLogRow(row);
 						SaveApplicationsLog();
@@ -102,19 +105,25 @@ namespace PTM.Business
 					}
 					else
 					{
+						PTMDataset.ApplicationsLogRow row;
 						row = rows[0];
 						row.Caption = currentProcess.MainWindowTitle;
 						row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
-						row.ActiveTime = Convert.ToInt32(new TimeSpan(0, 0, row.ActiveTime).Add(DateTime.Now - row.LastUpdateTime).TotalSeconds);
+						if(currentProcess==lastProcess)
+							row.ActiveTime = Convert.ToInt32(new TimeSpan(0, 0, row.ActiveTime).Add(DateTime.Now - row.LastUpdateTime).TotalSeconds);
+						else
+							row.ActiveTime = Convert.ToInt32(new TimeSpan(0, 0, row.ActiveTime).Add(DateTime.Now - lastCallTime).TotalSeconds);
 						row.LastUpdateTime = DateTime.Now;
 						RaiseApplicationLogChangeEvent(new PTMDataset.ApplicationsLogRowChangeEvent(row, DataRowAction.Change));
 					}
-
+					
 					return;
 				}
 			}
 			finally
 			{
+				lastProcess = currentProcess;
+				lastCallTime = DateTime.Now;
 				applicationsTimer.Start();
 			}
 		}
