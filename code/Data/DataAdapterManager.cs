@@ -21,7 +21,6 @@ namespace PTM.Data
 		private OleDbCommand oleDbInsertCommand3;
 		private OleDbCommand oleDbUpdateCommand3;
 		private OleDbCommand oleDbDeleteCommand3;
-		internal OleDbDataAdapter applicationsLogDataAdapter;
 		internal OleDbDataAdapter applicationsSummaryDataAdapter;
 		private OleDbCommand oleDbSelectCommand6;
 		internal OleDbDataAdapter configurationDataAdapter;
@@ -33,10 +32,6 @@ namespace PTM.Data
 		private OleDbCommand oleDbInsertCommand2;
 		private OleDbCommand oleDbUpdateCommand2;
 		private OleDbCommand oleDbDeleteCommand2;
-		private OleDbCommand oleDbSelectCommand1;
-		private OleDbCommand oleDbInsertCommand1;
-		private OleDbCommand oleDbUpdateCommand1;
-		private OleDbCommand oleDbDeleteCommand1;
 
 		/// <summary>
 		/// Required designer variable.
@@ -129,11 +124,6 @@ namespace PTM.Data
 			this.oleDbInsertCommand3 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbSelectCommand3 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbUpdateCommand3 = new System.Data.OleDb.OleDbCommand();
-			this.applicationsLogDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
-			this.oleDbDeleteCommand1 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbInsertCommand1 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbSelectCommand1 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbUpdateCommand1 = new System.Data.OleDb.OleDbCommand();
 			this.applicationsSummaryDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
 			this.oleDbSelectCommand6 = new System.Data.OleDb.OleDbCommand();
 			this.configurationDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
@@ -261,83 +251,6 @@ namespace PTM.Data
 			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Id", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Id", System.Data.DataRowVersion.Original, null));
 			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
 			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			// 
-			// applicationsLogDataAdapter
-			// 
-			this.applicationsLogDataAdapter.DeleteCommand = this.oleDbDeleteCommand1;
-			this.applicationsLogDataAdapter.InsertCommand = this.oleDbInsertCommand1;
-			this.applicationsLogDataAdapter.SelectCommand = this.oleDbSelectCommand1;
-			this.applicationsLogDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																												 new System.Data.Common.DataTableMapping("Table", "ApplicationsLog", new System.Data.Common.DataColumnMapping[] {
-																																																									new System.Data.Common.DataColumnMapping("ActiveTime", "ActiveTime"),
-																																																									new System.Data.Common.DataColumnMapping("ApplicationFullPath", "ApplicationFullPath"),
-																																																									new System.Data.Common.DataColumnMapping("Caption", "Caption"),
-																																																									new System.Data.Common.DataColumnMapping("Id", "Id"),
-																																																									new System.Data.Common.DataColumnMapping("LastUpdateTime", "LastUpdateTime"),
-																																																									new System.Data.Common.DataColumnMapping("Name", "Name"),
-																																																									new System.Data.Common.DataColumnMapping("ProcessId", "ProcessId"),
-																																																									new System.Data.Common.DataColumnMapping("TaskLogId", "TaskLogId"),
-																																																									new System.Data.Common.DataColumnMapping("UserProcessorTime", "UserProcessorTime")})});
-			this.applicationsLogDataAdapter.UpdateCommand = this.oleDbUpdateCommand1;
-			this.applicationsLogDataAdapter.RowUpdated += new System.Data.OleDb.OleDbRowUpdatedEventHandler(this.applicationsLogDataAdapter_RowUpdated);
-			// 
-			// oleDbDeleteCommand1
-			// 
-			this.oleDbDeleteCommand1.CommandText = @"DELETE FROM ApplicationsLog WHERE (Id = ?) AND (ActiveTime = ? OR ? IS NULL AND ActiveTime IS NULL) AND (ApplicationFullPath = ? OR ? IS NULL AND ApplicationFullPath IS NULL) AND (Caption = ? OR ? IS NULL AND Caption IS NULL) AND (LastUpdateTime = ? OR ? IS NULL AND LastUpdateTime IS NULL) AND (Name = ? OR ? IS NULL AND Name IS NULL) AND (ProcessId = ? OR ? IS NULL AND ProcessId IS NULL) AND (TaskLogId = ?) AND (UserProcessorTime = ? OR ? IS NULL AND UserProcessorTime IS NULL)";
-			this.oleDbDeleteCommand1.Connection = this.desingOleDbConnection;
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Id", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Id", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ActiveTime", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ActiveTime", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ActiveTime1", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ActiveTime", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ApplicationFullPath", System.Data.OleDb.OleDbType.VarWChar, 255, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ApplicationFullPath", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ApplicationFullPath1", System.Data.OleDb.OleDbType.VarWChar, 255, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ApplicationFullPath", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Caption", System.Data.OleDb.OleDbType.VarWChar, 120, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Caption", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Caption1", System.Data.OleDb.OleDbType.VarWChar, 120, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Caption", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_LastUpdateTime", System.Data.OleDb.OleDbType.DBDate, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "LastUpdateTime", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_LastUpdateTime1", System.Data.OleDb.OleDbType.DBDate, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "LastUpdateTime", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Name", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Name", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Name1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Name", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ProcessId", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ProcessId", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ProcessId1", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ProcessId", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_TaskLogId", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "TaskLogId", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_UserProcessorTime", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "UserProcessorTime", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_UserProcessorTime1", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "UserProcessorTime", System.Data.DataRowVersion.Original, null));
-			// 
-			// oleDbInsertCommand1
-			// 
-			this.oleDbInsertCommand1.CommandText = "INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Caption, LastUpdateT" +
-				"ime, Name, ProcessId, TaskLogId, UserProcessorTime) VALUES (?, ?, ?, ?, ?, ?, ?," +
-				" ?)";
-			this.oleDbInsertCommand1.Connection = this.desingOleDbConnection;
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("ActiveTime", System.Data.OleDb.OleDbType.Integer, 0, "ActiveTime"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("ApplicationFullPath", System.Data.OleDb.OleDbType.VarWChar, 255, "ApplicationFullPath"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Caption", System.Data.OleDb.OleDbType.VarWChar, 120, "Caption"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("LastUpdateTime", System.Data.OleDb.OleDbType.DBDate, 0, "LastUpdateTime"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Name", System.Data.OleDb.OleDbType.VarWChar, 50, "Name"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("ProcessId", System.Data.OleDb.OleDbType.Integer, 0, "ProcessId"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("TaskLogId", System.Data.OleDb.OleDbType.Integer, 0, "TaskLogId"));
-			this.oleDbInsertCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("UserProcessorTime", System.Data.OleDb.OleDbType.Integer, 0, "UserProcessorTime"));
-			// 
-			// oleDbSelectCommand1
-			// 
-			this.oleDbSelectCommand1.CommandText = "SELECT ActiveTime, ApplicationFullPath, Caption, Id, LastUpdateTime, Name, Proces" +
-				"sId, TaskLogId, UserProcessorTime FROM ApplicationsLog";
-			this.oleDbSelectCommand1.Connection = this.desingOleDbConnection;
-			// 
-			// oleDbUpdateCommand1
-			// 
-			this.oleDbUpdateCommand1.CommandText = "UPDATE ApplicationsLog SET ActiveTime = ?, ApplicationFullPath = ?, Caption = ?, " +
-				"LastUpdateTime = ?, Name = ?, ProcessId = ?, TaskLogId = ?, UserProcessorTime = " +
-				"? WHERE (Id = ?)";
-			this.oleDbUpdateCommand1.Connection = this.desingOleDbConnection;
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("ActiveTime", System.Data.OleDb.OleDbType.Integer, 0, "ActiveTime"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("ApplicationFullPath", System.Data.OleDb.OleDbType.VarWChar, 255, "ApplicationFullPath"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Caption", System.Data.OleDb.OleDbType.VarWChar, 120, "Caption"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("LastUpdateTime", System.Data.OleDb.OleDbType.DBDate, 0, "LastUpdateTime"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Name", System.Data.OleDb.OleDbType.VarWChar, 50, "Name"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("ProcessId", System.Data.OleDb.OleDbType.Integer, 0, "ProcessId"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("TaskLogId", System.Data.OleDb.OleDbType.Integer, 0, "TaskLogId"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("UserProcessorTime", System.Data.OleDb.OleDbType.Integer, 0, "UserProcessorTime"));
-			this.oleDbUpdateCommand1.Parameters.Add(new System.Data.OleDb.OleDbParameter("Id", System.Data.OleDb.OleDbType.Integer, 0, "Id"));
 			// 
 			// applicationsSummaryDataAdapter
 			// 

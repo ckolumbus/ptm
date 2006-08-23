@@ -21,8 +21,6 @@ namespace PTM.Data {
     [System.ComponentModel.ToolboxItem(true)]
     public class PTMDataset : DataSet {
         
-        private ApplicationsLogDataTable tableApplicationsLog;
-        
         private TasksDataTable tableTasks;
         
         private DataRelation relationTasksTasks;
@@ -39,9 +37,6 @@ namespace PTM.Data {
             if ((strSchema != null)) {
                 DataSet ds = new DataSet();
                 ds.ReadXmlSchema(new XmlTextReader(new System.IO.StringReader(strSchema)));
-                if ((ds.Tables["ApplicationsLog"] != null)) {
-                    this.Tables.Add(new ApplicationsLogDataTable(ds.Tables["ApplicationsLog"]));
-                }
                 if ((ds.Tables["Tasks"] != null)) {
                     this.Tables.Add(new TasksDataTable(ds.Tables["Tasks"]));
                 }
@@ -61,14 +56,6 @@ namespace PTM.Data {
             System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
             this.Tables.CollectionChanged += schemaChangedHandler;
             this.Relations.CollectionChanged += schemaChangedHandler;
-        }
-        
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public ApplicationsLogDataTable ApplicationsLog {
-            get {
-                return this.tableApplicationsLog;
-            }
         }
         
         [System.ComponentModel.Browsable(false)]
@@ -97,9 +84,6 @@ namespace PTM.Data {
             this.Reset();
             DataSet ds = new DataSet();
             ds.ReadXml(reader);
-            if ((ds.Tables["ApplicationsLog"] != null)) {
-                this.Tables.Add(new ApplicationsLogDataTable(ds.Tables["ApplicationsLog"]));
-            }
             if ((ds.Tables["Tasks"] != null)) {
                 this.Tables.Add(new TasksDataTable(ds.Tables["Tasks"]));
             }
@@ -121,10 +105,6 @@ namespace PTM.Data {
         }
         
         internal void InitVars() {
-            this.tableApplicationsLog = ((ApplicationsLogDataTable)(this.Tables["ApplicationsLog"]));
-            if ((this.tableApplicationsLog != null)) {
-                this.tableApplicationsLog.InitVars();
-            }
             this.tableTasks = ((TasksDataTable)(this.Tables["Tasks"]));
             if ((this.tableTasks != null)) {
                 this.tableTasks.InitVars();
@@ -139,8 +119,6 @@ namespace PTM.Data {
             this.Locale = new System.Globalization.CultureInfo("en-US");
             this.CaseSensitive = false;
             this.EnforceConstraints = true;
-            this.tableApplicationsLog = new ApplicationsLogDataTable();
-            this.Tables.Add(this.tableApplicationsLog);
             this.tableTasks = new TasksDataTable();
             this.Tables.Add(this.tableTasks);
             ForeignKeyConstraint fkc;
@@ -157,10 +135,6 @@ namespace PTM.Data {
             this.Relations.Add(this.relationTasksTasks);
         }
         
-        private bool ShouldSerializeApplicationsLog() {
-            return false;
-        }
-        
         private bool ShouldSerializeTasks() {
             return false;
         }
@@ -171,468 +145,7 @@ namespace PTM.Data {
             }
         }
         
-        public delegate void ApplicationsLogRowChangeEventHandler(object sender, ApplicationsLogRowChangeEvent e);
-        
         public delegate void TasksRowChangeEventHandler(object sender, TasksRowChangeEvent e);
-        
-        [System.Diagnostics.DebuggerStepThrough()]
-        public class ApplicationsLogDataTable : DataTable, System.Collections.IEnumerable {
-            
-            private DataColumn columnId;
-            
-            private DataColumn columnProcessId;
-            
-            private DataColumn columnTaskLogId;
-            
-            private DataColumn columnName;
-            
-            private DataColumn columnCaption;
-            
-            private DataColumn columnApplicationFullPath;
-            
-            private DataColumn columnLastUpdateTime;
-            
-            private DataColumn columnUserProcessorTime;
-            
-            private DataColumn columnActiveTime;
-            
-            internal ApplicationsLogDataTable() : 
-                    base("ApplicationsLog") {
-                this.InitClass();
-            }
-            
-            internal ApplicationsLogDataTable(DataTable table) : 
-                    base(table.TableName) {
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-                this.DisplayExpression = table.DisplayExpression;
-            }
-            
-            [System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            internal DataColumn IdColumn {
-                get {
-                    return this.columnId;
-                }
-            }
-            
-            internal DataColumn ProcessIdColumn {
-                get {
-                    return this.columnProcessId;
-                }
-            }
-            
-            internal DataColumn TaskLogIdColumn {
-                get {
-                    return this.columnTaskLogId;
-                }
-            }
-            
-            internal DataColumn NameColumn {
-                get {
-                    return this.columnName;
-                }
-            }
-            
-            internal DataColumn CaptionColumn {
-                get {
-                    return this.columnCaption;
-                }
-            }
-            
-            internal DataColumn ApplicationFullPathColumn {
-                get {
-                    return this.columnApplicationFullPath;
-                }
-            }
-            
-            internal DataColumn LastUpdateTimeColumn {
-                get {
-                    return this.columnLastUpdateTime;
-                }
-            }
-            
-            internal DataColumn UserProcessorTimeColumn {
-                get {
-                    return this.columnUserProcessorTime;
-                }
-            }
-            
-            internal DataColumn ActiveTimeColumn {
-                get {
-                    return this.columnActiveTime;
-                }
-            }
-            
-            public ApplicationsLogRow this[int index] {
-                get {
-                    return ((ApplicationsLogRow)(this.Rows[index]));
-                }
-            }
-            
-            public event ApplicationsLogRowChangeEventHandler ApplicationsLogRowChanged;
-            
-            public event ApplicationsLogRowChangeEventHandler ApplicationsLogRowChanging;
-            
-            public event ApplicationsLogRowChangeEventHandler ApplicationsLogRowDeleted;
-            
-            public event ApplicationsLogRowChangeEventHandler ApplicationsLogRowDeleting;
-            
-            public void AddApplicationsLogRow(ApplicationsLogRow row) {
-                this.Rows.Add(row);
-            }
-            
-            public ApplicationsLogRow AddApplicationsLogRow(int Id, int ProcessId, int TaskLogId, string Name, string Caption, string ApplicationFullPath, System.DateTime LastUpdateTime, int UserProcessorTime, int ActiveTime) {
-                ApplicationsLogRow rowApplicationsLogRow = ((ApplicationsLogRow)(this.NewRow()));
-                rowApplicationsLogRow.ItemArray = new object[] {
-                        Id,
-                        ProcessId,
-                        TaskLogId,
-                        Name,
-                        Caption,
-                        ApplicationFullPath,
-                        LastUpdateTime,
-                        UserProcessorTime,
-                        ActiveTime};
-                this.Rows.Add(rowApplicationsLogRow);
-                return rowApplicationsLogRow;
-            }
-            
-            public ApplicationsLogRow FindById(int Id) {
-                return ((ApplicationsLogRow)(this.Rows.Find(new object[] {
-                            Id})));
-            }
-            
-            public System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            public override DataTable Clone() {
-                ApplicationsLogDataTable cln = ((ApplicationsLogDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            protected override DataTable CreateInstance() {
-                return new ApplicationsLogDataTable();
-            }
-            
-            internal void InitVars() {
-                this.columnId = this.Columns["Id"];
-                this.columnProcessId = this.Columns["ProcessId"];
-                this.columnTaskLogId = this.Columns["TaskLogId"];
-                this.columnName = this.Columns["Name"];
-                this.columnCaption = this.Columns["Caption"];
-                this.columnApplicationFullPath = this.Columns["ApplicationFullPath"];
-                this.columnLastUpdateTime = this.Columns["LastUpdateTime"];
-                this.columnUserProcessorTime = this.Columns["UserProcessorTime"];
-                this.columnActiveTime = this.Columns["ActiveTime"];
-            }
-            
-            private void InitClass() {
-                this.columnId = new DataColumn("Id", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnId);
-                this.columnProcessId = new DataColumn("ProcessId", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnProcessId);
-                this.columnTaskLogId = new DataColumn("TaskLogId", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnTaskLogId);
-                this.columnName = new DataColumn("Name", typeof(string), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnName);
-                this.columnCaption = new DataColumn("Caption", typeof(string), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnCaption);
-                this.columnApplicationFullPath = new DataColumn("ApplicationFullPath", typeof(string), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnApplicationFullPath);
-                this.columnLastUpdateTime = new DataColumn("LastUpdateTime", typeof(System.DateTime), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnLastUpdateTime);
-                this.columnUserProcessorTime = new DataColumn("UserProcessorTime", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnUserProcessorTime);
-                this.columnActiveTime = new DataColumn("ActiveTime", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnActiveTime);
-                this.Constraints.Add(new UniqueConstraint("PTMDatasetKey4", new DataColumn[] {
-                                this.columnId}, true));
-                this.columnId.AllowDBNull = false;
-                this.columnId.Unique = true;
-            }
-            
-            public ApplicationsLogRow NewApplicationsLogRow() {
-                return ((ApplicationsLogRow)(this.NewRow()));
-            }
-            
-            protected override DataRow NewRowFromBuilder(DataRowBuilder builder) {
-                return new ApplicationsLogRow(builder);
-            }
-            
-            protected override System.Type GetRowType() {
-                return typeof(ApplicationsLogRow);
-            }
-            
-            protected override void OnRowChanged(DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.ApplicationsLogRowChanged != null)) {
-                    this.ApplicationsLogRowChanged(this, new ApplicationsLogRowChangeEvent(((ApplicationsLogRow)(e.Row)), e.Action));
-                }
-            }
-            
-            protected override void OnRowChanging(DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.ApplicationsLogRowChanging != null)) {
-                    this.ApplicationsLogRowChanging(this, new ApplicationsLogRowChangeEvent(((ApplicationsLogRow)(e.Row)), e.Action));
-                }
-            }
-            
-            protected override void OnRowDeleted(DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.ApplicationsLogRowDeleted != null)) {
-                    this.ApplicationsLogRowDeleted(this, new ApplicationsLogRowChangeEvent(((ApplicationsLogRow)(e.Row)), e.Action));
-                }
-            }
-            
-            protected override void OnRowDeleting(DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.ApplicationsLogRowDeleting != null)) {
-                    this.ApplicationsLogRowDeleting(this, new ApplicationsLogRowChangeEvent(((ApplicationsLogRow)(e.Row)), e.Action));
-                }
-            }
-            
-            public void RemoveApplicationsLogRow(ApplicationsLogRow row) {
-                this.Rows.Remove(row);
-            }
-        }
-        
-        [System.Diagnostics.DebuggerStepThrough()]
-        public class ApplicationsLogRow : DataRow {
-            
-            private ApplicationsLogDataTable tableApplicationsLog;
-            
-            internal ApplicationsLogRow(DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableApplicationsLog = ((ApplicationsLogDataTable)(this.Table));
-            }
-            
-            public int Id {
-                get {
-                    return ((int)(this[this.tableApplicationsLog.IdColumn]));
-                }
-                set {
-                    this[this.tableApplicationsLog.IdColumn] = value;
-                }
-            }
-            
-            public int ProcessId {
-                get {
-                    try {
-                        return ((int)(this[this.tableApplicationsLog.ProcessIdColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.ProcessIdColumn] = value;
-                }
-            }
-            
-            public int TaskLogId {
-                get {
-                    try {
-                        return ((int)(this[this.tableApplicationsLog.TaskLogIdColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.TaskLogIdColumn] = value;
-                }
-            }
-            
-            public string Name {
-                get {
-                    try {
-                        return ((string)(this[this.tableApplicationsLog.NameColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.NameColumn] = value;
-                }
-            }
-            
-            public string Caption {
-                get {
-                    try {
-                        return ((string)(this[this.tableApplicationsLog.CaptionColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.CaptionColumn] = value;
-                }
-            }
-            
-            public string ApplicationFullPath {
-                get {
-                    try {
-                        return ((string)(this[this.tableApplicationsLog.ApplicationFullPathColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.ApplicationFullPathColumn] = value;
-                }
-            }
-            
-            public System.DateTime LastUpdateTime {
-                get {
-                    try {
-                        return ((System.DateTime)(this[this.tableApplicationsLog.LastUpdateTimeColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.LastUpdateTimeColumn] = value;
-                }
-            }
-            
-            public int UserProcessorTime {
-                get {
-                    try {
-                        return ((int)(this[this.tableApplicationsLog.UserProcessorTimeColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.UserProcessorTimeColumn] = value;
-                }
-            }
-            
-            public int ActiveTime {
-                get {
-                    try {
-                        return ((int)(this[this.tableApplicationsLog.ActiveTimeColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableApplicationsLog.ActiveTimeColumn] = value;
-                }
-            }
-            
-            public bool IsProcessIdNull() {
-                return this.IsNull(this.tableApplicationsLog.ProcessIdColumn);
-            }
-            
-            public void SetProcessIdNull() {
-                this[this.tableApplicationsLog.ProcessIdColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsTaskLogIdNull() {
-                return this.IsNull(this.tableApplicationsLog.TaskLogIdColumn);
-            }
-            
-            public void SetTaskLogIdNull() {
-                this[this.tableApplicationsLog.TaskLogIdColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsNameNull() {
-                return this.IsNull(this.tableApplicationsLog.NameColumn);
-            }
-            
-            public void SetNameNull() {
-                this[this.tableApplicationsLog.NameColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsCaptionNull() {
-                return this.IsNull(this.tableApplicationsLog.CaptionColumn);
-            }
-            
-            public void SetCaptionNull() {
-                this[this.tableApplicationsLog.CaptionColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsApplicationFullPathNull() {
-                return this.IsNull(this.tableApplicationsLog.ApplicationFullPathColumn);
-            }
-            
-            public void SetApplicationFullPathNull() {
-                this[this.tableApplicationsLog.ApplicationFullPathColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsLastUpdateTimeNull() {
-                return this.IsNull(this.tableApplicationsLog.LastUpdateTimeColumn);
-            }
-            
-            public void SetLastUpdateTimeNull() {
-                this[this.tableApplicationsLog.LastUpdateTimeColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsUserProcessorTimeNull() {
-                return this.IsNull(this.tableApplicationsLog.UserProcessorTimeColumn);
-            }
-            
-            public void SetUserProcessorTimeNull() {
-                this[this.tableApplicationsLog.UserProcessorTimeColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsActiveTimeNull() {
-                return this.IsNull(this.tableApplicationsLog.ActiveTimeColumn);
-            }
-            
-            public void SetActiveTimeNull() {
-                this[this.tableApplicationsLog.ActiveTimeColumn] = System.Convert.DBNull;
-            }
-        }
-        
-        [System.Diagnostics.DebuggerStepThrough()]
-        public class ApplicationsLogRowChangeEvent : EventArgs {
-            
-            private ApplicationsLogRow eventRow;
-            
-            private DataRowAction eventAction;
-            
-            public ApplicationsLogRowChangeEvent(ApplicationsLogRow row, DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            public ApplicationsLogRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            public DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
         
         [System.Diagnostics.DebuggerStepThrough()]
         public class TasksDataTable : DataTable, System.Collections.IEnumerable {
@@ -889,7 +402,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.DefaultTaskIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -903,7 +416,7 @@ namespace PTM.Data {
                         return ((string)(this[this.tableTasks.DescriptionColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -926,7 +439,7 @@ namespace PTM.Data {
                         return ((bool)(this[this.tableTasks.IsDefaultTaskColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -940,7 +453,7 @@ namespace PTM.Data {
                         return ((bool)(this[this.tableTasks.IsFinishedColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -954,7 +467,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.ParentIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -968,7 +481,7 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableTasks.StartDateColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -982,7 +495,7 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableTasks.StopDateColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {
@@ -996,7 +509,7 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.TotalTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
                     }
                 }
                 set {

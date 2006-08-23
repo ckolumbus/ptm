@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Timers;
@@ -24,7 +24,7 @@ namespace PTM.Business
 		//private static PTMDataset.ApplicationsLogDataTable applicationsLogTable;
 		private static ArrayList currentApplicationsLog;
 		private static Process lastProcess;
-		private static Timer applicationsTimer;
+		private static System.Timers.Timer applicationsTimer;
 		private static DateTime lastCallTime;
 		private static Thread loggingThread;
 
@@ -42,7 +42,7 @@ namespace PTM.Business
 			//applicationsLogTable = dataTable;
 			
 			applicationsTimer.Elapsed+=new ElapsedEventHandler(ApplicationsTimer_Elapsed);			
-			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			Logs.LogChanged+=new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			//Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);
 		}
@@ -109,9 +109,16 @@ namespace PTM.Business
 						ApplicationLog row = new ApplicationLog();
 						row.TaskLogId = Logs.CurrentLog.Id;
 						row.ProcessId = currentProcess.Id;
-						row.Name = currentProcess.MainModule.ModuleName;
+						try
+						{
+							row.Name = currentProcess.MainModule.ModuleName;
+							row.ApplicationFullPath = currentProcess.MainModule.FileName;
+						}
+						catch(Win32Exception)
+						{
+							return;
+						}
 						row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
-						row.ApplicationFullPath = currentProcess.MainModule.FileName;
 						row.Caption = currentProcess.MainWindowTitle;
 						row.ActiveTime = Convert.ToInt32((DateTime.Now-initCallTime).TotalSeconds);
 						row.LastUpdateTime = DateTime.Now;
@@ -216,7 +223,7 @@ namespace PTM.Business
 		}
 
 		
-		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		private static void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
 			if(e.Action == DataRowAction.Add)
 			{

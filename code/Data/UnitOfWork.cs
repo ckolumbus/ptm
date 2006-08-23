@@ -1,5 +1,3 @@
-using System.Data;
-
 namespace PTM.Data
 {
 	public sealed class UnitOfWork

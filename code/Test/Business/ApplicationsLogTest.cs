@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using NUnit.Framework;
 using PTM.Business;
 using PTM.Data;
@@ -37,9 +35,5 @@ namespace PTM.Test.Business
 			m.DeleteDataSource();
 		}
 
-		private void ApplicationsLog_ApplicationsLogRowChanged(object sender, PTM.Data.PTMDataset.ApplicationsLogRowChangeEvent e)
-		{
-
-		}
 	}
 }
