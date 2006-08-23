@@ -37,7 +37,7 @@ namespace PTM.Business
 			Application.DoEvents();
 			Logs.Initialize();
 			Application.DoEvents();
-			ApplicationsLog.Initialize(adapterManager.applicationsLogDataAdapter);
+			ApplicationsLog.Initialize();
 			Application.DoEvents();
 			Summary.Initialize(adapterManager.applicationsSummaryDataAdapter);
 			Application.DoEvents();

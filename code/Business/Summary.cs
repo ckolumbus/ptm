@@ -106,7 +106,7 @@ namespace PTM.Business
 
 		internal static SummaryDataset.ApplicationsSummaryDataTable GetApplicationsSummary(PTMDataset.TasksRow parentRow, DateTime ini, DateTime end)
 		{
-			ApplicationsLog.SaveApplicationsLog();
+			ApplicationsLog.UpdateCurrentApplicationsLog();
 			applicationsSummary = new SummaryDataset.ApplicationsSummaryDataTable();
 			GetRecursiveSummary(parentRow, ini, end);
 			return applicationsSummary;

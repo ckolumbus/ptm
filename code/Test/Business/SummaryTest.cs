@@ -75,26 +75,26 @@ namespace PTM.Test.Business
 			result = Summary.GetTaskSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
 			TaskSummary sum1 = Summary.FindTaskSummaryByTaskId(result, row1.Id);
-			Assert.AreEqual(8, sum1.TotalTime);
+			Assert.IsTrue(sum1.TotalTime>=8);
 			TaskSummary sum2 = Summary.FindTaskSummaryByTaskId(result, row2.Id);
-			Assert.AreEqual(2, sum2.TotalTime);
+			Assert.IsTrue(sum2.TotalTime>=2);
 
 			result = Summary.GetTaskSummary(row1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
 			sum1 = Summary.FindTaskSummaryByTaskId(result, row1.Id);
-			Assert.AreEqual(5, sum1.TotalTime);
+			Assert.IsTrue( sum1.TotalTime>=5);
 			sum2 = Summary.FindTaskSummaryByTaskId(result, row3.Id);
-			Assert.AreEqual(3, sum2.TotalTime);
+			Assert.IsTrue(sum2.TotalTime>=3);
 
 			result = Summary.GetTaskSummary(row3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
 			sum1 = Summary.FindTaskSummaryByTaskId(result, row3.Id);
-			Assert.AreEqual(3, sum1.TotalTime);
+			Assert.IsTrue(sum1.TotalTime>=3);
 
 			result = Summary.GetTaskSummary(row2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
 			sum1 = Summary.FindTaskSummaryByTaskId(result, row2.Id);
-			Assert.AreEqual(2, sum1.TotalTime);
+			Assert.IsTrue( sum1.TotalTime>=2);
 		}
 
 

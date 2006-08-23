@@ -53,9 +53,30 @@ namespace PTM.Infos
 			set { taskLogId = value; }
 		}
 
+		public int ProcessId
+		{
+			get { return processId; }
+			set {processId = value; }
+		}
+
+		public int UserProcessorTime
+		{
+			get {
+				return userProcessorTime;
+			}
+			set { userProcessorTime=value; }
+		}
+
+		public DateTime LastUpdateTime
+		{
+			get { return lastUpdateTime; }
+			set { lastUpdateTime= value; }
+		}
+
 		int taskLogId;
-
-
+		int processId;
+		int userProcessorTime;
+		DateTime lastUpdateTime;
 
 
 
