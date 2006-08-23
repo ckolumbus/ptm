@@ -119,7 +119,7 @@ namespace PTM.View.Forms
 			// 
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(232, 72);
+			this.okButton.Location = new System.Drawing.Point(288, 72);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 0;
 			this.okButton.Text = "Ok";
@@ -129,7 +129,7 @@ namespace PTM.View.Forms
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(320, 72);
+			this.cancelButton.Location = new System.Drawing.Point(376, 72);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 1;
 			this.cancelButton.Text = "Cancel";
@@ -165,6 +165,11 @@ namespace PTM.View.Forms
 			// 
 			// minsNumericUpDown
 			// 
+			this.minsNumericUpDown.Increment = new System.Decimal(new int[] {
+																									 5,
+																									 0,
+																									 0,
+																									 0});
 			this.minsNumericUpDown.Location = new System.Drawing.Point(80, 56);
 			this.minsNumericUpDown.Maximum = new System.Decimal(new int[] {
 																								  60,
@@ -224,7 +229,7 @@ namespace PTM.View.Forms
 			this.parentTaskComboBox.Name = "parentTaskComboBox";
 			this.parentTaskComboBox.Size = new System.Drawing.Size(280, 21);
 			this.parentTaskComboBox.TabIndex = 21;
-			this.parentTaskComboBox.SelectedValueChanged+=new EventHandler(parentTaskComboBox_SelectedValueChanged);
+			this.parentTaskComboBox.SelectedValueChanged += new System.EventHandler(this.parentTaskComboBox_SelectedValueChanged);
 			// 
 			// durationValueLabel
 			// 

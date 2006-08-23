@@ -28,7 +28,13 @@ namespace PTM
 		[STAThread]
 		private static void Main()
 		{
-			// Used to check if we can create a new mutex
+			//Launch();
+			RunSingleInstance();
+		}
+
+		private static void RunSingleInstance()
+		{
+// Used to check if we can create a new mutex
 			bool newMutexCreated = false;
 			// The name of the mutex is to be prefixed with Local\ to make sure that its is created in the per-session namespace, not in the global namespace.
 			string mutexName = "Local\\" + Assembly.GetExecutingAssembly().GetName().Name;
@@ -53,7 +59,7 @@ namespace PTM
 				{
 					MainClass.sharedMemory = MemoryMappedFile.CreateMMF("Local\\sharedMemoryITimeTracker", MemoryMappedFile.FileAccess.ReadWrite, 8);
 				}
-				Initialize();
+				Launch();
 				
 			}
 
@@ -96,12 +102,11 @@ namespace PTM
 					GC.Collect();
 				}
 			}
-			//Application.Run(new MainForm());
 		}
 
 		static SplashForm splash = new SplashForm();
 
-		internal static void Initialize()
+		internal static void Launch()
 		{
 			Application.CurrentCulture = CultureInfo.InvariantCulture;
 			

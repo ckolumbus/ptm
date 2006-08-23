@@ -134,6 +134,7 @@ namespace PTM.Business
 			Process currentProcess=null;
 			foreach (Process process in processes)
 			{
+				if(!process.HasExited)
 				if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
 				{
 					currentProcess = process;
@@ -146,6 +147,7 @@ namespace PTM.Business
 				processes = Process.GetProcesses();
 				foreach (Process process in processes)
 				{
+					if(!process.HasExited)
 					if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
 					{
 						currentProcess = process;
