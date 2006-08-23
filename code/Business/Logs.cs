@@ -58,6 +58,10 @@ namespace PTM.Business
 			log.TaskId = taskId;
 			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + ", UpdateTime = ? WHERE Id = " + id, 
 				new string[]{"UpdateTime"}, new object[]{DateTime.Now});
+			
+			if(currentLog !=null && currentLog.Id == id)
+				currentLog.TaskId = taskId;
+			
 			if(LogChanged!=null)
 			{
 				LogChanged(new LogChangeEventArgs(log, DataRowAction.Change));

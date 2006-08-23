@@ -25,7 +25,7 @@ namespace PTM.View.Forms
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			lblVersion.Text += Application.ProductVersion;
+			lblVersion.Text += MainClass.GetVersionString();
 			
 			
 			//
@@ -92,7 +92,6 @@ namespace PTM.View.Forms
 			this.lblVersion.Location = new System.Drawing.Point(88, 48);
 			this.lblVersion.Name = "lblVersion";
 			this.lblVersion.TabIndex = 3;
-			this.lblVersion.Text = "v.";
 			// 
 			// panel1
 			// 

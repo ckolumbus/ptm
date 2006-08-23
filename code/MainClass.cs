@@ -139,5 +139,12 @@ namespace PTM
 			splash.Refresh();
 			Application.DoEvents();
 		}
+		
+		static public string GetVersionString()
+		{
+			return " alpha v. 1.3";
+		}
+		
+		
 	}
 }

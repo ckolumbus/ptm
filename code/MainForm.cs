@@ -23,7 +23,6 @@ namespace PTM
 		private TabPage tasksPage;
 		private MenuItem exitMenuItem;
 		private TabPage summaryPage;
-		private MenuItem saveMenuItem;
 		private StatusBar statusBar;
 		private StatusBarPanel statusBarPanel1;
 		private StatusBarPanel statusBarPanel2;
@@ -41,7 +40,7 @@ namespace PTM
 		{
 			InitializeComponent();
 			Application.DoEvents();
-			this.Text += Application.ProductVersion;
+			this.Text += MainClass.GetVersionString();
 			this.tasksLogControl.Exit+=new EventHandler(Exit);
 			LoadIconsFromResources();
 			Application.DoEvents();
@@ -51,7 +50,7 @@ namespace PTM
 		{
 			ResourceManager resourceManager = new ResourceManager ("PTM.View.Controls.Icons", GetType().Assembly);
 	
-			Icon resIcon = null;
+			Icon resIcon;
 			int i = 1;
 			do
 			{
@@ -99,8 +98,8 @@ namespace PTM
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.exitMenuItem = new System.Windows.Forms.MenuItem();
-			this.saveMenuItem = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.MenuItem();
 			this.statusBar = new System.Windows.Forms.StatusBar();
@@ -114,7 +113,6 @@ namespace PTM
 			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
 			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
@@ -134,22 +132,22 @@ namespace PTM
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.saveMenuItem,
 																											 this.menuItem3,
 																											 this.exitMenuItem});
 			this.menuItem1.Text = "File";
 			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 0;
+			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F3;
+			this.menuItem3.Text = "Explore &Tasks...";
+			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
+			// 
 			// exitMenuItem
 			// 
-			this.exitMenuItem.Index = 2;
+			this.exitMenuItem.Index = 1;
 			this.exitMenuItem.Text = "&Exit People Task Manager";
 			this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
-			// 
-			// saveMenuItem
-			// 
-			this.saveMenuItem.Index = 0;
-			this.saveMenuItem.Text = "Save";
-			this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
 			// 
 			// menuItem2
 			// 
@@ -260,13 +258,6 @@ namespace PTM
 			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
 			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 1;
-			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F3;
-			this.menuItem3.Text = "Explore &Tasks...";
-			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -279,7 +270,7 @@ namespace PTM
 			this.MinimumSize = new System.Drawing.Size(440, 456);
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "People Task Manager v. ";
+			this.Text = "People Task Manager ";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();
@@ -424,11 +415,6 @@ namespace PTM
 		}
 
 		#endregion
-
-		private void saveMenuItem_Click(object sender, EventArgs e)
-		{
-			Save();
-		}
 
 		private void aboutMenuItem_Click(object sender, EventArgs e)
 		{

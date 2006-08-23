@@ -43,6 +43,7 @@ namespace PTM.View.Controls
 		private Button switchToButton;
 		private Button deleteButton;
 		private ColumnHeader StartTimeHeader;
+		private DateTime currentDay;
 
 		public TasksLogControl()
 		{
@@ -76,8 +77,9 @@ namespace PTM.View.Controls
 			taskList.Items.Insert(0,itemA);
 		}
 		
-		private void LoadTodayLog()
+		private void SetCurrentDay()
 		{
+			currentDay = DateTime.Today;
 			ArrayList list = Logs.GetLogsByDay(DateTime.Today);
 			foreach (Log log in list)
 			{
@@ -396,7 +398,7 @@ namespace PTM.View.Controls
 			{
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
-					int taskLogId = ((Log) taskList.SelectedItems[0].Tag).Id;
+					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
 					//int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
 					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskRow.Id);
 				}
@@ -684,11 +686,21 @@ namespace PTM.View.Controls
 
 			else if(e.Action == DataRowAction.Add)
 			{
+				CheckCurrentDayChanged();
 				PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
 				SetListItemValues(itemA,e.Log, taskRow);
 				taskList.Items.Insert(0,itemA);
 				this.notifyIcon.Text = taskRow.Description;			
+			}
+		}
+
+		private void CheckCurrentDayChanged()
+		{
+			if(currentDay != DateTime.Today)
+			{
+				this.taskList.Items.Clear();
+				currentDay = DateTime.Today;
 			}
 		}
 
@@ -763,7 +775,7 @@ namespace PTM.View.Controls
 
 		private void TasksLogControl_Load(object sender, EventArgs e)
 		{
-			LoadTodayLog();
+			SetCurrentDay();
 		}
 
 

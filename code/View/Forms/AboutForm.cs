@@ -28,7 +28,7 @@ namespace PTM.View.Forms
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			this.lblVersion.Text+=Application.ProductVersion;
+			this.lblVersion.Text+=MainClass.GetVersionString();
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
@@ -103,7 +103,6 @@ namespace PTM.View.Forms
 			this.lblVersion.Location = new System.Drawing.Point(80, 32);
 			this.lblVersion.Name = "lblVersion";
 			this.lblVersion.TabIndex = 3;
-			this.lblVersion.Text = "v. ";
 			// 
 			// label3
 			// 
@@ -142,6 +141,7 @@ namespace PTM.View.Forms
 			// AboutForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(334, 129);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);

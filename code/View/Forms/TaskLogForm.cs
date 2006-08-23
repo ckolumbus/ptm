@@ -32,7 +32,9 @@ namespace PTM.View.Forms
 
 		public TaskLogForm()
 		{
-			InitializeComponent();			
+			InitializeComponent();		
+			this.minsNumericUpDown.KeyPress+=new KeyPressEventHandler(minsNumericUpDown_KeyPress);
+			
 			FillDefaultParentTasks();
 
 			this.durationValueLabel.Visible = false;
@@ -165,11 +167,6 @@ namespace PTM.View.Forms
 			// 
 			// minsNumericUpDown
 			// 
-			this.minsNumericUpDown.Increment = new System.Decimal(new int[] {
-																									 5,
-																									 0,
-																									 0,
-																									 0});
 			this.minsNumericUpDown.Location = new System.Drawing.Point(80, 56);
 			this.minsNumericUpDown.Maximum = new System.Decimal(new int[] {
 																								  60,
@@ -500,6 +497,20 @@ namespace PTM.View.Forms
 			this.selectedParentTaskRow = Tasks.FindById((int) parentTaskComboBox.SelectedValue);
 
 			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
+		}
+
+		private void minsNumericUpDown_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(e.KeyChar>='0' && e.KeyChar<='9')
+			{
+				if(minsNumericUpDown.Text.Length>=2)
+					e.Handled = true;
+				if(Convert.ToInt32(minsNumericUpDown.Text + e.KeyChar.ToString())>60)
+				{
+					minsNumericUpDown.Text = 60.ToString();
+					e.Handled = true;					
+				}
+			}
 		}
 	}
 }
