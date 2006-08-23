@@ -599,6 +599,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 						break;
 				}
 			}
+			
 			return(index);
 		}
 		#endregion

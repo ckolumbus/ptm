@@ -1081,10 +1081,16 @@ namespace PTM.View.Controls.TreeListViewComponents
 								break;
 							case APIsEnums.CustomDrawDrawStateFlags.ITEMPREPAINT |
 								APIsEnums.CustomDrawDrawStateFlags.SUBITEM:
+								
 								iRow = (int)nmlvcd.nmcd.dwItemSpec;
 								iCol = (int)nmlvcd.iSubItem;
-								bSelected = base.Items[iRow].Selected;// && this.Focused;
+								
 								TreeListViewItem item = GetTreeListViewItemFromIndex(iRow);
+								if(!item.Visible)
+									break;
+								
+								bSelected = base.Items[iRow].Selected;// && this.Focused;
+								
 								if(bSelected && _useXPHighLightStyle)
 								{
 									Color color = Focused ? ColorUtil.VSNetSelectionColor : ColorUtil.VSNetSelectionUnfocusedColor;

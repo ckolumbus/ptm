@@ -348,19 +348,6 @@ namespace PTM.Data
 			base.OnPaint(e);
 		}
 
-		private void applicationsLogDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
-		{
-			int lastId;
-			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", e.Command.Connection);
-
-			if (e.StatementType == StatementType.Insert)
-			{
-				lastId = (int)idCMD.ExecuteScalar();
-				e.Row["Id"] = lastId;
-			}
-
-		}
-
 		private void tasksDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
 		{
 			lock(e.Command.Connection)

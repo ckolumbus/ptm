@@ -20,7 +20,7 @@ namespace PTM.View
 		internal static extern IntPtr GetParent(IntPtr hwnd);
 
 		[DllImport("User32")]
-		internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
+		internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out IntPtr ProcessId);
 
 		[DllImport("User32")]
 		[return: MarshalAs(UnmanagedType.Bool)]

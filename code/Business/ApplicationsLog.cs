@@ -20,7 +20,7 @@ namespace PTM.Business
 
 	
 		//private static DbDataAdapter dataAdapter;
-		private static Process[] processes;
+		//private static Process[] processes;
 		//private static PTMDataset.ApplicationsLogDataTable applicationsLogTable;
 		private static ArrayList currentApplicationsLog;
 		private static Process lastProcess;
@@ -34,7 +34,7 @@ namespace PTM.Business
 		#region Public Methods
 		public static void Initialize()
 		{
-			processes = Process.GetProcesses();
+			//processes = Process.GetProcesses();
 			loggingThread = null;
 			lastProcess = null;
 			applicationsTimer = new Timer(1000);
@@ -62,7 +62,7 @@ namespace PTM.Business
 																{"ActiveTime", "Caption", "LastUpdateTime", "UserProcessorTime", "Id"},
 					new object[]
 																{
-																	applicationLog.ActiveTime, applicationLog.Caption,
+																	applicationLog.ActiveTime, applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)),
 																	applicationLog.LastUpdateTime, applicationLog.UserProcessorTime,
 																	applicationLog.Id
 																});
@@ -79,20 +79,7 @@ namespace PTM.Business
 				DateTime initCallTime = DateTime.Now;
 				applicationsTimer.Stop();
 				
-				IntPtr hwnd = ViewHelper.GetForegroundWindow();
-				//TODO: Hacer que no tome en cuenta el taskbar
-				if (hwnd.ToInt32() == 0)
-					return;
-				
-				if (!ViewHelper.IsWindow(hwnd))
-					return;
-
-				IntPtr pwnd = ViewHelper.GetParent(hwnd);
-				if (pwnd.ToInt32() == 0)
-					pwnd = hwnd;
-
-				
-				currentProcess = GetCurrentProcess(pwnd);
+				currentProcess = GetCurrentProcess();
 
 				if (currentProcess == null)
 				{
@@ -164,8 +151,8 @@ namespace PTM.Business
 				                                 	},
 				                                 new object[]
 				                                 	{
-				                                 		applicationLog.ActiveTime, applicationLog.ApplicationFullPath,
-				                                 		applicationLog.Caption, applicationLog.LastUpdateTime, applicationLog.Name,
+				                                 		applicationLog.ActiveTime, applicationLog.ApplicationFullPath.Substring(Math.Max(0,applicationLog.ApplicationFullPath.Length-255),Math.Min(applicationLog.ApplicationFullPath.Length, 255)),
+				                                 		applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)), applicationLog.LastUpdateTime, applicationLog.Name,
 				                                 		applicationLog.ProcessId, applicationLog.TaskLogId,
 				                                 		applicationLog.UserProcessorTime
 				                                 	});
@@ -181,10 +168,34 @@ namespace PTM.Business
 			return null;
 		}
 
-		private static Process GetCurrentProcess(IntPtr pwnd)
+		private static Process GetCurrentProcess()
 		{
-			IntPtr processId = ViewHelper.GetWindowThreadProcessId(pwnd, IntPtr.Zero);
-			Process currentProcess=null;
+			//Process currentProcess=null;
+			////Solution with Process.GetCurrentProcess()
+//			currentProcess = Process.GetCurrentProcess();
+//			IntPtr phnd = ViewHelper.GetParent(currentProcess.Handle);
+//			if (!ViewHelper.IsWindow(phnd))
+//				return null;
+//			return currentProcess;
+			
+			IntPtr hwnd = ViewHelper.GetForegroundWindow();
+				
+			if (hwnd.ToInt32() == 0)
+				return null;
+				
+			IntPtr pwnd = ViewHelper.GetParent(hwnd);
+			if (pwnd.ToInt32() == 0)
+				pwnd = hwnd;
+			
+			if (!ViewHelper.IsWindow(pwnd))
+				return null;
+
+			//IntPtr processId = ViewHelper.GetWindowThreadProcessId(pwnd, IntPtr.Zero);
+			IntPtr pid;
+			ViewHelper.GetWindowThreadProcessId(pwnd, out pid);
+			
+			return Process.GetProcessById(pid.ToInt32());
+			/*
 			foreach (Process process in processes)
 			{
 				if(!process.HasExited)
@@ -195,6 +206,7 @@ namespace PTM.Business
 					break;
 				}
 			}
+			
 			if(currentProcess == null)
 			{
 				processes = Process.GetProcesses();
@@ -210,17 +222,18 @@ namespace PTM.Business
 				}
 			}
 			return currentProcess;
+			*/
 		}
 
-		private static bool HasThreadId(Process process, IntPtr processId)
-		{
-			foreach (ProcessThread  pt in process.Threads)
-			{
-				if (pt.Id == processId.ToInt32())
-					return true;
-			}
-			return false;
-		}
+//		private static bool HasThreadId(Process process, IntPtr processId)
+//		{
+//			foreach (ProcessThread  pt in process.Threads)
+//			{
+//				if (pt.Id == processId.ToInt32())
+//					return true;
+//			}
+//			return false;
+//		}
 
 		
 		private static void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
