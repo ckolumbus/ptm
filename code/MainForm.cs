@@ -377,7 +377,7 @@ namespace PTM
 		{
 			if(tabControl.SelectedTab == this.summaryPage)
 			{
-				summaryControl.UpdateList();
+				summaryControl.UpdateSummary();
 			}
 			if(tabControl.SelectedTab == this.statisticsPage)
 			{

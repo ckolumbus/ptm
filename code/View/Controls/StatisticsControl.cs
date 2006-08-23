@@ -306,17 +306,20 @@ namespace PTM.View.Controls
 
 		public void UpdateStatistics()
 		{
-			//this.dateTimePicker.Value = DateTime.Now;
-			GetTaskDetail();
-			
+			if(this.dateTimePicker.Value != DateTime.Today)
+				this.dateTimePicker.Value = DateTime.Today;
+			else
+			{
+				GetTaskDetail(this.dateTimePicker.Value);
+			}
 		}
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
 		{
-			GetTaskDetail();
+			GetTaskDetail(dateTimePicker.Value);
 		}
 
-		private void GetTaskDetail()
+		private void GetTaskDetail(DateTime day)
 		{
 			try
 			{
@@ -325,11 +328,9 @@ namespace PTM.View.Controls
 				this.Refresh();
 				System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
 
-				//UnitOfWork.Update();
-	
 				appsSummaryDataset = Summary.GetApplicationsSummary(
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue), 
-					dateTimePicker.Value.Date, dateTimePicker.Value.Date.AddDays(1));
+					day, day.AddDays(1));
 				int appActiveTime = 0;
 				foreach (SummaryDataset.ApplicationsSummaryRow applicationsSummaryRow in appsSummaryDataset.Rows)
 				{
@@ -361,7 +362,7 @@ namespace PTM.View.Controls
 			if(parentTaskComboBox.SelectedIndex == -1)
 				return;
 
-			GetTaskDetail();
+			GetTaskDetail(dateTimePicker.Value);
 		}
 
 		private void browseButton_Click(object sender, System.EventArgs e)

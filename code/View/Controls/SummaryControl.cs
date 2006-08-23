@@ -277,7 +277,7 @@ namespace PTM.View.Controls
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
 		{
-			UpdateList();
+			UpdateList(dateTimePicker.Value);
 		}
 		
 
@@ -292,7 +292,18 @@ namespace PTM.View.Controls
 			totalTime = 0;
 		}
 
-		public void UpdateList()
+		
+		public void UpdateSummary()
+		{
+			if(this.dateTimePicker.Value != DateTime.Today)
+				this.dateTimePicker.Value = DateTime.Today;
+			else
+			{
+				UpdateList(this.dateTimePicker.Value);
+			}
+		}
+		
+		private void UpdateList(DateTime day)
 		{
 			try
 			{
@@ -301,7 +312,7 @@ namespace PTM.View.Controls
 			System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
 			ArrayList summaryList = Summary.GetTaskSummary( 
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue),
-					dateTimePicker.Value.Date, dateTimePicker.Value.Date.AddDays(1));
+					day.Date, day.AddDays(1));
 				
 				totalTime = 0;
 //				foreach (TaskSummary row in summaryList)
@@ -407,7 +418,7 @@ namespace PTM.View.Controls
 			if(parentTaskComboBox.SelectedIndex == -1)
 				return;
 
-			UpdateList();
+			UpdateList(dateTimePicker.Value);
 		}
 
 
