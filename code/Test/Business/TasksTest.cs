@@ -374,37 +374,37 @@ namespace PTM.Test.Business
 			row3.Id = Tasks.AddTasksRow(row3);
 			
 			bool result;
-			result = Tasks.IsParent(Tasks.RootTasksRow, null);
-			Assert.AreEqual(false, result);
+//			result = Tasks.IsParent(Tasks.RootTasksRow, null);
+//			Assert.AreEqual(false, result);
+//			
+//			result = Tasks.IsParent(null, Tasks.RootTasksRow);
+//			Assert.AreEqual(false, result);
 			
-			result = Tasks.IsParent(null, Tasks.RootTasksRow);
-			Assert.AreEqual(false, result);
-			
-			result = Tasks.IsParent(Tasks.RootTasksRow, row1);
+			result = Tasks.IsParent(Tasks.RootTasksRow.Id, row1.Id);
 			Assert.AreEqual(true, result);
 			
-			result = Tasks.IsParent(Tasks.RootTasksRow, row2);
+			result = Tasks.IsParent(Tasks.RootTasksRow.Id, row2.Id);
 			Assert.AreEqual(true, result);
 			
-			result = Tasks.IsParent(Tasks.RootTasksRow, row3);
+			result = Tasks.IsParent(Tasks.RootTasksRow.Id, row3.Id);
 			Assert.AreEqual(true, result);
 			
-			result = Tasks.IsParent(row1, Tasks.RootTasksRow);
+			result = Tasks.IsParent(row1.Id, Tasks.RootTasksRow.Id);
 			Assert.AreEqual(false, result);
 
-			result = Tasks.IsParent(row1, row2);
+			result = Tasks.IsParent(row1.Id, row2.Id);
 			Assert.AreEqual(false, result);
 			
-			result = Tasks.IsParent(row1, row3);
+			result = Tasks.IsParent(row1.Id, row3.Id);
 			Assert.AreEqual(true, result);
 			
-			result = Tasks.IsParent(row2, row1);
+			result = Tasks.IsParent(row2.Id, row1.Id);
 			Assert.AreEqual(false, result);
 			
-			result = Tasks.IsParent(row2, row3);
+			result = Tasks.IsParent(row2.Id, row3.Id);
 			Assert.AreEqual(false, result);
 			
-			result = Tasks.IsParent(row3, row1);
+			result = Tasks.IsParent(row3.Id, row1.Id);
 			Assert.AreEqual(false, result);
 		}
 		

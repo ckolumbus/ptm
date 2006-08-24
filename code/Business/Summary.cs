@@ -34,8 +34,8 @@ namespace PTM.Business
 
 			summaryList = ExecuteTaskSummary(initialDate, finalDate);
 
-//			if (parentRow == null)
-//				return summaryDataset.TasksSummary;
+			//			if (parentRow == null)
+			//				return summaryDataset.TasksSummary;
 
 			while (summaryList.Count > 0)
 			{
@@ -45,43 +45,46 @@ namespace PTM.Business
 				sumRow.IsDefaultTask = row.IsDefaultTask;
 				if (sumRow.IsDefaultTask)
 					sumRow.DefaultTaskId = row.DefaultTaskId;
-
-				if (row.Id != parentRow.Id)
+				
+				if(sumRow.DefaultTaskId!=(int)DefaultTask.Idle)//ignore idle time
 				{
-					if(row.IsParentIdNull())
+					if (row.Id != parentRow.Id)
 					{
-						summaryList.Remove(sumRow);
-						continue;
-					}
+						if(row.IsParentIdNull())
+						{
+							summaryList.Remove(sumRow);
+							continue;
+						}
 
-					if (row.ParentId == parentRow.Id)
-					{
-						TaskSummary retrow = FindTaskSummaryByTaskId(returnList, sumRow.TaskId);
-						if (retrow == null)
-							returnList.Add(sumRow);
+						if (row.ParentId == parentRow.Id)
+						{
+							TaskSummary retrow = FindTaskSummaryByTaskId(returnList, sumRow.TaskId);
+							if (retrow == null)
+								returnList.Add(sumRow);
+							else
+							{
+								retrow.TotalTime += sumRow.TotalTime;
+							}
+						}
 						else
 						{
-							retrow.TotalTime += sumRow.TotalTime;
+							TaskSummary psumRow = FindTaskSummaryByTaskId(summaryList, row.ParentId);
+							if (psumRow == null)
+							{
+								PTMDataset.TasksRow prow = Tasks.FindById(row.ParentId);
+								psumRow = sumRow;
+								psumRow.TaskId = prow.Id;
+								continue;
+							}
+							psumRow.TotalTime += sumRow.TotalTime;
 						}
 					}
 					else
 					{
-						TaskSummary psumRow = FindTaskSummaryByTaskId(summaryList, row.ParentId);
-						if (psumRow == null)
-						{
-							PTMDataset.TasksRow prow = Tasks.FindById(row.ParentId);
-							psumRow = sumRow;
-							psumRow.TaskId = prow.Id;
-							continue;
-						}
-						psumRow.TotalTime += sumRow.TotalTime;
+						sumRow.Description = NOT_DETAILED;
+						returnList.Add(sumRow);
 					}
-				}
-				else
-				{
-					sumRow.Description = NOT_DETAILED;
-					returnList.Add(sumRow);
-				}
+					}
 				summaryList.Remove(sumRow);
 			}
 			return returnList;
@@ -123,7 +126,7 @@ namespace PTM.Business
 			{
 				SummaryDataset.ApplicationsSummaryRow[] appSums = (SummaryDataset.ApplicationsSummaryRow[]) applicationsSummary.Select(
 					applicationsSummary.ApplicationFullPathColumn.ColumnName +
-						"='" + row.ApplicationFullPath + "'");
+					"='" + row.ApplicationFullPath + "'");
 				if (appSums.Length == 0)
 				{
 					applicationsSummary.ImportRow(row);
