@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Resources;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using PTM.Business;
 using PTM.Data;
 using PTM.View;
@@ -34,6 +35,8 @@ namespace PTM
 		private MenuItem menuItem2;
 		private MenuItem aboutMenuItem;
 		private System.Windows.Forms.MenuItem menuItem3;
+		private System.Windows.Forms.MenuItem menuItem4;
+		private System.Windows.Forms.MenuItem startUpMenuItem;
 		private IContainer components;
 
 		public MainForm()
@@ -43,7 +46,24 @@ namespace PTM
 			this.Text += MainClass.GetVersionString();
 			this.tasksLogControl.Exit+=new EventHandler(Exit);
 			LoadIconsFromResources();
+			LoadStartUpStatus();
 			Application.DoEvents();
+		}
+
+		private void LoadStartUpStatus()
+		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			
+			if (reg.GetValue("PTM") == null)
+			{
+				this.startUpMenuItem.Checked = false;
+			}
+			else
+			{
+				if(reg.GetValue("PTM").ToString() != Application.ExecutablePath.ToString()) //update path
+					reg.SetValue("PTM", Application.ExecutablePath.ToString());
+				this.startUpMenuItem.Checked = true;
+			}
 		}
 
 		private void LoadIconsFromResources()
@@ -113,6 +133,8 @@ namespace PTM
 			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
 			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
+			this.startUpMenuItem = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
@@ -126,6 +148,7 @@ namespace PTM
 			// 
 			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																											this.menuItem1,
+																											this.menuItem4,
 																											this.menuItem2});
 			// 
 			// menuItem1
@@ -151,7 +174,7 @@ namespace PTM
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 1;
+			this.menuItem2.Index = 2;
 			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																											 this.aboutMenuItem});
 			this.menuItem2.Text = "Help";
@@ -257,6 +280,19 @@ namespace PTM
 			this.statisticsControl.Name = "statisticsControl";
 			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
+			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 1;
+			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																											 this.startUpMenuItem});
+			this.menuItem4.Text = "Options";
+			// 
+			// startUpMenuItem
+			// 
+			this.startUpMenuItem.Index = 0;
+			this.startUpMenuItem.Text = "Run at Windows startup";
+			this.startUpMenuItem.Click += new System.EventHandler(this.menuItem5_Click);
 			// 
 			// MainForm
 			// 
@@ -431,6 +467,22 @@ namespace PTM
 
 		#endregion
 
+		private void menuItem5_Click(object sender, System.EventArgs e)
+		{
+			this.startUpMenuItem.Checked = !this.startUpMenuItem.Checked;
+			SetWindowsStartUp(this.startUpMenuItem.Checked);
+		}
+		
+		private static void SetWindowsStartUp(bool enable)
+		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			
+			if(enable)
+				reg.SetValue("PTM", Application.ExecutablePath.ToString());
+			else
+				reg.DeleteValue("PTM", false);
+
+		}
 
 	}
 }
