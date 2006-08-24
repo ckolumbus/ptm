@@ -64,6 +64,7 @@ namespace PTM
 					reg.SetValue("PTM", Application.ExecutablePath.ToString());
 				this.startUpMenuItem.Checked = true;
 			}
+			reg.Close();
 		}
 
 		private void LoadIconsFromResources()
@@ -482,6 +483,7 @@ namespace PTM
 			else
 				reg.DeleteValue("PTM", false);
 
+			reg.Close();
 		}
 
 	}

@@ -58,7 +58,8 @@ namespace PTM.Data
 
 		private static string GetDataSource()
 		{
-			string appdir = Directory.GetCurrentDirectory();
+			//string appdir = Directory.GetCurrentDirectory();
+			string appdir = Application.StartupPath;
 			string dbdir = appdir + @"\" + userNameData;
 			if (!Directory.Exists(dbdir))
 				Directory.CreateDirectory(dbdir);
