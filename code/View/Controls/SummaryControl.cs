@@ -32,13 +32,18 @@ namespace PTM.View.Controls
 		private ComboBox parentTaskComboBox;
 		private IContainer components;
 		private Button browseButton;
-		private ColumnHeader TaskIdHeader;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private PTM.View.Controls.IndicatorControl indicator2;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private PTM.View.Controls.IndicatorControl indicator3;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.ToolBar toolBar;
+		private System.Windows.Forms.ToolBarButton toolBarButton1;
+		private System.Windows.Forms.ToolBarButton toolBarButton2;
+		private System.Windows.Forms.ImageList toolBarImages;
 
 		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
+		private PTMDataset.TasksRow parentRow;
 		
 		public SummaryControl()
 		{
@@ -77,12 +82,16 @@ namespace PTM.View.Controls
 			
 			this.dateTimePicker.Value = DateTime.Today;
 			
-			if(parentTaskComboBox.Items.Count>0)
-				parentTaskComboBox.SelectedIndex = 0;
+			if(parentTasksTable.Count>0)
+			{
+				parentRow = (PTMDataset.TasksRow) parentTasksTable.Rows[0];
+				this.parentTaskComboBox.SelectedValue = parentRow.Id;
+			}
 			this.dateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 			
 			Logs.TasksLogDurationCountElapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			this.taskList.DoubleClick+=new EventHandler(taskList_DoubleClick);
 		}
 
 		/// <summary> 
@@ -115,7 +124,6 @@ namespace PTM.View.Controls
 			this.TaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.PercentHeader = new System.Windows.Forms.ColumnHeader();
-			this.TaskIdHeader = new System.Windows.Forms.ColumnHeader();
 			this.tasksIconsList = new System.Windows.Forms.ImageList(this.components);
 			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -128,10 +136,16 @@ namespace PTM.View.Controls
 			this.indicator2 = new PTM.View.Controls.IndicatorControl();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.indicator3 = new PTM.View.Controls.IndicatorControl();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.toolBar = new System.Windows.Forms.ToolBar();
+			this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
+			this.toolBarButton2 = new System.Windows.Forms.ToolBarButton();
+			this.toolBarImages = new System.Windows.Forms.ImageList(this.components);
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -147,17 +161,18 @@ namespace PTM.View.Controls
 			// taskList
 			// 
 			this.taskList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
+			this.taskList.AllowColumnReorder = true;
 			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																											  this.TaskHeader,
 																											  this.DurationTaskHeader,
-																											  this.PercentHeader,
-																											  this.TaskIdHeader});
+																											  this.PercentHeader});
 			this.taskList.FullRowSelect = true;
-			this.taskList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
+			this.taskList.MultiSelect = false;
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 184);
 			this.taskList.SmallImageList = this.tasksIconsList;
@@ -178,11 +193,6 @@ namespace PTM.View.Controls
 			// 
 			this.PercentHeader.Text = "Percent";
 			// 
-			// TaskIdHeader
-			// 
-			this.TaskIdHeader.Text = "Id";
-			this.TaskIdHeader.Width = 0;
-			// 
 			// tasksIconsList
 			// 
 			this.tasksIconsList.ImageSize = new System.Drawing.Size(16, 16);
@@ -193,6 +203,7 @@ namespace PTM.View.Controls
 			// 
 			this.dateTimePicker.Location = new System.Drawing.Point(80, 8);
 			this.dateTimePicker.Name = "dateTimePicker";
+			this.dateTimePicker.Size = new System.Drawing.Size(232, 20);
 			this.dateTimePicker.TabIndex = 0;
 			this.dateTimePicker.Value = new System.DateTime(2005, 8, 29, 0, 0, 0, 0);
 			// 
@@ -319,8 +330,50 @@ namespace PTM.View.Controls
 			this.indicator3.TextValue = "";
 			this.indicator3.Value = 0;
 			// 
+			// panel1
+			// 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.Controls.Add(this.toolBar);
+			this.panel1.Location = new System.Drawing.Point(352, 120);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(48, 24);
+			this.panel1.TabIndex = 14;
+			// 
+			// toolBar
+			// 
+			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+																											  this.toolBarButton1,
+																											  this.toolBarButton2});
+			this.toolBar.Divider = false;
+			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolBar.DropDownArrows = true;
+			this.toolBar.ImageList = this.toolBarImages;
+			this.toolBar.Location = new System.Drawing.Point(0, 0);
+			this.toolBar.Name = "toolBar";
+			this.toolBar.ShowToolTips = true;
+			this.toolBar.Size = new System.Drawing.Size(48, 26);
+			this.toolBar.TabIndex = 0;
+			this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar_ButtonClick);
+			// 
+			// toolBarButton1
+			// 
+			this.toolBarButton1.ImageIndex = 0;
+			this.toolBarButton1.ToolTipText = "Down level";
+			// 
+			// toolBarButton2
+			// 
+			this.toolBarButton2.ImageIndex = 1;
+			this.toolBarButton2.ToolTipText = "Up level";
+			// 
+			// toolBarImages
+			// 
+			this.toolBarImages.ImageSize = new System.Drawing.Size(16, 16);
+			this.toolBarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("toolBarImages.ImageStream")));
+			this.toolBarImages.TransparentColor = System.Drawing.Color.Transparent;
+			// 
 			// SummaryControl
 			// 
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.browseButton);
@@ -337,6 +390,7 @@ namespace PTM.View.Controls
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -497,15 +551,8 @@ namespace PTM.View.Controls
 			tgForm.ShowDialog(this);
 			if(tgForm.SelectedTaskRow == null)
 				return;
-
-			if(parentTasksTable.FindById(tgForm.SelectedTaskRow.Id)==null)
-			{
-				PTMDataset.TasksRow parentRow = this.parentTasksTable.NewTasksRow();
-				parentRow.ItemArray = tgForm.SelectedTaskRow.ItemArray;
-				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
-			}
-			this.parentTaskComboBox.SelectedValue= tgForm.SelectedTaskRow.Id;
+			
+			SetParent(tgForm.SelectedTaskRow);
 		}
 
 		private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -546,6 +593,52 @@ namespace PTM.View.Controls
 		
 		}
 
+		private void toolBar_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
+		{
+			if(e.Button.ImageIndex==0)
+				GoToChildDetail();
+			else if(e.Button.ImageIndex == 1)
+				GoToParentDetail();
+		}
 
+		private void SetParent(PTMDataset.TasksRow parent)
+		{
+			if(parentTasksTable.FindById(parent.Id)==null)
+			{
+				parentRow = this.parentTasksTable.NewTasksRow();
+				parentRow.ItemArray = parent.ItemArray;
+				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow), this.parentTaskComboBox.MaxLength);
+				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
+			}
+			this.parentTaskComboBox.SelectedValue = parent.Id;
+		}
+		
+		private void GoToParentDetail()
+		{
+			if(Tasks.RootTasksRow.Id == this.parentRow.Id)
+			{
+				return;
+			}
+			SetParent(Tasks.FindById(parentRow.ParentId));
+		}
+
+		private void GoToChildDetail()
+		{
+			if(this.taskList.SelectedItems.Count==0)
+			{
+				return;
+			}
+			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
+			SetParent(Tasks.FindById(sum.TaskId));
+		}
+
+		private void taskList_DoubleClick(object sender, EventArgs e)
+		{
+			if(this.taskList.SelectedItems.Count==0)
+				return;
+			
+			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
+			SetParent(Tasks.FindById(sum.TaskId));
+		}
 	}
 }
