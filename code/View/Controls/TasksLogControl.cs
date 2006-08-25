@@ -129,11 +129,6 @@ namespace PTM.View.Controls
 			this.notifyTimer = new System.Timers.Timer();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-//			this.Description = new System.Windows.Forms.ColumnHeader();
-//			this.Time = new System.Windows.Forms.ColumnHeader();
-//			this.Duration = new System.Windows.Forms.ColumnHeader();
-//			this.Id = new System.Windows.Forms.ColumnHeader();
-			//this.Id2 = new System.Windows.Forms.ColumnHeader();
 			this.switchToButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
@@ -144,7 +139,7 @@ namespace PTM.View.Controls
 			// 
 			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.editButton.Location = new System.Drawing.Point(168, 280);
+			this.editButton.Location = new System.Drawing.Point(152, 280);
 			this.editButton.Name = "editButton";
 			this.editButton.Size = new System.Drawing.Size(72, 23);
 			this.editButton.TabIndex = 8;
@@ -155,7 +150,7 @@ namespace PTM.View.Controls
 			// 
 			this.addTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.addTaskButton.Location = new System.Drawing.Point(328, 280);
+			this.addTaskButton.Location = new System.Drawing.Point(312, 280);
 			this.addTaskButton.Name = "addTaskButton";
 			this.addTaskButton.Size = new System.Drawing.Size(72, 23);
 			this.addTaskButton.TabIndex = 7;
@@ -174,7 +169,7 @@ namespace PTM.View.Controls
 			// DurationTaskHeader
 			// 
 			this.DurationTaskHeader.Text = "Duration";
-			this.DurationTaskHeader.Width = 80;
+			this.DurationTaskHeader.Width = 65;
 			// 
 			// notifyAnswerTimer
 			// 
@@ -275,6 +270,7 @@ namespace PTM.View.Controls
 			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
+			this.taskList.AutoArrange = false;
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																											  this.TaskDescriptionHeader,
 																											  this.DurationTaskHeader,
@@ -282,38 +278,16 @@ namespace PTM.View.Controls
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 8);
 			this.taskList.Name = "taskList";
-			this.taskList.Size = new System.Drawing.Size(392, 264);
+			this.taskList.Size = new System.Drawing.Size(376, 264);
+			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 10;
 			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
-			// 
-			// Description
-			// 
-//			this.Description.Text = "Description";
-//			this.Description.Width = 230;
-//			// 
-//			// Time
-//			// 
-//			this.Time.Text = "Time";
-//			this.Time.Width = 80;
-//			// 
-//			// Duration
-//			// 
-//			this.Duration.Text = "Duration";
-//			this.Duration.Width = 78;
-//			// 
-//			// Id
-//			// 
-//			this.Id.Width = 0;
-			// 
-			// Id2
-			// 
-			//this.Id2.Width = 0;
 			// 
 			// switchToButton
 			// 
 			this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.switchToButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.switchToButton.Location = new System.Drawing.Point(248, 280);
+			this.switchToButton.Location = new System.Drawing.Point(232, 280);
 			this.switchToButton.Name = "switchToButton";
 			this.switchToButton.Size = new System.Drawing.Size(72, 23);
 			this.switchToButton.TabIndex = 11;
@@ -324,7 +298,7 @@ namespace PTM.View.Controls
 			// 
 			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.deleteButton.Location = new System.Drawing.Point(88, 280);
+			this.deleteButton.Location = new System.Drawing.Point(72, 280);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(72, 23);
 			this.deleteButton.TabIndex = 12;
@@ -339,7 +313,7 @@ namespace PTM.View.Controls
 			this.Controls.Add(this.editButton);
 			this.Controls.Add(this.addTaskButton);
 			this.Name = "TasksLogControl";
-			this.Size = new System.Drawing.Size(408, 312);
+			this.Size = new System.Drawing.Size(392, 312);
 			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
 			this.ResumeLayout(false);

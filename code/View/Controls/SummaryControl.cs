@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using PTM.Business;
 using PTM.Data;
 using PTM.Infos;
+using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -19,7 +20,7 @@ namespace PTM.View.Controls
 	public class SummaryControl : UserControl
 	{
 		private DateTimePicker dateTimePicker;
-		private ListView taskList;
+		private TreeListView taskList;
 		private ColumnHeader DurationTaskHeader;
 		private Label label1;
 		private ImageList tasksIconsList;
@@ -120,7 +121,7 @@ namespace PTM.View.Controls
 			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SummaryControl));
 			this.label1 = new System.Windows.Forms.Label();
-			this.taskList = new System.Windows.Forms.ListView();
+			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.TaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.PercentHeader = new System.Windows.Forms.ColumnHeader();
@@ -169,15 +170,14 @@ namespace PTM.View.Controls
 																											  this.TaskHeader,
 																											  this.DurationTaskHeader,
 																											  this.PercentHeader});
-			this.taskList.FullRowSelect = true;
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 184);
 			this.taskList.SmallImageList = this.tasksIconsList;
+			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 2;
-			this.taskList.View = System.Windows.Forms.View.Details;
 			// 
 			// TaskHeader
 			// 
@@ -464,7 +464,7 @@ namespace PTM.View.Controls
 					//						percent = row.TotalTime / totalTime;
 					
 					TimeSpan duration = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalTime));
-					ListViewItem lvi = new ListViewItem(new string[] {summary.Description, ViewHelper.TimeSpanToTimeString(duration), 0.ToString("0.0%", CultureInfo.InvariantCulture), summary.TaskId.ToString(CultureInfo.InvariantCulture)});
+					TreeListViewItem lvi = new TreeListViewItem(summary.Description, new string[] {ViewHelper.TimeSpanToTimeString(duration), 0.ToString("0.0%", CultureInfo.InvariantCulture), summary.TaskId.ToString(CultureInfo.InvariantCulture)});
 					lvi.ImageIndex = 0;
 					if (summary.IsDefaultTask)
 					{
