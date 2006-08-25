@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.ActiveCfg = Debug|.NET
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.Build.0 = Debug|.NET
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.ActiveCfg = Release|.NET
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		database\ptm.mdb = database\ptm.mdb
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
