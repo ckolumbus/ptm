@@ -710,11 +710,8 @@ namespace PTM.View.Controls
 			TimeSpan active =  new TimeSpan(0,0,appRow.ActiveTime);
 			string activeTime = ViewHelper.TimeSpanToTimeString(active);
 			string caption = appRow.Caption.Length != 0 ? appRow.Caption : appRow.Name;
-			//TreeListViewItem lvi = null;
 			foreach (TreeListViewItem logItem in this.taskList.Items)
 			{
-//				if(item.Tag==null)
-//					return;
 				if (((Log)logItem.Tag).Id == appRow.TaskLogId)
 				{
 					foreach (TreeListViewItem appItem in logItem.Items)
@@ -731,7 +728,6 @@ namespace PTM.View.Controls
 					lvi.Tag = appRow;
 					lvi.ImageIndex = IconsManager.AddIconFromFile(appRow.ApplicationFullPath);
 					logItem.Items.Add(lvi);
-					//this.taskList.Refresh();
 				}
 			}
 		}
@@ -739,10 +735,6 @@ namespace PTM.View.Controls
 		private void ApplicationsLog_ApplicationsLogChanged(PTM.Business.ApplicationsLog.ApplicationLogChangeEventArgs e)
 		{
 			this.UpdateApplicationsList(e.ApplicationLog);
-//			if(e.Action == DataRowAction.Change)
-//			{
-//				
-//			}
 		}
 
 		#endregion

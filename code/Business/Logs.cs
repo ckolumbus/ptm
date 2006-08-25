@@ -131,7 +131,6 @@ namespace PTM.Business
 				if (string.Compare(defaultRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
 				{
 					PTMDataset.TasksRow row = Tasks.NewTasksRow();
-					row.BeginEdit();
 					row.ItemArray = defaultRow.ItemArray;
 					row.ParentId = taskParentId;
 					row.Id = Tasks.AddTasksRow(row);

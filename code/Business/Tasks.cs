@@ -92,6 +92,7 @@ namespace PTM.Business
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.NewTasksRow();
 			row.ItemArray = tasksRow.ItemArray;
+			row.Id = -1;
 			tasksDataTable.AddTasksRow(row);
 			//SaveTaskRow(row);
 			SaveTasks();
@@ -120,7 +121,7 @@ namespace PTM.Business
 		public static void DeleteTaskRow(PTMDataset.TasksRow tasksRow)
 		{
 			if(Tasks.CurrentTaskRow!=null)
-				if(Tasks.CurrentTaskRow.Id == tasksRow.Id || Tasks.IsParent(tasksRow.Id, Tasks.CurrentTaskRow.Id))
+				if(Tasks.CurrentTaskRow.Id == tasksRow.Id || Tasks.IsParent(tasksRow.Id, Tasks.CurrentTaskRow.Id)>0)
 				{
 					throw new ApplicationException("This task can't be deleted now. You are currently working on it or in a part of it.");
 				}
@@ -169,50 +170,36 @@ namespace PTM.Business
 			}
 			return path.ToString();
 		}
-/*
-		public static bool IsParent(PTMDataset.TasksRow parentRow, PTMDataset.TasksRow childRow)
-		{
-			if(parentRow == null || childRow == null)
-				return false;
-			
-			if(childRow.IsParentIdNull())
-				return false;
-			
-			int parentId = childRow.ParentId;
 
-			while (true)
-			{
-				PTMDataset.TasksRow curRow;
-				curRow = tasksDataTable.FindById(parentId);
-				if(curRow.Id == parentRow.Id) return true;
-				if(curRow.IsParentIdNull()) return false;
-				parentId = curRow.ParentId;
-			}
-		}
-		*/
-		public static bool IsParent(int parentTaskId, int childTaskId)
+		public static int IsParent(int parentTaskId, int childTaskId)
 		{
-			PTMDataset.TasksRow parentRow;
+            PTMDataset.TasksRow parentRow;
 			parentRow = tasksDataTable.FindById(parentTaskId);
 
 			PTMDataset.TasksRow childRow;
 			childRow = tasksDataTable.FindById(childTaskId);
 			
 			if(parentRow == null || childRow == null)
-				return false;
+				return -1;
 			
 			if(childRow.IsParentIdNull())
-				return false;
+				return -1;
+
+			if(parentTaskId == childTaskId)
+				return 0;
 			
 			int parentId = childRow.ParentId;
+
+			int generation = 1;
 
 			while (true)
 			{
 				PTMDataset.TasksRow curRow;
 				curRow = tasksDataTable.FindById(parentId);
-				if(curRow.Id == parentRow.Id) return true;
-				if(curRow.IsParentIdNull()) return false;
+				if(curRow.Id == parentRow.Id) return generation;
+				if(curRow.IsParentIdNull()) return -1;
 				parentId = curRow.ParentId;
+				generation++;
 			}
 		}
 
@@ -361,6 +348,11 @@ namespace PTM.Business
 				}
 			}
 		}
+
+		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		{
+			ManageTaskLogRowChanged(e);
+		}
 		#endregion
 
 		#region Events
@@ -397,9 +389,6 @@ namespace PTM.Business
 
 		#endregion
 
-		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
-		{
-			ManageTaskLogRowChanged(e);
-		}
+
 	}
 }

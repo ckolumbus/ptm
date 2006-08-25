@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Resources;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -60,8 +61,8 @@ namespace PTM
 			}
 			else
 			{
-				if(reg.GetValue("PTM").ToString() != Application.ExecutablePath.ToString()) //update path
-					reg.SetValue("PTM", Application.ExecutablePath.ToString());
+				if(reg.GetValue("PTM").ToString() != Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)) //update path
+					reg.SetValue("PTM", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 				this.startUpMenuItem.Checked = true;
 			}
 			reg.Close();
@@ -479,7 +480,7 @@ namespace PTM
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 			
 			if(enable)
-				reg.SetValue("PTM", Application.ExecutablePath.ToString());
+				reg.SetValue("PTM", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 			else
 				reg.DeleteValue("PTM", false);
 
