@@ -1086,10 +1086,11 @@ namespace PTM.View.Controls.TreeListViewComponents
 								iCol = (int)nmlvcd.iSubItem;
 								
 								TreeListViewItem item = GetTreeListViewItemFromIndex(iRow);
-								if(!item.Visible)
+								
+								if(item==null || !item.Visible)
 									break;
 								
-								bSelected = base.Items[iRow].Selected;// && this.Focused;
+								bSelected = base.Items[iRow].Selected;
 								
 								if(bSelected && _useXPHighLightStyle)
 								{
