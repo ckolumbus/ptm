@@ -18,10 +18,6 @@ namespace PTM.Business
 		{
 		}
 
-	
-		//private static DbDataAdapter dataAdapter;
-		//private static Process[] processes;
-		//private static PTMDataset.ApplicationsLogDataTable applicationsLogTable;
 		private static ArrayList currentApplicationsLog;
 		private static Process lastProcess;
 		private static System.Timers.Timer applicationsTimer;
@@ -34,36 +30,27 @@ namespace PTM.Business
 		#region Public Methods
 		public static void Initialize()
 		{
-			//processes = Process.GetProcesses();
 			loggingThread = null;
 			lastProcess = null;
 			applicationsTimer = new Timer(1000);
-			//dataAdapter = adapter;
-			//applicationsLogTable = dataTable;
 			
 			applicationsTimer.Elapsed+=new ElapsedEventHandler(ApplicationsTimer_Elapsed);			
 			Logs.LogChanged+=new Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			//Logs.AfterStartLogging+=new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging+=new EventHandler(TasksLog_AfterStopLogging);
 		}
 
-//		public static void SaveApplicationsLog()
-//		{
-//			dataAdapter.Update(applicationsLogTable);
-//			applicationsLogTable.AcceptChanges();
-//		}
 		public static void UpdateCurrentApplicationsLog()
 		{
-			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ?, LastUpdateTime = ? WHERE (Id = ?)";
+			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ? WHERE (Id = ?)";
 			foreach (ApplicationLog applicationLog in currentApplicationsLog)
 			{
 				DataAdapterManager.ExecuteNonQuery(cmd,
 					new string[]
-																{"ActiveTime", "Caption", "LastUpdateTime", "Id"},
+																{"ActiveTime", "Caption", "Id"},
 					new object[]
 																{
 																	applicationLog.ActiveTime, applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)),
-																	applicationLog.LastUpdateTime, applicationLog.Id
+																	applicationLog.Id
 																});
 			}
 		}
@@ -87,9 +74,6 @@ namespace PTM.Business
 				else
 				{
 					ApplicationLog applicationLog = FindCurrentApplication(currentProcess.Id);
-//					string select = applicationsLogTable.ProcessIdColumn.ColumnName + "=" + currentProcess.Id;
-//					select += "AND " + applicationsLogTable.TaskLogIdColumn.ColumnName + "=" + Logs.CurrentLog.Id;
-//					PTMDataset.ApplicationsLogRow[] rows = (PTMDataset.ApplicationsLogRow[]) applicationsLogTable.Select(select);
 					if (applicationLog == null)
 					{
 						ApplicationLog row = new ApplicationLog();
@@ -138,18 +122,18 @@ namespace PTM.Business
 		private static void InsertApplicationLog(ApplicationLog applicationLog)
 		{
 			string cmd =
-				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Caption, LastUpdateTime, Name, ProcessId, TaskLogId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Caption, Name, ProcessId, TaskLogId) VALUES (?, ?, ?, ?, ?, ?)";
 			applicationLog.Id =
 				DataAdapterManager.ExecuteInsert(cmd,
 				                                 new string[]
 				                                 	{
-				                                 		"ActiveTime", "ApplicationFullPath", "Caption", "LastUpdateTime", "Name",
+				                                 		"ActiveTime", "ApplicationFullPath", "Caption", "Name",
 				                                 		"ProcessId", "TaskLogId"
 				                                 	},
 				                                 new object[]
 				                                 	{
 				                                 		applicationLog.ActiveTime, applicationLog.ApplicationFullPath.Substring(Math.Max(0,applicationLog.ApplicationFullPath.Length-255),Math.Min(applicationLog.ApplicationFullPath.Length, 255)),
-				                                 		applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)), applicationLog.LastUpdateTime, applicationLog.Name,
+				                                 		applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)), applicationLog.Name,
 				                                 		applicationLog.ProcessId, applicationLog.TaskLogId
 				                                 	});
 		}
@@ -273,12 +257,6 @@ namespace PTM.Business
 			loggingThread.Start();
 		}
 
-//		private static void TasksLog_AfterStartLogging(object sender, EventArgs e)
-//		{
-//			//InvokeLoggingThread();
-//            UpdateActiveProcess();
-//		}
-
 		private static void TasksLog_AfterStopLogging(object sender, EventArgs e)
 		{
 			applicationsTimer.Stop();
@@ -309,14 +287,6 @@ namespace PTM.Business
 				get { return action; }
 			}
 		}
-
-//		private static void RaiseApplicationLogChangeEvent(ApplicationLog applicationLog)
-//		{
-//			if(ApplicationsLogChanged!=null)
-//			{
-//				ApplicationsLogChanged(new ApplicationLogChangeEventArgs(applicationLog, DataRowAction.Add));
-//			}
-//		}
 
 		#endregion
 
