@@ -54,17 +54,16 @@ namespace PTM.Business
 //		}
 		public static void UpdateCurrentApplicationsLog()
 		{
-			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ?, LastUpdateTime = ?, UserProcessorTime = ? WHERE (Id = ?)";
+			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ?, LastUpdateTime = ? WHERE (Id = ?)";
 			foreach (ApplicationLog applicationLog in currentApplicationsLog)
 			{
 				DataAdapterManager.ExecuteNonQuery(cmd,
 					new string[]
-																{"ActiveTime", "Caption", "LastUpdateTime", "UserProcessorTime", "Id"},
+																{"ActiveTime", "Caption", "LastUpdateTime", "Id"},
 					new object[]
 																{
 																	applicationLog.ActiveTime, applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)),
-																	applicationLog.LastUpdateTime, applicationLog.UserProcessorTime,
-																	applicationLog.Id
+																	applicationLog.LastUpdateTime, applicationLog.Id
 																});
 			}
 		}
@@ -105,7 +104,6 @@ namespace PTM.Business
 						{
 							return;
 						}
-						row.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
 						row.Caption = currentProcess.MainWindowTitle;
 						row.ActiveTime = Convert.ToInt32((DateTime.Now-initCallTime).TotalSeconds);
 						row.LastUpdateTime = DateTime.Now;
@@ -117,7 +115,6 @@ namespace PTM.Business
 					else
 					{
 						applicationLog.Caption = currentProcess.MainWindowTitle;
-						applicationLog.UserProcessorTime = Convert.ToInt32(currentProcess.UserProcessorTime.TotalSeconds);
 						if(currentProcess==lastProcess)
 							applicationLog.ActiveTime = Convert.ToInt32(new TimeSpan(0, 0, applicationLog.ActiveTime).Add(DateTime.Now - applicationLog.LastUpdateTime).TotalSeconds);
 						else
@@ -141,20 +138,19 @@ namespace PTM.Business
 		private static void InsertApplicationLog(ApplicationLog applicationLog)
 		{
 			string cmd =
-				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Caption, LastUpdateTime, Name, ProcessId, TaskLogId, UserProcessorTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Caption, LastUpdateTime, Name, ProcessId, TaskLogId) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			applicationLog.Id =
 				DataAdapterManager.ExecuteInsert(cmd,
 				                                 new string[]
 				                                 	{
 				                                 		"ActiveTime", "ApplicationFullPath", "Caption", "LastUpdateTime", "Name",
-				                                 		"ProcessId", "TaskLogId", "UserProcessorTime"
+				                                 		"ProcessId", "TaskLogId"
 				                                 	},
 				                                 new object[]
 				                                 	{
 				                                 		applicationLog.ActiveTime, applicationLog.ApplicationFullPath.Substring(Math.Max(0,applicationLog.ApplicationFullPath.Length-255),Math.Min(applicationLog.ApplicationFullPath.Length, 255)),
 				                                 		applicationLog.Caption.Substring(0,Math.Min(applicationLog.Caption.Length, 120)), applicationLog.LastUpdateTime, applicationLog.Name,
-				                                 		applicationLog.ProcessId, applicationLog.TaskLogId,
-				                                 		applicationLog.UserProcessorTime
+				                                 		applicationLog.ProcessId, applicationLog.TaskLogId
 				                                 	});
 		}
 

@@ -40,8 +40,8 @@ namespace PTM.Business
 			log.InsertTime = DateTime.Now;
 			log.TaskId = taskId;
 			
-			log.Id  = DataAdapterManager.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId, UpdateTime) VALUES (?, ?, ?, ?)", 
-				new string[]{"Duration", "InsertTime", "TaskId", "UpdateTime"}, new object[] {log.Duration, log.InsertTime, log.TaskId, DBNull.Value});
+			log.Id  = DataAdapterManager.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)", 
+				new string[]{"Duration", "InsertTime", "TaskId"}, new object[] {log.Duration, log.InsertTime, log.TaskId});
 					
 			currentLog = log;
 			if(LogChanged!=null)
@@ -56,8 +56,7 @@ namespace PTM.Business
 			Log log;
 			log = FindById(id);
 			log.TaskId = taskId;
-			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + ", UpdateTime = ? WHERE Id = " + id, 
-				new string[]{"UpdateTime"}, new object[]{DateTime.Now});
+			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + id);
 			
 			if(currentLog !=null && currentLog.Id == id)
 				currentLog.TaskId = taskId;
@@ -196,8 +195,8 @@ namespace PTM.Business
 			if(currentLog==null)
 				return;
 			
-			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET Duration = ?, UpdateTime = ? WHERE Id = " + Logs.currentLog.Id, 
-				new string[]{"Duration", "UpdateTime"}, new object[]{Logs.currentLog.Duration, DateTime.Now});
+			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET Duration = ? WHERE Id = " + Logs.currentLog.Id, 
+				new string[]{"Duration"}, new object[]{Logs.currentLog.Duration});
 			if(LogChanged!=null)
 			{
 				LogChanged(new LogChangeEventArgs(Logs.currentLog, DataRowAction.Change));
