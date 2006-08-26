@@ -67,7 +67,6 @@ namespace PTM.Data
 			if (!Directory.Exists(dbdir))
 				Directory.CreateDirectory(dbdir);
 
-			//string dataSource = dbdir + @"\" + ConfigurationSettings.AppSettings["DefaultFileName"] + ".mdb";
 			string dataSource = dbdir + @"\data.mdb";
 			if (!File.Exists(dataSource))
 				File.Copy(appdir + @"\ptm.mdb", dataSource, false);
@@ -83,7 +82,6 @@ namespace PTM.Data
 			if (!Directory.Exists(dbdir))
 				return false;
 
-			//string dataSource = dbdir + @"\" + ConfigurationSettings.AppSettings["DefaultFileName"] + ".mdb";
 			string dataSource = dbdir + @"\data.mdb";
 			if (!File.Exists(dataSource))
 				return false;

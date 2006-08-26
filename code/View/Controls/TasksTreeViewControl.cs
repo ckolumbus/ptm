@@ -46,9 +46,7 @@ namespace PTM.View.Controls
 			// 
 			// treeView
 			// 
-			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView.ImageIndex = -1;
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
@@ -79,7 +77,6 @@ namespace PTM.View.Controls
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad (e);
-			LoadTree();
 			treeView.ImageList = this.groupsImageList;
 			treeView.ImageIndex = 0;
 			treeView.SelectedImageIndex = 1;
@@ -87,16 +84,23 @@ namespace PTM.View.Controls
 			treeView.HideSelection = false;
 			treeView.AfterSelect+=new TreeViewEventHandler(treeView_AfterSelect);
 			treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(TreeView_AfterLabelEdit);
+			this.treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(treeView_AfterLabelEdit);
+
+			
+		}
+
+		public void Initialize()
+		{
+			LoadTree();
 			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
-			this.treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(treeView_AfterLabelEdit);
 
 			if (treeView.Nodes.Count > 0)
 			{
 				treeView.SelectedNode = treeView.Nodes[0];
 			}
 		}
-
+		
 //		public TreeView TreeView
 //		{
 //			get { return treeView; }
@@ -241,6 +245,27 @@ namespace PTM.View.Controls
 		public TreeNode TopNode
 		{
 			get {  return this.treeView.TopNode; }
+		}
+
+		public int SelectedValue
+		{
+			get
+			{
+				if(treeView.SelectedNode!=null)
+					return (int) treeView.SelectedNode.Tag;
+				else
+					return -1;
+			}
+			set
+			{
+				foreach (TreeNode node in treeView.Nodes)
+				{
+					if((int)node.Tag == value)
+					{
+						treeView.SelectedNode = node;
+					}
+				}
+			}
 		}
 
 		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)

@@ -19,11 +19,13 @@ namespace PTM.View.Forms
 		private NumericUpDown minsNumericUpDown;
 		private Button okButton;
 		private Button cancelButton;
-		private Label label2;
-		private Button browseGroupButton;
-		private ComboBox parentTaskComboBox;
 		private Label durationValueLabel;
 		private CheckBox hideDefaultTasksCheckBox;
+		private PTM.View.Controls.TasksTreeViewControl tasksTree;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Button editButton;
+		private System.Windows.Forms.Button deleteButton;
+		private System.Windows.Forms.Button newButton;
 
 		/// <summary>
 		/// Required designer variable.
@@ -35,7 +37,8 @@ namespace PTM.View.Forms
 			InitializeComponent();		
 			this.minsNumericUpDown.KeyPress+=new KeyPressEventHandler(minsNumericUpDown_KeyPress);
 			
-			FillDefaultParentTasks();
+			//FillDefaultParentTasks();
+			tasksTree.Initialize();
 
 			this.durationValueLabel.Visible = false;
 			//parentTaskComboBox.SelectedIndex = -1;
@@ -47,11 +50,11 @@ namespace PTM.View.Forms
 
 			if(Tasks.CurrentTaskRow != null)
 			{
-				parentTaskComboBox.SelectedValue = Tasks.CurrentTaskRow.ParentId;
+				tasksTree.SelectedValue = Tasks.CurrentTaskRow.ParentId;
 			}
 			else
 			{
-				parentTaskComboBox.SelectedValue = Tasks.RootTasksRow.Id;
+				tasksTree.SelectedValue = Tasks.RootTasksRow.Id;
 			}
 			parentTaskComboBox_SelectedValueChanged(null, null);
 		}
@@ -59,7 +62,8 @@ namespace PTM.View.Forms
 		public TaskLogForm(int taskId, string duration)
 		{
 			InitializeComponent();
-			FillDefaultParentTasks();
+			//FillDefaultParentTasks();
+			tasksTree.Initialize();
 //			parentTaskComboBox.SelectedIndex = -1;
 //			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 
@@ -70,10 +74,13 @@ namespace PTM.View.Forms
 			//this.duration = new TimeSpan(0, 0, durationSeconds);
 			//this.minsNumericUpDown.Value = duration.Minutes;
 			
+			this.tasksTree.SelectedValue = taskId;
 			PTMDataset.TasksRow row;
 			row  = Tasks.FindById(taskId);
 			PTMDataset.TasksRow parentRow = Tasks.FindById(row.ParentId);
-			SetParentTask(parentRow);
+			
+			//SetParentTask(parentRow);
+			parentTaskComboBox_SelectedValueChanged(null, null);
 			SetChildTask(row);
 		}
 
@@ -109,11 +116,13 @@ namespace PTM.View.Forms
 			this.label3 = new System.Windows.Forms.Label();
 			this.minsNumericUpDown = new System.Windows.Forms.NumericUpDown();
 			this.label6 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.browseGroupButton = new System.Windows.Forms.Button();
-			this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
 			this.durationValueLabel = new System.Windows.Forms.Label();
 			this.hideDefaultTasksCheckBox = new System.Windows.Forms.CheckBox();
+			this.tasksTree = new PTM.View.Controls.TasksTreeViewControl();
+			this.label2 = new System.Windows.Forms.Label();
+			this.editButton = new System.Windows.Forms.Button();
+			this.deleteButton = new System.Windows.Forms.Button();
+			this.newButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.minsNumericUpDown)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -121,7 +130,7 @@ namespace PTM.View.Forms
 			// 
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(288, 72);
+			this.okButton.Location = new System.Drawing.Point(264, 240);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 0;
 			this.okButton.Text = "Ok";
@@ -131,7 +140,7 @@ namespace PTM.View.Forms
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(376, 72);
+			this.cancelButton.Location = new System.Drawing.Point(352, 240);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 1;
 			this.cancelButton.Text = "Cancel";
@@ -139,9 +148,9 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(8, 32);
+			this.label1.Location = new System.Drawing.Point(8, 8);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(72, 23);
+			this.label1.Size = new System.Drawing.Size(58, 23);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Description:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -149,25 +158,25 @@ namespace PTM.View.Forms
 			// taskComboBox
 			// 
 			this.taskComboBox.Enabled = false;
-			this.taskComboBox.Location = new System.Drawing.Point(80, 32);
+			this.taskComboBox.Location = new System.Drawing.Point(72, 8);
 			this.taskComboBox.MaxLength = 80;
 			this.taskComboBox.Name = "taskComboBox";
-			this.taskComboBox.Size = new System.Drawing.Size(256, 21);
+			this.taskComboBox.Size = new System.Drawing.Size(264, 21);
 			this.taskComboBox.TabIndex = 3;
 			// 
 			// label3
 			// 
 			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label3.Location = new System.Drawing.Point(8, 56);
+			this.label3.Location = new System.Drawing.Point(12, 240);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(72, 23);
+			this.label3.Size = new System.Drawing.Size(48, 23);
 			this.label3.TabIndex = 13;
 			this.label3.Text = "Duration:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// minsNumericUpDown
 			// 
-			this.minsNumericUpDown.Location = new System.Drawing.Point(80, 56);
+			this.minsNumericUpDown.Location = new System.Drawing.Point(72, 240);
 			this.minsNumericUpDown.Maximum = new System.Decimal(new int[] {
 																								  60,
 																								  0,
@@ -192,47 +201,17 @@ namespace PTM.View.Forms
 			// label6
 			// 
 			this.label6.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label6.Location = new System.Drawing.Point(128, 56);
+			this.label6.Location = new System.Drawing.Point(120, 240);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(40, 23);
 			this.label6.TabIndex = 17;
 			this.label6.Text = "mins.";
 			// 
-			// label2
-			// 
-			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label2.Location = new System.Drawing.Point(8, 8);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(72, 23);
-			this.label2.TabIndex = 18;
-			this.label2.Text = "Detail Level:";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// browseGroupButton
-			// 
-			this.browseGroupButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.browseGroupButton.Location = new System.Drawing.Point(368, 6);
-			this.browseGroupButton.Name = "browseGroupButton";
-			this.browseGroupButton.Size = new System.Drawing.Size(80, 23);
-			this.browseGroupButton.TabIndex = 20;
-			this.browseGroupButton.Text = "Browse...";
-			this.browseGroupButton.Click += new System.EventHandler(this.browseGroupButton_Click);
-			// 
-			// parentTaskComboBox
-			// 
-			this.parentTaskComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.parentTaskComboBox.Location = new System.Drawing.Point(80, 8);
-			this.parentTaskComboBox.MaxLength = 50;
-			this.parentTaskComboBox.Name = "parentTaskComboBox";
-			this.parentTaskComboBox.Size = new System.Drawing.Size(280, 21);
-			this.parentTaskComboBox.TabIndex = 21;
-			this.parentTaskComboBox.SelectedValueChanged += new System.EventHandler(this.parentTaskComboBox_SelectedValueChanged);
-			// 
 			// durationValueLabel
 			// 
-			this.durationValueLabel.Location = new System.Drawing.Point(80, 56);
+			this.durationValueLabel.Location = new System.Drawing.Point(78, 246);
 			this.durationValueLabel.Name = "durationValueLabel";
-			this.durationValueLabel.Size = new System.Drawing.Size(112, 23);
+			this.durationValueLabel.Size = new System.Drawing.Size(80, 23);
 			this.durationValueLabel.TabIndex = 22;
 			// 
 			// hideDefaultTasksCheckBox
@@ -240,22 +219,71 @@ namespace PTM.View.Forms
 			this.hideDefaultTasksCheckBox.Checked = true;
 			this.hideDefaultTasksCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.hideDefaultTasksCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.hideDefaultTasksCheckBox.Location = new System.Drawing.Point(344, 32);
+			this.hideDefaultTasksCheckBox.Location = new System.Drawing.Point(348, 6);
 			this.hideDefaultTasksCheckBox.Name = "hideDefaultTasksCheckBox";
-			this.hideDefaultTasksCheckBox.Size = new System.Drawing.Size(112, 32);
+			this.hideDefaultTasksCheckBox.Size = new System.Drawing.Size(88, 32);
 			this.hideDefaultTasksCheckBox.TabIndex = 23;
-			this.hideDefaultTasksCheckBox.Text = "Hide default tasks";
+			this.hideDefaultTasksCheckBox.Text = "Hide defaults";
 			this.hideDefaultTasksCheckBox.CheckedChanged += new System.EventHandler(this.hideDefaultTasksCheckBox_CheckedChanged);
+			// 
+			// tasksTree
+			// 
+			this.tasksTree.Location = new System.Drawing.Point(72, 42);
+			this.tasksTree.Name = "tasksTree";
+			this.tasksTree.Size = new System.Drawing.Size(264, 184);
+			this.tasksTree.TabIndex = 24;
+			// 
+			// label2
+			// 
+			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label2.Location = new System.Drawing.Point(8, 40);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(52, 23);
+			this.label2.TabIndex = 25;
+			this.label2.Text = "Create in:";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// editButton
+			// 
+			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.editButton.Location = new System.Drawing.Point(348, 120);
+			this.editButton.Name = "editButton";
+			this.editButton.Size = new System.Drawing.Size(80, 23);
+			this.editButton.TabIndex = 28;
+			this.editButton.Text = "Edit";
+			// 
+			// deleteButton
+			// 
+			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.deleteButton.Location = new System.Drawing.Point(348, 160);
+			this.deleteButton.Name = "deleteButton";
+			this.deleteButton.Size = new System.Drawing.Size(80, 23);
+			this.deleteButton.TabIndex = 27;
+			this.deleteButton.Text = "Delete";
+			// 
+			// newButton
+			// 
+			this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.newButton.Location = new System.Drawing.Point(348, 80);
+			this.newButton.Name = "newButton";
+			this.newButton.Size = new System.Drawing.Size(80, 23);
+			this.newButton.TabIndex = 26;
+			this.newButton.Text = "New...";
 			// 
 			// TaskLogForm
 			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(454, 102);
-			this.Controls.Add(this.hideDefaultTasksCheckBox);
-			this.Controls.Add(this.parentTaskComboBox);
-			this.Controls.Add(this.browseGroupButton);
+			this.ClientSize = new System.Drawing.Size(438, 270);
+			this.Controls.Add(this.editButton);
+			this.Controls.Add(this.deleteButton);
+			this.Controls.Add(this.newButton);
 			this.Controls.Add(this.label2);
+			this.Controls.Add(this.tasksTree);
+			this.Controls.Add(this.hideDefaultTasksCheckBox);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.minsNumericUpDown);
 			this.Controls.Add(this.label3);
@@ -271,7 +299,7 @@ namespace PTM.View.Forms
 			this.Name = "TaskLogForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Task Log";
+			this.Text = "Log";
 			this.TopMost = true;
 			this.Load += new System.EventHandler(this.TaskLogForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.minsNumericUpDown)).EndInit();
@@ -299,8 +327,9 @@ namespace PTM.View.Forms
 
 
 		private PTMDataset.TasksDataTable childTasksTable = null;
-		private PTMDataset.TasksDataTable parentTasksTable = null;
+		//private PTMDataset.TasksDataTable parentTasksTable = null;
 
+		/*
 		private void FillDefaultParentTasks()
 		{
 			parentTasksTable = new PTMDataset.TasksDataTable();
@@ -321,7 +350,7 @@ namespace PTM.View.Forms
 			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
 			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
 			this.parentTaskComboBox.DataSource = parentTasksTable.DefaultView;
-		}
+		}*/
 
 		private void FillChildTasks(bool showDefaulTasks)
 		{
@@ -398,8 +427,11 @@ namespace PTM.View.Forms
 			}
 			this.taskComboBox.SelectedValue= childTaskRow.Id;
 		}
+		
+		/*
 		private void SetParentTask(PTMDataset.TasksRow parentTaskRow)
 		{
+			
 			if(parentTaskRow==null)
 				return;
 			if(parentTasksTable.FindById(parentTaskRow.Id)==null)
@@ -411,12 +443,12 @@ namespace PTM.View.Forms
 			}
 			this.parentTaskComboBox.SelectedValue= parentTaskRow.Id;
 			parentTaskComboBox_SelectedValueChanged(null, null);
-		}
+		}*/
 
 
 		private void TaskLogForm_Load(object sender, EventArgs e)
 		{
-			this.parentTaskComboBox.Focus();		
+			this.taskComboBox.Focus();		
 		}
 
 		private void hideDefaultTasksCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -424,6 +456,7 @@ namespace PTM.View.Forms
 			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
 		}
 
+		/*
 		private void browseGroupButton_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm tgForm = new TasksHierarchyForm();
@@ -440,7 +473,7 @@ namespace PTM.View.Forms
 			{
 				SetParentTask(tgForm.SelectedTaskRow);
 			}
-		}
+		}*/
 
 		private bool cancelClose = false;
 		private void okButton_Click(object sender, EventArgs e)
@@ -451,13 +484,13 @@ namespace PTM.View.Forms
 				this.duration = new TimeSpan(0, Convert.ToInt32(this.minsNumericUpDown.Value), 0);
 
 				PTMDataset.TasksRow row;
-				row = Tasks.FindByParentIdAndDescription((int) this.parentTaskComboBox.SelectedValue, description);
+				row = Tasks.FindByParentIdAndDescription((int) this.tasksTree.SelectedValue, description);
 
 				if (row==null)
 				{
 					this.selectedTaskRow = Tasks.NewTasksRow();
 					this.selectedTaskRow.Description = description;
-					this.selectedTaskRow.ParentId = (int) this.parentTaskComboBox.SelectedValue;
+					this.selectedTaskRow.ParentId = (int) this.tasksTree.SelectedValue;
 					this.selectedTaskRow.Id = Tasks.AddTasksRow(this.selectedTaskRow);
 				}
 				else
@@ -492,9 +525,9 @@ namespace PTM.View.Forms
 
 		private void parentTaskComboBox_SelectedValueChanged(object sender, EventArgs e)
 		{
-			if(parentTaskComboBox.SelectedIndex == -1)
+			if(this.tasksTree.SelectedValue == -1)
 				return;
-			this.selectedParentTaskRow = Tasks.FindById((int) parentTaskComboBox.SelectedValue);
+			this.selectedParentTaskRow = Tasks.FindById((int) tasksTree.SelectedValue);
 
 			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
 		}

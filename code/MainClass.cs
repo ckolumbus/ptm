@@ -120,7 +120,7 @@ namespace PTM
 			//Application.EnableVisualStyles();
 			//Application.DoEvents();
 			Application.DoEvents();
-			MainModule.Initialize(new PTMDataset(), ConfigurationSettings.AppSettings["UserName"]);
+			MainModule.Initialize(new PTMDataset(), "data");
 			splash.SetLoadProgress(50);
 			splash.Refresh();
 			Application.DoEvents();
