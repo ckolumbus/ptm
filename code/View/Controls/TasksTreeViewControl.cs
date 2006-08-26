@@ -14,12 +14,10 @@ namespace PTM.View.Controls
 
 		public TasksTreeViewControl()
 		{
-			InitializeComponent();
-			//tasksDataTable = Tasks.
-			
+			InitializeComponent();		
 		}
 
-		public event TreeViewEventHandler AfterSelect;
+		public event EventHandler SelectedTaskChanged;
 
 		protected override void Dispose( bool disposing )
 		{
@@ -70,9 +68,9 @@ namespace PTM.View.Controls
 		}
 		#endregion
 
-		//private PTMDataset.TasksDataTable tasksDataTable;
 		private ImageList groupsImageList;
 		private TreeView treeView;
+		private int currentSelectedTask = -1;
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -85,8 +83,6 @@ namespace PTM.View.Controls
 			treeView.AfterSelect+=new TreeViewEventHandler(treeView_AfterSelect);
 			treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(TreeView_AfterLabelEdit);
 			this.treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(treeView_AfterLabelEdit);
-
-			
 		}
 
 		public void Initialize()
@@ -115,7 +111,7 @@ namespace PTM.View.Controls
 			row.IsDefaultTask = false;
 			row.Id = Tasks.AddTasksRow(row);
 			
-			TreeNode node = FindNode(row.Id);
+			TreeNode node = FindTaskNode(row.Id);
 			node.EnsureVisible();
 			treeView.SelectedNode = node;
 			node.BeginEdit();
@@ -130,9 +126,14 @@ namespace PTM.View.Controls
 		
 		public void DeleteSelectedTask()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.FindById((int) treeView.SelectedNode.Tag);
-			Tasks.DeleteTaskRow(row);	
+			if(MessageBox.Show("All tasks and sub-groups assigned to this group will be deleted too. \nAre you sure you want to delete '" + this.treeView.SelectedNode.Text + "'?", 
+				this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly)
+				== DialogResult.OK)
+			{
+				PTMDataset.TasksRow row;
+				row = Tasks.FindById((int) treeView.SelectedNode.Tag);
+				Tasks.DeleteTaskRow(row);
+			}
 		}
 
 		private void LoadTree()
@@ -150,34 +151,29 @@ namespace PTM.View.Controls
 			{
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);
-//				PTMDataset.TasksRow nrow;
-//				nrow = tasksDataTable.NewTasksRow();
-//				nrow.ItemArray = row.ItemArray;
-//				this.tasksDataTable.AddTasksRow(nrow);
 				AddChildNodes(row, nodeChild);
 			}
 		}
 
 		
-		private TreeNode CreateNode(DataRow row)
+		private TreeNode CreateNode(PTMDataset.TasksRow row)
 		{
-			PTMDataset.TasksDataTable tasksDataTable = new PTMDataset.TasksDataTable();
-			TreeNode node = new TreeNode(row[tasksDataTable.DescriptionColumn.ColumnName].ToString(), this.treeView.ImageIndex,this.treeView.SelectedImageIndex);
-			node.Tag = row[tasksDataTable.IdColumn.ColumnName];
+			TreeNode node = new TreeNode(row.Description, this.treeView.ImageIndex,this.treeView.SelectedImageIndex);
+			node.Tag = row.Id;
 			return node;
 		}
 
 	
-		private TreeNode FindNode(object value)
+		private TreeNode FindTaskNode(int taskId)
 		{
-			return FindNode(value, this.treeView.Nodes);
+			return FindNode(taskId, this.treeView.Nodes);
 		}
 
-		private  TreeNode FindNode(object value, TreeNodeCollection nodes)
+		private  TreeNode FindNode(int taskId, TreeNodeCollection nodes)
 		{
 			foreach (TreeNode node in nodes)
 			{
-				if ((int)node.Tag==(int)value)
+				if ((int)node.Tag==taskId)
 				{
 					return node;
 				}
@@ -185,7 +181,7 @@ namespace PTM.View.Controls
 				{
 					if(node.Nodes.Count>0)
 					{
-						TreeNode childnode = FindNode(value, node.Nodes);
+						TreeNode childnode = FindNode(taskId, node.Nodes);
 						if(childnode!=null)
 							return childnode;
 					}
@@ -214,21 +210,21 @@ namespace PTM.View.Controls
 		{
 			if(e.Action == DataRowAction.Add)
 			{
-				TreeNode nodeParent = FindNode(e.Row.ParentId);
+				TreeNode nodeParent = FindTaskNode(e.Row.ParentId);
 				TreeNode nodeChild = CreateNode(e.Row);
 				nodeParent.Nodes.Add(nodeChild);
 				return;
 			}
 			else if(e.Action == DataRowAction.Change)
 			{
-				TreeNode node = FindNode(e.Row.Id);
+				TreeNode node = FindTaskNode(e.Row.Id);
 				node.Text = e.Row.Description;
 			}
 		}
 
 		private void Tasks_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
-			TreeNode node = FindNode(e.Row.Id);
+			TreeNode node = FindTaskNode(e.Row.Id);
 			if(node!=null || node.TreeView == null)
 				node.Remove();	
 		}
@@ -237,24 +233,21 @@ namespace PTM.View.Controls
 			treeView.LabelEdit = false;
 		}
 
-		public TreeNode SelectedNode
-		{
-			get { return this.treeView.SelectedNode; }
-		}
+//		public TreeNode SelectedNode
+//		{
+//			get { return this.treeView.SelectedNode; }
+//		}
+//
+//		public TreeNode TopNode
+//		{
+//			get {  return this.treeView.TopNode; }
+//		}
 
-		public TreeNode TopNode
-		{
-			get {  return this.treeView.TopNode; }
-		}
-
-		public int SelectedValue
+		public int SelectedTaskId
 		{
 			get
 			{
-				if(treeView.SelectedNode!=null)
-					return (int) treeView.SelectedNode.Tag;
-				else
-					return -1;
+				return currentSelectedTask;
 			}
 			set
 			{
@@ -262,6 +255,7 @@ namespace PTM.View.Controls
 				{
 					if((int)node.Tag == value)
 					{
+						currentSelectedTask = value;
 						treeView.SelectedNode = node;
 					}
 				}
@@ -270,9 +264,13 @@ namespace PTM.View.Controls
 
 		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			if(this.AfterSelect!=null)
+			if(currentSelectedTask != (int)e.Node.Tag)
 			{
-				this.AfterSelect(sender, e);
+				currentSelectedTask = (int) e.Node.Tag;
+				if(this.SelectedTaskChanged!=null)
+				{
+					this.SelectedTaskChanged(sender, e);
+				}
 			}
 		}
 	}

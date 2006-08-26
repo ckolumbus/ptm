@@ -329,7 +329,7 @@ namespace PTM.View.Controls
 			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
-				AddTaskLog(tasklog.SelectedTaskRow.Id, (int)tasklog.Duration.TotalMinutes);
+				AddTaskLog(tasklog.SelectedTaskRow.Id, Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue, CultureInfo.InvariantCulture));
 			}
 			else if (mustAddATask)
 			{
@@ -364,10 +364,8 @@ namespace PTM.View.Controls
 			if(!isValidEditableLog())
 				return;
 			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
-			//int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
-			string duration= taskList.SelectedItems[0].SubItems[DurationTaskHeader.Index].Text;
 			
-			TaskLogForm taskLogForm = new TaskLogForm(taskId, duration);
+			TaskLogForm taskLogForm = new TaskLogForm(taskId);
 			if(taskLogForm.ShowDialog(this.Parent)==DialogResult.OK)
 			{
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
