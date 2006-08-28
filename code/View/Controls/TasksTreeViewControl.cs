@@ -163,7 +163,7 @@ namespace PTM.View.Controls
 			foreach (PTMDataset.TasksRow row in childsRows)
 			{
 				if(!this.includeDefaultTask && row.IsDefaultTask && row.DefaultTaskId == (int)DefaultTask.Idle)
-					return;
+					continue;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);
 				AddChildNodes(row, nodeChild);
