@@ -271,6 +271,7 @@ namespace PTM.Test.Business
 			int count = Tasks.Count;
 			Tasks.DeleteTaskRow(row1);
 			Assert.AreEqual(count-2, Tasks.Count);
+			Assert.AreEqual(2, tasksRowDeletingEventCount);
 		}
 
 

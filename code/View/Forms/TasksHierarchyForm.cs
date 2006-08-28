@@ -31,7 +31,7 @@ namespace PTM.View.Forms
 		{
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged+=new EventHandler(TreeView_AfterSelect);
-			this.tasksTreeViewControl.Initialize();
+			this.tasksTreeViewControl.Initialize(true);
 		}
 
 		/// <summary>
@@ -133,20 +133,11 @@ namespace PTM.View.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Tasks Explorer";
-			this.Load += new System.EventHandler(this.TasksGroupsForm_Load);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
-
-		//private PTMDataset.TasksDataTable tasksTable = null;
-		
-		private void TasksGroupsForm_Load(object sender, EventArgs e)
-		{
-			
-		}
-
-		
+	
 
 		private void newButton_Click(object sender, EventArgs e)
 		{

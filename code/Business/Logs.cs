@@ -39,7 +39,6 @@ namespace PTM.Business
 			log.Duration = 0;
 			log.InsertTime = DateTime.Now;
 			log.TaskId = taskId;
-			
 			log.Id  = DataAdapterManager.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)", 
 				new string[]{"Duration", "InsertTime", "TaskId"}, new object[] {log.Duration, log.InsertTime, log.TaskId});
 					

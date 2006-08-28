@@ -44,12 +44,15 @@ namespace PTM.View.Controls
 			// 
 			// treeView
 			// 
+			this.treeView.AllowDrop = true;
+			this.treeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView.HotTracking = true;
 			this.treeView.ImageIndex = -1;
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
 			this.treeView.SelectedImageIndex = -1;
-			this.treeView.Size = new System.Drawing.Size(224, 384);
+			this.treeView.Size = new System.Drawing.Size(120, 104);
 			this.treeView.TabIndex = 0;
 			// 
 			// groupsImageList
@@ -62,7 +65,7 @@ namespace PTM.View.Controls
 			// 
 			this.Controls.Add(this.treeView);
 			this.Name = "TasksTreeViewControl";
-			this.Size = new System.Drawing.Size(224, 384);
+			this.Size = new System.Drawing.Size(120, 104);
 			this.ResumeLayout(false);
 
 		}
@@ -71,6 +74,8 @@ namespace PTM.View.Controls
 		private ImageList groupsImageList;
 		private TreeView treeView;
 		private int currentSelectedTask = -1;
+		public bool includeDefaultTask;
+		public const string NEW_TASK = "New Task";
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -85,32 +90,24 @@ namespace PTM.View.Controls
 			this.treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(treeView_AfterLabelEdit);
 		}
 
-		public void Initialize()
+		public void Initialize(bool includeDefaultTask)
 		{
+			this.includeDefaultTask = includeDefaultTask;
 			LoadTree();
 			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
 
-			if (treeView.Nodes.Count > 0)
-			{
-				treeView.SelectedNode = treeView.Nodes[0];
-			}
 		}
 		
-//		public TreeView TreeView
-//		{
-//			get { return treeView; }
-//		}
-		public const string NEW_TASK = "New Task";
 		public void AddNewTask()
 		{
-			treeView.LabelEdit = true;
 			PTMDataset.TasksRow row = Tasks.NewTasksRow();
 			row.Description = NEW_TASK;
 			row.ParentId = (int) treeView.SelectedNode.Tag;
 			row.IsDefaultTask = false;
 			row.Id = Tasks.AddTasksRow(row);
 			
+			treeView.LabelEdit = true;
 			TreeNode node = FindTaskNode(row.Id);
 			node.EnsureVisible();
 			treeView.SelectedNode = node;
@@ -121,7 +118,6 @@ namespace PTM.View.Controls
 		{
 			treeView.LabelEdit = true;
 			treeView.SelectedNode.BeginEdit();
-
 		}
 		
 		public void DeleteSelectedTask()
@@ -136,6 +132,7 @@ namespace PTM.View.Controls
 			}
 		}
 
+
 		private void LoadTree()
 		{
 			treeView.Nodes.Clear();
@@ -149,13 +146,14 @@ namespace PTM.View.Controls
 			DataRow[] childsRows = Tasks.GetChildTasks(parentRow);
 			foreach (PTMDataset.TasksRow row in childsRows)
 			{
+				if(!this.includeDefaultTask && row.IsDefaultTask && row.DefaultTaskId == (int)DefaultTask.Idle)
+					return;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);
 				AddChildNodes(row, nodeChild);
 			}
 		}
 
-		
 		private TreeNode CreateNode(PTMDataset.TasksRow row)
 		{
 			TreeNode node = new TreeNode(row.Description, this.treeView.ImageIndex,this.treeView.SelectedImageIndex);
@@ -163,13 +161,12 @@ namespace PTM.View.Controls
 			return node;
 		}
 
-	
 		private TreeNode FindTaskNode(int taskId)
 		{
 			return FindNode(taskId, this.treeView.Nodes);
 		}
 
-		private  TreeNode FindNode(int taskId, TreeNodeCollection nodes)
+		private TreeNode FindNode(int taskId, TreeNodeCollection nodes)
 		{
 			foreach (TreeNode node in nodes)
 			{
@@ -193,17 +190,19 @@ namespace PTM.View.Controls
 		
 		private void treeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
 		{
-			PTMDataset.TasksDataTable tasksDataTable = new PTMDataset.TasksDataTable();
 			PTMDataset.TasksRow row = Tasks.FindById(Convert.ToInt32(e.Node.Tag));
-         if(row!=null)
+			if(row!=null)
 			{
-				row[tasksDataTable.DescriptionColumn.ColumnName] = e.Label;
-				Tasks.UpdateTaskRow(row);
+				if(e.Label!=null &&  e.Label!=String.Empty)
+				{
+					row.Description = e.Label;
+					Tasks.UpdateTaskRow(row);					
+				}
 			}
 			else
-         {
-         	throw new  ConstraintException("Value member should be a key.");
-         }
+			{
+		     	throw new  ConstraintException("Value member should be a key.");
+	        }
 		}
 
 		private void Tasks_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
@@ -233,15 +232,6 @@ namespace PTM.View.Controls
 			treeView.LabelEdit = false;
 		}
 
-//		public TreeNode SelectedNode
-//		{
-//			get { return this.treeView.SelectedNode; }
-//		}
-//
-//		public TreeNode TopNode
-//		{
-//			get {  return this.treeView.TopNode; }
-//		}
 
 		public int SelectedTaskId
 		{
@@ -251,13 +241,17 @@ namespace PTM.View.Controls
 			}
 			set
 			{
-				foreach (TreeNode node in treeView.Nodes)
+				if(currentSelectedTask==value)
+					return;
+				TreeNode node;
+				node = FindTaskNode(value);
+				if(node== null)
+					return;
+				currentSelectedTask = value;
+				treeView.SelectedNode = node;
+				if(this.SelectedTaskChanged!=null)
 				{
-					if((int)node.Tag == value)
-					{
-						currentSelectedTask = value;
-						treeView.SelectedNode = node;
-					}
+					this.SelectedTaskChanged(this, new EventArgs());
 				}
 			}
 		}

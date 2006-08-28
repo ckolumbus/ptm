@@ -32,12 +32,9 @@ namespace PTM.View.Forms
 		{
 			InitializeComponent();		
 			
-			//FillDefaultParentTasks();
-			tasksTree.Initialize();
+			tasksTree.Initialize(false);
 
-			//parentTaskComboBox.SelectedIndex = -1;
-			//this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
-			this.tasksTree.SelectedTaskChanged+=new EventHandler(parentTaskComboBox_SelectedValueChanged);
+			this.tasksTree.SelectedTaskChanged+=new EventHandler(taskTree_SelectedTaskChanged);
 			if(Tasks.CurrentTaskRow != null)
 			{
 				tasksTree.SelectedTaskId = Tasks.CurrentTaskRow.ParentId;
@@ -46,26 +43,27 @@ namespace PTM.View.Forms
 			{
 				tasksTree.SelectedTaskId = Tasks.RootTasksRow.Id;
 			}
-			parentTaskComboBox_SelectedValueChanged(null, null);
+			//taskTree_SelectedTaskChanged(null, null);
 		}
 
-		public TaskLogForm(int taskId)
+		public TaskLogForm(int editTaskId)
 		{
 			InitializeComponent();
-			//FillDefaultParentTasks();
-			tasksTree.Initialize();
-//			parentTaskComboBox.SelectedIndex = -1;
-//			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
-			this.tasksTree.SelectedTaskChanged+=new EventHandler(parentTaskComboBox_SelectedValueChanged);
+			tasksTree.Initialize(false);
+			this.tasksTree.SelectedTaskChanged+=new EventHandler(taskTree_SelectedTaskChanged);
 
-			this.tasksTree.SelectedTaskId = taskId;
-			PTMDataset.TasksRow row;
-			row  = Tasks.FindById(taskId);
-			PTMDataset.TasksRow parentRow = Tasks.FindById(row.ParentId);
 			
-			//SetParentTask(parentRow);
-			parentTaskComboBox_SelectedValueChanged(null, null);
+			this.tasksTree.SelectedTaskId = editTaskId;
+			
+			PTMDataset.TasksRow row;
+			row = Tasks.FindById(editTaskId);
+			//taskTree_SelectedTaskChanged(null, null);
 			SetChildTask(row);
+		}
+
+		private void TaskLogForm_Load(object sender, EventArgs e)
+		{
+			this.taskComboBox.Focus();		
 		}
 
 		
@@ -180,6 +178,7 @@ namespace PTM.View.Forms
 			this.editButton.Name = "editButton";
 			this.editButton.TabIndex = 28;
 			this.editButton.Text = "Edit";
+			this.editButton.Click += new System.EventHandler(this.editButton_Click);
 			// 
 			// deleteButton
 			// 
@@ -189,6 +188,7 @@ namespace PTM.View.Forms
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.TabIndex = 27;
 			this.deleteButton.Text = "Delete";
+			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
 			// newButton
 			// 
@@ -198,6 +198,7 @@ namespace PTM.View.Forms
 			this.newButton.Name = "newButton";
 			this.newButton.TabIndex = 26;
 			this.newButton.Text = "New...";
+			this.newButton.Click += new System.EventHandler(this.newButton_Click);
 			// 
 			// groupBox1
 			// 
@@ -254,30 +255,6 @@ namespace PTM.View.Forms
 		}
 
 		private PTMDataset.TasksDataTable childTasksTable = null;
-		//private PTMDataset.TasksDataTable parentTasksTable = null;
-
-		/*
-		private void FillDefaultParentTasks()
-		{
-			parentTasksTable = new PTMDataset.TasksDataTable();
-			parentTasksTable.Rows.Clear();
-			ManagementDataset.ConfigurationRow[] defaultgroups = ConfigurationHelper.GetExistingGroups();
-			foreach (ManagementDataset.ConfigurationRow defaultgroup in defaultgroups)
-			{
-				PTMDataset.TasksRow parentTaskRow;
-				parentTaskRow = parentTasksTable.NewTasksRow();
-				PTMDataset.TasksRow taskRow;
-				taskRow = Tasks.FindById(Convert.ToInt32(defaultgroup.ConfigValue, CultureInfo.InvariantCulture));
-				if(taskRow == null)
-					continue;
-				parentTaskRow.ItemArray = taskRow.ItemArray;
-				parentTaskRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentTaskRow), this.parentTaskComboBox.MaxLength);
-				parentTasksTable.AddTasksRow(parentTaskRow);
-			}
-			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
-			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
-			this.parentTaskComboBox.DataSource = parentTasksTable.DefaultView;
-		}*/
 
 		private void FillChildTasks(bool showDefaulTasks)
 		{
@@ -355,52 +332,12 @@ namespace PTM.View.Forms
 			this.taskComboBox.SelectedValue= childTaskRow.Id;
 		}
 		
-		/*
-		private void SetParentTask(PTMDataset.TasksRow parentTaskRow)
-		{
-			
-			if(parentTaskRow==null)
-				return;
-			if(parentTasksTable.FindById(parentTaskRow.Id)==null)
-			{
-				PTMDataset.TasksRow parentRow = this.parentTasksTable.NewTasksRow();
-				parentRow.ItemArray = parentTaskRow.ItemArray;
-				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Rows.InsertAt(parentRow, 0 );
-			}
-			this.parentTaskComboBox.SelectedValue= parentTaskRow.Id;
-			parentTaskComboBox_SelectedValueChanged(null, null);
-		}*/
-
-
-		private void TaskLogForm_Load(object sender, EventArgs e)
-		{
-			this.taskComboBox.Focus();		
-		}
-
+	
 		private void hideDefaultTasksCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
 		}
 
-		/*
-		private void browseGroupButton_Click(object sender, EventArgs e)
-		{
-			TasksHierarchyForm tgForm = new TasksHierarchyForm();
-			tgForm.ShowDialog(this);
-			//FillDefaultParentTasks();
-			if(tgForm.SelectedTaskRow == null)
-			{
-				//if(this.selectedParentTaskRow==null)
-					return;
-//				else
-//					SetParentTask(selectedParentTaskRow);
-			}
-			else
-			{
-				SetParentTask(tgForm.SelectedTaskRow);
-			}
-		}*/
 
 		private bool cancelClose = false;
 		private void okButton_Click(object sender, EventArgs e)
@@ -441,13 +378,40 @@ namespace PTM.View.Forms
 			cancelClose= false;}
 		}
 
-		private void parentTaskComboBox_SelectedValueChanged(object sender, EventArgs e)
+		private void taskTree_SelectedTaskChanged(object sender, EventArgs e)
 		{
 			if(this.tasksTree.SelectedTaskId == -1)
 				return;
+
+			if(tasksTree.SelectedTaskId == Tasks.RootTasksRow.Id)
+			{
+				this.editButton.Enabled = false;
+				this.deleteButton.Enabled = false;
+			}
+			else
+			{
+				this.editButton.Enabled = true;
+				this.deleteButton.Enabled = true;
+			}
+
 			this.selectedParentTaskRow = Tasks.FindById(tasksTree.SelectedTaskId);
 
 			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
+		}
+
+		private void newButton_Click(object sender, System.EventArgs e)
+		{
+			tasksTree.AddNewTask();
+		}
+
+		private void editButton_Click(object sender, System.EventArgs e)
+		{
+			tasksTree.EditSelectedTaskDescription();
+		}
+
+		private void deleteButton_Click(object sender, System.EventArgs e)
+		{
+			tasksTree.DeleteSelectedTask();
 		}
 
 	}

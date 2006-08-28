@@ -131,13 +131,30 @@ namespace PTM.Business
 
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
-			row.Delete();	
+			DeleteOnCascade(row);
 			
-			//SaveTaskRow(row);
-			SaveTasks();
-			if(TasksRowDeleting!=null)
-				TasksRowDeleting(null, new PTMDataset.TasksRowChangeEvent(tasksRow, DataRowAction.Delete));
 		}
+
+		private static void DeleteOnCascade(PTMDataset.TasksRow row)
+		{
+			PTMDataset.TasksRow[] rows;
+			while(true)
+			{
+				rows = row.GetTasksRows();
+				if(rows.Length ==0)
+				{
+					row.Delete();	
+					SaveTasks();
+					if(TasksRowDeleting!=null)
+						TasksRowDeleting(null, new PTMDataset.TasksRowChangeEvent(row, DataRowAction.Delete));
+					return;
+				}
+				PTMDataset.TasksRow child = rows[0];
+				DeleteOnCascade(child);
+				
+			}
+		}
+
 		public static PTMDataset.TasksRow[] GetChildTasks(PTMDataset.TasksRow tasksRow)
 		{
 			PTMDataset.TasksRow row;
@@ -274,18 +291,7 @@ namespace PTM.Business
 			}
 			
 			tasksDataTable.AcceptChanges();
-//			for(int i = 0;i<tasksDataTable.Rows.Count;i++)
-//			{
-//				PTMDataset.TasksRow trow = (PTMDataset.TasksRow) tasksDataTable.Rows[i];
-//				if(trow.RowState != DataRowState.Detached)
-//				{
-//					trow.AcceptChanges();
-//					i--;
-//				}
-//			}
-//			foreach(PTMDataset.TasksRow trow in tasksDataTable.Rows)
-//				if(trow.RowState != DataRowState.Detached)
-//					trow.AcceptChanges();
+
 		}
 		private static void ValidateTaskRow(PTMDataset.TasksRow tasksRow)
 		{
@@ -297,6 +303,11 @@ namespace PTM.Business
 				throw new ApplicationException("Description can't be empty");
 			if(Tasks.FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description)!=null)
 				throw new ApplicationException("Task already exist");
+
+			PTMDataset.TasksRow parent;
+			parent = tasksDataTable.FindById(tasksRow.ParentId);
+			if(parent.IsDefaultTask)
+				throw new ApplicationException("Parent can't be a default task");
 		}
 		private static PTMDataset.TasksRow CloneRow(PTMDataset.TasksRow tasksRow)
 		{
