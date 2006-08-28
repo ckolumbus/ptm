@@ -143,10 +143,10 @@ namespace PTM.Business
 				rows = row.GetTasksRows();
 				if(rows.Length ==0)
 				{
-					row.Delete();	
-					SaveTasks();
 					if(TasksRowDeleting!=null)
 						TasksRowDeleting(null, new PTMDataset.TasksRowChangeEvent(row, DataRowAction.Delete));
+					row.Delete();
+					SaveTasks();
 					return;
 				}
 				PTMDataset.TasksRow child = rows[0];

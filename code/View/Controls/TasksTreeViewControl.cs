@@ -105,7 +105,15 @@ namespace PTM.View.Controls
 			row.Description = NEW_TASK;
 			row.ParentId = (int) treeView.SelectedNode.Tag;
 			row.IsDefaultTask = false;
-			row.Id = Tasks.AddTasksRow(row);
+
+			try
+			{
+				row.Id = Tasks.AddTasksRow(row);
+			}
+			catch(ApplicationException aex)
+			{
+				MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
 			
 			treeView.LabelEdit = true;
 			TreeNode node = FindTaskNode(row.Id);
@@ -122,14 +130,22 @@ namespace PTM.View.Controls
 		
 		public void DeleteSelectedTask()
 		{
-			if(MessageBox.Show("All tasks and sub-groups assigned to this group will be deleted too. \nAre you sure you want to delete '" + this.treeView.SelectedNode.Text + "'?", 
-				this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly)
+			
+			if(MessageBox.Show("All tasks and sub-tasks assigned to this task will be deleted too. \nAre you sure you want to delete '" + this.treeView.SelectedNode.Text + "'?", 
+				this.ParentForm.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly)
 				== DialogResult.OK)
 			{
 				PTMDataset.TasksRow row;
 				row = Tasks.FindById((int) treeView.SelectedNode.Tag);
-				Tasks.DeleteTaskRow(row);
-			}
+				try
+				{
+					Tasks.DeleteTaskRow(row);
+				}
+				catch(ApplicationException aex)
+				{
+					MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}				
 		}
 
 
@@ -196,13 +212,16 @@ namespace PTM.View.Controls
 				if(e.Label!=null &&  e.Label!=String.Empty)
 				{
 					row.Description = e.Label;
-					Tasks.UpdateTaskRow(row);					
+					try
+					{
+						Tasks.UpdateTaskRow(row);						
+					}
+					catch(ApplicationException aex)
+					{
+						MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+					}
 				}
 			}
-			else
-			{
-		     	throw new  ConstraintException("Value member should be a key.");
-	        }
 		}
 
 		private void Tasks_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
