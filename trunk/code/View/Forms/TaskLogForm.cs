@@ -52,11 +52,11 @@ namespace PTM.View.Forms
 			tasksTree.Initialize(false);
 			this.tasksTree.SelectedTaskChanged+=new EventHandler(taskTree_SelectedTaskChanged);
 
-			
-			this.tasksTree.SelectedTaskId = editTaskId;
-			
 			PTMDataset.TasksRow row;
 			row = Tasks.FindById(editTaskId);
+			
+			this.tasksTree.SelectedTaskId = row.ParentId;
+			
 			//taskTree_SelectedTaskChanged(null, null);
 			SetChildTask(row);
 		}
