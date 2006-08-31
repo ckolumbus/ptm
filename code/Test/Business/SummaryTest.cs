@@ -101,6 +101,7 @@ namespace PTM.Test.Business
 		[TearDown]
 		public void TearDown()
 		{
+			Logs.StopLogging();
 			DataAdapterManager m = new DataAdapterManager("test");
 			m.DeleteDataSource();
 		}

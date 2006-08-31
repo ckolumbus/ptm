@@ -41,6 +41,8 @@ namespace PTM.Business
 
 		public static void UpdateCurrentApplicationsLog()
 		{
+			if(currentApplicationsLog==null)
+				return;
 			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ? WHERE (Id = ?)";
 			foreach (ApplicationLog applicationLog in currentApplicationsLog)
 			{

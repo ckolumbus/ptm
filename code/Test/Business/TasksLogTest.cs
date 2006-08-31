@@ -29,7 +29,7 @@ namespace PTM.Test.Business
 		[SetUp]
 		public void SetUp()
 		{
-			TearDown();
+			//TearDown();
 			DataAdapterManager m = new DataAdapterManager("test");
 			m.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();
@@ -197,6 +197,7 @@ namespace PTM.Test.Business
 		[TearDown]
 		public void TearDown()
 		{
+			Logs.StopLogging();
 			Logs.LogChanged-=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			Logs.AfterStartLogging-=new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging-=new EventHandler(TasksLog_AfterStopLogging);

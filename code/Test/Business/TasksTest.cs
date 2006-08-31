@@ -413,6 +413,7 @@ namespace PTM.Test.Business
 		[TearDown]
 		public void TearDown()
 		{
+			Logs.StopLogging();
 			Tasks.TasksRowChanged-=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TasksRowDeleting-=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
 			DataAdapterManager m = new DataAdapterManager("test");
