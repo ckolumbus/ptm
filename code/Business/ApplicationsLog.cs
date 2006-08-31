@@ -260,6 +260,7 @@ namespace PTM.Business
 		private static void TasksLog_AfterStopLogging(object sender, EventArgs e)
 		{
 			applicationsTimer.Stop();
+			JoinLoggingThread();
 			UpdateCurrentApplicationsLog();
 		}
 

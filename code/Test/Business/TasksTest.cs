@@ -23,7 +23,7 @@ namespace PTM.Test.Business
 		[SetUp]
 		public void SetUp()
 		{
-			this.TearDown();
+			//this.TearDown();
 			DataAdapterManager m = new DataAdapterManager("test");
 			m.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();
@@ -34,6 +34,7 @@ namespace PTM.Test.Business
 			tasksRowDeletingEventCount = 0;
 			Tasks.TasksRowChanged+=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TasksRowDeleting+=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
+			
 		}
 
 		[Test]
@@ -187,12 +188,12 @@ namespace PTM.Test.Business
 			row.ParentId = Tasks.RootTasksRow.Id;
 			row.Id = Tasks.AddTasksRow(row);
 			int count = Tasks.Count;
-			row.Description = "TaskTest";
+			row.Description = "UpdateDefaultTaskTest";
 			Tasks.UpdateTaskRow(row);
 			Assert.AreEqual(count, Tasks.Count);
 			PTMDataset.TasksRow updatedRow;
 			updatedRow = Tasks.FindById(row.Id);
-			Assert.AreEqual("TaskTest", updatedRow.Description);
+			Assert.AreEqual("UpdateDefaultTaskTest", updatedRow.Description);
 			Assert.AreEqual(false, updatedRow.IsDefaultTask);
 			Assert.AreEqual(true, updatedRow.IsDefaultTaskIdNull());
 		}

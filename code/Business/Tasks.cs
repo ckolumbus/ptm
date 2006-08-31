@@ -107,8 +107,8 @@ namespace PTM.Business
 
 		public static void UpdateTaskRow(PTMDataset.TasksRow tasksRow)
 		{
-			ValidateTaskRow(tasksRow);
 			SetDefaultTask(tasksRow);
+			ValidateTaskRow(tasksRow);
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
 			row.ItemArray = tasksRow.ItemArray;
@@ -333,6 +333,8 @@ namespace PTM.Business
 		}
 		private static void SetDefaultTask(PTMDataset.TasksRow tasksRow)
 		{
+			if(tasksRow.IsDescriptionNull())
+				return;
 			tasksRow.IsDefaultTask = false;
 			tasksRow.SetDefaultTaskIdNull();
 			foreach (DefaultTask defaultTask in DefaultTasks.List)
