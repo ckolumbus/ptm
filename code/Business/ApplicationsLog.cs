@@ -290,6 +290,23 @@ namespace PTM.Business
 
 		#endregion
 
-
+		public static ArrayList GetApplicationsLog(int logId)
+		{
+			ArrayList resultsHT = DataAdapterManager.ExecuteGetRows("SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime WHERE TaskLogId = " + logId.ToString(), null, null );
+			ArrayList results = new ArrayList();
+			foreach (Hashtable hashtable in resultsHT)
+			{
+				ApplicationLog applicationLog = new ApplicationLog();
+				applicationLog.Id = (int) hashtable["Id"];
+				applicationLog.ProcessId = (int) hashtable["ProcessId"];
+				applicationLog.Name = (string) hashtable["Name"];
+				applicationLog.Caption = (string) hashtable["Caption"];
+				applicationLog.ApplicationFullPath = (string) hashtable["ApplicationFullPath"];
+				applicationLog.ActiveTime = (int) hashtable["ActiveTime"];
+				applicationLog.TaskLogId = logId;
+				results.Add(applicationLog);
+			}
+			return results;
+		}
 	}
 }

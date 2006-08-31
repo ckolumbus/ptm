@@ -69,13 +69,6 @@ namespace PTM.View.Controls
 			
 		}
 
-		private void AddLogToList(Log log)
-		{
-			PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
-			TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-			SetListItemValues(itemA,log, taskRow);
-			taskList.Items.Insert(0,itemA);
-		}
 		
 		private void SetCurrentDay()
 		{
@@ -83,7 +76,15 @@ namespace PTM.View.Controls
 			ArrayList list = Logs.GetLogsByDay(DateTime.Today);
 			foreach (Log log in list)
 			{
-				AddLogToList(log);
+				PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
+				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+				SetListItemValues(itemA,log, taskRow);
+				taskList.Items.Insert(0,itemA);
+				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
+				foreach (ApplicationLog applicationLog in applicationLogs)
+				{
+					UpdateApplicationsList(applicationLog);
+				}
 			}
 		}
 
@@ -708,30 +709,30 @@ namespace PTM.View.Controls
 			
 		}
 
-		private void UpdateApplicationsList(ApplicationLog appRow)
+		private void UpdateApplicationsList(ApplicationLog applicationLog)
 		{
-			if (appRow == null) {return;}
+			if (applicationLog == null) {return;}
 
-			TimeSpan active =  new TimeSpan(0,0,appRow.ActiveTime);
+			TimeSpan active =  new TimeSpan(0,0,applicationLog.ActiveTime);
 			string activeTime = ViewHelper.TimeSpanToTimeString(active);
-			string caption = appRow.Caption.Length != 0 ? appRow.Caption : appRow.Name;
+			string caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;
 			foreach (TreeListViewItem logItem in this.taskList.Items)
 			{
-				if (((Log)logItem.Tag).Id == appRow.TaskLogId)
+				if (((Log)logItem.Tag).Id == applicationLog.TaskLogId)
 				{
 					foreach (TreeListViewItem appItem in logItem.Items)
 					{
-						if(((ApplicationLog)appItem.Tag).Id == appRow.Id)
+						if(((ApplicationLog)appItem.Tag).Id == applicationLog.Id)
 						{
-							appItem.Tag = appRow;
+							appItem.Tag = applicationLog;
 							appItem.SubItems[TaskDescriptionHeader.Index].Text = caption;
 							appItem.SubItems[DurationTaskHeader.Index].Text = activeTime;
 							return;
 						}
 					}
-					TreeListViewItem lvi = new TreeListViewItem(caption, new string[] {activeTime, "", appRow.Id.ToString(CultureInfo.InvariantCulture)});
-					lvi.Tag = appRow;
-					lvi.ImageIndex = IconsManager.AddIconFromFile(appRow.ApplicationFullPath);
+					TreeListViewItem lvi = new TreeListViewItem(caption, new string[] {activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture)});
+					lvi.Tag = applicationLog;
+					lvi.ImageIndex = IconsManager.AddIconFromFile(applicationLog.ApplicationFullPath);
 					logItem.Items.Add(lvi);
 				}
 			}

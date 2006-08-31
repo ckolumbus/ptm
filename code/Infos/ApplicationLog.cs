@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace PTM.Infos
 {
@@ -70,7 +71,6 @@ namespace PTM.Infos
 		DateTime lastUpdateTime;
 
 
-
-
+		
 	}
 }
