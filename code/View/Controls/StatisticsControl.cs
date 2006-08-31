@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using PTM.Business;
 using PTM.Data;
+using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -13,7 +14,7 @@ namespace PTM.View.Controls
 	/// </summary>
 	public class StatisticsControl : UserControl
 	{
-		private ListView applicationsList;
+		private TreeListView applicationsList;
 		private ColumnHeader colName;
 		private ColumnHeader colActiveTime;
 		private ColumnHeader colProcessId;
@@ -90,7 +91,7 @@ namespace PTM.View.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.applicationsList = new System.Windows.Forms.ListView();
+			this.applicationsList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.colName = new System.Windows.Forms.ColumnHeader();
 			this.colActiveTime = new System.Windows.Forms.ColumnHeader();
 			this.colAppPercent = new System.Windows.Forms.ColumnHeader();
@@ -112,7 +113,6 @@ namespace PTM.View.Controls
 			// 
 			// applicationsList
 			// 
-			this.applicationsList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
 			this.applicationsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
@@ -121,15 +121,11 @@ namespace PTM.View.Controls
 																														 this.colActiveTime,
 																														 this.colAppPercent,
 																														 this.colProcessId});
-			this.applicationsList.FullRowSelect = true;
-			this.applicationsList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
 			this.applicationsList.Size = new System.Drawing.Size(376, 136);
-			this.applicationsList.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.applicationsList.TabIndex = 2;
-			this.applicationsList.View = System.Windows.Forms.View.Details;
 			// 
 			// colName
 			// 
@@ -265,7 +261,7 @@ namespace PTM.View.Controls
 			this.label2.Text = "Detail Level:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// Statistics
+			// StatisticsControl
 			// 
 			this.Controls.Add(this.browseButton);
 			this.Controls.Add(this.parentTaskComboBox);
@@ -274,7 +270,7 @@ namespace PTM.View.Controls
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.dateTimePicker);
-			this.Name = "Statistics";
+			this.Name = "StatisticsControl";
 			this.Size = new System.Drawing.Size(408, 288);
 			this.Load += new System.EventHandler(this.Statistics_Load);
 			this.groupBox3.ResumeLayout(false);
@@ -343,7 +339,7 @@ namespace PTM.View.Controls
 					double percent = 0;
 					if(appActiveTime>0)
 						percent =  applicationsSummaryRow.TotalActiveTime / appActiveTime;
-					ListViewItem lvi = new ListViewItem(new string[]{applicationsSummaryRow.Name, activeTime, percent.ToString("0.0%", CultureInfo.InvariantCulture), applicationsSummaryRow.TaskId.ToString(CultureInfo.InvariantCulture)});
+					TreeListViewItem lvi = new TreeListViewItem(applicationsSummaryRow.Name, new string[]{activeTime, percent.ToString("0.0%", CultureInfo.InvariantCulture), applicationsSummaryRow.TaskId.ToString(CultureInfo.InvariantCulture)});
 					lvi.ImageIndex = IconsManager.AddIconFromFile(applicationsSummaryRow.ApplicationFullPath);
 					this.applicationsList.Items.Add(lvi);
 				}
