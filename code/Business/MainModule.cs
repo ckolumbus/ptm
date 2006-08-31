@@ -20,7 +20,7 @@ namespace PTM.Business
 			Application.DoEvents();
 			UnitOfWork.Initialize(ds, adapterManager);
 			Application.DoEvents();
-			ConfigurationHelper.Initialize(adapterManager.configurationDataAdapter, adapterManager.defaultTaskDataAdapter);
+			ConfigurationHelper.Initialize(adapterManager.configurationDataAdapter);
 			Application.DoEvents();
 			DefaultTasks.Initialize();
 			Application.DoEvents();

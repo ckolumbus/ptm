@@ -116,7 +116,7 @@ namespace PTM.Test.Business
 		public void AddDefaultTask()
 		{
 			DefaultTask defaultTaskRow;
-			defaultTaskRow = DefaultTasks.DefaultTasksDataTable[0];
+			defaultTaskRow = DefaultTasks.List[0];
 			
 			PTMDataset.TasksRow row;
 			row = Tasks.NewTasksRow();
@@ -157,7 +157,7 @@ namespace PTM.Test.Business
 		public void UpdateTaskToDefaultTask()
 		{
 			DefaultTask defaultTaskRow;
-			defaultTaskRow = DefaultTasks.DefaultTasksDataTable[0];
+			defaultTaskRow = DefaultTasks.List[0];
 
 			PTMDataset.TasksRow row;
 			row = Tasks.NewTasksRow();
@@ -179,7 +179,7 @@ namespace PTM.Test.Business
 		public void UpdateDefaultTaskToTask()
 		{
 			DefaultTask defaultTaskRow;
-			defaultTaskRow = DefaultTasks.DefaultTasksDataTable[0];
+			defaultTaskRow = DefaultTasks.List[0];
 
 			PTMDataset.TasksRow row;
 			row = Tasks.NewTasksRow();

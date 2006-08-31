@@ -335,7 +335,7 @@ namespace PTM.Business
 		{
 			tasksRow.IsDefaultTask = false;
 			tasksRow.SetDefaultTaskIdNull();
-			foreach (DefaultTask defaultTask in DefaultTasks.DefaultTasksDataTable)
+			foreach (DefaultTask defaultTask in DefaultTasks.List)
 			{
 				if (string.Compare(defaultTask.Description.Replace(" ", null), tasksRow.Description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
 				{

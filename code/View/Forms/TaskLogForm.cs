@@ -271,7 +271,7 @@ namespace PTM.View.Forms
 					row.ItemArray = childRow.ItemArray;
 					childTasksTable.AddTasksRow(row);
 				}
-				foreach (DefaultTask defaultRow in DefaultTasks.DefaultTasksDataTable)
+				foreach (DefaultTask defaultRow in DefaultTasks.List)
 				{
 					bool exist = false;
 					foreach (PTMDataset.TasksRow childRow in childTasksTable.Rows)
@@ -300,7 +300,7 @@ namespace PTM.View.Forms
 				foreach (PTMDataset.TasksRow childRow in childRows)
 				{
 					bool exist = false;
-					foreach (DefaultTask defaultRow in DefaultTasks.DefaultTasksDataTable)
+					foreach (DefaultTask defaultRow in DefaultTasks.List)
 					{
 						if(childRow.IsDefaultTask && childRow.DefaultTaskId == defaultRow.DefaultTaskId)
 						{

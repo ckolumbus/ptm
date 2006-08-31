@@ -14,8 +14,10 @@ namespace PTM.Business
 		}
 		
 		private static ArrayList list;
+		private static DefaultTasks instance;
 		public static void Initialize()
 		{
+			instance = new DefaultTasks();
 			list = new ArrayList();
 			list.Add(new DefaultTask(DefaultTaskEnum.Idle));
 			list.Add(new DefaultTask(DefaultTaskEnum.LunchTime));
@@ -23,29 +25,11 @@ namespace PTM.Business
 			list.Add(new DefaultTask(DefaultTaskEnum.PhoneCall));
 			list.Add(new DefaultTask(DefaultTaskEnum.CheckingMail));
 			list.Add(new DefaultTask(DefaultTaskEnum.OnAMeeting));
-			defaultTasksDataTable = new PTMDataset.TasksDataTable();
-			LoadDefaultTasks();
 		}
 
-		private static void LoadDefaultTasks()
+		internal static DefaultTasks List
 		{
-			defaultTasksDataTable.BeginLoadData();
-			foreach (ManagementDataset.DefaultTasksRow row in ConfigurationHelper.DefaultTasks.Rows)
-			{
-				PTMDataset.TasksRow trow = defaultTasksDataTable.NewTasksRow();
-				trow.DefaultTaskId = row.Id;
-				trow.Description = row.Description;
-				trow.IsDefaultTask = true;
-				defaultTasksDataTable.Rows.Add(trow);
-			}
-			defaultTasksDataTable.EndLoadData();
-		}
-
-		private static PTMDataset.TasksDataTable defaultTasksDataTable;
-
-		internal static DefaultTasks DefaultTasksDataTable
-		{
-			get { return new DefaultTasks(); }
+			get { return instance; }
 		}
 		public static string GetDefaultTaskDescription(DefaultTaskEnum defaultTaskEnum)
 		{
@@ -66,6 +50,7 @@ namespace PTM.Business
 			}
 			return defaultTaskEnum.ToString();
 		}
+		
 		
 		public void CopyTo(Array array, int index)
 		{

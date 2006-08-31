@@ -16,11 +16,6 @@ namespace PTM.Data
 		private OleDbConnection desingOleDbConnection;
 		private OleDbConnection productionOleDbConnection;
 		internal OleDbDataAdapter tasksDataAdapter;
-		internal OleDbDataAdapter defaultTaskDataAdapter;
-		private OleDbCommand oleDbSelectCommand3;
-		private OleDbCommand oleDbInsertCommand3;
-		private OleDbCommand oleDbUpdateCommand3;
-		private OleDbCommand oleDbDeleteCommand3;
 		internal OleDbDataAdapter applicationsSummaryDataAdapter;
 		private OleDbCommand oleDbSelectCommand6;
 		internal OleDbDataAdapter configurationDataAdapter;
@@ -121,11 +116,6 @@ namespace PTM.Data
 			this.oleDbInsertCommand2 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbSelectCommand2 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbUpdateCommand2 = new System.Data.OleDb.OleDbCommand();
-			this.defaultTaskDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
-			this.oleDbDeleteCommand3 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbInsertCommand3 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbSelectCommand3 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbUpdateCommand3 = new System.Data.OleDb.OleDbCommand();
 			this.applicationsSummaryDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
 			this.oleDbSelectCommand6 = new System.Data.OleDb.OleDbCommand();
 			this.configurationDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
@@ -144,16 +134,16 @@ namespace PTM.Data
 			this.tasksDataAdapter.InsertCommand = this.oleDbInsertCommand2;
 			this.tasksDataAdapter.SelectCommand = this.oleDbSelectCommand2;
 			this.tasksDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																									   new System.Data.Common.DataTableMapping("Table", "Tasks", new System.Data.Common.DataColumnMapping[] {
-																																																				new System.Data.Common.DataColumnMapping("DefaultTaskId", "DefaultTaskId"),
-																																																				new System.Data.Common.DataColumnMapping("Description", "Description"),
-																																																				new System.Data.Common.DataColumnMapping("Id", "Id"),
-																																																				new System.Data.Common.DataColumnMapping("IsDefaultTask", "IsDefaultTask"),
-																																																				new System.Data.Common.DataColumnMapping("IsFinished", "IsFinished"),
-																																																				new System.Data.Common.DataColumnMapping("ParentId", "ParentId"),
-																																																				new System.Data.Common.DataColumnMapping("StartDate", "StartDate"),
-																																																				new System.Data.Common.DataColumnMapping("StopDate", "StopDate"),
-																																																				new System.Data.Common.DataColumnMapping("TotalTime", "TotalTime")})});
+																																	new System.Data.Common.DataTableMapping("Table", "Tasks", new System.Data.Common.DataColumnMapping[] {
+																																																																			  new System.Data.Common.DataColumnMapping("DefaultTaskId", "DefaultTaskId"),
+																																																																			  new System.Data.Common.DataColumnMapping("Description", "Description"),
+																																																																			  new System.Data.Common.DataColumnMapping("Id", "Id"),
+																																																																			  new System.Data.Common.DataColumnMapping("IsDefaultTask", "IsDefaultTask"),
+																																																																			  new System.Data.Common.DataColumnMapping("IsFinished", "IsFinished"),
+																																																																			  new System.Data.Common.DataColumnMapping("ParentId", "ParentId"),
+																																																																			  new System.Data.Common.DataColumnMapping("StartDate", "StartDate"),
+																																																																			  new System.Data.Common.DataColumnMapping("StopDate", "StopDate"),
+																																																																			  new System.Data.Common.DataColumnMapping("TotalTime", "TotalTime")})});
 			this.tasksDataAdapter.UpdateCommand = this.oleDbUpdateCommand2;
 			this.tasksDataAdapter.RowUpdated += new System.Data.OleDb.OleDbRowUpdatedEventHandler(this.tasksDataAdapter_RowUpdated);
 			// 
@@ -211,59 +201,16 @@ namespace PTM.Data
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("TotalTime", System.Data.OleDb.OleDbType.Integer, 0, "TotalTime"));
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("Id", System.Data.OleDb.OleDbType.Integer, 0, "Id"));
 			// 
-			// defaultTaskDataAdapter
-			// 
-			this.defaultTaskDataAdapter.DeleteCommand = this.oleDbDeleteCommand3;
-			this.defaultTaskDataAdapter.InsertCommand = this.oleDbInsertCommand3;
-			this.defaultTaskDataAdapter.SelectCommand = this.oleDbSelectCommand3;
-			this.defaultTaskDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																											 new System.Data.Common.DataTableMapping("Table", "DefaultTasks", new System.Data.Common.DataColumnMapping[] {
-																																																							 new System.Data.Common.DataColumnMapping("Description", "Description"),
-																																																							 new System.Data.Common.DataColumnMapping("Id", "Id")})});
-			this.defaultTaskDataAdapter.UpdateCommand = this.oleDbUpdateCommand3;
-			// 
-			// oleDbDeleteCommand3
-			// 
-			this.oleDbDeleteCommand3.CommandText = "DELETE FROM DefaultTasks WHERE (Id = ?) AND (Description = ? OR ? IS NULL AND Des" +
-				"cription IS NULL)";
-			this.oleDbDeleteCommand3.Connection = this.desingOleDbConnection;
-			this.oleDbDeleteCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Id", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Id", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			// 
-			// oleDbInsertCommand3
-			// 
-			this.oleDbInsertCommand3.CommandText = "INSERT INTO DefaultTasks(Description, Id) VALUES (?, ?)";
-			this.oleDbInsertCommand3.Connection = this.desingOleDbConnection;
-			this.oleDbInsertCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Description", System.Data.OleDb.OleDbType.VarWChar, 50, "Description"));
-			this.oleDbInsertCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Id", System.Data.OleDb.OleDbType.Integer, 0, "Id"));
-			// 
-			// oleDbSelectCommand3
-			// 
-			this.oleDbSelectCommand3.CommandText = "SELECT Description, Id FROM DefaultTasks";
-			this.oleDbSelectCommand3.Connection = this.desingOleDbConnection;
-			// 
-			// oleDbUpdateCommand3
-			// 
-			this.oleDbUpdateCommand3.CommandText = "UPDATE DefaultTasks SET Description = ?, Id = ? WHERE (Id = ?) AND (Description =" +
-				" ? OR ? IS NULL AND Description IS NULL)";
-			this.oleDbUpdateCommand3.Connection = this.desingOleDbConnection;
-			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Description", System.Data.OleDb.OleDbType.VarWChar, 50, "Description"));
-			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Id", System.Data.OleDb.OleDbType.Integer, 0, "Id"));
-			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Id", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Id", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand3.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			// 
 			// applicationsSummaryDataAdapter
 			// 
 			this.applicationsSummaryDataAdapter.SelectCommand = this.oleDbSelectCommand6;
 			this.applicationsSummaryDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																													 new System.Data.Common.DataTableMapping("Table", "ApplicationsSummary", new System.Data.Common.DataColumnMapping[] {
-																																																											new System.Data.Common.DataColumnMapping("TaskId", "TaskId"),
-																																																											new System.Data.Common.DataColumnMapping("TotalActiveTime", "TotalActiveTime"),
-																																																											new System.Data.Common.DataColumnMapping("TotalApplicationsLog", "TotalApplicationsLog"),
-																																																											new System.Data.Common.DataColumnMapping("Name", "Name"),
-																																																											new System.Data.Common.DataColumnMapping("ApplicationFullPath", "ApplicationFullPath")})});
+																																					  new System.Data.Common.DataTableMapping("Table", "ApplicationsSummary", new System.Data.Common.DataColumnMapping[] {
+																																																																													new System.Data.Common.DataColumnMapping("TaskId", "TaskId"),
+																																																																													new System.Data.Common.DataColumnMapping("TotalActiveTime", "TotalActiveTime"),
+																																																																													new System.Data.Common.DataColumnMapping("TotalApplicationsLog", "TotalApplicationsLog"),
+																																																																													new System.Data.Common.DataColumnMapping("Name", "Name"),
+																																																																													new System.Data.Common.DataColumnMapping("ApplicationFullPath", "ApplicationFullPath")})});
 			// 
 			// oleDbSelectCommand6
 			// 
@@ -279,12 +226,12 @@ namespace PTM.Data
 			this.configurationDataAdapter.InsertCommand = this.oleDbInsertCommand6;
 			this.configurationDataAdapter.SelectCommand = this.oleDbSelectCommand8;
 			this.configurationDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																											   new System.Data.Common.DataTableMapping("Table", "Configuration", new System.Data.Common.DataColumnMapping[] {
-																																																								new System.Data.Common.DataColumnMapping("ConfigValue", "ConfigValue"),
-																																																								new System.Data.Common.DataColumnMapping("Description", "Description"),
-																																																								new System.Data.Common.DataColumnMapping("Id", "Id"),
-																																																								new System.Data.Common.DataColumnMapping("KeyValue", "KeyValue"),
-																																																								new System.Data.Common.DataColumnMapping("ListValue", "ListValue")})});
+																																			  new System.Data.Common.DataTableMapping("Table", "Configuration", new System.Data.Common.DataColumnMapping[] {
+																																																																									new System.Data.Common.DataColumnMapping("ConfigValue", "ConfigValue"),
+																																																																									new System.Data.Common.DataColumnMapping("Description", "Description"),
+																																																																									new System.Data.Common.DataColumnMapping("Id", "Id"),
+																																																																									new System.Data.Common.DataColumnMapping("KeyValue", "KeyValue"),
+																																																																									new System.Data.Common.DataColumnMapping("ListValue", "ListValue")})});
 			this.configurationDataAdapter.UpdateCommand = this.oleDbUpdateCommand6;
 			this.configurationDataAdapter.RowUpdated += new System.Data.OleDb.OleDbRowUpdatedEventHandler(this.configurationDataAdapter_RowUpdated);
 			// 

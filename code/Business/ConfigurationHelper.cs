@@ -23,24 +23,16 @@ namespace PTM.Business
 
 		private static ManagementDataset configurationDataset = new ManagementDataset();
 		private static DbDataAdapter configurationDataAdapter;
-		private static DbDataAdapter defaultTaskDataAdapter;
 
-		internal static void Initialize(DbDataAdapter configurationAdapter, DbDataAdapter defaultTaskAdapter)
+		internal static void Initialize(DbDataAdapter configurationAdapter)
 		{
 			configurationDataAdapter = configurationAdapter;
-			defaultTaskDataAdapter = defaultTaskAdapter;
 			Load();
 		}
 
 		private static void Load()
 		{
 			configurationDataAdapter.Fill(configurationDataset.Configuration);
-			defaultTaskDataAdapter.Fill(configurationDataset.DefaultTasks);
-		}
-
-		internal static ManagementDataset.DefaultTasksDataTable DefaultTasks
-		{
-			get { return configurationDataset.DefaultTasks; }
 		}
 
 		internal static ManagementDataset.ConfigurationRow GetConfiguration(ConfigurationKey config)

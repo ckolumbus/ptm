@@ -27,7 +27,7 @@ namespace PTM.Test.Business
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.IsTrue(DefaultTasks.DefaultTasksDataTable.Count>0);
+			Assert.IsTrue(DefaultTasks.List.Count>0);
 		}
 
 		[TearDown]

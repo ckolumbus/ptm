@@ -17,14 +17,6 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="DefaultTasks">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="Description" type="xs:string" minOccurs="0" />
-							<xs:element name="Id" type="xs:int" />
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
 				<xs:element name="List">
 					<xs:complexType>
 						<xs:sequence>
@@ -37,10 +29,6 @@
 		</xs:complexType>
 		<xs:unique name="Constraint1" msdata:PrimaryKey="true">
 			<xs:selector xpath=".//mstns:Configuration" />
-			<xs:field xpath="mstns:Id" />
-		</xs:unique>
-		<xs:unique name="DefaultTasks_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
-			<xs:selector xpath=".//mstns:DefaultTasks" />
 			<xs:field xpath="mstns:Id" />
 		</xs:unique>
 		<xs:key name="ConfigurationDatasetKey1">
