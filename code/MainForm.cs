@@ -39,6 +39,8 @@ namespace PTM
 		private System.Windows.Forms.MenuItem menuItem4;
 		private System.Windows.Forms.MenuItem startUpMenuItem;
 		private IContainer components;
+		private bool systemShutdown = false;
+		private bool AnimationDisabled = false;
 
 		public MainForm()
 		{
@@ -47,6 +49,7 @@ namespace PTM
 			this.Text += MainClass.GetVersionString();
 			this.tasksLogControl.Exit+=new EventHandler(Exit);
 			LoadIconsFromResources();
+			Application.DoEvents();
 			LoadStartUpStatus();
 			Application.DoEvents();
 		}
@@ -323,23 +326,36 @@ namespace PTM
 
 		#endregion
 
-		protected override void OnHandleCreated(EventArgs e)
+		#region MainForm
+
+		private void MainForm_Load(object sender, EventArgs e)
 		{
-			base.OnHandleCreated(e);
-			IntPtr mainWindowHandle = this.Handle;
-			try
+			this.tasksLogControl.NewTaskLog(true);
+			Logs.StartLogging();
+		}
+
+		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(tabControl.SelectedTab == this.summaryPage)
 			{
-				lock (this)
-				{
-					//Write the handle to the Shared Memory 
-					MainClass.sharedMemory.WriteHandle(mainWindowHandle);
-				}
+				summaryControl.UpdateSummary();
 			}
-			catch (Exception ex)
+			if(tabControl.SelectedTab == this.statisticsPage)
 			{
-				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown",MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Application.Exit();
+				statisticsControl.UpdateStatistics();
 			}
+		}
+
+		private static void SetWindowsStartUp(bool enable)
+		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			
+			if(enable)
+				reg.SetValue("PTM", System.Reflection.Assembly.GetExecutingAssembly().Location);
+			else
+				reg.DeleteValue("PTM", false);
+
+			reg.Close();
 		}
 
 		protected override void WndProc(ref Message m)
@@ -347,7 +363,7 @@ namespace PTM
 			// Once the program recieves WM_QUERYENDSESSION message, set the boolean systemShutdown.
 
 			if (m.Msg == ViewHelper.WM_QUERYENDSESSION)
-				MainClass.systemShutdown = true;
+				systemShutdown = true;
 			base.WndProc(ref m);
 		}
 
@@ -355,7 +371,7 @@ namespace PTM
 		{
 			try
 			{
-				if (MainClass.systemShutdown == true)
+				if (systemShutdown)
 					e.Cancel = false;
 				else
 				{
@@ -371,8 +387,7 @@ namespace PTM
 
 			base.OnClosing(e);
 		}
-
-		private bool AnimationDisabled = false;
+	
 		private void AnimateWindow()
 		{
 			// if the user has not disabled animating windows...
@@ -394,37 +409,7 @@ namespace PTM
 			}
 		}
 
-
-
-		protected override void OnClosed(EventArgs e)
-		{
-//			this.notifyIcon.Visible = false;
-//			this.notifyIcon.Icon.Dispose();
-//			this.notifyIcon.Dispose();
-			base.OnClosed(e);
-		}
-		#region MainForm
-
-		private void MainForm_Load(object sender, EventArgs e)
-		{
-			this.tasksLogControl.NewTaskLog(true);
-			Logs.StartLogging();
-		}
-
-		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if(tabControl.SelectedTab == this.summaryPage)
-			{
-				summaryControl.UpdateSummary();
-			}
-			if(tabControl.SelectedTab == this.statisticsPage)
-			{
-				statisticsControl.UpdateStatistics();
-			}
-		}
-
-
-
+		
 		#endregion
 
 		#region Menu
@@ -444,22 +429,15 @@ namespace PTM
 			UnitOfWork.Update();
 		}
 		
-		
-		#region MainMenu
-
 		private void exitMenuItem_Click(object sender, EventArgs e)
 		{
 			Exit(sender, e);
 		}
-
-		#endregion
-
 		private void aboutMenuItem_Click(object sender, EventArgs e)
 		{
 			AboutForm about = new AboutForm();
 			about.ShowDialog(this);
 		}
-		
 		
 		private void menuItem3_Click(object sender, System.EventArgs e)
 		{
@@ -467,25 +445,15 @@ namespace PTM
 			taskHForm.ShowDialog(this);
 		}
 
-		#endregion
-
 		private void menuItem5_Click(object sender, System.EventArgs e)
 		{
 			this.startUpMenuItem.Checked = !this.startUpMenuItem.Checked;
 			SetWindowsStartUp(this.startUpMenuItem.Checked);
 		}
 		
-		private static void SetWindowsStartUp(bool enable)
-		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-			
-			if(enable)
-				reg.SetValue("PTM", System.Reflection.Assembly.GetExecutingAssembly().Location);
-			else
-				reg.DeleteValue("PTM", false);
+		#endregion
 
-			reg.Close();
-		}
-
+		
+		
 	}
 }

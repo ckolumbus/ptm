@@ -19,8 +19,9 @@ namespace PTM
 	public sealed class MainClass
 	{
 
+		internal static bool runSingleInstance = false;
 		internal static MemoryMappedFile sharedMemory;
-		internal static bool systemShutdown = false;
+		
 
 		private MainClass()
 		{
@@ -29,13 +30,15 @@ namespace PTM
 		[STAThread]
 		private static void Main()
 		{
-			//Launch();
-			RunSingleInstance();
+			if(runSingleInstance)
+				RunSingleInstance();
+			else
+				Launch();
 		}
 
 		private static void RunSingleInstance()
 		{
-// Used to check if we can create a new mutex
+			// Used to check if we can create a new mutex
 			bool newMutexCreated = false;
 			// The name of the mutex is to be prefixed with Local\ to make sure that its is created in the per-session namespace, not in the global namespace.
 			string mutexName = "Local\\" + Assembly.GetExecutingAssembly().GetName().Name;
@@ -125,6 +128,8 @@ namespace PTM
 			splash.Refresh();
 			Application.DoEvents();
 			MainForm main = new MainForm();
+			if(runSingleInstance)
+				main.HandleCreated+=new EventHandler(main_HandleCreated);
 			splash.SetLoadProgress(100);
 			splash.Refresh();
 			Application.DoEvents();
@@ -143,9 +148,26 @@ namespace PTM
 		
 		static public string GetVersionString()
 		{
-			return " alpha v. 1.4.1";
+			return " alpha v. 1.5";
 		}
-		
-		
+
+		private static void main_HandleCreated(object sender, EventArgs e)
+		{
+			IntPtr mainWindowHandle = ((MainForm)sender).Handle;
+			try
+			{
+				lock (sender)
+				{
+					//Write the handle to the Shared Memory 
+					MainClass.sharedMemory.WriteHandle(mainWindowHandle);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown",MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Application.Exit();
+			}
+		}
 	}
 }
+

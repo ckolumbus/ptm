@@ -322,7 +322,10 @@ namespace PTM.View.Controls
 		#endregion
 
 		#region TaskLog
-
+		private void TasksLogControl_Load(object sender, EventArgs e)
+		{
+			SetCurrentDay();
+		}
 		public void NewTaskLog(bool mustAddATask)
 		{
 			notifyTimer.Stop();
@@ -467,6 +470,8 @@ namespace PTM.View.Controls
 				this.editButton.Enabled = true;
 			}
 		}
+
+
 
 		#endregion
 
@@ -643,27 +648,29 @@ namespace PTM.View.Controls
 
 		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
+			PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 			if(e.Action == DataRowAction.Change)
 			{
 				foreach (TreeListViewItem item in this.taskList.Items)
 				{
 					if (((Log)item.Tag).Id == e.Log.Id)
 					{
-						PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 						SetListItemValues(item,e.Log, taskRow);
 						break;
 					}
 				}
 			}
-
 			else if(e.Action == DataRowAction.Add)
 			{
 				CheckCurrentDayChanged();
-				PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
 				SetListItemValues(itemA,e.Log, taskRow);
-				taskList.Items.Insert(0,itemA);
-				this.notifyIcon.Text = taskRow.Description;			
+				taskList.Items.Insert(0,itemA);				
+			}
+			
+			if(Logs.CurrentLog != null && Logs.CurrentLog.Id == e.Log.Id)
+			{
+				this.notifyIcon.Text = taskRow.Description;
 			}
 		}
 
@@ -737,11 +744,7 @@ namespace PTM.View.Controls
 
 		#endregion
 
-		private void TasksLogControl_Load(object sender, EventArgs e)
-		{
-			SetCurrentDay();
-		}
-
+		
 
 	}
 }
