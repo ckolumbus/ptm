@@ -243,7 +243,7 @@ namespace PTM.View.Controls
 		private void Tasks_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
 			TreeNode node = FindTaskNode(e.Row.Id);
-			if(node!=null || node.TreeView == null)
+			if(node!=null && node.TreeView != null)
 				node.Remove();	
 		}
 		private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
