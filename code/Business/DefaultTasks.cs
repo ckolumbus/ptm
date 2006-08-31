@@ -22,9 +22,9 @@ namespace PTM.Business
 			list.Add(new DefaultTask(DefaultTaskEnum.Idle));
 			list.Add(new DefaultTask(DefaultTaskEnum.LunchTime));
 			list.Add(new DefaultTask(DefaultTaskEnum.OtherPersonal));
-			list.Add(new DefaultTask(DefaultTaskEnum.PhoneCall));
-			list.Add(new DefaultTask(DefaultTaskEnum.CheckingMail));
-			list.Add(new DefaultTask(DefaultTaskEnum.OnAMeeting));
+			list.Add(new DefaultTask(DefaultTaskEnum.JobPhoneCall));
+			list.Add(new DefaultTask(DefaultTaskEnum.CheckingJobMail));
+			list.Add(new DefaultTask(DefaultTaskEnum.JobMeeting));
 		}
 
 		internal static DefaultTasks List
@@ -41,16 +41,35 @@ namespace PTM.Business
 					return "Lunch Time";
 				case DefaultTaskEnum.OtherPersonal:
 					return "Other/Personal";
-				case DefaultTaskEnum.PhoneCall:
+				case DefaultTaskEnum.JobPhoneCall:
 					return "Job Phone Call";
-				case DefaultTaskEnum.CheckingMail:
+				case DefaultTaskEnum.CheckingJobMail:
 					return "Checking Job Email";
-				case DefaultTaskEnum.OnAMeeting:
+				case DefaultTaskEnum.JobMeeting:
 					return "Job Meeting";
 			}
 			return defaultTaskEnum.ToString();
 		}
 		
+		public static bool IsActive(DefaultTaskEnum defaultTaskEnum)
+		{
+			switch(defaultTaskEnum)
+			{
+				case DefaultTaskEnum.Idle:
+					return false;
+				case DefaultTaskEnum.LunchTime:
+					return false;
+				case DefaultTaskEnum.OtherPersonal:
+					return false;
+				case DefaultTaskEnum.JobPhoneCall:
+					return true;
+				case DefaultTaskEnum.CheckingJobMail:
+					return true;
+				case DefaultTaskEnum.JobMeeting:
+					return true;
+			}
+			return false;
+		}
 		
 		public void CopyTo(Array array, int index)
 		{
@@ -102,6 +121,14 @@ namespace PTM.Business
 		{
 			get { return (int)type; }
 		}
+		
+		public bool IsActive
+		{
+			get
+			{
+				return DefaultTasks.IsActive(type);
+			}
+		}
 	}
 	
 	public enum DefaultTaskEnum : int
@@ -109,8 +136,8 @@ namespace PTM.Business
 		Idle = 1,
 		LunchTime = 2,
 		OtherPersonal = 3,
-		PhoneCall = 4,
-		CheckingMail = 5,
-		OnAMeeting = 7
+		JobPhoneCall = 4,
+		CheckingJobMail = 5,
+		JobMeeting = 7
 	}
 }

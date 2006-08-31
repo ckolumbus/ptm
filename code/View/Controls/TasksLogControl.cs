@@ -570,25 +570,25 @@ namespace PTM.View.Controls
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.PhoneCall);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.JobPhoneCall);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.PhoneCall);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.JobPhoneCall);
 		}
 
 		private void menuItem6_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingMail);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingJobMail);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.CheckingMail);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.CheckingJobMail);
 		}
 
 		private void menuItem7_Click(object sender, System.EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.OnAMeeting);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.JobMeeting);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.OnAMeeting);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.JobMeeting);
 		}
 
 		private void menuItem10_Click(object sender, EventArgs e)

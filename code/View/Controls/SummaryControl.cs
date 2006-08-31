@@ -415,7 +415,7 @@ namespace PTM.View.Controls
 				foreach (TaskSummary summary in summaryList)
 				{
 					totalTime+= summary.TotalTime;
-					if(!summary.IsDefaultTask)
+					if(!summary.IsDefaultTask || (summary.IsDefaultTask && DefaultTasks.IsActive((DefaultTaskEnum) summary.DefaultTaskId)))
 						totalActiveTime += summary.TotalTime;
 					
 					TimeSpan duration = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalTime));

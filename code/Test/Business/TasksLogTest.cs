@@ -134,15 +134,15 @@ namespace PTM.Test.Business
 		[Test]
 		public void AddDefaultTaskLogTest()
 		{
-			Log log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingMail);
+			Log log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingJobMail);
 			PTMDataset.TasksRow task;
 			task = Tasks.FindById(log.TaskId);
 			Assert.AreEqual(true, task.IsDefaultTask);
-			Assert.AreEqual((int)DefaultTaskEnum.CheckingMail, task.DefaultTaskId);
-			log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingMail);
+			Assert.AreEqual((int)DefaultTaskEnum.CheckingJobMail, task.DefaultTaskId);
+			log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingJobMail);
 			task = Tasks.FindById(log.TaskId);
 			Assert.AreEqual(true, task.IsDefaultTask);
-			Assert.AreEqual((int)DefaultTaskEnum.CheckingMail, task.DefaultTaskId);
+			Assert.AreEqual((int)DefaultTaskEnum.CheckingJobMail, task.DefaultTaskId);
 		}
 		
 		[Test]
