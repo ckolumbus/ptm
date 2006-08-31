@@ -1,20 +1,11 @@
+using System.Collections;
 using System.Windows.Forms;
 using PTM.Data;
 
 namespace PTM.Business
 {
-	internal enum DefaultTask : int
-	{
-		Idle = 1,
-		LunchTime = 2,
-		GoToTheBath = 3,
-		PhoneCall = 4,
-		CheckingMail = 5,
-		OutOfMyplace = 6,
-		OnAMeeting = 7
-	}
-
-
+	
+	
 	public class MainModule
 	{
 		

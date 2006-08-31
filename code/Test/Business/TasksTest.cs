@@ -115,8 +115,8 @@ namespace PTM.Test.Business
 		[Test]
 		public void AddDefaultTask()
 		{
-			PTMDataset.TasksRow defaultTaskRow;
-			defaultTaskRow = (PTMDataset.TasksRow) DefaultTasks.DefaultTasksDataTable.Rows[0];
+			DefaultTask defaultTaskRow;
+			defaultTaskRow = DefaultTasks.DefaultTasksDataTable[0];
 			
 			PTMDataset.TasksRow row;
 			row = Tasks.NewTasksRow();
@@ -156,8 +156,8 @@ namespace PTM.Test.Business
 		[Test]
 		public void UpdateTaskToDefaultTask()
 		{
-			PTMDataset.TasksRow defaultTaskRow;
-			defaultTaskRow = (PTMDataset.TasksRow) DefaultTasks.DefaultTasksDataTable.Rows[0];
+			DefaultTask defaultTaskRow;
+			defaultTaskRow = DefaultTasks.DefaultTasksDataTable[0];
 
 			PTMDataset.TasksRow row;
 			row = Tasks.NewTasksRow();
@@ -178,8 +178,8 @@ namespace PTM.Test.Business
 		[Test]
 		public void UpdateDefaultTaskToTask()
 		{
-			PTMDataset.TasksRow defaultTaskRow;
-			defaultTaskRow = (PTMDataset.TasksRow) DefaultTasks.DefaultTasksDataTable.Rows[0];
+			DefaultTask defaultTaskRow;
+			defaultTaskRow = DefaultTasks.DefaultTasksDataTable[0];
 
 			PTMDataset.TasksRow row;
 			row = Tasks.NewTasksRow();
@@ -279,7 +279,7 @@ namespace PTM.Test.Business
 		public void GetChildTasksTest()
 		{
 			PTMDataset.TasksRow[] childs;
-			childs = Tasks.GetChildTasks(Tasks.RootTasksRow);
+			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(0, childs.Length);
 			
 			PTMDataset.TasksRow row1;
@@ -300,16 +300,16 @@ namespace PTM.Test.Business
 			row3.ParentId = row1.Id;
 			row3.Id = Tasks.AddTasksRow(row3);
 			
-			childs = Tasks.GetChildTasks(Tasks.RootTasksRow);
+			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(2, childs.Length);
 			
-			childs = Tasks.GetChildTasks(row1);
+			childs = Tasks.GetChildTasks(row1.Id);
 			Assert.AreEqual(1, childs.Length);
 			
-			childs = Tasks.GetChildTasks(row2);
+			childs = Tasks.GetChildTasks(row2.Id);
 			Assert.AreEqual(0, childs.Length);
 
-			childs = Tasks.GetChildTasks(row3);
+			childs = Tasks.GetChildTasks(row3.Id);
 			Assert.AreEqual(0, childs.Length);
 
 		}

@@ -117,7 +117,7 @@ namespace PTM.Test.Business
 			PTMDataset.TasksRow idleTaskRow;
 			idleTaskRow = Tasks.FindById(deletedLog.TaskId);
 			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
-			Assert.AreEqual((int)DefaultTask.Idle, idleTaskRow.DefaultTaskId);
+			Assert.AreEqual((int)DefaultTaskEnum.Idle, idleTaskRow.DefaultTaskId);
 			
 			Logs.UpdateLogTaskId(log1.Id, taskrow1.Id);
 			Log updatedRow;
@@ -128,21 +128,21 @@ namespace PTM.Test.Business
 			deletedLog = Logs.FindById(log1.Id);
 			idleTaskRow = Tasks.FindById(deletedLog.TaskId);
 			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
-			Assert.AreEqual((int)DefaultTask.Idle, idleTaskRow.DefaultTaskId);
+			Assert.AreEqual((int)DefaultTaskEnum.Idle, idleTaskRow.DefaultTaskId);
 			
 		}
 		[Test]
 		public void AddDefaultTaskLogTest()
 		{
-			Log log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.CheckingMail);
+			Log log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingMail);
 			PTMDataset.TasksRow task;
 			task = Tasks.FindById(log.TaskId);
 			Assert.AreEqual(true, task.IsDefaultTask);
-			Assert.AreEqual((int)DefaultTask.CheckingMail, task.DefaultTaskId);
-			log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.CheckingMail);
+			Assert.AreEqual((int)DefaultTaskEnum.CheckingMail, task.DefaultTaskId);
+			log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingMail);
 			task = Tasks.FindById(log.TaskId);
 			Assert.AreEqual(true, task.IsDefaultTask);
-			Assert.AreEqual((int)DefaultTask.CheckingMail, task.DefaultTaskId);
+			Assert.AreEqual((int)DefaultTaskEnum.CheckingMail, task.DefaultTaskId);
 		}
 		
 		[Test]

@@ -46,7 +46,7 @@ namespace PTM.Business
 				if (sumRow.IsDefaultTask)
 					sumRow.DefaultTaskId = row.DefaultTaskId;
 				
-				if(sumRow.DefaultTaskId!=(int)DefaultTask.Idle)//ignore idle time
+				if(sumRow.DefaultTaskId!=(int)DefaultTaskEnum.Idle)//ignore idle time
 				{
 					if (row.Id != parentRow.Id)
 					{
@@ -138,8 +138,7 @@ namespace PTM.Business
 				}
 			}
 			PTMDataset.TasksRow[] childRows;
-			//childRows = (PTMDataset.TasksRow[]) parentRow.GetChildRows(Tasks.GetRecursiveRelation((PTMDataset.TasksDataTable) parentRow.Table));
-			childRows = Tasks.GetChildTasks(parentRow);
+			childRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (PTMDataset.TasksRow childRow in childRows)
 			{
 				GetRecursiveSummary(childRow, ini, end);

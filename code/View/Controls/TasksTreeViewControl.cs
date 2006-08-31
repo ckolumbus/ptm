@@ -159,10 +159,10 @@ namespace PTM.View.Controls
 
 		private void AddChildNodes(PTMDataset.TasksRow parentRow, TreeNode nodeParent)
 		{
-			DataRow[] childsRows = Tasks.GetChildTasks(parentRow);
+			DataRow[] childsRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (PTMDataset.TasksRow row in childsRows)
 			{
-				if(!this.includeDefaultTask && row.IsDefaultTask && row.DefaultTaskId == (int)DefaultTask.Idle)
+				if(!this.includeDefaultTask && row.IsDefaultTask)
 					continue;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);

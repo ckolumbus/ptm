@@ -497,6 +497,32 @@ namespace PTM.Data
 				cmd.Connection.Close();
 			}
 		}
+		public static ArrayList ExecuteGetRows(string cmdText)
+		{
+			OleDbCommand cmd;
+			cmd = GetNewCommand(cmdText);
+			try
+			{			
+				cmd.Connection.Open();
+				OleDbDataReader reader = cmd.ExecuteReader();
+				if(!reader.HasRows)
+					return new ArrayList();
+				ArrayList list = new ArrayList();
+				while(reader.Read())
+				{
+					Hashtable hash = new Hashtable();
+					for(int i=0;i<reader.FieldCount;i++)
+						hash.Add(reader.GetName(i), reader[i]);
+					list.Add(hash);
+				}
+				reader.Close();
+				return list;
+			}
+			finally
+			{
+				cmd.Connection.Close();
+			}
+		}
 		public static int ExecuteInsert(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;

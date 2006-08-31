@@ -292,7 +292,7 @@ namespace PTM.Business
 
 		public static ArrayList GetApplicationsLog(int logId)
 		{
-			ArrayList resultsHT = DataAdapterManager.ExecuteGetRows("SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime WHERE TaskLogId = " + logId.ToString(), null, null );
+			ArrayList resultsHT = DataAdapterManager.ExecuteGetRows("SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " + logId.ToString());
 			ArrayList results = new ArrayList();
 			foreach (Hashtable hashtable in resultsHT)
 			{

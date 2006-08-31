@@ -32,8 +32,6 @@ namespace PTM.View.Controls
 		private MenuItem menuItem1;
 		private MenuItem menuItem5;
 		private MenuItem menuItem6;
-		private MenuItem menuItem7;
-		private MenuItem menuItem8;
 		private MenuItem menuItem9;
 		private MenuItem menuItem2;
 		private MenuItem menuItem3;
@@ -43,6 +41,7 @@ namespace PTM.View.Controls
 		private Button switchToButton;
 		private Button deleteButton;
 		private ColumnHeader StartTimeHeader;
+		private System.Windows.Forms.MenuItem menuItem7;
 		private DateTime currentDay;
 
 		public TasksLogControl()
@@ -124,7 +123,6 @@ namespace PTM.View.Controls
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
-			this.menuItem8 = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItem10 = new System.Windows.Forms.MenuItem();
 			this.notifyTimer = new System.Timers.Timer();
@@ -187,7 +185,6 @@ namespace PTM.View.Controls
 																														this.menuItem5,
 																														this.menuItem6,
 																														this.menuItem7,
-																														this.menuItem8,
 																														this.menuItem9,
 																														this.menuItem10});
 			// 
@@ -216,41 +213,35 @@ namespace PTM.View.Controls
 			// menuItem4
 			// 
 			this.menuItem4.Index = 4;
-			this.menuItem4.Text = "Go to the Bath";
+			this.menuItem4.Text = "Other/Personal";
 			this.menuItem4.Click += new System.EventHandler(this.menuItem4_Click);
 			// 
 			// menuItem5
 			// 
 			this.menuItem5.Index = 5;
-			this.menuItem5.Text = "Phone Call";
+			this.menuItem5.Text = "Job Phone Call";
 			this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
 			// 
 			// menuItem6
 			// 
 			this.menuItem6.Index = 6;
-			this.menuItem6.Text = "Checking Mail";
+			this.menuItem6.Text = "Checking Job Email";
 			this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
 			// 
 			// menuItem7
 			// 
 			this.menuItem7.Index = 7;
-			this.menuItem7.Text = "Out of my place";
+			this.menuItem7.Text = "Job Meeting";
 			this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
-			// 
-			// menuItem8
-			// 
-			this.menuItem8.Index = 8;
-			this.menuItem8.Text = "On a Meeting";
-			this.menuItem8.Click += new System.EventHandler(this.menuItem8_Click);
 			// 
 			// menuItem9
 			// 
-			this.menuItem9.Index = 9;
+			this.menuItem9.Index = 8;
 			this.menuItem9.Text = "-";
 			// 
 			// menuItem10
 			// 
-			this.menuItem10.Index = 10;
+			this.menuItem10.Index = 9;
 			this.menuItem10.Text = "About...";
 			this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
 			// 
@@ -338,15 +329,15 @@ namespace PTM.View.Controls
 			else if (mustAddATask)
 			{
 				if(Tasks.CurrentTaskRow==null)
-					AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.Idle);
+					AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
 				else
-					AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.Idle);
+					AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.Idle);
 			}
 		}
 
-		private void AddDefaultTaskLog(int taskParentId, DefaultTask defaultTask)
+		private void AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
-			Logs.AddDefaultTaskLog(taskParentId, defaultTask);
+			Logs.AddDefaultTaskLog(taskParentId, defaultTaskEnum);
 			ResetNotifyTimer(Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue));
 		}
 
@@ -521,7 +512,7 @@ namespace PTM.View.Controls
 			}
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Cancel)
 			{
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.Idle);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.Idle);
 			}
 			else if (notifyForm.Result == NotifyForm.NotifyResult.No)
 			{
@@ -555,57 +546,49 @@ namespace PTM.View.Controls
 		private void menuItem2_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.Idle);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.Idle);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.Idle);
 		}
 
 		private void menuItem3_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.LunchTime);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.LunchTime);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.LunchTime);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.LunchTime);
 		}
 
 		private void menuItem4_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.GoToTheBath);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.OtherPersonal);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.GoToTheBath);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.OtherPersonal);
 		}
 
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.PhoneCall);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.PhoneCall);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.PhoneCall);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.PhoneCall);
 		}
 
 		private void menuItem6_Click(object sender, EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.CheckingMail);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingMail);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.CheckingMail);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.CheckingMail);
 		}
 
-		private void menuItem7_Click(object sender, EventArgs e)
+		private void menuItem7_Click(object sender, System.EventArgs e)
 		{
 			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.OutOfMyplace);
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.OnAMeeting);
 			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.OutOfMyplace);
-		}
-
-		private void menuItem8_Click(object sender, EventArgs e)
-		{
-			if(Tasks.CurrentTaskRow==null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTask.OnAMeeting);
-			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTask.OnAMeeting);
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.OnAMeeting);
 		}
 
 		private void menuItem10_Click(object sender, EventArgs e)
@@ -744,6 +727,8 @@ namespace PTM.View.Controls
 		}
 
 		#endregion
+
+		
 
 		
 

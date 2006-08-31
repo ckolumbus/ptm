@@ -73,74 +73,21 @@ namespace PTM.Business
 			
 			PTMDataset.TasksRow taskRow;
 			taskRow = Tasks.FindById(log.TaskId);
-			
-			string description = DefaultTask.Idle.ToString(CultureInfo.InvariantCulture);
-			PTMDataset.TasksRow[] childRows;
-			childRows = Tasks.GetChildTasks(Tasks.FindById(taskRow.ParentId));
-			
-			int defaultTaskId = -1;
-			foreach (PTMDataset.TasksRow childRow in childRows)
-			{
-				if (string.Compare(childRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
-				{
-					defaultTaskId = childRow.Id;
-					break;
-				}
-			}
-			
-			if(defaultTaskId ==-1)
-			foreach (PTMDataset.TasksRow defaultRow in DefaultTasks.DefaultTasksDataTable)
-			{
-				if (string.Compare(defaultRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
-				{
-					PTMDataset.TasksRow row = Tasks.NewTasksRow();
-					row.ItemArray = defaultRow.ItemArray;
-					row.ParentId = taskRow.ParentId;
-					row.Id = Tasks.AddTasksRow(row);
-					defaultTaskId = row.Id;
-					break;
-				}
-			}
-			if(defaultTaskId !=-1)
-			{
-				UpdateLogTaskId(id, defaultTaskId);
-			}
-			else
-			{
-				throw new ApplicationException("An unexpected error has been ocurred in the application during deleting a log.");
-			}
+						
+			int idleTaskId = Tasks.AddDeafultTask(taskRow.ParentId, DefaultTaskEnum.Idle);
+			UpdateLogTaskId(id, idleTaskId);
 		}
-		public static Log AddDefaultTaskLog(int taskParentId, DefaultTask defaultTask)
+		
+		public static Log AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
-
-			string description = defaultTask.ToString(CultureInfo.InvariantCulture);
-			PTMDataset.TasksRow[] childRows;
-			childRows = Tasks.GetChildTasks(Tasks.FindById(taskParentId));
-			foreach (PTMDataset.TasksRow childRow in childRows)
-			{
-				if (string.Compare(childRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
-				{
-					return AddLog(childRow.Id);
-				}
-			}
-			
-			foreach (PTMDataset.TasksRow defaultRow in DefaultTasks.DefaultTasksDataTable)
-			{
-				if (string.Compare(defaultRow.Description.Replace(" ", null), description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
-				{
-					PTMDataset.TasksRow row = Tasks.NewTasksRow();
-					row.ItemArray = defaultRow.ItemArray;
-					row.ParentId = taskParentId;
-					row.Id = Tasks.AddTasksRow(row);
-					return AddLog(row.Id);
-				}
-			}
-			throw new InvalidOperationException();
+			int idleTaskId = Tasks.AddDeafultTask(taskParentId, defaultTaskEnum);
+			return AddLog(idleTaskId);
 		}
+		
 		public static Log FindById(int id)
 		{
-//			if(currentLog!=null && currentLog.Id == id)
-//				return currentLog;
+			if(currentLog!=null && currentLog.Id == id)
+				return currentLog;
 			Hashtable hash;
 			hash = DataAdapterManager.ExecuteGetFirstRow("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + id);
 			if(hash==null)

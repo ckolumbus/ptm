@@ -19,7 +19,7 @@ namespace PTM
 	public sealed class MainClass
 	{
 
-		internal static bool runSingleInstance = false;
+		internal static bool runSingleInstance = true;
 		internal static MemoryMappedFile sharedMemory;
 		
 
@@ -151,6 +151,7 @@ namespace PTM
 			return " alpha v. 1.5";
 		}
 
+		
 		private static void main_HandleCreated(object sender, EventArgs e)
 		{
 			IntPtr mainWindowHandle = ((MainForm)sender).Handle;

@@ -54,6 +54,7 @@ namespace PTM
 			Application.DoEvents();
 		}
 
+		
 		private void LoadStartUpStatus()
 		{
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -364,6 +365,7 @@ namespace PTM
 
 			if (m.Msg == ViewHelper.WM_QUERYENDSESSION)
 				systemShutdown = true;
+			
 			base.WndProc(ref m);
 		}
 

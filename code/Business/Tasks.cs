@@ -83,12 +83,12 @@ namespace PTM.Business
 		}
 		public static int AddTasksRow(PTMDataset.TasksRow tasksRow)
 		{
+			SetDefaultTask(tasksRow);
 			ValidateTaskRow(tasksRow);
 			tasksRow.TotalTime = 0;
 			tasksRow.IsFinished = false;
 			tasksRow.SetStartDateNull();
 			tasksRow.SetStopDateNull();
-			SetDefaultTask(tasksRow);
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.NewTasksRow();
 			row.ItemArray = tasksRow.ItemArray;
@@ -155,10 +155,10 @@ namespace PTM.Business
 			}
 		}
 
-		public static PTMDataset.TasksRow[] GetChildTasks(PTMDataset.TasksRow tasksRow)
+		public static PTMDataset.TasksRow[] GetChildTasks(int taskId)
 		{
 			PTMDataset.TasksRow row;
-			row = tasksDataTable.FindById(tasksRow.Id);
+			row = tasksDataTable.FindById(taskId);
 			foreach (DataRelation relation in tasksDataTable.ChildRelations)
 			{
 				if (relation.ChildTable.TableName == tasksDataTable.TableName)
@@ -303,6 +303,8 @@ namespace PTM.Business
 				throw new ApplicationException("Description can't be empty");
 			if(Tasks.FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description)!=null)
 				throw new ApplicationException("Task already exist");
+			if(tasksRow.IsDefaultTask && Tasks.FindByParentIdAndDefaultTask(tasksRow.ParentId, tasksRow.DefaultTaskId)!=null)
+				throw new ApplicationException("Default task already exist");
 
 			PTMDataset.TasksRow parent;
 			parent = tasksDataTable.FindById(tasksRow.ParentId);
@@ -333,13 +335,13 @@ namespace PTM.Business
 		{
 			tasksRow.IsDefaultTask = false;
 			tasksRow.SetDefaultTaskIdNull();
-			foreach (PTMDataset.TasksRow defaultTask in DefaultTasks.DefaultTasksDataTable.Rows)
+			foreach (DefaultTask defaultTask in DefaultTasks.DefaultTasksDataTable)
 			{
 				if (string.Compare(defaultTask.Description.Replace(" ", null), tasksRow.Description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
 				{
 					tasksRow.IsDefaultTask = true;
 					tasksRow.DefaultTaskId = defaultTask.DefaultTaskId;
-					break;
+					return;
 				}
 			}
 		}
@@ -400,6 +402,49 @@ namespace PTM.Business
 
 		#endregion
 
+		private static PTMDataset.TasksRow FindByParentIdAndDefaultTask(int parentId, int defaultTaskId)
+		{
+			PTMDataset.TasksRow[] rows;
+			rows = (PTMDataset.TasksRow[]) tasksDataTable.Select(
+				tasksDataTable.DefaultTaskIdColumn.ColumnName +
+				"=" + defaultTaskId + " AND " +
+				tasksDataTable.ParentIdColumn.ColumnName +
+				"=" + parentId);
 
+			if(rows.Length>0)
+				return CloneRow(rows[0]);
+			else
+				return null;
+		}
+		
+		public static int AddDeafultTask(int taskParentId, DefaultTaskEnum defaultTaskEnum)
+		{		
+			PTMDataset.TasksRow[] childRows;
+			childRows = Tasks.GetChildTasks(taskParentId);
+			
+			int idleTaskId = -1;
+			foreach (PTMDataset.TasksRow childRow in childRows)
+			{
+				if(childRow.IsDefaultTask && childRow.DefaultTaskId == (int)defaultTaskEnum)
+				{
+					idleTaskId = childRow.Id;
+					break;
+				}
+			}
+			
+			if(idleTaskId ==-1)
+			{
+				PTMDataset.TasksRow row = Tasks.NewTasksRow();
+				row.Description = DefaultTasks.GetDefaultTaskDescription(defaultTaskEnum);
+				row.IsDefaultTask = true;
+				row.DefaultTaskId = (int)defaultTaskEnum;
+				row.ParentId =taskParentId;
+				row.Id = Tasks.AddTasksRow(row);
+				idleTaskId = row.Id;
+			}
+			return idleTaskId;
+		}
+		
+		
 	}
 }

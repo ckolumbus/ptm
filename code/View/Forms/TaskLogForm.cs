@@ -260,7 +260,7 @@ namespace PTM.View.Forms
 		{
 			childTasksTable = new PTMDataset.TasksDataTable();
 			PTMDataset.TasksRow[] childRows;
-			childRows = Tasks.GetChildTasks(selectedParentTaskRow);
+			childRows = Tasks.GetChildTasks(selectedParentTaskRow.Id);
 
 			if(showDefaulTasks)
 			{
@@ -271,12 +271,12 @@ namespace PTM.View.Forms
 					row.ItemArray = childRow.ItemArray;
 					childTasksTable.AddTasksRow(row);
 				}
-				foreach (PTMDataset.TasksRow defaultRow in DefaultTasks.DefaultTasksDataTable.Rows)
+				foreach (DefaultTask defaultRow in DefaultTasks.DefaultTasksDataTable)
 				{
 					bool exist = false;
 					foreach (PTMDataset.TasksRow childRow in childTasksTable.Rows)
 					{
-						if (string.Compare(childRow.Description.Replace(" ", null), defaultRow.Description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
+						if(childRow.IsDefaultTask && childRow.DefaultTaskId == defaultRow.DefaultTaskId)
 						{
 							exist = true;
 							break;
@@ -286,9 +286,11 @@ namespace PTM.View.Forms
 					{
 						PTMDataset.TasksRow row;
 						row = childTasksTable.NewTasksRow();
-						row.ItemArray = defaultRow.ItemArray;
+						row.IsDefaultTask = true;
+						row.DefaultTaskId = defaultRow.DefaultTaskId;
+						row.Description = defaultRow.Description;
 						row.ParentId = this.selectedParentTaskRow.Id;
-						row.Id = - defaultRow.Id;
+						row.Id = -defaultRow.DefaultTaskId;
 						childTasksTable.AddTasksRow(row);
 					}
 				}
@@ -298,9 +300,9 @@ namespace PTM.View.Forms
 				foreach (PTMDataset.TasksRow childRow in childRows)
 				{
 					bool exist = false;
-					foreach (PTMDataset.TasksRow defaultRow in DefaultTasks.DefaultTasksDataTable.Rows)
+					foreach (DefaultTask defaultRow in DefaultTasks.DefaultTasksDataTable)
 					{
-						if (string.Compare(childRow.Description.Replace(" ", null), defaultRow.Description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
+						if(childRow.IsDefaultTask && childRow.DefaultTaskId == defaultRow.DefaultTaskId)
 						{
 							exist = true;
 							break;
