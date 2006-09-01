@@ -7,16 +7,18 @@ namespace PTM.Business
 	
 	
 	public class MainModule
-	{
-		
+	{	
 
 		protected MainModule()
 		{
-		}
+		}//MainModule
 
+		/// <summary>
+		/// Initializes the engine components, 
+		/// </summary>
 		public static void Initialize(PTMDataset ds, string userName)
 		{
-			DataAdapterManager adapterManager = new DataAdapterManager(userName);
+			DataAdapterManager adapterManager = new DataAdapterManager( userName );
 			Application.DoEvents();
 			UnitOfWork.Initialize(ds, adapterManager);
 			Application.DoEvents();
@@ -34,5 +36,5 @@ namespace PTM.Business
 			Application.DoEvents();
 		}
 
-	}
-}
+	}//MainModule
+}//namespace
