@@ -157,10 +157,10 @@ namespace PTM.View.Controls
 			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label3.Location = new System.Drawing.Point(8, 8);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(72, 23);
+			this.label3.Size = new System.Drawing.Size(64, 23);
 			this.label3.TabIndex = 4;
 			this.label3.Text = "Date:";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox3
 			// 
@@ -259,7 +259,7 @@ namespace PTM.View.Controls
 			this.label2.Size = new System.Drawing.Size(72, 23);
 			this.label2.TabIndex = 12;
 			this.label2.Text = "Detail Level:";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// StatisticsControl
 			// 

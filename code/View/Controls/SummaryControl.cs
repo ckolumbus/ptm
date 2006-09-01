@@ -162,9 +162,9 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskHeader,
-																					   this.DurationTaskHeader,
-																					   this.PercentHeader});
+																											  this.TaskHeader,
+																											  this.DurationTaskHeader,
+																											  this.PercentHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -310,8 +310,8 @@ namespace PTM.View.Controls
 			// toolBar
 			// 
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																					   this.toolBarButton1,
-																					   this.toolBarButton2});
+																											  this.toolBarButton1,
+																											  this.toolBarButton2});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;

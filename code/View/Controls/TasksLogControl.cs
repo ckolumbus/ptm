@@ -42,8 +42,10 @@ namespace PTM.View.Controls
 		private Button deleteButton;
 		private ColumnHeader StartTimeHeader;
 		private System.Windows.Forms.MenuItem menuItem7;
+		private System.Windows.Forms.DateTimePicker logDate;
+		private System.Windows.Forms.Label label1;
 		private DateTime currentDay;
-
+		
 		public TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
@@ -69,10 +71,10 @@ namespace PTM.View.Controls
 		}
 
 		
-		private void SetCurrentDay()
+		private void SetLogDay(DateTime date)
 		{
-			currentDay = DateTime.Today;
-			ArrayList list = Logs.GetLogsByDay(DateTime.Today);
+			taskList.Items.Clear();
+			ArrayList list = Logs.GetLogsByDay(date);
 			foreach (Log log in list)
 			{
 				PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
@@ -130,6 +132,8 @@ namespace PTM.View.Controls
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.switchToButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
+			this.logDate = new System.Windows.Forms.DateTimePicker();
+			this.label1 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
 			this.SuspendLayout();
@@ -268,9 +272,9 @@ namespace PTM.View.Controls
 																											  this.DurationTaskHeader,
 																											  this.StartTimeHeader});
 			this.taskList.HideSelection = false;
-			this.taskList.Location = new System.Drawing.Point(8, 8);
+			this.taskList.Location = new System.Drawing.Point(8, 32);
 			this.taskList.Name = "taskList";
-			this.taskList.Size = new System.Drawing.Size(376, 264);
+			this.taskList.Size = new System.Drawing.Size(376, 240);
 			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 10;
 			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
@@ -297,8 +301,28 @@ namespace PTM.View.Controls
 			this.deleteButton.Text = "&Delete";
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
+			// logDate
+			// 
+			this.logDate.Location = new System.Drawing.Point(48, 8);
+			this.logDate.Name = "logDate";
+			this.logDate.Size = new System.Drawing.Size(256, 20);
+			this.logDate.TabIndex = 13;
+			this.logDate.ValueChanged += new System.EventHandler(this.logDate_ValueChanged);
+			// 
+			// label1
+			// 
+			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label1.Location = new System.Drawing.Point(8, 12);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(40, 16);
+			this.label1.TabIndex = 14;
+			this.label1.Text = "Date:";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// TasksLogControl
 			// 
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.logDate);
 			this.Controls.Add(this.deleteButton);
 			this.Controls.Add(this.switchToButton);
 			this.Controls.Add(this.taskList);
@@ -316,7 +340,8 @@ namespace PTM.View.Controls
 		#region TaskLog
 		private void TasksLogControl_Load(object sender, EventArgs e)
 		{
-			SetCurrentDay();
+			currentDay = DateTime.Today;
+			SetLogDay(currentDay);
 		}
 		public void NewTaskLog(bool mustAddATask)
 		{
@@ -463,7 +488,20 @@ namespace PTM.View.Controls
 			}
 		}
 
-
+		private void logDate_ValueChanged(object sender, System.EventArgs e)
+		{
+			if(logDate.Value.Date != DateTime.Today)
+			{
+				this.addTaskButton.Enabled = false;
+				this.switchToButton.Enabled = false;
+			}
+			else
+			{
+				this.addTaskButton.Enabled = true;
+				this.switchToButton.Enabled = true;
+			}
+			SetLogDay(logDate.Value.Date);
+		}
 
 		#endregion
 
@@ -647,9 +685,12 @@ namespace PTM.View.Controls
 			else if(e.Action == DataRowAction.Add)
 			{
 				CheckCurrentDayChanged();
-				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-				SetListItemValues(itemA,e.Log, taskRow);
-				taskList.Items.Insert(0,itemA);				
+				if(this.logDate.Value.Date == currentDay)
+				{
+					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+					SetListItemValues(itemA,e.Log, taskRow);
+					taskList.Items.Insert(0,itemA);						
+				}
 			}
 			
 			if(Logs.CurrentLog != null && Logs.CurrentLog.Id == e.Log.Id)
@@ -664,6 +705,7 @@ namespace PTM.View.Controls
 			{
 				this.taskList.Items.Clear();
 				currentDay = DateTime.Today;
+				this.logDate.Value = currentDay;
 			}
 		}
 
@@ -727,6 +769,8 @@ namespace PTM.View.Controls
 		}
 
 		#endregion
+
+
 
 		
 
