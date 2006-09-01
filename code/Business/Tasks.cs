@@ -446,7 +446,14 @@ namespace PTM.Business
 			}
 			return idleTaskId;
 		}
-		
-		
+
+
+		public static void UpdateParentTask(int taskId, int parentId)
+		{
+			PTMDataset.TasksRow row;
+			row = tasksDataTable.FindById(taskId);
+			row.ParentId = parentId;
+			Tasks.UpdateTaskRow(row);
+		}
 	}
 }
