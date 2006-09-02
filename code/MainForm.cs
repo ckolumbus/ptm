@@ -422,7 +422,7 @@ namespace PTM
 			Application.DoEvents();
 			this.Close();
 			Save();
-			Application.DoEvents();
+			Application.DoEvents();			
 			Application.Exit();
 		}
 

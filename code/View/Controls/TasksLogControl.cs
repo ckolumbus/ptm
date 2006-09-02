@@ -66,8 +66,14 @@ namespace PTM.View.Controls
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
 			this.Load+=new EventHandler(TasksLogControl_Load);
-			
-			
+		}
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			Tasks.TasksRowChanged-=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
+			Tasks.TasksRowDeleting-=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Logs.LogChanged-=new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			ApplicationsLog.ApplicationsLogChanged-=new PTM.Business.ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+			base.OnHandleDestroyed (e);
 		}
 
 		

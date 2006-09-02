@@ -111,7 +111,7 @@ namespace PTM.View.Forms
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(256, 252);
 			this.okButton.Name = "okButton";
-			this.okButton.TabIndex = 0;
+			this.okButton.TabIndex = 6;
 			this.okButton.Text = "Ok";
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
@@ -122,7 +122,7 @@ namespace PTM.View.Forms
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(344, 252);
 			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.TabIndex = 1;
+			this.cancelButton.TabIndex = 7;
 			this.cancelButton.Text = "Cancel";
 			// 
 			// label1
@@ -131,7 +131,7 @@ namespace PTM.View.Forms
 			this.label1.Location = new System.Drawing.Point(8, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(58, 23);
-			this.label1.TabIndex = 2;
+			this.label1.TabIndex = 8;
 			this.label1.Text = "Description:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -144,7 +144,7 @@ namespace PTM.View.Forms
 			this.taskComboBox.MaxLength = 80;
 			this.taskComboBox.Name = "taskComboBox";
 			this.taskComboBox.Size = new System.Drawing.Size(264, 21);
-			this.taskComboBox.TabIndex = 3;
+			this.taskComboBox.TabIndex = 0;
 			// 
 			// hideDefaultTasksCheckBox
 			// 
@@ -155,7 +155,7 @@ namespace PTM.View.Forms
 			this.hideDefaultTasksCheckBox.Location = new System.Drawing.Point(342, 6);
 			this.hideDefaultTasksCheckBox.Name = "hideDefaultTasksCheckBox";
 			this.hideDefaultTasksCheckBox.Size = new System.Drawing.Size(88, 32);
-			this.hideDefaultTasksCheckBox.TabIndex = 23;
+			this.hideDefaultTasksCheckBox.TabIndex = 1;
 			this.hideDefaultTasksCheckBox.Text = "Hide defaults";
 			this.hideDefaultTasksCheckBox.CheckedChanged += new System.EventHandler(this.hideDefaultTasksCheckBox_CheckedChanged);
 			// 
@@ -168,7 +168,7 @@ namespace PTM.View.Forms
 			this.tasksTree.Name = "tasksTree";
 			this.tasksTree.SelectedTaskId = -1;
 			this.tasksTree.Size = new System.Drawing.Size(318, 192);
-			this.tasksTree.TabIndex = 24;
+			this.tasksTree.TabIndex = 0;
 			// 
 			// editButton
 			// 
@@ -176,7 +176,7 @@ namespace PTM.View.Forms
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(344, 120);
 			this.editButton.Name = "editButton";
-			this.editButton.TabIndex = 28;
+			this.editButton.TabIndex = 4;
 			this.editButton.Text = "Edit";
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
 			// 
@@ -186,7 +186,7 @@ namespace PTM.View.Forms
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(344, 160);
 			this.deleteButton.Name = "deleteButton";
-			this.deleteButton.TabIndex = 27;
+			this.deleteButton.TabIndex = 5;
 			this.deleteButton.Text = "Delete";
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
@@ -196,8 +196,8 @@ namespace PTM.View.Forms
 			this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.newButton.Location = new System.Drawing.Point(344, 80);
 			this.newButton.Name = "newButton";
-			this.newButton.TabIndex = 26;
-			this.newButton.Text = "New...";
+			this.newButton.TabIndex = 3;
+			this.newButton.Text = "New";
 			this.newButton.Click += new System.EventHandler(this.newButton_Click);
 			// 
 			// groupBox1
@@ -210,7 +210,7 @@ namespace PTM.View.Forms
 			this.groupBox1.Location = new System.Drawing.Point(6, 30);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(330, 216);
-			this.groupBox1.TabIndex = 29;
+			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Create in";
 			// 
@@ -218,6 +218,7 @@ namespace PTM.View.Forms
 			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.CancelButton = this.cancelButton;
 			this.ClientSize = new System.Drawing.Size(432, 289);
 			this.Controls.Add(this.editButton);
 			this.Controls.Add(this.deleteButton);

@@ -93,6 +93,13 @@ namespace PTM.View.Controls
 			this.taskList.DoubleClick+=new EventHandler(taskList_DoubleClick);
 		}
 
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			Logs.TasksLogDurationCountElapsed-=new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			base.OnHandleDestroyed (e);
+		}
+
+		
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>

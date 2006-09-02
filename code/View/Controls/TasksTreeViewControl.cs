@@ -101,6 +101,17 @@ namespace PTM.View.Controls
 			this.treeView.AfterLabelEdit+=new NodeLabelEditEventHandler(treeView_AfterLabelEdit);
 		}
 
+		protected override void OnParentChanged(EventArgs e)
+		{
+			base.OnParentChanged (e);
+		}
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			base.OnHandleDestroyed (e);
+			Tasks.TasksRowChanged-=new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
+			Tasks.TasksRowDeleting-=new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
+		}
+	
 		public void Initialize(bool includeDefaultTask)
 		{
 			this.includeDefaultTask = includeDefaultTask;

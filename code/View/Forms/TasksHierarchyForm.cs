@@ -82,7 +82,7 @@ namespace PTM.View.Forms
 			this.okButton.Location = new System.Drawing.Point(264, 288);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(80, 23);
-			this.okButton.TabIndex = 2;
+			this.okButton.TabIndex = 4;
 			this.okButton.Text = "Ok";
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
@@ -93,7 +93,7 @@ namespace PTM.View.Forms
 			this.deleteButton.Location = new System.Drawing.Point(264, 96);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(80, 23);
-			this.deleteButton.TabIndex = 5;
+			this.deleteButton.TabIndex = 3;
 			this.deleteButton.Text = "Delete";
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
@@ -103,7 +103,7 @@ namespace PTM.View.Forms
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(264, 56);
 			this.editButton.Name = "editButton";
-			this.editButton.TabIndex = 6;
+			this.editButton.TabIndex = 2;
 			this.editButton.Text = "Edit";
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
 			// 
@@ -116,10 +116,11 @@ namespace PTM.View.Forms
 			this.tasksTreeViewControl.Name = "tasksTreeViewControl";
 			this.tasksTreeViewControl.SelectedTaskId = -1;
 			this.tasksTreeViewControl.Size = new System.Drawing.Size(248, 304);
-			this.tasksTreeViewControl.TabIndex = 9;
+			this.tasksTreeViewControl.TabIndex = 0;
 			// 
 			// TasksHierarchyForm
 			// 
+			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(352, 318);
 			this.Controls.Add(this.tasksTreeViewControl);
