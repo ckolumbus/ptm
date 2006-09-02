@@ -17,6 +17,8 @@ namespace PTM.View.Forms
 		private Label lblVersion;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.PictureBox pictureBox3;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -65,6 +67,8 @@ namespace PTM.View.Forms
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.pictureBox3 = new System.Windows.Forms.PictureBox();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -90,7 +94,7 @@ namespace PTM.View.Forms
 			// 
 			this.button1.BackColor = System.Drawing.SystemColors.Control;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button1.Location = new System.Drawing.Point(264, 96);
+			this.button1.Location = new System.Drawing.Point(264, 128);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(64, 23);
 			this.button1.TabIndex = 2;
@@ -124,7 +128,7 @@ namespace PTM.View.Forms
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(80, 80);
+			this.label2.Location = new System.Drawing.Point(80, 112);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(176, 23);
 			this.label2.TabIndex = 6;
@@ -132,17 +136,37 @@ namespace PTM.View.Forms
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(80, 104);
+			this.label4.Location = new System.Drawing.Point(80, 136);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(176, 23);
 			this.label4.TabIndex = 7;
 			this.label4.Text = "cestradac@users.sourceforge.net";
 			// 
+			// label5
+			// 
+			this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label5.Location = new System.Drawing.Point(80, 80);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(96, 23);
+			this.label5.TabIndex = 8;
+			this.label5.Text = "Manuel Castro";
+			// 
+			// pictureBox3
+			// 
+			this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+			this.pictureBox3.Location = new System.Drawing.Point(176, 80);
+			this.pictureBox3.Name = "pictureBox3";
+			this.pictureBox3.Size = new System.Drawing.Size(24, 16);
+			this.pictureBox3.TabIndex = 9;
+			this.pictureBox3.TabStop = false;
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(334, 129);
+			this.ClientSize = new System.Drawing.Size(334, 164);
+			this.Controls.Add(this.pictureBox3);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.pictureBox2);
