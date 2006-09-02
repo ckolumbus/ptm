@@ -151,7 +151,7 @@ namespace PTM.View.Controls
 			this.editButton.Location = new System.Drawing.Point(152, 280);
 			this.editButton.Name = "editButton";
 			this.editButton.Size = new System.Drawing.Size(72, 23);
-			this.editButton.TabIndex = 8;
+			this.editButton.TabIndex = 3;
 			this.editButton.Text = "&Edit...";
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
 			// 
@@ -162,7 +162,7 @@ namespace PTM.View.Controls
 			this.addTaskButton.Location = new System.Drawing.Point(312, 280);
 			this.addTaskButton.Name = "addTaskButton";
 			this.addTaskButton.Size = new System.Drawing.Size(72, 23);
-			this.addTaskButton.TabIndex = 7;
+			this.addTaskButton.TabIndex = 5;
 			this.addTaskButton.Text = "&New Log...";
 			// 
 			// TaskDescriptionHeader
@@ -187,16 +187,16 @@ namespace PTM.View.Controls
 			// notifyContextMenu
 			// 
 			this.notifyContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																														this.exitContextMenuItem,
-																														this.menuItem1,
-																														this.menuItem2,
-																														this.menuItem3,
-																														this.menuItem4,
-																														this.menuItem5,
-																														this.menuItem6,
-																														this.menuItem7,
-																														this.menuItem9,
-																														this.menuItem10});
+																							  this.exitContextMenuItem,
+																							  this.menuItem1,
+																							  this.menuItem2,
+																							  this.menuItem3,
+																							  this.menuItem4,
+																							  this.menuItem5,
+																							  this.menuItem6,
+																							  this.menuItem7,
+																							  this.menuItem9,
+																							  this.menuItem10});
 			// 
 			// exitContextMenuItem
 			// 
@@ -274,15 +274,15 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.AutoArrange = false;
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																											  this.TaskDescriptionHeader,
-																											  this.DurationTaskHeader,
-																											  this.StartTimeHeader});
+																					   this.TaskDescriptionHeader,
+																					   this.DurationTaskHeader,
+																					   this.StartTimeHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 32);
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 240);
 			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
-			this.taskList.TabIndex = 10;
+			this.taskList.TabIndex = 1;
 			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
 			// 
 			// switchToButton
@@ -292,7 +292,7 @@ namespace PTM.View.Controls
 			this.switchToButton.Location = new System.Drawing.Point(232, 280);
 			this.switchToButton.Name = "switchToButton";
 			this.switchToButton.Size = new System.Drawing.Size(72, 23);
-			this.switchToButton.TabIndex = 11;
+			this.switchToButton.TabIndex = 4;
 			this.switchToButton.Text = "&Switch To";
 			this.switchToButton.Click += new System.EventHandler(this.switchToButton_Click);
 			// 
@@ -303,7 +303,7 @@ namespace PTM.View.Controls
 			this.deleteButton.Location = new System.Drawing.Point(72, 280);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(72, 23);
-			this.deleteButton.TabIndex = 12;
+			this.deleteButton.TabIndex = 2;
 			this.deleteButton.Text = "&Delete";
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
@@ -312,7 +312,7 @@ namespace PTM.View.Controls
 			this.logDate.Location = new System.Drawing.Point(48, 8);
 			this.logDate.Name = "logDate";
 			this.logDate.Size = new System.Drawing.Size(256, 20);
-			this.logDate.TabIndex = 13;
+			this.logDate.TabIndex = 0;
 			this.logDate.ValueChanged += new System.EventHandler(this.logDate_ValueChanged);
 			// 
 			// label1
@@ -321,7 +321,7 @@ namespace PTM.View.Controls
 			this.label1.Location = new System.Drawing.Point(8, 12);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(40, 16);
-			this.label1.TabIndex = 14;
+			this.label1.TabIndex = 6;
 			this.label1.Text = "Date:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 

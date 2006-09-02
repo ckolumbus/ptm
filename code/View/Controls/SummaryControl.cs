@@ -157,7 +157,7 @@ namespace PTM.View.Controls
 			this.label1.Location = new System.Drawing.Point(8, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(64, 23);
-			this.label1.TabIndex = 3;
+			this.label1.TabIndex = 7;
 			this.label1.Text = "Date:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -169,9 +169,9 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																											  this.TaskHeader,
-																											  this.DurationTaskHeader,
-																											  this.PercentHeader});
+																					   this.TaskHeader,
+																					   this.DurationTaskHeader,
+																					   this.PercentHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -179,7 +179,7 @@ namespace PTM.View.Controls
 			this.taskList.Size = new System.Drawing.Size(376, 184);
 			this.taskList.SmallImageList = this.tasksIconsList;
 			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
-			this.taskList.TabIndex = 2;
+			this.taskList.TabIndex = 0;
 			// 
 			// TaskHeader
 			// 
@@ -217,7 +217,7 @@ namespace PTM.View.Controls
 			this.groupBox1.Location = new System.Drawing.Point(8, 64);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(72, 80);
-			this.groupBox1.TabIndex = 5;
+			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Total Time";
 			// 
@@ -247,7 +247,7 @@ namespace PTM.View.Controls
 			this.groupBox3.Location = new System.Drawing.Point(8, 144);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(392, 208);
-			this.groupBox3.TabIndex = 8;
+			this.groupBox3.TabIndex = 3;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Tasks";
 			// 
@@ -256,7 +256,7 @@ namespace PTM.View.Controls
 			this.label2.Location = new System.Drawing.Point(8, 32);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(72, 23);
-			this.label2.TabIndex = 9;
+			this.label2.TabIndex = 6;
 			this.label2.Text = "Detail Level:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -267,14 +267,14 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.MaxLength = 50;
 			this.parentTaskComboBox.Name = "parentTaskComboBox";
 			this.parentTaskComboBox.Size = new System.Drawing.Size(232, 21);
-			this.parentTaskComboBox.TabIndex = 10;
+			this.parentTaskComboBox.TabIndex = 1;
 			// 
 			// browseButton
 			// 
 			this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.browseButton.Location = new System.Drawing.Point(320, 32);
 			this.browseButton.Name = "browseButton";
-			this.browseButton.TabIndex = 11;
+			this.browseButton.TabIndex = 2;
 			this.browseButton.Text = "Browse...";
 			this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
 			// 
@@ -286,7 +286,7 @@ namespace PTM.View.Controls
 			this.groupBox2.Location = new System.Drawing.Point(88, 64);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(72, 80);
-			this.groupBox2.TabIndex = 12;
+			this.groupBox2.TabIndex = 5;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Active %";
 			// 
@@ -317,8 +317,8 @@ namespace PTM.View.Controls
 			// toolBar
 			// 
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																											  this.toolBarButton1,
-																											  this.toolBarButton2});
+																					   this.toolBarButton1,
+																					   this.toolBarButton2});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;

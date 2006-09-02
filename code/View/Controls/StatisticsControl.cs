@@ -117,15 +117,15 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																														 this.colName,
-																														 this.colActiveTime,
-																														 this.colAppPercent,
-																														 this.colProcessId});
+																							   this.colName,
+																							   this.colActiveTime,
+																							   this.colAppPercent,
+																							   this.colProcessId});
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
 			this.applicationsList.Size = new System.Drawing.Size(376, 136);
-			this.applicationsList.TabIndex = 2;
+			this.applicationsList.TabIndex = 0;
 			// 
 			// colName
 			// 
@@ -150,7 +150,7 @@ namespace PTM.View.Controls
 			// 
 			this.dateTimePicker.Location = new System.Drawing.Point(80, 9);
 			this.dateTimePicker.Name = "dateTimePicker";
-			this.dateTimePicker.TabIndex = 3;
+			this.dateTimePicker.TabIndex = 0;
 			// 
 			// label3
 			// 
@@ -158,7 +158,7 @@ namespace PTM.View.Controls
 			this.label3.Location = new System.Drawing.Point(8, 8);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(64, 23);
-			this.label3.TabIndex = 4;
+			this.label3.TabIndex = 5;
 			this.label3.Text = "Date:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -173,7 +173,7 @@ namespace PTM.View.Controls
 			this.groupBox3.Location = new System.Drawing.Point(8, 64);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(392, 160);
-			this.groupBox3.TabIndex = 9;
+			this.groupBox3.TabIndex = 3;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Applications";
 			// 
@@ -190,7 +190,7 @@ namespace PTM.View.Controls
 			this.groupBox4.Location = new System.Drawing.Point(8, 232);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(392, 48);
-			this.groupBox4.TabIndex = 10;
+			this.groupBox4.TabIndex = 4;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Totals";
 			// 
@@ -201,7 +201,7 @@ namespace PTM.View.Controls
 			this.AppsActiveTimeValue.Location = new System.Drawing.Point(112, 16);
 			this.AppsActiveTimeValue.Name = "AppsActiveTimeValue";
 			this.AppsActiveTimeValue.Size = new System.Drawing.Size(48, 23);
-			this.AppsActiveTimeValue.TabIndex = 5;
+			this.AppsActiveTimeValue.TabIndex = 1;
 			// 
 			// label8
 			// 
@@ -210,7 +210,7 @@ namespace PTM.View.Controls
 			this.label8.Location = new System.Drawing.Point(8, 16);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(104, 23);
-			this.label8.TabIndex = 4;
+			this.label8.TabIndex = 0;
 			this.label8.Text = "Apps. Active Time:";
 			// 
 			// totalTasksLoggedValue
@@ -220,7 +220,7 @@ namespace PTM.View.Controls
 			this.totalTasksLoggedValue.Location = new System.Drawing.Point(336, 16);
 			this.totalTasksLoggedValue.Name = "totalTasksLoggedValue";
 			this.totalTasksLoggedValue.Size = new System.Drawing.Size(48, 23);
-			this.totalTasksLoggedValue.TabIndex = 2;
+			this.totalTasksLoggedValue.TabIndex = 3;
 			this.totalTasksLoggedValue.Visible = false;
 			// 
 			// label1
@@ -230,7 +230,7 @@ namespace PTM.View.Controls
 			this.label1.Location = new System.Drawing.Point(232, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(104, 23);
-			this.label1.TabIndex = 0;
+			this.label1.TabIndex = 2;
 			this.label1.Text = "Total Task Logged:";
 			this.label1.Visible = false;
 			// 
@@ -239,7 +239,7 @@ namespace PTM.View.Controls
 			this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.browseButton.Location = new System.Drawing.Point(320, 34);
 			this.browseButton.Name = "browseButton";
-			this.browseButton.TabIndex = 14;
+			this.browseButton.TabIndex = 2;
 			this.browseButton.Text = "Browse...";
 			this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
 			// 
@@ -250,14 +250,14 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.MaxLength = 50;
 			this.parentTaskComboBox.Name = "parentTaskComboBox";
 			this.parentTaskComboBox.Size = new System.Drawing.Size(232, 21);
-			this.parentTaskComboBox.TabIndex = 13;
+			this.parentTaskComboBox.TabIndex = 1;
 			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(8, 36);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(72, 23);
-			this.label2.TabIndex = 12;
+			this.label2.TabIndex = 6;
 			this.label2.Text = "Detail Level:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
