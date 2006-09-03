@@ -21,7 +21,6 @@ namespace PTM.Test.Business
 		[SetUp]
 		public void SetUp()
 		{
-			TearDown();
 			DataAdapterManager m = new DataAdapterManager("test");
 			m.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();

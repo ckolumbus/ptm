@@ -166,7 +166,7 @@ namespace PTM.Business
 					return CloneRows((PTMDataset.TasksRow[]) row.GetChildRows(relation));
 				}
 			}
-			return new PTMDataset.TasksRow[] {};
+			return null;
 		}
 
 		public static string GetFullPath(PTMDataset.TasksRow row)
@@ -199,11 +199,11 @@ namespace PTM.Business
 			if(parentRow == null || childRow == null)
 				return -1;
 			
-			if(childRow.IsParentIdNull())
-				return -1;
-
 			if(parentTaskId == childTaskId)
 				return 0;
+			
+			if(childRow.IsParentIdNull())
+				return -1;
 			
 			int parentId = childRow.ParentId;
 
@@ -239,7 +239,7 @@ namespace PTM.Business
 			}
 			tasksDataTable.EndLoadData();
 		}
-
+		
 		private static void SetRootTask()
 		{
 			foreach (PTMDataset.TasksRow tasksRow in tasksDataTable)
@@ -251,6 +251,7 @@ namespace PTM.Business
 				}
 			}
 		}
+
 
 		private static void AddRootTask()
 		{
@@ -281,14 +282,14 @@ namespace PTM.Business
 			}
 			
 			//PTMDataset.TasksRow[] rows = new PTMDataset.TasksRow[] {row};
-			try
-			{
+//			try
+//			{
 				dataAdapter.Update(tasksDataTable);
-			}
-			catch (DBConcurrencyException ex)
-			{
-				Logger.Write("Cascade Delete: " + ex.Message);
-			}
+//			}
+//			catch (DBConcurrencyException ex)
+//			{
+//				Logger.Write("Cascade Delete: " + ex.Message);
+//			}
 			
 			tasksDataTable.AcceptChanges();
 
@@ -451,7 +452,7 @@ namespace PTM.Business
 		public static void UpdateParentTask(int taskId, int parentId)
 		{
 			PTMDataset.TasksRow row;
-			row = tasksDataTable.FindById(taskId);
+			row = Tasks.FindById(taskId);
 			row.ParentId = parentId;
 			Tasks.UpdateTaskRow(row);
 		}
