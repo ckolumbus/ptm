@@ -71,28 +71,28 @@ namespace PTM.Test.Business
 			//row2 ->2
 
 			ArrayList result;
-			result = Summary.GetTaskSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
-			TaskSummary sum1 = Summary.FindTaskSummaryByTaskId(result, row1.Id);
+			TaskSummary sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row1.Id);
 			Assert.IsTrue(sum1.TotalTime>=8);
-			TaskSummary sum2 = Summary.FindTaskSummaryByTaskId(result, row2.Id);
+			TaskSummary sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, row2.Id);
 			Assert.IsTrue(sum2.TotalTime>=2);
 
-			result = Summary.GetTaskSummary(row1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(row1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
-			sum1 = Summary.FindTaskSummaryByTaskId(result, row1.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row1.Id);
 			Assert.IsTrue( sum1.TotalTime>=5);
-			sum2 = Summary.FindTaskSummaryByTaskId(result, row3.Id);
+			sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, row3.Id);
 			Assert.IsTrue(sum2.TotalTime>=3);
 
-			result = Summary.GetTaskSummary(row3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(row3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = Summary.FindTaskSummaryByTaskId(result, row3.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row3.Id);
 			Assert.IsTrue(sum1.TotalTime>=3);
 
-			result = Summary.GetTaskSummary(row2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(row2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = Summary.FindTaskSummaryByTaskId(result, row2.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row2.Id);
 			Assert.IsTrue( sum1.TotalTime>=2);
 		}
 

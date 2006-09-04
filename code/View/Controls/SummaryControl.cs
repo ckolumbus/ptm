@@ -413,7 +413,7 @@ namespace PTM.View.Controls
 				Clear();
 				this.Refresh();
 				System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
-				ArrayList summaryList = Summary.GetTaskSummary( 
+				ArrayList summaryList = TasksSummaries.GetTaskSummary( 
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue),
 					day.Date, day.AddDays(1));
 				

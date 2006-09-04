@@ -32,8 +32,6 @@ namespace PTM.Business
 			Application.DoEvents();
 			ApplicationsLog.Initialize();
 			Application.DoEvents();
-			Summary.Initialize(adapterManager.applicationsSummaryDataAdapter);
-			Application.DoEvents();
 		}
 
 	}//MainModule

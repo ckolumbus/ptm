@@ -179,7 +179,7 @@ namespace PTM
 		
 		static public string GetVersionString()
 		{
-			return " alpha v. 1.5";
+			return " alpha v. 1.6";
 		}//GetVersionString
 
 		

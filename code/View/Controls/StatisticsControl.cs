@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using PTM.Business;
 using PTM.Data;
+using PTM.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 
@@ -281,7 +283,7 @@ namespace PTM.View.Controls
 		#endregion
 
 		//private SummaryDataset.TasksSummaryDataTable tasksSummaryDataset;
-		private SummaryDataset.ApplicationsSummaryDataTable appsSummaryDataset;
+		//private SummaryDataset.ApplicationsSummaryDataTable appsSummaryDataset;
 
 		private void Statistics_Load(object sender, EventArgs e)
 		{
@@ -323,16 +325,16 @@ namespace PTM.View.Controls
 				ClearContent();
 				this.Refresh();
 				System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
-
-				appsSummaryDataset = Summary.GetApplicationsSummary(
+				
+				ArrayList appsSummaryList = ApplicationSummaries.GetApplicationsSummary(
 					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue), 
 					day, day.AddDays(1));
 				int appActiveTime = 0;
-				foreach (SummaryDataset.ApplicationsSummaryRow applicationsSummaryRow in appsSummaryDataset.Rows)
+				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
 				{
 					appActiveTime+= (int)applicationsSummaryRow.TotalActiveTime;
 				}
-				foreach (SummaryDataset.ApplicationsSummaryRow applicationsSummaryRow in appsSummaryDataset.Rows)
+				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
 				{
 					TimeSpan active =  new TimeSpan(0,0,(int) applicationsSummaryRow.TotalActiveTime);
 					string activeTime = ViewHelper.TimeSpanToTimeString(active);

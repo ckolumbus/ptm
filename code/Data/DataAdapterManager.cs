@@ -16,8 +16,6 @@ namespace PTM.Data
 		private OleDbConnection desingOleDbConnection;
 		private OleDbConnection productionOleDbConnection;
 		internal OleDbDataAdapter tasksDataAdapter;
-		internal OleDbDataAdapter applicationsSummaryDataAdapter;
-		private OleDbCommand oleDbSelectCommand6;
 		internal OleDbDataAdapter configurationDataAdapter;
 		private OleDbCommand oleDbSelectCommand8;
 		private OleDbCommand oleDbInsertCommand6;
@@ -116,8 +114,6 @@ namespace PTM.Data
 			this.oleDbInsertCommand2 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbSelectCommand2 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbUpdateCommand2 = new System.Data.OleDb.OleDbCommand();
-			this.applicationsSummaryDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
-			this.oleDbSelectCommand6 = new System.Data.OleDb.OleDbCommand();
 			this.configurationDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
 			this.oleDbDeleteCommand6 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbInsertCommand6 = new System.Data.OleDb.OleDbCommand();
@@ -200,25 +196,6 @@ namespace PTM.Data
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("StopDate", System.Data.OleDb.OleDbType.DBDate, 0, "StopDate"));
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("TotalTime", System.Data.OleDb.OleDbType.Integer, 0, "TotalTime"));
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("Id", System.Data.OleDb.OleDbType.Integer, 0, "Id"));
-			// 
-			// applicationsSummaryDataAdapter
-			// 
-			this.applicationsSummaryDataAdapter.SelectCommand = this.oleDbSelectCommand6;
-			this.applicationsSummaryDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																																					  new System.Data.Common.DataTableMapping("Table", "ApplicationsSummary", new System.Data.Common.DataColumnMapping[] {
-																																																																													new System.Data.Common.DataColumnMapping("TaskId", "TaskId"),
-																																																																													new System.Data.Common.DataColumnMapping("TotalActiveTime", "TotalActiveTime"),
-																																																																													new System.Data.Common.DataColumnMapping("TotalApplicationsLog", "TotalApplicationsLog"),
-																																																																													new System.Data.Common.DataColumnMapping("Name", "Name"),
-																																																																													new System.Data.Common.DataColumnMapping("ApplicationFullPath", "ApplicationFullPath")})});
-			// 
-			// oleDbSelectCommand6
-			// 
-			this.oleDbSelectCommand6.CommandText = @"SELECT TasksLog.TaskId, SUM(ApplicationsLog.ActiveTime) AS TotalActiveTime, COUNT(ApplicationsLog.Id) AS TotalApplicationsLog, ApplicationsLog.Name, ApplicationsLog.ApplicationFullPath FROM (TasksLog INNER JOIN ApplicationsLog ON TasksLog.Id = ApplicationsLog.TaskLogId) GROUP BY TasksLog.TaskId, TasksLog.InsertTime, ApplicationsLog.Name, ApplicationsLog.ApplicationFullPath HAVING (TasksLog.InsertTime >= ?) AND (TasksLog.InsertTime < ?) AND (TasksLog.TaskId = ?) ORDER BY SUM(ApplicationsLog.ActiveTime) DESC";
-			this.oleDbSelectCommand6.Connection = this.desingOleDbConnection;
-			this.oleDbSelectCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("InsertTime", System.Data.OleDb.OleDbType.DBDate, 0, "InsertTime"));
-			this.oleDbSelectCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("InsertTime1", System.Data.OleDb.OleDbType.DBDate, 0, "InsertTime"));
-			this.oleDbSelectCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("TaskId", System.Data.OleDb.OleDbType.Integer, 0, "TaskId"));
 			// 
 			// configurationDataAdapter
 			// 
@@ -438,6 +415,10 @@ namespace PTM.Data
 				}
 				reader.Close();
 				return list;
+			}
+			catch(Exception ex)
+			{
+				throw;
 			}
 			finally
 			{

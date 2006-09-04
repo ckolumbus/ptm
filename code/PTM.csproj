@@ -128,6 +128,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Business\ApplicationSummaries.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Business\ConfigurationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -148,12 +153,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Business\Summary.cs"
+                    RelPath = "Business\Tasks.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Business\Tasks.cs"
+                    RelPath = "Business\TasksSummaries.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -206,31 +211,17 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Data\SummaryDataset.xsd"
-                    BuildAction = "Content"
-                    Generator = "MSDataSetGenerator"
-                    LastGenOutput = "SummaryDataset.cs"
-                />
-                <File
-                    RelPath = "Data\SummaryDataset.cs"
-                    DependentUpon = "SummaryDataset.xsd"
-                    SubType = "code"
-                    BuildAction = "Compile"
-                    DesignTime = "True"
-                    AutoGen = "True"
-                />
-                <File
-                    RelPath = "Data\SummaryDataset.xsx"
-                    DependentUpon = "SummaryDataset.xsd"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "Data\UnitOfWork.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Infos\ApplicationLog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Infos\ApplicationSummary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
