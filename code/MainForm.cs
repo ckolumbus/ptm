@@ -44,20 +44,21 @@ namespace PTM
 
 		public MainForm()
 		{
-			InitializeComponent();
-			Application.DoEvents();
-			this.Text += MainClass.GetVersionString();
-			this.tasksLogControl.Exit+=new EventHandler(Exit);
-			LoadIconsFromResources();
-			Application.DoEvents();
-			LoadStartUpStatus();
-			Application.DoEvents();
-		}
+			InitializeComponent( );
+			Application.DoEvents( );
+			this.Text += MainClass.GetVersionString( );
+			this.tasksLogControl.Exit += new EventHandler( Exit );
+			LoadIconsFromResources( );
+			Application.DoEvents( );
+			LoadStartUpStatus( );
+			Application.DoEvents( );
+		}//MainForm
 
 		
-		private void LoadStartUpStatus()
+		private void LoadStartUpStatus(  )
 		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			RegistryKey reg = Registry.CurrentUser. 
+				OpenSubKey( "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run" , true );
 			
 			if (reg.GetValue("PTM") == null)
 			{
@@ -68,9 +69,9 @@ namespace PTM
 				if(reg.GetValue("PTM").ToString() != System.Reflection.Assembly.GetExecutingAssembly().Location) //update path
 					reg.SetValue("PTM", System.Reflection.Assembly.GetExecutingAssembly().Location);
 				this.startUpMenuItem.Checked = true;
-			}
+			}//if-else
 			reg.Close();
-		}
+		}//LoadStartUpStatus
 
 		private void LoadIconsFromResources()
 		{
@@ -80,14 +81,16 @@ namespace PTM
 			int i = 1;
 			do
 			{
-				resIcon = (Icon) resourceManager.GetObject("Icon" + i.ToString(CultureInfo.InvariantCulture));
+				resIcon = (Icon) resourceManager.GetObject( 
+					"Icon" + i.ToString( CultureInfo.InvariantCulture ) );
 				if(resIcon!=null)
 				{
-					IconsManager.AddIcon((i-1).ToString(CultureInfo.InvariantCulture), resIcon);
-				}
+					IconsManager.AddIcon(
+						(i-1).ToString( CultureInfo.InvariantCulture ), resIcon );
+				}//if
 				i++;
 			}while(resIcon!=null);
-		}
+		}//LoadIconsFromResources
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -99,7 +102,7 @@ namespace PTM
 				foreach (Image i in IconsManager.IconsList.Images)
 				{
 					i.Dispose();	
-				}
+				}//foreach
 				
 //				this.notifyIcon.Visible = false;
 //				this.notifyIcon.Icon.Dispose();
@@ -108,10 +111,10 @@ namespace PTM
 				if (components != null)
 				{
 					components.Dispose();
-				}
-			}
+				}//if
+			}//if
 			base.Dispose(disposing);
-		}
+		}//Dispose
 
 		#region Windows Form Designer generated code
 
@@ -333,48 +336,57 @@ namespace PTM
 		{
 			this.tasksLogControl.NewTaskLog(true);
 			Logs.StartLogging();
-		}
+		}//MainForm_Load
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if(tabControl.SelectedTab == this.summaryPage)
 			{
 				summaryControl.UpdateSummary();
-			}
+			}//if
 			if(tabControl.SelectedTab == this.statisticsPage)
 			{
 				statisticsControl.UpdateStatistics();
-			}
-		}
+			}//if
+		}//tabControl_SelectedIndexChanged
 
 		private static void SetWindowsStartUp(bool enable)
 		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey(
+					"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 			
 			if(enable)
+			{
 				reg.SetValue("PTM", System.Reflection.Assembly.GetExecutingAssembly().Location);
+			}
 			else
+			{
 				reg.DeleteValue("PTM", false);
+			}//if-else
 
 			reg.Close();
-		}
+		}//SetWindowsStartUp
 
 		protected override void WndProc(ref Message m)
 		{
 			// Once the program recieves WM_QUERYENDSESSION message, set the boolean systemShutdown.
 
 			if (m.Msg == ViewHelper.WM_QUERYENDSESSION)
+			{
 				systemShutdown = true;
+			}
 			
 			base.WndProc(ref m);
-		}
+		}//WndProc
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			try
 			{
 				if (systemShutdown)
+				{
 					e.Cancel = false;
+				}
 				else
 				{
 					e.Cancel = true;
@@ -385,10 +397,10 @@ namespace PTM
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
+			}//try-cacth
 
 			base.OnClosing(e);
-		}
+		}//OnClosing
 	
 		private void AnimateWindow()
 		{
@@ -406,10 +418,10 @@ namespace PTM
 					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo) == true)
 					{
 						ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
-					}
-				}
-			}
-		}
+					}//if
+				}//if
+			}//if
+		}//AnimateWindow
 
 		
 		#endregion
@@ -424,38 +436,37 @@ namespace PTM
 			Save();
 			Application.DoEvents();			
 			Application.Exit();
-		}
+		}//Exit
 
 		private static void Save()
 		{
 			UnitOfWork.Update();
-		}
+		}//Save
 		
 		private void exitMenuItem_Click(object sender, EventArgs e)
 		{
 			Exit(sender, e);
-		}
+		}//exitMenuItem_Click
+
 		private void aboutMenuItem_Click(object sender, EventArgs e)
 		{
 			AboutForm about = new AboutForm();
 			about.ShowDialog(this);
-		}
+		}//aboutMenuItem_Click
 		
 		private void menuItem3_Click(object sender, System.EventArgs e)
 		{
 			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
 			taskHForm.ShowDialog(this);
-		}
+		}//menuItem3_Click
 
 		private void menuItem5_Click(object sender, System.EventArgs e)
 		{
 			this.startUpMenuItem.Checked = !this.startUpMenuItem.Checked;
 			SetWindowsStartUp(this.startUpMenuItem.Checked);
-		}
+		}//menuItem5_Click
 		
 		#endregion
-
 		
-		
-	}
-}
+	}//MainForm
+}//end of namespace

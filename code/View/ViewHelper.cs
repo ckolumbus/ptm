@@ -5,22 +5,25 @@ using System.Runtime.InteropServices;
 namespace PTM.View
 {
 	/// <summary>
-	/// Summary description for ViewHelper.
+	/// ViewHelper.
 	/// </summary>
 	public sealed class ViewHelper
 	{
 		private ViewHelper()
 		{
-		}
+		}//ViewHelper
+
+		/// <summary>
+		/// Declaration of external (DLL) functions.
+		/// </summary>
+		[DllImport("User32")]
+		internal static extern IntPtr GetForegroundWindow( );
 
 		[DllImport("User32")]
-		internal static extern IntPtr GetForegroundWindow();
+		internal static extern IntPtr GetParent( IntPtr hwnd );
 
 		[DllImport("User32")]
-		internal static extern IntPtr GetParent(IntPtr hwnd);
-
-		[DllImport("User32")]
-		internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out IntPtr ProcessId);
+		internal static extern IntPtr GetWindowThreadProcessId( IntPtr hWnd, out IntPtr ProcessId );
 
 		[DllImport("User32")]
 		[return: MarshalAs(UnmanagedType.Bool)]
@@ -71,7 +74,7 @@ namespace PTM.View
 		internal static extern bool DrawAnimatedRects(IntPtr hwnd, int idAni, ref RECT lprcFrom, ref RECT lprcTo);
 
 		[StructLayout(LayoutKind.Sequential)]
-			public struct RECT
+		public struct RECT
 		{
 			internal int left;
 			internal int top;
@@ -81,52 +84,70 @@ namespace PTM.View
 			public override string ToString()
 			{
 				return ("Left :" + left.ToString(CultureInfo.InvariantCulture) + "," + "Top :" + top.ToString(CultureInfo.InvariantCulture) + "," + "Right :" + right.ToString(CultureInfo.InvariantCulture) + "," + "Bottom :" + bottom.ToString(CultureInfo.InvariantCulture));
-			}
-		}
+			}//ToString
+		}//RECT
 
 		[DllImport("user32.dll", EntryPoint="GetWindowRect", CharSet=CharSet.Auto)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool GetWindowRect(IntPtr hwnd, ref RECT lpRect);
 
-		internal static IntPtr GetNotificationAreaHandle()
+		internal static IntPtr GetNotificationAreaHandle( )
 		{
-			IntPtr hwnd = ViewHelper.FindWindowEx(IntPtr.Zero, IntPtr.Zero, "Shell_TrayWnd", null);
-			Console.WriteLine("Shell_TrayWnd" + hwnd.ToString());
-			hwnd = ViewHelper.FindWindowEx(hwnd, IntPtr.Zero, "TrayNotifyWnd", null);
-			Console.WriteLine("TrayNotifyWnd" + hwnd.ToString());
-			hwnd = ViewHelper.FindWindowEx(hwnd, IntPtr.Zero, "SysPager", null);
-			Console.WriteLine("SysPager" + hwnd.ToString());
+			IntPtr hwnd = ViewHelper.FindWindowEx( IntPtr.Zero, IntPtr.Zero, "Shell_TrayWnd", null );
+			Console.WriteLine( "Shell_TrayWnd" + hwnd.ToString( ) );
+			hwnd = ViewHelper.FindWindowEx( hwnd, IntPtr.Zero, "TrayNotifyWnd", null );
+			Console.WriteLine( "TrayNotifyWnd" + hwnd.ToString( ) );
+			hwnd = ViewHelper.FindWindowEx( hwnd, IntPtr.Zero, "SysPager", null );
+			Console.WriteLine( "SysPager" + hwnd.ToString( ) );
 
-			if (hwnd != IntPtr.Zero)
-				hwnd = ViewHelper.FindWindowEx(hwnd, IntPtr.Zero, null, "Notification Area");
+			if ( hwnd != IntPtr.Zero )
+			{
+				hwnd = ViewHelper.FindWindowEx( hwnd, IntPtr.Zero, null, "Notification Area" );
+			}//if
 
 			Console.WriteLine("Notification Area" + hwnd.ToString());
 			return hwnd;
-		}
+		}//GetNotificationAreaHandle
 
+		/// <summary>
+		/// TimeSpanToTimeString, returns a timeSpan as a formated string
+		/// "00:00:00"
+		/// </summary>
 		internal static string TimeSpanToTimeString(TimeSpan ts)
 		{
-			return ts.Hours.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') + ":" + ts.Minutes.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') + ":" + ts.Seconds.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
-		}
-		internal static string Int32ToTimeString(int seconds)
+			return ts.Hours.ToString( CultureInfo.InvariantCulture ).PadLeft(2, '0') + 
+				":" + ts.Minutes.ToString( CultureInfo.InvariantCulture ).PadLeft(2, '0') + 
+				":" + ts.Seconds.ToString( CultureInfo.InvariantCulture ).PadLeft(2, '0');
+		}//TimeSpanToTimeString
+
+
+		/// <summary>
+		/// Int32ToTimeString, returns a time Span conversion of the amount 
+		/// spected in seconds.
+		/// </summary>
+		internal static string Int32ToTimeString( int seconds )
 		{
 			TimeSpan t = new TimeSpan(0, 0, seconds);
-			return TimeSpanToTimeString(t);
-		}
+			return TimeSpanToTimeString( t );
+		}//Int32ToTimeString
 
 
-
+		/// <summary>
+		/// FixTaskPath, returns the path parameter size limited to
+		/// maxLen. Is length is greater, split with three dots '...'.
+		/// </summary>
 		internal static string FixTaskPath(string path, int maxLen)
 		{
-			if(path.Length>maxLen)
+			if( path.Length > maxLen )
 			{
-				return "..." + path.Substring(path.Length-(maxLen-3), (maxLen-3));
+				return "..." + path.Substring( path.Length - ( maxLen - 3 ),
+					( maxLen - 3 ) );
 			}
 			else
 			{
 				return path;
-			}
-		}
+			}//if-else
+		}//FixTaskPath
 
-	}
-}
+	}//end of class
+}//end of namespace

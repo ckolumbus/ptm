@@ -4,57 +4,84 @@ using System.Windows.Forms;
 namespace PTM.Infos
 {
 	/// <summary>
-	/// Descripción breve de TaskSummary.
+	/// TaskSummary
 	/// </summary>
 	public class TaskSummary
 	{
+		/// <summary>
+		/// TaskSummary Constructor
+		/// </summary>
 		public TaskSummary()
 		{
-		}
+		}//TaskSummary
 
+		/// <summary>
+		/// Task Id of this summary
+		/// </summary>
 		int taskId;
+		/// <summary>
+		/// Total elapsed time with this task
+		/// </summary>
 		double totalTime;
-		string descripcion;
+		/// <summary>
+		/// Task description
+		/// </summary>
+		string description;
+		/// <summary>
+		/// Stores if this task is one of the Default tasks.
+		/// </summary>
 		bool isDefaultTask;
+		/// <summary>
+		/// In case of being a Defautl Task stores its defaultTask Id.
+		/// </summary>
 		int defaultTaskId;
 
+		/// <summary>
+		/// TaskId Accessors
+		/// </summary>
 		public int TaskId
 		{
 			get { return taskId; }
 			set
 			{ taskId = value; }
-		}
+		}//TaskId
 
+		/// <summary>
+		/// TotalTime Accessors
+		/// </summary>
 		public double TotalTime
 		{
-			get
-			{
-				return totalTime;
-			}
+			get{ return totalTime;}
 			set { totalTime = value; }
-		}
+		}//TotalTime
 
+		/// <summary>
+		/// Description Accessors
+		/// </summary>
 		public string Description
 		{
-			get { return descripcion; }
+			get { return description; }
 			set
-			{ descripcion = value; }
-		}
+			{ description = value; }
+		}//Description
 
+		/// <summary>
+		/// IsDefaultTask Accessors
+		/// </summary>
 		public bool IsDefaultTask
 		{
 			get { return isDefaultTask; }
-			set
-			{ isDefaultTask = value; }
-		}
+			set { isDefaultTask = value; }
+		}//IsDefaultTask
 
+		/// <summary>
+		/// DefaultTaskId Accessors
+		/// </summary>
 		public int DefaultTaskId
 		{
 			get { return defaultTaskId; }
-			set
-			{ defaultTaskId = value; }
-		}
+			set { defaultTaskId = value; }
+		}//DefaultTaskId
 
-
-	}
-}
+	}//end of class
+}//end of namespace

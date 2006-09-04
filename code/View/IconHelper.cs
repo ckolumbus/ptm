@@ -27,7 +27,7 @@ namespace PTM.View
 			/// Specify small icon - 16 pixels by 16 pixels.
 			/// </summary>
 			Small = 1
-		}
+		}//IconSize
 
 		/// <summary>
 		/// Options to specify whether folders should be in the open or closed state.
@@ -42,7 +42,7 @@ namespace PTM.View
 			/// Specify closed folder.
 			/// </summary>
 			Closed = 1
-		}
+		}//FolderType
 
 		/// <summary>
 		/// Returns an icon for a given file - indicated by the name parameter.
@@ -66,7 +66,7 @@ namespace PTM.View
 			else
 			{
 				flags += Shell32.SHGFI_LARGEICON;
-			}
+			}//if-else
 
 			Shell32.SHGetFileInfo(name,
 			                      Shell32.FILE_ATTRIBUTE_NORMAL,
@@ -79,10 +79,10 @@ namespace PTM.View
 			User32.DestroyIcon(shfi.hIcon); // Cleanup
 			return icon;
 
-		}
+		}//GetFileIcon
 
 
-	}
+	}//end of class IconHelper
 
 	/// <summary>
 	/// Wraps necessary Shell32.dll structures and functions required to retrieve Icon Handles using SHGetFileInfo. Code
@@ -101,13 +101,13 @@ namespace PTM.View
 		{
 			internal ushort cb;
 			[MarshalAs(UnmanagedType.LPArray)] internal byte[] abID;
-		}
+		}//SHITEMID
 
 		[StructLayout(LayoutKind.Sequential)]
 		internal struct ITEMIDLIST
 		{
 			internal SHITEMID mkid;
-		}
+		}//ITEMIDLIST
 
 		[StructLayout(LayoutKind.Sequential)]
 		internal struct BROWSEINFO
@@ -120,7 +120,7 @@ namespace PTM.View
 			internal IntPtr lpfn;
 			internal int lParam;
 			internal IntPtr iImage;
-		}
+		};//BROWSEINFO
 
 		// Browsing for directory.
 		internal const uint BIF_RETURNONLYFSDIRS = 0x0001;
@@ -146,7 +146,7 @@ namespace PTM.View
 			internal uint dwAttributes;
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=MAX_PATH)] internal string szDisplayName;
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=NAMESIZE)] internal string szTypeName;
-		} ;
+		};//SHFILEINFO
 
 		internal const uint SHGFI_ICON = 0x000000100; // get icon
 		internal const uint SHGFI_DISPLAYNAME = 0x000000200; // get display name
@@ -178,7 +178,7 @@ namespace PTM.View
 			uint cbFileInfo,
 			uint uFlags
 			);
-	}
+	}//Shell32
 
 	/// <summary>
 	/// Wraps necessary functions imported from User32.dll. Code courtesy of MSDN Cold Rooster Consulting example.
@@ -194,5 +194,5 @@ namespace PTM.View
 		/// <returns>N/A</returns>
 		[DllImport("User32.dll")]
 		internal static extern int DestroyIcon(IntPtr hIcon);
-	}
-}
+	}//User32
+}//end of namespace

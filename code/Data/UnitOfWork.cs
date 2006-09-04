@@ -4,7 +4,7 @@ namespace PTM.Data
 	{
 		private UnitOfWork()
 		{
-		}
+		}//UnitOfWork
 
 		private static PTMDataset ptmDataset;
 		private static DataAdapterManager dataAdapterManager;
@@ -12,13 +12,13 @@ namespace PTM.Data
 		public static PTMDataset PtmDataset
 		{
 			get { return ptmDataset; }
-		}
+		}//PtmDataset
 
 		internal static void Initialize(PTMDataset ds,  DataAdapterManager adapterManager)
 		{
 			ptmDataset = ds;
 			dataAdapterManager = adapterManager;
-		}
+		}//Initialize
 
 		internal static void Update()
 		{
@@ -32,6 +32,6 @@ namespace PTM.Data
 				ptmDataset.Tasks.EndLoadData();
 				//ptmDataset.TasksLog.EndLoadData();
 				//ptmDataset.ApplicationsLog.EndLoadData();
-		}
-	}
-}
+		}//Update
+	}//UnitOfWork
+}//End of namespace 

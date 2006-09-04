@@ -36,55 +36,67 @@ namespace PTM.View
 		{
 			ReadOnly = 2,
 			ReadWrite = 4
-		}
+		}//FileAccess
 
-		private MemoryMappedFile(IntPtr memoryFileHandle)
+		private MemoryMappedFile( IntPtr memoryFileHandle )
 		{
 			this.memoryFileHandle = memoryFileHandle;
-		}
+		}//MemoryMappedFile
 
 		public static MemoryMappedFile CreateMMF(string fileName, FileAccess access, int size)
 		{
-			if (size < 0)
+			if ( size < 0 )
+			{
 				throw new ArgumentException("The size parameter should be a number greater than Zero.");
+			}//if
 
 			IntPtr memoryFileHandle = CreateFileMapping(0xFFFFFFFF, IntPtr.Zero, (uint) access, 0, (uint) size, fileName);
 			if (memoryFileHandle == IntPtr.Zero)
+			{
 				throw new SharedMemoryException("Creating Shared Memory failed.");
+			}//if
 
 			return new MemoryMappedFile(memoryFileHandle);
-		}
+		}//CreateMMF
 
 		public static IntPtr ReadHandle(string fileName)
 		{
 			IntPtr mappedFileHandle = OpenFileMapping((int) FileAccess.ReadWrite, false, fileName);
 			if (mappedFileHandle == IntPtr.Zero)
+			{
 				throw new SharedMemoryException("Opening the Shared Memory for Read failed.");
+			}//if
 
 			IntPtr mappedViewHandle = MapViewOfFile(mappedFileHandle, (uint) FILE_MAP_READ, 0, 0, 8);
 			if (mappedViewHandle == IntPtr.Zero)
-				throw new SharedMemoryException("Creating a view of Shared Memory failed.");
+			{
+				throw new SharedMemoryException( "Creating a view of Shared Memory failed." );
+			}//if
 
-			IntPtr windowHandle = Marshal.ReadIntPtr(mappedViewHandle);
+			IntPtr windowHandle = Marshal.ReadIntPtr( mappedViewHandle );
 			if (windowHandle == IntPtr.Zero)
+			{
 				throw new ArgumentException("Reading from the specified address in  Shared Memory failed.");
+			}//if
 
-			UnmapViewOfFile(mappedViewHandle);
-			CloseHandle((uint) mappedFileHandle);
+			UnmapViewOfFile( mappedViewHandle );
+			CloseHandle( (uint) mappedFileHandle );
 			return windowHandle;
-		}
+		}//ReadHandle
 
 		public void WriteHandle(IntPtr windowHandle)
 		{
 			IntPtr mappedViewHandle = MapViewOfFile(memoryFileHandle, (uint) FILE_MAP_WRITE, 0, 0, 8);
 			if (mappedViewHandle == IntPtr.Zero)
+			{
 				throw new SharedMemoryException("Creating a view of Shared Memory failed.");
+			}//if
 
-			Marshal.WriteIntPtr(mappedViewHandle, windowHandle);
+			Marshal.WriteIntPtr( mappedViewHandle, windowHandle );
 
-			UnmapViewOfFile(mappedViewHandle);
-			CloseHandle((uint) mappedViewHandle);
-		}
+			UnmapViewOfFile( mappedViewHandle );
+			CloseHandle( (uint) mappedViewHandle );
+		}//WriteHandle
 
 		#region IDisposable Member
 
@@ -98,22 +110,22 @@ namespace PTM.View
 		}
 
 		#endregion
-	}
+	}//end of MemoryMappedFile class
 
 	[Serializable]
 	public class SharedMemoryException : Exception
 	{
 		public SharedMemoryException()
 		{
-		}
+		}//SharedMemoryException
 
 		public SharedMemoryException(string message) : base(message)
 		{
-		}
+		}//SharedMemoryException
 
 		public SharedMemoryException(string message, Exception inner) : base(message, inner)
 		{
-		}
+		}//SharedMemoryException
 
-	}
-}
+	}//end of SharedMemoryException class
+}//end of namespace

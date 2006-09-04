@@ -14,28 +14,48 @@ using PTM.View.Forms;
 namespace PTM
 {
 	/// <summary>
-	/// Summary description for Main.
+	/// Application Starter class
 	/// </summary>
 	public sealed class MainClass
 	{
 
+		/// <summary>
+		/// Boolean value to store single instance configuration 
+		/// </summary>
 		internal static bool runSingleInstance = true;
+		
+		/// <summary>
+		/// MemoryMappedFile to share between instances
+		/// </summary>
 		internal static MemoryMappedFile sharedMemory;
 		
 
+		/// <summary>
+		/// MainClass constructor
+		/// </summary>
 		private MainClass()
 		{
-		}
+		}//MainClass
 
 		[STAThread]
+		/// <summary>
+		/// Main Method, Application access point
+		/// </summary>
 		private static void Main()
 		{
-			if(runSingleInstance)
+			if( runSingleInstance )
+			{
 				RunSingleInstance();
+			}
 			else
+			{
 				Launch();
-		}
+			}//if-else
+		}//Main
 
+		/// <summary>
+		/// Validates that no other application is runnin.
+		/// </summary>
 		private static void RunSingleInstance()
 		{
 			// Used to check if we can create a new mutex
@@ -51,22 +71,23 @@ namespace PTM
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show( ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Application.Exit();
-			}
+			}//try-catch
 
 			// When the mutex is created for the first time we run the program since it is the first instance.
-			if (newMutexCreated)
+			if ( newMutexCreated )
 			{
 				//Create the Shared Memory to store the window handle. This memory is shared between processes
-				lock (typeof (MainForm))
+				lock ( typeof (MainForm) )
 				{
-					MainClass.sharedMemory = MemoryMappedFile.CreateMMF("Local\\sharedMemoryITimeTracker", MemoryMappedFile.FileAccess.ReadWrite, 8);
-				}
+					MainClass.sharedMemory = MemoryMappedFile.CreateMMF(
+						"Local\\sharedMemoryITimeTracker", 
+						MemoryMappedFile.FileAccess.ReadWrite, 8 );
+				}//lock
 				Launch();
 				
 			}
-
 			else // If the mutex already exists, no need to launch a new instance of the program because a previous instance is running .
 			{
 				try
@@ -75,26 +96,33 @@ namespace PTM
 					IntPtr mainWindowHandle = IntPtr.Zero;
 					lock (typeof (MainForm))
 					{
-						mainWindowHandle = MemoryMappedFile.ReadHandle("Local\\sharedMemoryITimeTracker");
-					}
-					if (mainWindowHandle != IntPtr.Zero)
+						mainWindowHandle = MemoryMappedFile.ReadHandle(
+									"Local\\sharedMemoryITimeTracker" );
+					}//lock
+					if ( mainWindowHandle != IntPtr.Zero )
 					{
-						if (ViewHelper.IsIconic(mainWindowHandle))
-							ViewHelper.ShowWindow(mainWindowHandle, ViewHelper.SW_SHOWNORMAL); // Restore the Window 
+						if (ViewHelper.IsIconic( mainWindowHandle ) )
+						{
+							// Restore the Window 
+							ViewHelper.ShowWindow( mainWindowHandle, ViewHelper.SW_SHOWNORMAL ); 
+						}
 						else
-							ViewHelper.ShowWindow(mainWindowHandle, ViewHelper.SW_RESTORE); // Restore the Window 
-
-						ViewHelper.UpdateWindow(mainWindowHandle);
-					}
+						{
+							// Restore the Window 
+							ViewHelper.ShowWindow( mainWindowHandle, ViewHelper.SW_RESTORE ); 
+						}//if-else
+						ViewHelper.UpdateWindow( mainWindowHandle );
+					}//if
 					return;
 				}
 				catch (Exception ex)
 				{
 					MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown");
-				}
+				}//try-catch
 
-				// Tell the garbage collector to keep the Mutex alive until the code execution reaches this point, ie. normally when the program is exiting.
-				GC.KeepAlive(mutex);
+				// Tell the garbage collector to keep the Mutex alive until the code 
+				//execution reaches this point, ie. normally when the program is exiting.
+				GC.KeepAlive( mutex );
 				// Release the Mutex 
 				try
 				{
@@ -104,9 +132,9 @@ namespace PTM
 				{
 					MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, "Exception thrown");
 					GC.Collect();
-				}
-			}
-		}
+				}//try-catch
+			}//if-else
+		}//RunSingleInstance
 
 		static SplashForm splash = new SplashForm();
 
@@ -115,60 +143,65 @@ namespace PTM
 			Application.CurrentCulture = CultureInfo.InvariantCulture;
 			
 			splash.Show();
-			System.Timers.Timer timer = new System.Timers.Timer();
+			System.Timers.Timer timer = new System.Timers.Timer( );
+			//Configure this timer to restart each second ( 1000 millis)
 			timer.Interval = 1000;
-			timer.Elapsed+=new System.Timers.ElapsedEventHandler(timer_Elapsed);
+			timer.Elapsed += new System.Timers.ElapsedEventHandler( timer_Elapsed );
 			timer.Start();
 			//splash.Refresh();
 			//Application.EnableVisualStyles();
 			//Application.DoEvents();
-			Application.DoEvents();
-			MainModule.Initialize(new PTMDataset(), "data");
-			splash.SetLoadProgress(50);
-			splash.Refresh();
-			Application.DoEvents();
-			MainForm main = new MainForm();
-			if(runSingleInstance)
-				main.HandleCreated+=new EventHandler(main_HandleCreated);
-			splash.SetLoadProgress(100);
-			splash.Refresh();
-			Application.DoEvents();
-			splash.Close();
+			Application.DoEvents( );
+			MainModule.Initialize( new PTMDataset(), "data" );
+			splash.SetLoadProgress( 50 );
+			splash.Refresh( );
+			Application.DoEvents( );
+			MainForm main = new MainForm( );
+			if( runSingleInstance )
+			{
+				main.HandleCreated += new EventHandler( main_HandleCreated );
+			}
+			splash.SetLoadProgress( 100 );
+			splash.Refresh( );
+			Application.DoEvents( );
+			splash.Close( );
 			splash = null;
-			Application.DoEvents();
-			Application.Run(main);
-		}
+			Application.DoEvents( );
+			Application.Run( main );
+		}//Launch
 
-		private static void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private static void timer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
 		{
 			splash.AddProgress(10);
 			splash.Refresh();
 			Application.DoEvents();
-		}
+		}//timer_Elapsed
 		
 		static public string GetVersionString()
 		{
 			return " alpha v. 1.5";
-		}
+		}//GetVersionString
 
 		
-		private static void main_HandleCreated(object sender, EventArgs e)
+		private static void main_HandleCreated( object sender, EventArgs e )
 		{
-			IntPtr mainWindowHandle = ((MainForm)sender).Handle;
+			IntPtr mainWindowHandle = ( (MainForm)sender ).Handle;
 			try
 			{
 				lock (sender)
 				{
 					//Write the handle to the Shared Memory 
-					MainClass.sharedMemory.WriteHandle(mainWindowHandle);
-				}
+					MainClass.sharedMemory.WriteHandle( mainWindowHandle );
+				}//lock
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown",MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" +
+					"Application Exiting...", "Exception thrown",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Application.Exit();
-			}
-		}
-	}
-}
+			}//try-catch
+		}//main_HandleCreated
+	}//end of class
+}//enf of namespace
 
