@@ -241,17 +241,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Test\Business\ApplicationSummariesTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Test\Business\DefaultTasksTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Test\Business\SummaryTest.cs"
+                    RelPath = "Test\Business\TasksLogTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Test\Business\TasksLogTest.cs"
+                    RelPath = "Test\Business\TasksSummariesTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

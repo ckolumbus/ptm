@@ -12,9 +12,9 @@ namespace PTM.Test.Business
 	/// Descripción breve de SummaryTest.
 	/// </summary>
 	[TestFixture]
-	public class SummaryTest
+	public class TaskSummariesTest
 	{
-		public SummaryTest()
+		public TaskSummariesTest()
 		{
 		}
 

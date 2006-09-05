@@ -40,7 +40,7 @@ namespace PTM.Business
 			childRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (PTMDataset.TasksRow childRow in childRows)
 			{
-				return MergeApplicationSummaryLists(appSumaryList, GetApplicationsRecursiveSummary( childRow, ini, end ));
+				appSumaryList = MergeApplicationSummaryLists(appSumaryList, GetApplicationsRecursiveSummary( childRow, ini, end ));
 			}//foreach
 			return appSumaryList;
 		}//GetApplicationsRecursiveSummary
