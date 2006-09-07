@@ -138,6 +138,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Business\DataMaintenanceHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Business\DefaultTasks.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

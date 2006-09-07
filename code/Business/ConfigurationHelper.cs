@@ -12,7 +12,8 @@ namespace PTM.Business
 	/// </summary>
 	public enum ConfigurationKey : int
 	{
-		DefaultTasksLogDuration = 1
+		DefaultTasksLogDuration = 1,
+		DepurationDays = 2
 	}//ConfigurationKey enum
 
 	/// <summary>
