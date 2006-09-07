@@ -17,7 +17,7 @@ namespace PTM.Business
 		#region Private Methods
 		private static ArrayList GetApplicationsRecursiveSummary( PTMDataset.TasksRow parentRow, DateTime ini, DateTime end)
 		{		
-			ArrayList arrayHT = DataAdapterManager.ExecuteGetRows(
+			ArrayList arrayHT = DbHelper.ExecuteGetRows(
 				"SELECT TasksLog.TaskId, Sum(ApplicationsLog.ActiveTime) AS TotalActiveTime, ApplicationsLog.Name, ApplicationsLog.ApplicationFullPath " +
 				"FROM TasksLog INNER JOIN ApplicationsLog ON TasksLog.Id = ApplicationsLog.TaskLogId " +
 				"WHERE TasksLog.Id IN (select TasksLog.Id from TasksLog where TasksLog.TaskId=? and TasksLog.InsertTime>=? and TasksLog.InsertTime<=?) " +

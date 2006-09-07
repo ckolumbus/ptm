@@ -19,8 +19,8 @@ namespace PTM.Test.Business.Helpers
 		[SetUp]
 		public void SetUp()
 		{
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.Initialize("test");
+			DbHelper.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();
 			MainModule.Initialize(ds, "test");
 		}
@@ -82,8 +82,7 @@ namespace PTM.Test.Business.Helpers
 		public void TearDown()
 		{
 			Logs.StopLogging();
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.DeleteDataSource();
 		}
 	}
 }

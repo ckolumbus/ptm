@@ -178,6 +178,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Data\DbHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\PTMDataset.xsd"
                     BuildAction = "Content"
                     Generator = "MSDataSetGenerator"

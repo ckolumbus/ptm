@@ -18,7 +18,8 @@ namespace PTM.Business
 		/// </summary>
 		public static void Initialize(PTMDataset ds, string userName)
 		{
-			DataAdapterManager adapterManager = new DataAdapterManager( userName );
+			DbHelper.Initialize(userName);
+			DataAdapterManager adapterManager = new DataAdapterManager();
 			Application.DoEvents();
 			UnitOfWork.Initialize(ds, adapterManager);
 			Application.DoEvents();

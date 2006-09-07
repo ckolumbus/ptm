@@ -39,7 +39,7 @@ namespace PTM.Business.Helpers
 		public static Configuration GetConfiguration( ConfigurationKey key )
 		{
 			Hashtable ht;
-			ht = DataAdapterManager.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
+			ht = DbHelper.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
 			                                      ((int) key).ToString());
 			
 			object configValue;
@@ -73,7 +73,7 @@ namespace PTM.Business.Helpers
 					break;
 			}
 			
-			DataAdapterManager.ExecuteNonQuery("UPDATE Configuration SET ConfigValue = ? WHERE KeyValue = " +
+			DbHelper.ExecuteNonQuery("UPDATE Configuration SET ConfigValue = ? WHERE KeyValue = " +
 			                                   ((int) configuration.Key).ToString(), new string[]{"ConfigValue"}, new object[]{configuration.Value});
 		}
 

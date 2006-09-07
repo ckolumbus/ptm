@@ -23,9 +23,8 @@ namespace PTM.Test.Business
 		[SetUp]
 		public void SetUp()
 		{
-			//this.TearDown();
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.Initialize("test");
+			DbHelper.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();
 			MainModule.Initialize(ds, "test");
 			
@@ -468,12 +467,9 @@ namespace PTM.Test.Business
 			Logs.StopLogging();
 			Tasks.TasksRowChanged-=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TasksRowDeleting-=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.DeleteDataSource();
 		}
 
-		
-		
 		private void Tasks_TasksRowChanged(object sender, PTM.Data.PTMDataset.TasksRowChangeEvent e)
 		{
 			if(e.Action == DataRowAction.Add)

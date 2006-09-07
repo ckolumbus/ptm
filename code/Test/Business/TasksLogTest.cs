@@ -25,13 +25,13 @@ namespace PTM.Test.Business
 		private int afterStartLoggingCount;
 		private int afterStopLogging;
 		private int tasksLogDurationCountElapsed;
-		
+				
 		[SetUp]
 		public void SetUp()
 		{
 			//TearDown();
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.Initialize("test");
+			DbHelper.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();
 			MainModule.Initialize(ds, "test");
 			
@@ -202,8 +202,7 @@ namespace PTM.Test.Business
 			Logs.AfterStartLogging-=new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging-=new EventHandler(TasksLog_AfterStopLogging);
 			Logs.TasksLogDurationCountElapsed-=new System.Timers.ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.DeleteDataSource();
 		}
 
 		private void TasksLog_AfterStartLogging(object sender, EventArgs e)

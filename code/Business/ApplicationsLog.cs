@@ -78,7 +78,7 @@ namespace PTM.Business
 			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ? WHERE (Id = ?)";
 			foreach (ApplicationLog applicationLog in currentApplicationsLog)
 			{
-				DataAdapterManager.ExecuteNonQuery(cmd,
+				DbHelper.ExecuteNonQuery(cmd,
 					new string[]
 						{"ActiveTime", "Caption", "Id"},
 					new object[]
@@ -182,7 +182,7 @@ namespace PTM.Business
 			string cmd =
 				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Caption, Name, ProcessId, TaskLogId) VALUES (?, ?, ?, ?, ?, ?)";
 			applicationLog.Id =
-				DataAdapterManager.ExecuteInsert(cmd,
+				DbHelper.ExecuteInsert(cmd,
 				new string[]
 					{
 						"ActiveTime", "ApplicationFullPath", "Caption", "Name",
@@ -403,7 +403,7 @@ namespace PTM.Business
 		/// </summary>
 		public static ArrayList GetApplicationsLog(int taskLogId)
 		{
-			ArrayList resultsHT = DataAdapterManager.ExecuteGetRows("SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " + taskLogId.ToString());
+			ArrayList resultsHT = DbHelper.ExecuteGetRows("SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " + taskLogId.ToString());
 			ArrayList results = new ArrayList();
 			foreach (Hashtable hashtable in resultsHT)
 			{

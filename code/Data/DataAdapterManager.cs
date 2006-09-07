@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace PTM.Data
 {
 	/// <summary>
-	/// Summary description for DataAdapterManager2.
+	/// Summary description for DataAdapterManager.
 	/// </summary>
 	public class DataAdapterManager : Control
 	{
@@ -26,60 +26,16 @@ namespace PTM.Data
 		/// </summary>
 		private Container components = null;
 
-		private static string userNameData;
-		//private string connectionString;
-		//private OleDbConnection[] connections;
-
-		public DataAdapterManager(string userName)
+		public DataAdapterManager()
 		{
 			// This call is required by the Windows.Forms Form Designer.
          InitializeComponent();
-
-			userNameData = userName;
-			string dataSource = GetDataSource();
-			connectionString = this.desingOleDbConnection.ConnectionString.Replace(this.desingOleDbConnection.DataSource, dataSource);
+			string dataSource = DbHelper.GetDataSource();
+			string connectionString = this.desingOleDbConnection.ConnectionString.Replace(this.desingOleDbConnection.DataSource, dataSource);
 			this.productionOleDbConnection = this.desingOleDbConnection;
 			//this.productionOleDbConnection = new OleDbConnection(connectionString);
 			this.productionOleDbConnection.ConnectionString = connectionString;
-			
-		}
-
-		private static string GetDataSource()
-		{
-			//string appdir = Directory.GetCurrentDirectory();
-			//string appdir = Application.StartupPath;
-			//string appdir = Path.GetDirectoryName(Application.ExecutablePath);
-			string appdir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			
-			string dbdir = appdir + @"\" + userNameData;
-			if (!Directory.Exists(dbdir))
-				Directory.CreateDirectory(dbdir);
-
-			string dataSource = dbdir + @"\data.mdb";
-			if (!File.Exists(dataSource))
-				File.Copy(appdir + @"\ptm.mdb", dataSource, false);
-
-			return dataSource;
-		}
-
-
-		public bool DeleteDataSource()
-		{
-			string appdir = Directory.GetCurrentDirectory();
-			string dbdir = appdir + @"\" + userNameData;
-			if (!Directory.Exists(dbdir))
-				return false;
-
-			string dataSource = dbdir + @"\data.mdb";
-			if (!File.Exists(dataSource))
-				return false;
-			else
-			{
-				File.Delete(dataSource);
-				return true;
-			}
-		}
-
+		}	
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -217,196 +173,6 @@ namespace PTM.Data
 			}
 		}
 
-		private static string connectionString;
-		private static  OleDbCommand GetNewCommand(string cmdText)
-		{
-			if(connectionString==null)
-			{
-				connectionString = @"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
-				string dataSource = GetDataSource();
-				connectionString.Replace("@DATA_SOURCE", dataSource);
-			}
-			
-			OleDbConnection connection = new OleDbConnection(connectionString);
-			OleDbCommand command = new OleDbCommand(cmdText, connection);
-			return command;
-		}
-		public static int ExecuteNonQuery(string cmdText, string[] paramNames,  object[] paramValues)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
-			{
-				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
-				param.Value = paramValues[i];
-				param.SourceColumn = paramNames[i];
-				cmd.Parameters.Add(param);
-			}
-			try
-			{
-				cmd.Connection.Open();
-				return cmd.ExecuteNonQuery();	
-			}
-			finally
-			{
-				cmd.Connection.Close();				
-			}
-		}
 		
-		public static int ExecuteNonQuery(string cmdText)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			try
-			{
-				cmd.Connection.Open();
-				return cmd.ExecuteNonQuery();	
-			}
-			finally
-			{
-				cmd.Connection.Close();				
-			}
-		}
-
-		private static OleDbType GetOleDbType(object paramValue)
-		{
-			if(paramValue== null || paramValue == DBNull.Value)
-				return OleDbType.Variant;
-			if(paramValue.GetType() == typeof(int))
-				return OleDbType.Integer;
-			if(paramValue.GetType() == typeof(DateTime))
-				return OleDbType.Date;
-			if(paramValue.GetType() == typeof(string))
-				return OleDbType.VarWChar;
-			
-			throw new DataException("Type Db type not found:" + paramValue.ToString());
-		}
-
-		public static Hashtable ExecuteGetFirstRow(string cmdText)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			try
-			{
-				cmd.Connection.Open();
-				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
-					return null;
-				Hashtable hash = new Hashtable();
-				reader.Read();
-				for(int i=0;i<reader.FieldCount;i++)
-					hash.Add(reader.GetName(i), reader[i]);
-				reader.Close();				
-				return hash;				
-			}
-			finally
-			{
-				cmd.Connection.Close();
-			}
-		}
-		public static ArrayList ExecuteGetRows(string cmdText, string[] paramNames,  object[] paramValues)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
-			{
-				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
-				param.Value = paramValues[i];
-				param.SourceColumn = paramNames[i];
-				cmd.Parameters.Add(param);
-			}
-			try
-			{			
-				cmd.Connection.Open();
-				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
-					return new ArrayList();
-				ArrayList list = new ArrayList();
-				while(reader.Read())
-				{
-					Hashtable hash = new Hashtable();
-					for(int i=0;i<reader.FieldCount;i++)
-						hash.Add(reader.GetName(i), reader[i]);
-					list.Add(hash);
-				}
-				reader.Close();
-				return list;
-			}
-			catch(Exception ex)
-			{
-				throw;
-			}
-			finally
-			{
-				cmd.Connection.Close();
-			}
-		}
-		public static ArrayList ExecuteGetRows(string cmdText)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			try
-			{			
-				cmd.Connection.Open();
-				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
-					return new ArrayList();
-				ArrayList list = new ArrayList();
-				while(reader.Read())
-				{
-					Hashtable hash = new Hashtable();
-					for(int i=0;i<reader.FieldCount;i++)
-						hash.Add(reader.GetName(i), reader[i]);
-					list.Add(hash);
-				}
-				reader.Close();
-				return list;
-			}
-			finally
-			{
-				cmd.Connection.Close();
-			}
-		}
-		public static int ExecuteInsert(string cmdText, string[] paramNames, object[] paramValues)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
-			{
-				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
-				param.Value = paramValues[i];
-				param.SourceColumn = paramNames[i];
-				cmd.Parameters.Add(param);
-			}
-			try
-			{
-				cmd.Connection.Open();
-				int r = cmd.ExecuteNonQuery();
-				if(r==0)
-					throw new DataException("Database is not responding.");
-				cmd = new OleDbCommand("SELECT @@IDENTITY", cmd.Connection);
-				return (int) cmd.ExecuteScalar();
-			}
-			finally
-			{
-				cmd.Connection.Close();				
-			}
-			
-		}
-		public static object ExecuteScalar(string cmdText)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			try
-			{
-				cmd.Connection.Open();
-				return cmd.ExecuteScalar();	
-			}
-			finally
-			{
-				cmd.Connection.Close();				
-			}
-		}
-
 	}
 }

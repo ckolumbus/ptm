@@ -39,7 +39,7 @@ namespace PTM.Business
 			log.Duration = 0;
 			log.InsertTime = DateTime.Now;
 			log.TaskId = taskId;
-			log.Id  = DataAdapterManager.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)", 
+			log.Id  = DbHelper.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)", 
 				new string[]{"Duration", "InsertTime", "TaskId"}, new object[] {log.Duration, log.InsertTime, log.TaskId});
 					
 			currentLog = log;
@@ -55,7 +55,7 @@ namespace PTM.Business
 			Log log;
 			log = FindById(id);
 			log.TaskId = taskId;
-			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + id);
+			DbHelper.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + id);
 			
 			if(currentLog !=null && currentLog.Id == id)
 				currentLog.TaskId = taskId;
@@ -89,7 +89,7 @@ namespace PTM.Business
 			if(currentLog!=null && currentLog.Id == id)
 				return currentLog;
 			Hashtable hash;
-			hash = DataAdapterManager.ExecuteGetFirstRow("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + id);
+			hash = DbHelper.ExecuteGetFirstRow("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + id);
 			if(hash==null)
 				return null;
 			Log log = new Log();
@@ -116,7 +116,7 @@ namespace PTM.Business
 		public static ArrayList GetLogsByDay(DateTime day)
 		{
 			DateTime date = day.Date;
-			ArrayList hashList = DataAdapterManager.ExecuteGetRows(
+			ArrayList hashList = DbHelper.ExecuteGetRows(
 				"Select Id, TaskId, Duration, InsertTime  from TasksLog where InsertTime >= ? and InsertTime <= ? order by InsertTime", 
 				new string[]{"InsertTimeFrom", "InsertTimeTo"}, new object[]{date, date.AddDays(1).AddSeconds(-1)});
 			
@@ -141,7 +141,7 @@ namespace PTM.Business
 			if(currentLog==null)
 				return;
 			
-			DataAdapterManager.ExecuteNonQuery("UPDATE TasksLog SET Duration = ? WHERE Id = " + Logs.currentLog.Id, 
+			DbHelper.ExecuteNonQuery("UPDATE TasksLog SET Duration = ? WHERE Id = " + Logs.currentLog.Id, 
 				new string[]{"Duration"}, new object[]{Logs.currentLog.Duration});
 			if(LogChanged!=null)
 			{

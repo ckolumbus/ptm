@@ -20,8 +20,8 @@ namespace PTM.Test.Business.Helpers
 		[SetUp]
 		public void SetUp()
 		{
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.Initialize("test");
+			DbHelper.DeleteDataSource();
 			PTMDataset ds = new PTMDataset();
 			MainModule.Initialize(ds, "test");
 		}
@@ -91,7 +91,7 @@ namespace PTM.Test.Business.Helpers
 					Assert.AreEqual(10, logs.Count,"i=" +i.ToString());
 				}
 			}
-			int idleTasksCount = (int) DataAdapterManager.ExecuteScalar("select count(Id) from Tasks where Tasks.IsDefaultTask = 1 and Tasks.DefaultTaskId = "+ (int)DefaultTaskEnum.Idle);
+			int idleTasksCount = (int) DbHelper.ExecuteScalar("select count(Id) from Tasks where Tasks.IsDefaultTask = 1 and Tasks.DefaultTaskId = "+ (int)DefaultTaskEnum.Idle);
 			Assert.AreEqual(3, idleTasksCount);
 			
 		}
@@ -99,7 +99,7 @@ namespace PTM.Test.Business.Helpers
 		private void InsertLog(int taskId, DateTime insertTime)
 		{
 			int duration = (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value*60;
-			DataAdapterManager.ExecuteNonQuery("INSERT INTO TasksLog (TaskId, Duration, InsertTime) values (?, ?, ?)", 
+			DbHelper.ExecuteNonQuery("INSERT INTO TasksLog (TaskId, Duration, InsertTime) values (?, ?, ?)", 
 				new string[]{"TaskId", "Duration", "InsertTime"}, new object[]{taskId, duration, insertTime});
 		}
 		
@@ -107,8 +107,7 @@ namespace PTM.Test.Business.Helpers
 		public void TearDown()
 		{
 			Logs.StopLogging();
-			DataAdapterManager m = new DataAdapterManager("test");
-			m.DeleteDataSource();
+			DbHelper.DeleteDataSource();
 		}
 	}
 }

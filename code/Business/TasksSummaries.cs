@@ -22,7 +22,7 @@ namespace PTM.Business
 		private static ArrayList ExecuteTaskSummary(DateTime initialDate, DateTime finalDate)
 		{
 			ArrayList summaryList = new ArrayList();
-			ArrayList list = DataAdapterManager.ExecuteGetRows(
+			ArrayList list = DbHelper.ExecuteGetRows(
 				"SELECT TasksLog.TaskId, Sum( TasksLog.Duration ) AS TotalTime FROM TasksLog " + 
 				"WHERE ( ( (TasksLog.InsertTime)>=? And (TasksLog.InsertTime)<=? ) )" + 
 				"GROUP BY TasksLog.TaskId;", 
