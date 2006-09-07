@@ -356,7 +356,7 @@ namespace PTM.View.Controls
 			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
-				AddTaskLog(tasklog.SelectedTaskRow.Id, (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
+				AddTaskLog(tasklog.SelectedTaskRow.Id, (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 			}
 			else if (mustAddATask)
 			{
@@ -370,7 +370,7 @@ namespace PTM.View.Controls
 		private void AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
 			Logs.AddDefaultTaskLog(taskParentId, defaultTaskEnum);
-			ResetNotifyTimer((int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
+			ResetNotifyTimer((int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 		}
 
 		private void AddTaskLog(int taskId , int defaultMins)
@@ -452,7 +452,7 @@ namespace PTM.View.Controls
 				return;
 			int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
 			AddTaskLog(taskId, 
-				(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
+				(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 
 		}
 
@@ -563,7 +563,7 @@ namespace PTM.View.Controls
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
 			{
 				AddTaskLog(Tasks.CurrentTaskRow.Id, 
-					(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
+					(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 			}
 			else
 			{

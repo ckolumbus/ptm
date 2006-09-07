@@ -12,7 +12,7 @@ namespace PTM.Business.Helpers
 	/// </summary>
 	public enum ConfigurationKey : int
 	{
-		DefaultTasksLogDuration = 1,
+		TasksLogDuration = 1,
 		DataMaintenanceDays = 2
 	}//ConfigurationKey enum
 
@@ -45,7 +45,7 @@ namespace PTM.Business.Helpers
 			object configValue;
 			switch(key)
 			{
-				case ConfigurationKey.DefaultTasksLogDuration:
+				case ConfigurationKey.TasksLogDuration:
 				case ConfigurationKey.DataMaintenanceDays:
 					configValue = Convert.ToInt32(ht["ConfigValue"]);
 					break;				
@@ -62,7 +62,7 @@ namespace PTM.Business.Helpers
 		{
 			switch(configuration.Key)
 			{
-				case ConfigurationKey.DefaultTasksLogDuration:
+				case ConfigurationKey.TasksLogDuration:
 					if(Convert.ToInt32(configuration.Value)<1 || 
 					   Convert.ToInt32(configuration.Value) > 60)
 						throw new ApplicationException("The log duration can't be less than 1 min. and more than 60 min.");

@@ -217,18 +217,6 @@ namespace PTM.Data
 			}
 		}
 
-		private void configurationDataAdapter_RowUpdated(object sender, OleDbRowUpdatedEventArgs e)
-		{
-			int lastId;
-			OleDbCommand idCMD = new OleDbCommand("SELECT @@IDENTITY", e.Command.Connection);
-
-			if (e.StatementType == StatementType.Insert)
-			{
-				lastId = (int)idCMD.ExecuteScalar();
-				e.Row["Id"] = -lastId;
-			}
-		}
-
 		private static string connectionString;
 		private static  OleDbCommand GetNewCommand(string cmdText)
 		{
@@ -405,5 +393,20 @@ namespace PTM.Data
 			}
 			
 		}
+		public static object ExecuteScalar(string cmdText)
+		{
+			OleDbCommand cmd;
+			cmd = GetNewCommand(cmdText);
+			try
+			{
+				cmd.Connection.Open();
+				return cmd.ExecuteScalar();	
+			}
+			finally
+			{
+				cmd.Connection.Close();				
+			}
+		}
+
 	}
 }
