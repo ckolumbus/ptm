@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Business;
+using PTM.Business.Helpers;
 using PTM.Data;
 using PTM.Infos;
 using PTM.View.Controls.TreeListViewComponents;
@@ -355,7 +356,7 @@ namespace PTM.View.Controls
 			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
-				AddTaskLog(tasklog.SelectedTaskRow.Id, Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value, CultureInfo.InvariantCulture));
+				AddTaskLog(tasklog.SelectedTaskRow.Id, (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
 			}
 			else if (mustAddATask)
 			{
@@ -369,7 +370,7 @@ namespace PTM.View.Controls
 		private void AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
 			Logs.AddDefaultTaskLog(taskParentId, defaultTaskEnum);
-			ResetNotifyTimer(Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value));
+			ResetNotifyTimer((int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
 		}
 
 		private void AddTaskLog(int taskId , int defaultMins)
@@ -397,7 +398,6 @@ namespace PTM.View.Controls
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					//int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
 					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskRow.Id);
 				}
 			}
@@ -411,7 +411,6 @@ namespace PTM.View.Controls
 				for(int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					//int taskLogId = Convert.ToInt32(taskList.SelectedItems[i].SubItems[TaskLogIdHeader.Index].Text, CultureInfo.InvariantCulture);
 					Logs.DeleteLog(taskLogId);
 				}
 			
@@ -452,9 +451,8 @@ namespace PTM.View.Controls
 			if(!isValidEditableLog())
 				return;
 			int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
-			//int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
 			AddTaskLog(taskId, 
-				Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value, CultureInfo.InvariantCulture));
+				(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
 
 		}
 
@@ -565,7 +563,7 @@ namespace PTM.View.Controls
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
 			{
 				AddTaskLog(Tasks.CurrentTaskRow.Id, 
-					Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value, CultureInfo.InvariantCulture));
+					(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value);
 			}
 			else
 			{
@@ -644,7 +642,7 @@ namespace PTM.View.Controls
 
 		#endregion
 
-		#region PTM events
+		#region Business events
 
 		private void TasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
@@ -775,12 +773,6 @@ namespace PTM.View.Controls
 		}
 
 		#endregion
-
-
-
-		
-
-		
 
 	}
 }

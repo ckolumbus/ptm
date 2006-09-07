@@ -1,23 +1,20 @@
 using System;
 using PTM.Data;
 
-namespace PTM.Business
+namespace PTM.Business.Helpers
 {
 	/// <summary>
 	/// Summary description for DataMaintenanceHelper.
 	/// </summary>
-	public class DataMaintenanceHelper
+	public sealed class DataMaintenanceHelper
 	{
-		public DataMaintenanceHelper()
+		private DataMaintenanceHelper()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 		}
 		
 		public void DeleteIdleEntries()
 		{
-			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DepurationDays);
+			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
 			DateTime limitDate = DateTime.Today.AddDays(-Convert.ToInt32(config.Value));
 			
 			//Delete Idle logs

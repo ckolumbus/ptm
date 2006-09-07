@@ -133,16 +133,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Business\ConfigurationHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Business\DataMaintenanceHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Business\DefaultTasks.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -164,6 +154,16 @@
                 />
                 <File
                     RelPath = "Business\TasksSummaries.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Business\Helpers\ConfigurationHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Business\Helpers\DataMaintenanceHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

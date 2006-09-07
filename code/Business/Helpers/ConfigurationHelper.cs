@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Globalization;
 using PTM.Data;
 
-namespace PTM.Business
+namespace PTM.Business.Helpers
 {
 	/// <summary>
 	/// ConfigurationKey enumeration 
@@ -13,7 +13,7 @@ namespace PTM.Business
 	public enum ConfigurationKey : int
 	{
 		DefaultTasksLogDuration = 1,
-		DepurationDays = 2
+		DataMaintenanceDays = 2
 	}//ConfigurationKey enum
 
 	/// <summary>
@@ -42,9 +42,40 @@ namespace PTM.Business
 			ht = DataAdapterManager.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
 			                                      ((int) key).ToString());
 			
-			return new Configuration(key, ht["ConfigValue"]);
+			object configValue;
+			switch(key)
+			{
+				case ConfigurationKey.DefaultTasksLogDuration:
+				case ConfigurationKey.DataMaintenanceDays:
+					configValue = Convert.ToInt32(ht["ConfigValue"]);
+					break;				
+				default:
+					configValue = ht["ConfigValue"];
+					break;
+			}
+			
+			return new Configuration(key, configValue);
 			
 		}//GetConfiguration
+		
+		public static void SaveConfiguration(Configuration configuration)
+		{
+			switch(configuration.Key)
+			{
+				case ConfigurationKey.DefaultTasksLogDuration:
+					if(Convert.ToInt32(configuration.Value)<1 || 
+					   Convert.ToInt32(configuration.Value) > 60)
+						throw new ApplicationException("The log duration can't be less than 1 min. and more than 60 min.");
+					break;
+				case ConfigurationKey.DataMaintenanceDays:
+					if(Convert.ToInt32(configuration.Value)<0)
+						throw new ApplicationException("Data maintenance days can't be less than 0.");
+					break;
+			}
+			
+			DataAdapterManager.ExecuteNonQuery("UPDATE Configuration SET ConfigValue = ? WHERE KeyValue = " +
+			                                   ((int) configuration.Key).ToString(), new string[]{"ConfigValue"}, new object[]{configuration.Value});
+		}
 
 	}//ConfigurationHelper
 	
