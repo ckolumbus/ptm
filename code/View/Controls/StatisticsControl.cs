@@ -44,19 +44,10 @@ namespace PTM.View.Controls
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			ManagementDataset.ConfigurationRow[] defaultgroups = ConfigurationHelper.GetExistingGroups();
-			foreach (ManagementDataset.ConfigurationRow defaultgroup in defaultgroups)
-			{
-				PTMDataset.TasksRow parentTaskRow;
-				parentTaskRow = parentTasksTable.NewTasksRow();
-				PTMDataset.TasksRow taskRow;
-				taskRow = Tasks.FindById(Convert.ToInt32(defaultgroup.ConfigValue,CultureInfo.InvariantCulture));
-				if(taskRow == null)
-					continue;
-				parentTaskRow.ItemArray = taskRow.ItemArray;
-				parentTaskRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentTaskRow),this.parentTaskComboBox.MaxLength);
-				parentTasksTable.AddTasksRow(parentTaskRow);
-			}
+			PTMDataset.TasksRow parentTaskRow;
+			parentTaskRow = parentTasksTable.NewTasksRow();
+			parentTaskRow.ItemArray = Tasks.RootTasksRow.ItemArray;
+			parentTasksTable.AddTasksRow(parentTaskRow);
 			this.parentTaskComboBox.DataSource = parentTasksTable;
 			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
 			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;

@@ -1,10 +1,10 @@
--*-*-*-*--*-*-*-*-*-*-*-*-*-*-
-- People Task Manager Proyect-
--*-*-*-*-*-*-*-*-*-*-*-*-*-*--
+-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-
+- People's Task Manager Project-
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-
 
 A self improvement tool...
 
-Developer: Carlos Damian Estrada Chavez
+Admin: Carlos Damian Estrada Chavez
 
 Project Page: http://sourceforge.net/projects/ptm
 

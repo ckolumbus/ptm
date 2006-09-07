@@ -23,15 +23,9 @@ namespace PTM.Data
 		internal static void Update()
 		{
 				ptmDataset.Tasks.BeginLoadData();
-				//ptmDataset.TasksLog.BeginLoadData();
-				//ptmDataset.ApplicationsLog.BeginLoadData();
 				dataAdapterManager.tasksDataAdapter.Update(ptmDataset.Tasks);
-				//dataAdapterManager.tasksLogDataAdapter.Update(ptmDataset.TasksLog);
-				//dataAdapterManager.applicationsLogDataAdapter.Update(ptmDataset.ApplicationsLog);
 				ptmDataset.AcceptChanges();
 				ptmDataset.Tasks.EndLoadData();
-				//ptmDataset.TasksLog.EndLoadData();
-				//ptmDataset.ApplicationsLog.EndLoadData();
 		}//Update
 	}//UnitOfWork
 }//End of namespace 

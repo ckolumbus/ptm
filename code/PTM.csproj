@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
     >
@@ -173,25 +173,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Data\ManagementDataset.xsd"
-                    BuildAction = "Content"
-                    Generator = "MSDataSetGenerator"
-                    LastGenOutput = "ManagementDataset.cs"
-                />
-                <File
-                    RelPath = "Data\ManagementDataset.cs"
-                    DependentUpon = "ManagementDataset.xsd"
-                    SubType = "code"
-                    BuildAction = "Compile"
-                    DesignTime = "True"
-                    AutoGen = "True"
-                />
-                <File
-                    RelPath = "Data\ManagementDataset.xsx"
-                    DependentUpon = "ManagementDataset.xsd"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "Data\PTMDataset.xsd"
                     BuildAction = "Content"
                     Generator = "MSDataSetGenerator"
@@ -242,6 +223,11 @@
                 />
                 <File
                     RelPath = "Test\Business\ApplicationSummariesTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\Business\ConfigurationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

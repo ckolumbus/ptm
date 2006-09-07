@@ -363,7 +363,6 @@ namespace PTM.View.Forms
 				{
 					selectedTaskRow = row;
 				}
-				ConfigurationHelper.AddRecentTask(this.selectedParentTaskRow);
 			}
 			catch(ApplicationException aex)
 			{

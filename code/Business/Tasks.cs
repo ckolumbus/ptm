@@ -300,7 +300,6 @@ namespace PTM.Business
 			SaveTasks();
 			row.EndEdit();
 			rootTaskRow = row;
-			ConfigurationHelper.AddRecentTask(row);
 		}
 
 		private static void SaveTasks()

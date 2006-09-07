@@ -16,11 +16,6 @@ namespace PTM.Data
 		private OleDbConnection desingOleDbConnection;
 		private OleDbConnection productionOleDbConnection;
 		internal OleDbDataAdapter tasksDataAdapter;
-		internal OleDbDataAdapter configurationDataAdapter;
-		private OleDbCommand oleDbSelectCommand8;
-		private OleDbCommand oleDbInsertCommand6;
-		private OleDbCommand oleDbUpdateCommand6;
-		private OleDbCommand oleDbDeleteCommand6;
 		private OleDbCommand oleDbSelectCommand2;
 		private OleDbCommand oleDbInsertCommand2;
 		private OleDbCommand oleDbUpdateCommand2;
@@ -114,11 +109,6 @@ namespace PTM.Data
 			this.oleDbInsertCommand2 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbSelectCommand2 = new System.Data.OleDb.OleDbCommand();
 			this.oleDbUpdateCommand2 = new System.Data.OleDb.OleDbCommand();
-			this.configurationDataAdapter = new System.Data.OleDb.OleDbDataAdapter();
-			this.oleDbDeleteCommand6 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbInsertCommand6 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbSelectCommand8 = new System.Data.OleDb.OleDbCommand();
-			this.oleDbUpdateCommand6 = new System.Data.OleDb.OleDbCommand();
 			// 
 			// desingOleDbConnection
 			// 
@@ -196,68 +186,6 @@ namespace PTM.Data
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("StopDate", System.Data.OleDb.OleDbType.DBDate, 0, "StopDate"));
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("TotalTime", System.Data.OleDb.OleDbType.Integer, 0, "TotalTime"));
 			this.oleDbUpdateCommand2.Parameters.Add(new System.Data.OleDb.OleDbParameter("Id", System.Data.OleDb.OleDbType.Integer, 0, "Id"));
-			// 
-			// configurationDataAdapter
-			// 
-			this.configurationDataAdapter.DeleteCommand = this.oleDbDeleteCommand6;
-			this.configurationDataAdapter.InsertCommand = this.oleDbInsertCommand6;
-			this.configurationDataAdapter.SelectCommand = this.oleDbSelectCommand8;
-			this.configurationDataAdapter.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
-																																			  new System.Data.Common.DataTableMapping("Table", "Configuration", new System.Data.Common.DataColumnMapping[] {
-																																																																									new System.Data.Common.DataColumnMapping("ConfigValue", "ConfigValue"),
-																																																																									new System.Data.Common.DataColumnMapping("Description", "Description"),
-																																																																									new System.Data.Common.DataColumnMapping("Id", "Id"),
-																																																																									new System.Data.Common.DataColumnMapping("KeyValue", "KeyValue"),
-																																																																									new System.Data.Common.DataColumnMapping("ListValue", "ListValue")})});
-			this.configurationDataAdapter.UpdateCommand = this.oleDbUpdateCommand6;
-			this.configurationDataAdapter.RowUpdated += new System.Data.OleDb.OleDbRowUpdatedEventHandler(this.configurationDataAdapter_RowUpdated);
-			// 
-			// oleDbDeleteCommand6
-			// 
-			this.oleDbDeleteCommand6.CommandText = @"DELETE FROM Configuration WHERE (Id = ?) AND (ConfigValue = ? OR ? IS NULL AND ConfigValue IS NULL) AND (Description = ? OR ? IS NULL AND Description IS NULL) AND (KeyValue = ? OR ? IS NULL AND KeyValue IS NULL) AND (ListValue = ? OR ? IS NULL AND ListValue IS NULL)";
-			this.oleDbDeleteCommand6.Connection = this.desingOleDbConnection;
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Id", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Id", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ConfigValue", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ConfigValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ConfigValue1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ConfigValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_KeyValue", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "KeyValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_KeyValue1", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "KeyValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ListValue", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ListValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbDeleteCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ListValue1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ListValue", System.Data.DataRowVersion.Original, null));
-			// 
-			// oleDbInsertCommand6
-			// 
-			this.oleDbInsertCommand6.CommandText = "INSERT INTO Configuration(ConfigValue, Description, KeyValue, ListValue) VALUES (" +
-				"?, ?, ?, ?)";
-			this.oleDbInsertCommand6.Connection = this.desingOleDbConnection;
-			this.oleDbInsertCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("ConfigValue", System.Data.OleDb.OleDbType.VarWChar, 50, "ConfigValue"));
-			this.oleDbInsertCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Description", System.Data.OleDb.OleDbType.VarWChar, 50, "Description"));
-			this.oleDbInsertCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("KeyValue", System.Data.OleDb.OleDbType.Integer, 0, "KeyValue"));
-			this.oleDbInsertCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("ListValue", System.Data.OleDb.OleDbType.VarWChar, 50, "ListValue"));
-			// 
-			// oleDbSelectCommand8
-			// 
-			this.oleDbSelectCommand8.CommandText = "SELECT ConfigValue, Description, Id, KeyValue, ListValue FROM Configuration";
-			this.oleDbSelectCommand8.Connection = this.desingOleDbConnection;
-			// 
-			// oleDbUpdateCommand6
-			// 
-			this.oleDbUpdateCommand6.CommandText = @"UPDATE Configuration SET ConfigValue = ?, Description = ?, KeyValue = ?, ListValue = ? WHERE (Id = ?) AND (ConfigValue = ? OR ? IS NULL AND ConfigValue IS NULL) AND (Description = ? OR ? IS NULL AND Description IS NULL) AND (KeyValue = ? OR ? IS NULL AND KeyValue IS NULL) AND (ListValue = ? OR ? IS NULL AND ListValue IS NULL)";
-			this.oleDbUpdateCommand6.Connection = this.desingOleDbConnection;
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("ConfigValue", System.Data.OleDb.OleDbType.VarWChar, 50, "ConfigValue"));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Description", System.Data.OleDb.OleDbType.VarWChar, 50, "Description"));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("KeyValue", System.Data.OleDb.OleDbType.Integer, 0, "KeyValue"));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("ListValue", System.Data.OleDb.OleDbType.VarWChar, 50, "ListValue"));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Id", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Id", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ConfigValue", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ConfigValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ConfigValue1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ConfigValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_Description1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "Description", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_KeyValue", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "KeyValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_KeyValue1", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "KeyValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ListValue", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ListValue", System.Data.DataRowVersion.Original, null));
-			this.oleDbUpdateCommand6.Parameters.Add(new System.Data.OleDb.OleDbParameter("Original_ListValue1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, false, ((System.Byte)(0)), ((System.Byte)(0)), "ListValue", System.Data.DataRowVersion.Original, null));
 			// 
 			// DataAdapterManager
 			// 

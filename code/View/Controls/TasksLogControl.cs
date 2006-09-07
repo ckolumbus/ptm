@@ -355,7 +355,7 @@ namespace PTM.View.Controls
 			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
-				AddTaskLog(tasklog.SelectedTaskRow.Id, Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue, CultureInfo.InvariantCulture));
+				AddTaskLog(tasklog.SelectedTaskRow.Id, Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value, CultureInfo.InvariantCulture));
 			}
 			else if (mustAddATask)
 			{
@@ -369,7 +369,7 @@ namespace PTM.View.Controls
 		private void AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
 			Logs.AddDefaultTaskLog(taskParentId, defaultTaskEnum);
-			ResetNotifyTimer(Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue));
+			ResetNotifyTimer(Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value));
 		}
 
 		private void AddTaskLog(int taskId , int defaultMins)
@@ -454,7 +454,7 @@ namespace PTM.View.Controls
 			int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
 			//int taskId =  Convert.ToInt32(taskList.SelectedItems[0].SubItems[TaskIdHeader.Index].Text, CultureInfo.InvariantCulture);
 			AddTaskLog(taskId, 
-				Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue, CultureInfo.InvariantCulture));
+				Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value, CultureInfo.InvariantCulture));
 
 		}
 
@@ -565,7 +565,7 @@ namespace PTM.View.Controls
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
 			{
 				AddTaskLog(Tasks.CurrentTaskRow.Id, 
-					Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).ConfigValue, CultureInfo.InvariantCulture));
+					Convert.ToInt32(ConfigurationHelper.GetConfiguration(ConfigurationKey.DefaultTasksLogDuration).Value, CultureInfo.InvariantCulture));
 			}
 			else
 			{
