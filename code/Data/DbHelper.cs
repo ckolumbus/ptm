@@ -20,7 +20,9 @@ namespace PTM.Data
 		public static void Initialize(string userName)
 		{
 			userNameData = userName;
-			GetDataSource();
+			string dataSource = GetDataSource();
+			connectionString = @"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
+			connectionString = connectionString.Replace("@DATA_SOURCE", dataSource);
 		}
 		
 		
@@ -59,11 +61,7 @@ namespace PTM.Data
 			}
 		}
 
-		public static void BeginTransaction()
-		{
-			
-		}
-
+		
 		public static int ExecuteNonQuery(string cmdText)
 		{
 			OleDbCommand cmd;
@@ -258,13 +256,6 @@ namespace PTM.Data
 
 		public static OleDbConnection GetConnection()
 		{
-			if(connectionString==null)
-			{
-				connectionString = @"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
-				string dataSource = GetDataSource();
-				connectionString = connectionString.Replace("@DATA_SOURCE", dataSource);
-			}
-
 			return new OleDbConnection(connectionString);
 		}
 
@@ -282,6 +273,31 @@ namespace PTM.Data
 			throw new DataException("Type Db type not found:" + paramValue.ToString());
 		}
 
+		public static void CompactDB()
+		{
+			object[] oParams;
+
+			object objJRO = 
+				Activator.CreateInstance(Type.GetTypeFromProgID("JRO.JetEngine"));
 		
+			string dataSource = GetDataSource();
+			string tempFile = Path.GetDirectoryName(dataSource) + "\\temp.mdb";
+			oParams = new object[] {
+											  connectionString,
+											  "Provider=Microsoft.Jet.OLEDB.4.0;Data" + 
+											  " Source="+ tempFile + ";Jet OLEDB:Engine Type=5"};
+
+			objJRO.GetType().InvokeMember("CompactDatabase",
+				System.Reflection.BindingFlags.InvokeMethod,
+				null,
+				objJRO,
+				oParams);
+
+			System.IO.File.Delete(dataSource);
+			System.IO.File.Move(tempFile, dataSource);
+
+			System.Runtime.InteropServices.Marshal.ReleaseComObject(objJRO);
+			objJRO=null;
+		}
 	}
 }

@@ -17,6 +17,10 @@ namespace PTM.Business.Helpers
 		{
 		}
 		
+		public static void CompactDB()
+		{
+			DbHelper.CompactDB();
+		}
 		public static void DeleteIdleEntries()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
