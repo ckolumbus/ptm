@@ -16,6 +16,7 @@ namespace PTM.Data
 		}
 		
 		private static string userNameData;
+		private static string connectionString;
 		public static void Initialize(string userName)
 		{
 			userNameData = userName;
@@ -58,21 +59,26 @@ namespace PTM.Data
 			}
 		}
 
-
-		private static string connectionString;
-		private static  OleDbCommand GetNewCommand(string cmdText)
+		public static void BeginTransaction()
 		{
-			if(connectionString==null)
-			{
-				connectionString = @"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
-				string dataSource = GetDataSource();
-				connectionString = connectionString.Replace("@DATA_SOURCE", dataSource);
-			}
 			
-			OleDbConnection connection = new OleDbConnection(connectionString);
-			OleDbCommand command = new OleDbCommand(cmdText, connection);
-			return command;
 		}
+
+		public static int ExecuteNonQuery(string cmdText)
+		{
+			OleDbCommand cmd;
+			cmd = GetNewCommand(cmdText);
+			try
+			{
+				cmd.Connection.Open();
+				return cmd.ExecuteNonQuery();	
+			}
+			finally
+			{
+				cmd.Connection.Close();				
+			}
+		}
+
 		public static int ExecuteNonQuery(string cmdText, string[] paramNames,  object[] paramValues)
 		{
 			OleDbCommand cmd;
@@ -95,35 +101,7 @@ namespace PTM.Data
 			}
 		}
 		
-		public static int ExecuteNonQuery(string cmdText)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			try
-			{
-				cmd.Connection.Open();
-				return cmd.ExecuteNonQuery();	
-			}
-			finally
-			{
-				cmd.Connection.Close();				
-			}
-		}
-
-		private static OleDbType GetOleDbType(object paramValue)
-		{
-			if(paramValue== null || paramValue == DBNull.Value)
-				return OleDbType.Variant;
-			if(paramValue.GetType() == typeof(int))
-				return OleDbType.Integer;
-			if(paramValue.GetType() == typeof(DateTime))
-				return OleDbType.Date;
-			if(paramValue.GetType() == typeof(string))
-				return OleDbType.VarWChar;
-			
-			throw new DataException("Type Db type not found:" + paramValue.ToString());
-		}
-
+		
 		public static Hashtable ExecuteGetFirstRow(string cmdText)
 		{
 			OleDbCommand cmd;
@@ -140,6 +118,32 @@ namespace PTM.Data
 					hash.Add(reader.GetName(i), reader[i]);
 				reader.Close();				
 				return hash;				
+			}
+			finally
+			{
+				cmd.Connection.Close();
+			}
+		}
+		public static ArrayList ExecuteGetRows(string cmdText)
+		{
+			OleDbCommand cmd;
+			cmd = GetNewCommand(cmdText);
+			try
+			{			
+				cmd.Connection.Open();
+				OleDbDataReader reader = cmd.ExecuteReader();
+				if(!reader.HasRows)
+					return new ArrayList();
+				ArrayList list = new ArrayList();
+				while(reader.Read())
+				{
+					Hashtable hash = new Hashtable();
+					for(int i=0;i<reader.FieldCount;i++)
+						hash.Add(reader.GetName(i), reader[i]);
+					list.Add(hash);
+				}
+				reader.Close();
+				return list;
 			}
 			finally
 			{
@@ -179,32 +183,7 @@ namespace PTM.Data
 				cmd.Connection.Close();
 			}
 		}
-		public static ArrayList ExecuteGetRows(string cmdText)
-		{
-			OleDbCommand cmd;
-			cmd = GetNewCommand(cmdText);
-			try
-			{			
-				cmd.Connection.Open();
-				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
-					return new ArrayList();
-				ArrayList list = new ArrayList();
-				while(reader.Read())
-				{
-					Hashtable hash = new Hashtable();
-					for(int i=0;i<reader.FieldCount;i++)
-						hash.Add(reader.GetName(i), reader[i]);
-					list.Add(hash);
-				}
-				reader.Close();
-				return list;
-			}
-			finally
-			{
-				cmd.Connection.Close();
-			}
-		}
+		
 		public static int ExecuteInsert(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;
@@ -231,6 +210,8 @@ namespace PTM.Data
 			}
 			
 		}
+		
+		
 		public static object ExecuteScalar(string cmdText)
 		{
 			OleDbCommand cmd;
@@ -245,6 +226,62 @@ namespace PTM.Data
 				cmd.Connection.Close();				
 			}
 		}
+		public static object ExecuteScalar(string cmdText, string[] paramNames,  object[] paramValues)
+		{
+			OleDbCommand cmd;
+			cmd = GetNewCommand(cmdText);
+			for(int i = 0; i<paramValues.Length;i++)
+			{
+				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
+				param.Value = paramValues[i];
+				param.SourceColumn = paramNames[i];
+				cmd.Parameters.Add(param);
+			}
+			try
+			{
+				cmd.Connection.Open();
+				return cmd.ExecuteScalar();	
+			}
+			finally
+			{
+				cmd.Connection.Close();				
+			}
+		}
+		
+		
+		public static  OleDbCommand GetNewCommand(string cmdText)
+		{
+			OleDbConnection connection = GetConnection();
+			OleDbCommand command = new OleDbCommand(cmdText, connection);
+			return command;
+		}
 
+		public static OleDbConnection GetConnection()
+		{
+			if(connectionString==null)
+			{
+				connectionString = @"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
+				string dataSource = GetDataSource();
+				connectionString = connectionString.Replace("@DATA_SOURCE", dataSource);
+			}
+
+			return new OleDbConnection(connectionString);
+		}
+
+		private static OleDbType GetOleDbType(object paramValue)
+		{
+			if(paramValue== null || paramValue == DBNull.Value)
+				return OleDbType.Variant;
+			if(paramValue.GetType() == typeof(int))
+				return OleDbType.Integer;
+			if(paramValue.GetType() == typeof(DateTime))
+				return OleDbType.Date;
+			if(paramValue.GetType() == typeof(string))
+				return OleDbType.VarWChar;
+			
+			throw new DataException("Type Db type not found:" + paramValue.ToString());
+		}
+
+		
 	}
 }

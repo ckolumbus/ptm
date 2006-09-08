@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using PTM.Data;
 using PTM.Infos;
@@ -34,25 +36,28 @@ namespace PTM.Business.Helpers
 			
 		}
 		
-		public static void MergeContiguousLogs(int daysToMerge)
+		public static void GroupLogs()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
-			int i = 1;
 			DateTime date = DateTime.Today.AddDays(-(int)config.Value);
 			while(true)
 			{
-				if(i>= daysToMerge) 
+				object value = DbHelper.ExecuteScalar("SELECT Max(InsertTime) FROM TasksLog WHERE InsertTime<?",
+				                       new string[] {"InsertTime"}, new object[] {date});
+				
+				if(value == DBNull.Value)
 					break;
-				date = date.AddDays(-1);
+			
+				date = ((DateTime) value).Date;
+				
 				ArrayList list = Logs.GetLogsByDay(date);
-				if(list.Count==0)
+				bool mergeNeeded = GroupLogsList(list);
+				if(!mergeNeeded)
 					break;
-				MergeLogs(list);
-				i++;
 			}
 		}
 
-		private static void MergeLogs(ArrayList logs)
+		private static bool GroupLogsList(ArrayList logs)
 		{
 			ArrayList mergedList = new ArrayList();
 			ArrayList needsDelete = new ArrayList();
@@ -73,12 +78,43 @@ namespace PTM.Business.Helpers
 							merged.Duration += log.Duration;
 							needsDelete.Add(log);
 							needsUpdate.Add(merged);
-							break;
+							continue;
 					}
 				}
 				mergedList.Add(log);
 				m++;
 			}
+			if(needsDelete.Count == 0 && needsUpdate.Count== 0)
+				return false;
+			
+			OleDbConnection con;
+			con = DbHelper.GetConnection();
+			con.Open();
+			OleDbTransaction trans = con.BeginTransaction();
+			try
+			{
+				foreach (Log log in needsDelete)
+				{
+					OleDbCommand command = new OleDbCommand("Delete from TasksLog Where Id = " + log.Id, con, trans);
+					command.ExecuteNonQuery();
+				}
+				foreach (Log log in needsUpdate)
+				{
+					OleDbCommand command = new OleDbCommand("Update TasksLog Set Duration = " + log.Duration+ " Where Id = " + log.Id, con, trans);
+					command.ExecuteNonQuery();
+				}
+				trans.Commit();				
+			}
+			catch
+			{
+				trans.Rollback();
+				throw;
+			}
+			finally
+			{
+				con.Close();
+			}
+			return true;
 		}
 	}
 }
