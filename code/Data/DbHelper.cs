@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.IO;
 
 namespace PTM.Data
@@ -277,9 +278,29 @@ namespace PTM.Data
 		{
 			object[] oParams;
 
+			Type typJRO=Type.GetTypeFromProgID("JRO.JetEngine");
+			if (typJRO==null)
+			{
+				//phps. msjro is not registered
+				string strMsjrodll=Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),@"Common Files\System\ado\msjro.dll");
+				if (File.Exists(strMsjrodll))
+				{
+					//start a process to register the dll
+					Process procRegisterMsjro=Process.Start("regsvr32.exe",string.Concat("/s \"",strMsjrodll,"\""));
+					procRegisterMsjro.WaitForExit();
+					typJRO=Type.GetTypeFromProgID("JRO.JetEngine");
+				}
+			}
+
+			if (typJRO==null)
+			{
+				throw new InvalidOperationException("JRO.JetEngine can not be created... please check if it is installed");
+			}
+
+			//create an inctance of a Jet Replication Object
 			object objJRO = 
-				Activator.CreateInstance(Type.GetTypeFromProgID("JRO.JetEngine"));
-		
+				Activator.CreateInstance(typJRO); 
+			
 			string dataSource = GetDataSource();
 			string tempFile = Path.GetDirectoryName(dataSource) + "\\temp.mdb";
 			oParams = new object[] {
