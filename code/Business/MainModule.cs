@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Windows.Forms;
+using PTM.Business.Helpers;
 using PTM.Data;
 
 namespace PTM.Business
@@ -19,6 +20,10 @@ namespace PTM.Business
 		public static void Initialize(PTMDataset ds, string userName)
 		{
 			DbHelper.Initialize(userName);
+			Application.DoEvents();
+			DataMaintenanceHelper.DeleteIdleEntries();
+			Application.DoEvents();
+			DataMaintenanceHelper.GroupLogs();
 			Application.DoEvents();
 			DbHelper.CompactDB();
 			Application.DoEvents();
