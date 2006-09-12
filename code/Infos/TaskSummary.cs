@@ -1,6 +1,3 @@
-using System;
-using System.Windows.Forms;
-
 namespace PTM.Infos
 {
 	/// <summary>
@@ -13,28 +10,37 @@ namespace PTM.Infos
 		/// </summary>
 		public TaskSummary()
 		{
-		}//TaskSummary
+		} //TaskSummary
 
 		/// <summary>
 		/// Task Id of this summary
 		/// </summary>
-		int taskId;
+		private int taskId;
+
 		/// <summary>
 		/// Total elapsed time with this task
 		/// </summary>
-		double totalTime;
+		private double totalActiveTime;
+
+		/// <summary>
+		/// Total elapsed inactive time with this task
+		/// </summary>
+		private double totalInactiveTime;
+
 		/// <summary>
 		/// Task description
 		/// </summary>
-		string description;
+		private string description;
+
 		/// <summary>
 		/// Stores if this task is one of the Default tasks.
 		/// </summary>
-		bool isDefaultTask;
+		private bool isDefaultTask;
+
 		/// <summary>
 		/// In case of being a Defautl Task stores its defaultTask Id.
 		/// </summary>
-		int defaultTaskId;
+		private int defaultTaskId;
 
 		/// <summary>
 		/// TaskId Accessors
@@ -42,18 +48,26 @@ namespace PTM.Infos
 		public int TaskId
 		{
 			get { return taskId; }
-			set
-			{ taskId = value; }
-		}//TaskId
+			set { taskId = value; }
+		} //TaskId
 
 		/// <summary>
-		/// TotalTime Accessors
+		/// TotalActiveTime Accessors
 		/// </summary>
-		public double TotalTime
+		public double TotalActiveTime
 		{
-			get{ return totalTime;}
-			set { totalTime = value; }
-		}//TotalTime
+			get { return totalActiveTime; }
+			set { totalActiveTime = value; }
+		} //TotalTime
+
+		/// <summary>
+		/// TotalActiveTime Accessors
+		/// </summary>
+		public double TotalInactiveTime
+		{
+			get { return totalInactiveTime; }
+			set { totalInactiveTime = value; }
+		} //TotalTime
 
 		/// <summary>
 		/// Description Accessors
@@ -61,9 +75,8 @@ namespace PTM.Infos
 		public string Description
 		{
 			get { return description; }
-			set
-			{ description = value; }
-		}//Description
+			set { description = value; }
+		} //Description
 
 		/// <summary>
 		/// IsDefaultTask Accessors
@@ -72,7 +85,7 @@ namespace PTM.Infos
 		{
 			get { return isDefaultTask; }
 			set { isDefaultTask = value; }
-		}//IsDefaultTask
+		} //IsDefaultTask
 
 		/// <summary>
 		/// DefaultTaskId Accessors
@@ -81,7 +94,6 @@ namespace PTM.Infos
 		{
 			get { return defaultTaskId; }
 			set { defaultTaskId = value; }
-		}//DefaultTaskId
-
-	}//end of class
-}//end of namespace
+		} //DefaultTaskId
+	} //end of class
+} //end of namespace

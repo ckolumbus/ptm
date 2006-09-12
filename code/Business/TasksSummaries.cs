@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Data.OleDb;
 using PTM.Data;
 using PTM.Infos;
 
@@ -33,7 +32,7 @@ namespace PTM.Business
 			{
 				TaskSummary taskSum = new TaskSummary();
 				taskSum.TaskId = (int) hashtable["TaskId"];
-				taskSum.TotalTime = (double) hashtable["TotalTime"];
+				taskSum.TotalActiveTime = (double) hashtable["TotalTime"];
 				summaryList.Add( taskSum );
 			}//foreach
 			return summaryList;
@@ -60,6 +59,11 @@ namespace PTM.Business
 				if ( sumRow.IsDefaultTask )
 				{
 					sumRow.DefaultTaskId = row.DefaultTaskId;
+					if(!DefaultTasks.IsActive((DefaultTaskEnum) sumRow.DefaultTaskId))
+					{
+						sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
+						sumRow.TotalActiveTime = 0;
+					}
 				}//if
 				
 				if(sumRow.DefaultTaskId!=(int)DefaultTaskEnum.Idle)//ignore idle time
@@ -77,12 +81,12 @@ namespace PTM.Business
 							TaskSummary retrow = FindTaskSummaryByTaskId(returnList, sumRow.TaskId);
 							if (retrow == null)
 							{
-
 								returnList.Add(sumRow);
 							}
 							else
 							{
-								retrow.TotalTime += sumRow.TotalTime;
+									retrow.TotalInactiveTime += sumRow.TotalInactiveTime;
+									retrow.TotalActiveTime += sumRow.TotalActiveTime;
 							}//if-else
 						}
 						else
@@ -95,7 +99,8 @@ namespace PTM.Business
 								psumRow.TaskId = prow.Id;
 								continue;
 							}//if
-							psumRow.TotalTime += sumRow.TotalTime;
+								psumRow.TotalInactiveTime += sumRow.TotalInactiveTime;
+								psumRow.TotalActiveTime += sumRow.TotalActiveTime;
 						}//if-else
 					}
 					else

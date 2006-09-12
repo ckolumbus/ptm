@@ -29,9 +29,10 @@ namespace PTM.View.Controls
 		private DateTimePicker dateTimePicker;
 		private Label totalTasksLoggedValue;
 		private Label AppsActiveTimeValue;
-		private System.Windows.Forms.Button browseButton;
-		private System.Windows.Forms.ComboBox parentTaskComboBox;
-		private System.Windows.Forms.Label label2;
+		private Button browseButton;
+		private ComboBox parentTaskComboBox;
+		private Label label2;
+
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -51,33 +52,32 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.DataSource = parentTasksTable;
 			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
 			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
-			
+
 			this.dateTimePicker.Value = DateTime.Today;
-			
-			if(parentTaskComboBox.Items.Count>0)
+
+			if (parentTaskComboBox.Items.Count > 0)
 				parentTaskComboBox.SelectedIndex = 0;
-			this.dateTimePicker.ValueChanged += new System.EventHandler(this.dateTimePicker_ValueChanged);
-			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
-
-
+			this.dateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
+			this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 		}
 
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Component Designer generated code
+
 		/// <summary> 
 		/// Required method for Designer support - do not modify 
 		/// the contents of this method with the code editor.
@@ -106,14 +106,18 @@ namespace PTM.View.Controls
 			// 
 			// applicationsList
 			// 
-			this.applicationsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																							   this.colName,
-																							   this.colActiveTime,
-																							   this.colAppPercent,
-																							   this.colProcessId});
+			this.applicationsList.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                                       	{
+			                                       		this.colName,
+			                                       		this.colActiveTime,
+			                                       		this.colAppPercent,
+			                                       		this.colProcessId
+			                                       	});
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
@@ -157,9 +161,11 @@ namespace PTM.View.Controls
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.applicationsList);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
@@ -172,8 +178,10 @@ namespace PTM.View.Controls
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.AppsActiveTimeValue);
 			this.groupBox4.Controls.Add(this.label8);
 			this.groupBox4.Controls.Add(this.totalTasksLoggedValue);
@@ -269,8 +277,8 @@ namespace PTM.View.Controls
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
 		//private SummaryDataset.TasksSummaryDataTable tasksSummaryDataset;
@@ -287,7 +295,6 @@ namespace PTM.View.Controls
 
 		private void ClearContent()
 		{
-
 			this.totalTasksLoggedValue.Text = "";
 			this.AppsActiveTimeValue.Text = "";
 			this.applicationsList.Items.Clear();
@@ -295,7 +302,7 @@ namespace PTM.View.Controls
 
 		public void UpdateStatistics()
 		{
-			if(this.dateTimePicker.Value != DateTime.Today)
+			if (this.dateTimePicker.Value != DateTime.Today)
 				this.dateTimePicker.Value = DateTime.Today;
 			else
 			{
@@ -312,63 +319,67 @@ namespace PTM.View.Controls
 		{
 			try
 			{
-
 				ClearContent();
 				this.Refresh();
-				System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
-				
+				Cursor.Current = Cursors.WaitCursor;
+
 				ArrayList appsSummaryList = ApplicationSummaries.GetApplicationsSummary(
-					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue), 
+					Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
 					day, day.AddDays(1));
 				int appActiveTime = 0;
 				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
 				{
-					appActiveTime+= (int)applicationsSummaryRow.TotalActiveTime;
+					appActiveTime += (int) applicationsSummaryRow.TotalActiveTime;
 				}
 				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
 				{
-					TimeSpan active =  new TimeSpan(0,0,(int) applicationsSummaryRow.TotalActiveTime);
+					TimeSpan active = new TimeSpan(0, 0, (int) applicationsSummaryRow.TotalActiveTime);
 					string activeTime = ViewHelper.TimeSpanToTimeString(active);
 					double percent = 0;
-					if(appActiveTime>0)
-						percent =  applicationsSummaryRow.TotalActiveTime / appActiveTime;
-					TreeListViewItem lvi = new TreeListViewItem(applicationsSummaryRow.Name, new string[]{activeTime, percent.ToString("0.0%", CultureInfo.InvariantCulture), applicationsSummaryRow.TaskId.ToString(CultureInfo.InvariantCulture)});
+					if (appActiveTime > 0)
+						percent = applicationsSummaryRow.TotalActiveTime/appActiveTime;
+					TreeListViewItem lvi =
+						new TreeListViewItem(applicationsSummaryRow.Name,
+						                     new string[]
+						                     	{
+						                     		activeTime, percent.ToString("0.0%", CultureInfo.InvariantCulture),
+						                     		applicationsSummaryRow.TaskId.ToString(CultureInfo.InvariantCulture)
+						                     	});
 					lvi.ImageIndex = IconsManager.AddIconFromFile(applicationsSummaryRow.ApplicationFullPath);
 					this.applicationsList.Items.Add(lvi);
 				}
-				AppsActiveTimeValue.Text =  ViewHelper.TimeSpanToTimeString(new TimeSpan(0,0,appActiveTime));
-				
+				AppsActiveTimeValue.Text = ViewHelper.TimeSpanToTimeString(new TimeSpan(0, 0, appActiveTime));
 			}
 			finally
 			{
-				System.Windows.Forms.Cursor.Current = Cursors.Default;
+				Cursor.Current = Cursors.Default;
 			}
-			}
+		}
 
 
 		private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(parentTaskComboBox.SelectedIndex == -1)
+			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
 			GetTaskDetail(dateTimePicker.Value);
 		}
 
-		private void browseButton_Click(object sender, System.EventArgs e)
+		private void browseButton_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm tgForm = new TasksHierarchyForm();
 			tgForm.ShowDialog(this);
-			if(tgForm.SelectedTaskRow == null)
+			if (tgForm.SelectedTaskRow == null)
 				return;
 
-			if(parentTasksTable.FindById(tgForm.SelectedTaskRow.Id)==null)
+			if (parentTasksTable.FindById(tgForm.SelectedTaskRow.Id) == null)
 			{
 				PTMDataset.TasksRow parentRow = this.parentTasksTable.NewTasksRow();
 				parentRow.ItemArray = tgForm.SelectedTaskRow.ItemArray;
 				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Rows.InsertAt(parentRow, 0 );
+				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
 			}
-			this.parentTaskComboBox.SelectedValue= tgForm.SelectedTaskRow.Id;
+			this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskRow.Id;
 		}
 	}
 }

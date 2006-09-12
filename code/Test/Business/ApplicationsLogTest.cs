@@ -29,7 +29,7 @@ namespace PTM.Test.Business
 		public void Initialize()
 		{
 		}
-		
+
 		[Test]
 		public void GetApplicationsLogTest()
 		{
@@ -46,6 +46,5 @@ namespace PTM.Test.Business
 			Logs.StopLogging();
 			DbHelper.DeleteDataSource();
 		}
-
 	}
 }

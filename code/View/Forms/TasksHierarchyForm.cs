@@ -15,10 +15,10 @@ namespace PTM.View.Forms
 		private TasksTreeViewControl tasksTreeViewControl;
 		private Button newButton;
 		private Button okButton;
-		private System.Windows.Forms.Button deleteButton;
-		private System.Windows.Forms.Button editButton;
+		private Button deleteButton;
+		private Button editButton;
 		private IContainer components;
-		
+
 
 		private PTMDataset.TasksRow selectedTaskRow = null;
 
@@ -30,33 +30,34 @@ namespace PTM.View.Forms
 		public TasksHierarchyForm()
 		{
 			InitializeComponent();
-			tasksTreeViewControl.SelectedTaskChanged+=new EventHandler(TreeView_AfterSelect);
+			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);
 			this.tasksTreeViewControl.Initialize(true);
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksHierarchyForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TasksHierarchyForm));
 			this.newButton = new System.Windows.Forms.Button();
 			this.okButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
@@ -66,7 +67,9 @@ namespace PTM.View.Forms
 			// 
 			// newButton
 			// 
-			this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.newButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.newButton.Location = new System.Drawing.Point(264, 16);
 			this.newButton.Name = "newButton";
@@ -77,7 +80,9 @@ namespace PTM.View.Forms
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(264, 288);
 			this.okButton.Name = "okButton";
@@ -88,7 +93,9 @@ namespace PTM.View.Forms
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(264, 96);
 			this.deleteButton.Name = "deleteButton";
@@ -99,7 +106,9 @@ namespace PTM.View.Forms
 			// 
 			// editButton
 			// 
-			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.editButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(264, 56);
 			this.editButton.Name = "editButton";
@@ -109,9 +118,11 @@ namespace PTM.View.Forms
 			// 
 			// tasksTreeViewControl
 			// 
-			this.tasksTreeViewControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.tasksTreeViewControl.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.tasksTreeViewControl.Location = new System.Drawing.Point(8, 8);
 			this.tasksTreeViewControl.Name = "tasksTreeViewControl";
 			this.tasksTreeViewControl.SelectedTaskId = -1;
@@ -128,36 +139,35 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.deleteButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.newButton);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MinimizeBox = false;
 			this.Name = "TasksHierarchyForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Tasks Explorer";
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
-	
 
 		private void newButton_Click(object sender, EventArgs e)
 		{
-			tasksTreeViewControl.AddNewTask();		
+			tasksTreeViewControl.AddNewTask();
 		}
 
-		private void editButton_Click(object sender, System.EventArgs e)
+		private void editButton_Click(object sender, EventArgs e)
 		{
 			tasksTreeViewControl.EditSelectedTaskDescription();
 		}
 
-		private void deleteButton_Click(object sender, System.EventArgs e)
-		{	
-			tasksTreeViewControl.DeleteSelectedTask();	
+		private void deleteButton_Click(object sender, EventArgs e)
+		{
+			tasksTreeViewControl.DeleteSelectedTask();
 		}
 
 		private void TreeView_AfterSelect(object sender, EventArgs e)
 		{
-			if(tasksTreeViewControl.SelectedTaskId == Tasks.RootTasksRow.Id)
+			if (tasksTreeViewControl.SelectedTaskId == Tasks.RootTasksRow.Id)
 			{
 				this.editButton.Enabled = false;
 				this.deleteButton.Enabled = false;
@@ -169,10 +179,10 @@ namespace PTM.View.Forms
 			}
 		}
 
-		private void okButton_Click(object sender, System.EventArgs e)
+		private void okButton_Click(object sender, EventArgs e)
 		{
 			this.selectedTaskRow = Tasks.FindById(
-			(int) tasksTreeViewControl.SelectedTaskId);
+				(int) tasksTreeViewControl.SelectedTaskId);
 			this.Close();
 		}
 	}

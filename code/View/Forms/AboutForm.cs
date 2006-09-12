@@ -15,10 +15,11 @@ namespace PTM.View.Forms
 		private Label label3;
 		private PictureBox pictureBox2;
 		private Label lblVersion;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.PictureBox pictureBox3;
+		private Label label2;
+		private Label label4;
+		private Label label5;
+		private PictureBox pictureBox3;
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -30,7 +31,7 @@ namespace PTM.View.Forms
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			this.lblVersion.Text+=MainClass.GetVersionString();
+			this.lblVersion.Text += MainClass.GetVersionString();
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
@@ -39,26 +40,27 @@ namespace PTM.View.Forms
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AboutForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (AboutForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
@@ -73,7 +75,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
 			this.pictureBox1.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(72, 64);
@@ -83,7 +85,9 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Font =
+				new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold,
+				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.label1.Location = new System.Drawing.Point(80, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(168, 23);
@@ -119,7 +123,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox2
 			// 
-			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+			this.pictureBox2.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox2.Image")));
 			this.pictureBox2.Location = new System.Drawing.Point(176, 56);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(24, 16);
@@ -153,7 +157,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox3
 			// 
-			this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+			this.pictureBox3.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox3.Image")));
 			this.pictureBox3.Location = new System.Drawing.Point(176, 80);
 			this.pictureBox3.Name = "pictureBox3";
 			this.pictureBox3.Size = new System.Drawing.Size(24, 16);
@@ -176,7 +180,7 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
@@ -185,8 +189,8 @@ namespace PTM.View.Forms
 			this.Text = "About People Task Manager";
 			this.TopMost = true;
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
 		private void button1_Click(object sender, EventArgs e)

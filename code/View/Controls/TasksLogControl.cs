@@ -11,7 +11,7 @@ using PTM.Data;
 using PTM.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
-using Timer = System.Timers.Timer;
+using Timer=System.Timers.Timer;
 
 namespace PTM.View.Controls
 {
@@ -42,42 +42,45 @@ namespace PTM.View.Controls
 		private Button switchToButton;
 		private Button deleteButton;
 		private ColumnHeader StartTimeHeader;
-		private System.Windows.Forms.MenuItem menuItem7;
-		private System.Windows.Forms.DateTimePicker logDate;
-		private System.Windows.Forms.Label label1;
+		private MenuItem menuItem7;
+		private DateTimePicker logDate;
+		private Label label1;
 		private DateTime currentDay;
-		
+
 		public TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
-	
-			exitContextMenuItem.Click+=new EventHandler(exitContextMenuItem_Click);
-			notifyIcon.MouseDown+=new MouseEventHandler(notifyIcon_MouseDown);
-			notifyTimer.Elapsed+=new ElapsedEventHandler(notifyTimer_Elapsed);
-			notifyAnswerTimer.Elapsed+=new ElapsedEventHandler(notifyAnswerTimer_Elapsed);
-			notifyIcon.Click+=new EventHandler(notifyIcon_Click);
-			addTaskButton.Click+=new EventHandler(addTaskButton_Click);
-			this.taskList.DoubleClick+=new EventHandler(taskList_DoubleClick);
 
-			Tasks.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
-			Tasks.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Logs.LogChanged+=new Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			ApplicationsLog.ApplicationsLogChanged+=new PTM.Business.ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);
+			notifyIcon.MouseDown += new MouseEventHandler(notifyIcon_MouseDown);
+			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
+			notifyAnswerTimer.Elapsed += new ElapsedEventHandler(notifyAnswerTimer_Elapsed);
+			notifyIcon.Click += new EventHandler(notifyIcon_Click);
+			addTaskButton.Click += new EventHandler(addTaskButton_Click);
+			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
+
+			Tasks.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
+			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			ApplicationsLog.ApplicationsLogChanged +=
+				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
-			this.Load+=new EventHandler(TasksLogControl_Load);
-		}
-		protected override void OnHandleDestroyed(EventArgs e)
-		{
-			Tasks.TasksRowChanged-=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
-			Tasks.TasksRowDeleting-=new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Logs.LogChanged-=new Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			ApplicationsLog.ApplicationsLogChanged-=new PTM.Business.ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
-			base.OnHandleDestroyed (e);
+			this.Load += new EventHandler(TasksLogControl_Load);
 		}
 
-		
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			Tasks.TasksRowChanged -= new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
+			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			ApplicationsLog.ApplicationsLogChanged -=
+				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+			base.OnHandleDestroyed(e);
+		}
+
+
 		private void SetLogDay(DateTime date)
 		{
 			taskList.Items.Clear();
@@ -86,8 +89,8 @@ namespace PTM.View.Controls
 			{
 				PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
 				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-				SetListItemValues(itemA,log, taskRow);
-				taskList.Items.Insert(0,itemA);
+				SetListItemValues(itemA, log, taskRow);
+				taskList.Items.Insert(0, itemA);
 				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
 				foreach (ApplicationLog applicationLog in applicationLogs)
 				{
@@ -96,19 +99,20 @@ namespace PTM.View.Controls
 			}
 		}
 
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Component Designer generated code
+
 		/// <summary> 
 		/// Required method for Designer support - do not modify 
 		/// the contents of this method with the code editor.
@@ -116,7 +120,7 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksLogControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TasksLogControl));
 			this.editButton = new System.Windows.Forms.Button();
 			this.addTaskButton = new System.Windows.Forms.Button();
 			this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
@@ -141,13 +145,15 @@ namespace PTM.View.Controls
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.logDate = new System.Windows.Forms.DateTimePicker();
 			this.label1 = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.notifyAnswerTimer)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.notifyTimer)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// editButton
 			// 
-			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.editButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(152, 280);
 			this.editButton.Name = "editButton";
@@ -158,7 +164,9 @@ namespace PTM.View.Controls
 			// 
 			// addTaskButton
 			// 
-			this.addTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.addTaskButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.addTaskButton.Location = new System.Drawing.Point(312, 280);
 			this.addTaskButton.Name = "addTaskButton";
@@ -187,17 +195,19 @@ namespace PTM.View.Controls
 			// 
 			// notifyContextMenu
 			// 
-			this.notifyContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							  this.exitContextMenuItem,
-																							  this.menuItem1,
-																							  this.menuItem2,
-																							  this.menuItem3,
-																							  this.menuItem4,
-																							  this.menuItem5,
-																							  this.menuItem6,
-																							  this.menuItem7,
-																							  this.menuItem9,
-																							  this.menuItem10});
+			this.notifyContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                          	{
+			                                          		this.exitContextMenuItem,
+			                                          		this.menuItem1,
+			                                          		this.menuItem2,
+			                                          		this.menuItem3,
+			                                          		this.menuItem4,
+			                                          		this.menuItem5,
+			                                          		this.menuItem6,
+			                                          		this.menuItem7,
+			                                          		this.menuItem9,
+			                                          		this.menuItem10
+			                                          	});
 			// 
 			// exitContextMenuItem
 			// 
@@ -264,20 +274,24 @@ namespace PTM.View.Controls
 			// notifyIcon
 			// 
 			this.notifyIcon.ContextMenu = this.notifyContextMenu;
-			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+			this.notifyIcon.Icon = ((System.Drawing.Icon) (resources.GetObject("notifyIcon.Icon")));
 			this.notifyIcon.Text = "Current task";
 			this.notifyIcon.Visible = true;
 			// 
 			// taskList
 			// 
-			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.taskList.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.AutoArrange = false;
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskDescriptionHeader,
-																					   this.DurationTaskHeader,
-																					   this.StartTimeHeader});
+			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                               	{
+			                               		this.TaskDescriptionHeader,
+			                               		this.DurationTaskHeader,
+			                               		this.StartTimeHeader
+			                               	});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 32);
 			this.taskList.Name = "taskList";
@@ -288,7 +302,9 @@ namespace PTM.View.Controls
 			// 
 			// switchToButton
 			// 
-			this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.switchToButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.switchToButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.switchToButton.Location = new System.Drawing.Point(232, 280);
 			this.switchToButton.Name = "switchToButton";
@@ -299,7 +315,9 @@ namespace PTM.View.Controls
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(72, 280);
 			this.deleteButton.Name = "deleteButton";
@@ -337,30 +355,33 @@ namespace PTM.View.Controls
 			this.Controls.Add(this.addTaskButton);
 			this.Name = "TasksLogControl";
 			this.Size = new System.Drawing.Size(392, 312);
-			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.notifyAnswerTimer)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.notifyTimer)).EndInit();
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
 		#region TaskLog
+
 		private void TasksLogControl_Load(object sender, EventArgs e)
 		{
 			currentDay = DateTime.Today;
 			SetLogDay(currentDay);
 		}
+
 		public void NewTaskLog(bool mustAddATask)
 		{
 			notifyTimer.Stop();
 			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
-				AddTaskLog(tasklog.SelectedTaskRow.Id, (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+				AddTaskLog(tasklog.SelectedTaskRow.Id,
+				           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 			}
 			else if (mustAddATask)
 			{
-				if(Tasks.CurrentTaskRow==null)
+				if (Tasks.CurrentTaskRow == null)
 					AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
 				else
 					AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.Idle);
@@ -370,10 +391,10 @@ namespace PTM.View.Controls
 		private void AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
 			Logs.AddDefaultTaskLog(taskParentId, defaultTaskEnum);
-			ResetNotifyTimer((int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+			ResetNotifyTimer((int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 		}
 
-		private void AddTaskLog(int taskId , int defaultMins)
+		private void AddTaskLog(int taskId, int defaultMins)
 		{
 			Logs.AddLog(taskId);
 			ResetNotifyTimer(defaultMins);
@@ -388,34 +409,33 @@ namespace PTM.View.Controls
 
 		private void EditSelectedTaskLog()
 		{
-			if(!isValidEditableLog())
+			if (!isValidEditableLog())
 				return;
 			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
-			
+
 			TaskLogForm taskLogForm = new TaskLogForm(taskId);
-			if(taskLogForm.ShowDialog(this.Parent)==DialogResult.OK)
+			if (taskLogForm.ShowDialog(this.Parent) == DialogResult.OK)
 			{
-				for(int i = 0; i < taskList.SelectedItems.Count; i++)
+				for (int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
 					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskRow.Id);
 				}
 			}
 		}
-		
+
 		private void DeleteSelectedTaskLog()
 		{
-			if(!isValidEditableLog())
+			if (!isValidEditableLog())
 				return;
-			
-				for(int i = 0; i < taskList.SelectedItems.Count; i++)
-				{
-					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					Logs.DeleteLog(taskLogId);
-				}
-			
+
+			for (int i = 0; i < taskList.SelectedItems.Count; i++)
+			{
+				int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
+				Logs.DeleteLog(taskLogId);
+			}
 		}
-		
+
 		private void addTaskButton_Click(object sender, EventArgs e)
 		{
 			NewTaskLog(false);
@@ -430,59 +450,58 @@ namespace PTM.View.Controls
 		{
 			EditSelectedTaskLog();
 		}
-		
+
 		private void deleteButton_Click(object sender, EventArgs e)
 		{
 			DeleteSelectedTaskLog();
 		}
-		
+
 		private bool isValidEditableLog()
 		{
-			if(this.taskList.SelectedItems.Count==0)
+			if (this.taskList.SelectedItems.Count == 0)
 				return false;
-			if(taskList.SelectedItems[0].Parent!=null)
+			if (taskList.SelectedItems[0].Parent != null)
 				return false;
-			
+
 			return true;
 		}
-		
+
 		private void switchToButton_Click(object sender, EventArgs e)
 		{
-			if(!isValidEditableLog())
+			if (!isValidEditableLog())
 				return;
-			int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
-			AddTaskLog(taskId, 
-				(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
-
+			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+			AddTaskLog(taskId,
+			           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 		}
 
 		private void taskList_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(this.taskList.SelectedItems.Count<=0)
+			if (this.taskList.SelectedItems.Count <= 0)
 				this.editButton.Enabled = false;
-			else if(this.taskList.SelectedItems.Count == 1)
+			else if (this.taskList.SelectedItems.Count == 1)
 			{
-				if(taskList.SelectedItems[0].Parent==null)
+				if (taskList.SelectedItems[0].Parent == null)
 					this.editButton.Enabled = true;
 				else
 					this.editButton.Enabled = false;
 			}
 			else
 			{
-				if(taskList.SelectedItems[0].Parent!=null)
+				if (taskList.SelectedItems[0].Parent != null)
 				{
 					this.editButton.Enabled = false;
 					return;
 				}
-				int taskId =  ((Log)taskList.SelectedItems[0].Tag).TaskId;
-				for(int i = 1 ; i<this.taskList.SelectedItems.Count;i++)
+				int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+				for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
 				{
-					if(taskList.SelectedItems[i].Parent!=null)
+					if (taskList.SelectedItems[i].Parent != null)
 					{
 						this.editButton.Enabled = false;
 						return;
 					}
-					if(((Log)taskList.SelectedItems[i].Tag).TaskId!=taskId)
+					if (((Log) taskList.SelectedItems[i].Tag).TaskId != taskId)
 					{
 						this.editButton.Enabled = false;
 						return;
@@ -492,9 +511,9 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void logDate_ValueChanged(object sender, System.EventArgs e)
+		private void logDate_ValueChanged(object sender, EventArgs e)
 		{
-			if(logDate.Value.Date != DateTime.Today)
+			if (logDate.Value.Date != DateTime.Today)
 			{
 				this.addTaskButton.Enabled = false;
 				this.switchToButton.Enabled = false;
@@ -512,7 +531,9 @@ namespace PTM.View.Controls
 		#region Notifications
 
 		private NotifyForm notifyForm;
-		private void notifyIcon_MouseDown(object sender, MouseEventArgs e)		{
+
+		private void notifyIcon_MouseDown(object sender, MouseEventArgs e)
+		{
 			if (e.Button == MouseButtons.Left)
 			{
 				if (this.Visible == false)
@@ -544,6 +565,7 @@ namespace PTM.View.Controls
 		{
 			this.ParentForm.Activate();
 		}
+
 		private void GetAnswer()
 		{
 			notifyAnswerTimer.Stop();
@@ -562,8 +584,8 @@ namespace PTM.View.Controls
 			}
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
 			{
-				AddTaskLog(Tasks.CurrentTaskRow.Id, 
-					(int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+				AddTaskLog(Tasks.CurrentTaskRow.Id,
+				           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 			}
 			else
 			{
@@ -571,12 +593,12 @@ namespace PTM.View.Controls
 			}
 		}
 
-
 		#endregion
 
 		#region NotifyContextMenu
 
 		public event EventHandler Exit;
+
 		private void exitContextMenuItem_Click(object sender, EventArgs e)
 		{
 			this.notifyTimer.Stop();
@@ -587,7 +609,7 @@ namespace PTM.View.Controls
 
 		private void menuItem2_Click(object sender, EventArgs e)
 		{
-			if(Tasks.CurrentTaskRow==null)
+			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
 			else
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.Idle);
@@ -595,7 +617,7 @@ namespace PTM.View.Controls
 
 		private void menuItem3_Click(object sender, EventArgs e)
 		{
-			if(Tasks.CurrentTaskRow==null)
+			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.LunchTime);
 			else
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.LunchTime);
@@ -603,7 +625,7 @@ namespace PTM.View.Controls
 
 		private void menuItem4_Click(object sender, EventArgs e)
 		{
-			if(Tasks.CurrentTaskRow==null)
+			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.OtherPersonal);
 			else
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.OtherPersonal);
@@ -611,7 +633,7 @@ namespace PTM.View.Controls
 
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
-			if(Tasks.CurrentTaskRow==null)
+			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.JobPhoneCall);
 			else
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.JobPhoneCall);
@@ -619,15 +641,15 @@ namespace PTM.View.Controls
 
 		private void menuItem6_Click(object sender, EventArgs e)
 		{
-			if(Tasks.CurrentTaskRow==null)
+			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingJobMail);
 			else
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.CheckingJobMail);
 		}
 
-		private void menuItem7_Click(object sender, System.EventArgs e)
+		private void menuItem7_Click(object sender, EventArgs e)
 		{
-			if(Tasks.CurrentTaskRow==null)
+			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.JobMeeting);
 			else
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.JobMeeting);
@@ -639,18 +661,17 @@ namespace PTM.View.Controls
 			about.ShowDialog(this.Parent);
 		}
 
-
 		#endregion
 
 		#region Business events
 
 		private void TasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
-			if(e.Action == DataRowAction.Change)
+			if (e.Action == DataRowAction.Change)
 			{
 				foreach (ListViewItem item in this.taskList.Items)
 				{
-					if (((Log)item.Tag).TaskId == e.Row.Id)
+					if (((Log) item.Tag).TaskId == e.Row.Id)
 					{
 						item.SubItems[TaskDescriptionHeader.Index].Text = e.Row.Description;
 					}
@@ -660,44 +681,44 @@ namespace PTM.View.Controls
 
 		private void TasksDataTable_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
-				if(e.Action == DataRowAction.Delete)
-				{			
-					foreach (ListViewItem item in this.taskList.Items)
+			if (e.Action == DataRowAction.Delete)
+			{
+				foreach (ListViewItem item in this.taskList.Items)
+				{
+					if (((Log) item.Tag).TaskId == e.Row.Id)
 					{
-						if (((Log)item.Tag).TaskId == e.Row.Id)
-						{
-							item.Remove();
-						}
+						item.Remove();
 					}
 				}
+			}
 		}
 
 		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
 			PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
-			if(e.Action == DataRowAction.Change)
+			if (e.Action == DataRowAction.Change)
 			{
 				foreach (TreeListViewItem item in this.taskList.Items)
 				{
-					if (((Log)item.Tag).Id == e.Log.Id)
+					if (((Log) item.Tag).Id == e.Log.Id)
 					{
-						SetListItemValues(item,e.Log, taskRow);
+						SetListItemValues(item, e.Log, taskRow);
 						break;
 					}
 				}
 			}
-			else if(e.Action == DataRowAction.Add)
+			else if (e.Action == DataRowAction.Add)
 			{
 				CheckCurrentDayChanged();
-				if(this.logDate.Value.Date == currentDay)
+				if (this.logDate.Value.Date == currentDay)
 				{
 					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-					SetListItemValues(itemA,e.Log, taskRow);
-					taskList.Items.Insert(0,itemA);						
+					SetListItemValues(itemA, e.Log, taskRow);
+					taskList.Items.Insert(0, itemA);
 				}
 			}
-			
-			if(Logs.CurrentLog != null && Logs.CurrentLog.Id == e.Log.Id)
+
+			if (Logs.CurrentLog != null && Logs.CurrentLog.Id == e.Log.Id)
 			{
 				this.notifyIcon.Text = taskRow.Description;
 			}
@@ -705,7 +726,7 @@ namespace PTM.View.Controls
 
 		private void CheckCurrentDayChanged()
 		{
-			if(currentDay != DateTime.Today)
+			if (currentDay != DateTime.Today)
 			{
 				this.taskList.Items.Clear();
 				currentDay = DateTime.Today;
@@ -713,45 +734,47 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SetListItemValues(ListViewItem item, Log log ,PTMDataset.TasksRow taskRow)
+		private void SetListItemValues(ListViewItem item, Log log, PTMDataset.TasksRow taskRow)
 		{
 			item.Tag = log;
-			if(item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
+			if (item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
 			{
 				item.Text = taskRow.Description;
 			}
 			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
 			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
-			
+
 			if (taskRow.IsDefaultTask)
 			{
 				item.ImageIndex = IconsManager.GetIndex(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
-				if(Logs.CurrentLog!=null && log.Id == Logs.CurrentLog.Id)
+				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon = IconsManager.GetIcon(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
 			}
 			else
 			{
 				item.ImageIndex = IconsManager.GetIndex("0");
-				if(Logs.CurrentLog!=null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon =  IconsManager.GetIcon("0");
+				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
+					notifyIcon.Icon = IconsManager.GetIcon("0");
 			}
-			
 		}
 
 		private void UpdateApplicationsList(ApplicationLog applicationLog)
 		{
-			if (applicationLog == null) {return;}
+			if (applicationLog == null)
+			{
+				return;
+			}
 
-			TimeSpan active =  new TimeSpan(0,0,applicationLog.ActiveTime);
+			TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
 			string activeTime = ViewHelper.TimeSpanToTimeString(active);
 			string caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;
 			foreach (TreeListViewItem logItem in this.taskList.Items)
 			{
-				if (((Log)logItem.Tag).Id == applicationLog.TaskLogId)
+				if (((Log) logItem.Tag).Id == applicationLog.TaskLogId)
 				{
 					foreach (TreeListViewItem appItem in logItem.Items)
 					{
-						if(((ApplicationLog)appItem.Tag).Id == applicationLog.Id)
+						if (((ApplicationLog) appItem.Tag).Id == applicationLog.Id)
 						{
 							appItem.Tag = applicationLog;
 							appItem.SubItems[TaskDescriptionHeader.Index].Text = caption;
@@ -759,7 +782,9 @@ namespace PTM.View.Controls
 							return;
 						}
 					}
-					TreeListViewItem lvi = new TreeListViewItem(caption, new string[] {activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture)});
+					TreeListViewItem lvi =
+						new TreeListViewItem(caption,
+						                     new string[] {activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture)});
 					lvi.Tag = applicationLog;
 					lvi.ImageIndex = IconsManager.AddIconFromFile(applicationLog.ApplicationFullPath);
 					logItem.Items.Add(lvi);
@@ -767,12 +792,11 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void ApplicationsLog_ApplicationsLogChanged(PTM.Business.ApplicationsLog.ApplicationLogChangeEventArgs e)
+		private void ApplicationsLog_ApplicationsLogChanged(ApplicationsLog.ApplicationLogChangeEventArgs e)
 		{
 			this.UpdateApplicationsList(e.ApplicationLog);
 		}
 
 		#endregion
-
 	}
 }

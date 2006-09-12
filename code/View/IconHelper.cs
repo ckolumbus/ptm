@@ -12,7 +12,9 @@ namespace PTM.View
 	/// </example>
 	internal class IconHelper
 	{
-		private IconHelper(){}
+		private IconHelper()
+		{
+		}
 
 		/// <summary>
 		/// Options to specify the size of icons to return.
@@ -27,7 +29,7 @@ namespace PTM.View
 			/// Specify small icon - 16 pixels by 16 pixels.
 			/// </summary>
 			Small = 1
-		}//IconSize
+		} //IconSize
 
 		/// <summary>
 		/// Options to specify whether folders should be in the open or closed state.
@@ -42,7 +44,7 @@ namespace PTM.View
 			/// Specify closed folder.
 			/// </summary>
 			Closed = 1
-		}//FolderType
+		} //FolderType
 
 		/// <summary>
 		/// Returns an icon for a given file - indicated by the name parameter.
@@ -66,7 +68,7 @@ namespace PTM.View
 			else
 			{
 				flags += Shell32.SHGFI_LARGEICON;
-			}//if-else
+			} //if-else
 
 			Shell32.SHGetFileInfo(name,
 			                      Shell32.FILE_ATTRIBUTE_NORMAL,
@@ -78,11 +80,8 @@ namespace PTM.View
 			Icon icon = (Icon) Icon.FromHandle(shfi.hIcon).Clone();
 			User32.DestroyIcon(shfi.hIcon); // Cleanup
 			return icon;
-
-		}//GetFileIcon
-
-
-	}//end of class IconHelper
+		} //GetFileIcon
+	} //end of class IconHelper
 
 	/// <summary>
 	/// Wraps necessary Shell32.dll structures and functions required to retrieve Icon Handles using SHGetFileInfo. Code
@@ -93,7 +92,10 @@ namespace PTM.View
 	// the icon reading code over to the IconReader type.
 	internal class Shell32
 	{
-		private Shell32(){}
+		private Shell32()
+		{
+		}
+
 		internal const int MAX_PATH = 256;
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -101,13 +103,13 @@ namespace PTM.View
 		{
 			internal ushort cb;
 			[MarshalAs(UnmanagedType.LPArray)] internal byte[] abID;
-		}//SHITEMID
+		} //SHITEMID
 
 		[StructLayout(LayoutKind.Sequential)]
 		internal struct ITEMIDLIST
 		{
 			internal SHITEMID mkid;
-		}//ITEMIDLIST
+		} //ITEMIDLIST
 
 		[StructLayout(LayoutKind.Sequential)]
 		internal struct BROWSEINFO
@@ -120,7 +122,7 @@ namespace PTM.View
 			internal IntPtr lpfn;
 			internal int lParam;
 			internal IntPtr iImage;
-		};//BROWSEINFO
+		} ; //BROWSEINFO
 
 		// Browsing for directory.
 		internal const uint BIF_RETURNONLYFSDIRS = 0x0001;
@@ -146,7 +148,7 @@ namespace PTM.View
 			internal uint dwAttributes;
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=MAX_PATH)] internal string szDisplayName;
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=NAMESIZE)] internal string szTypeName;
-		};//SHFILEINFO
+		} ; //SHFILEINFO
 
 		internal const uint SHGFI_ICON = 0x000000100; // get icon
 		internal const uint SHGFI_DISPLAYNAME = 0x000000200; // get display name
@@ -178,14 +180,17 @@ namespace PTM.View
 			uint cbFileInfo,
 			uint uFlags
 			);
-	}//Shell32
+	} //Shell32
 
 	/// <summary>
 	/// Wraps necessary functions imported from User32.dll. Code courtesy of MSDN Cold Rooster Consulting example.
 	/// </summary>
 	internal class User32
 	{
-		private User32(){}
+		private User32()
+		{
+		}
+
 		/// <summary>
 		/// Provides access to function required to delete handle. This method is used internally
 		/// and is not required to be called separately.
@@ -194,5 +199,5 @@ namespace PTM.View
 		/// <returns>N/A</returns>
 		[DllImport("User32.dll")]
 		internal static extern int DestroyIcon(IntPtr hIcon);
-	}//User32
-}//end of namespace
+	} //User32
+} //end of namespace

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
+using System.Reflection;
 using System.Resources;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -35,62 +35,62 @@ namespace PTM
 		private StatisticsControl statisticsControl;
 		private MenuItem menuItem2;
 		private MenuItem aboutMenuItem;
-		private System.Windows.Forms.MenuItem menuItem3;
-		private System.Windows.Forms.MenuItem menuItem4;
-		private System.Windows.Forms.MenuItem startUpMenuItem;
+		private MenuItem menuItem3;
+		private MenuItem menuItem4;
+		private MenuItem startUpMenuItem;
 		private IContainer components;
 		private bool systemShutdown = false;
 		private bool AnimationDisabled = false;
 
 		public MainForm()
 		{
-			InitializeComponent( );
-			Application.DoEvents( );
-			this.Text += MainClass.GetVersionString( );
-			this.tasksLogControl.Exit += new EventHandler( Exit );
-			LoadIconsFromResources( );
-			Application.DoEvents( );
-			LoadStartUpStatus( );
-			Application.DoEvents( );
-		}//MainForm
+			InitializeComponent();
+			Application.DoEvents();
+			this.Text += MainClass.GetVersionString();
+			this.tasksLogControl.Exit += new EventHandler(Exit);
+			LoadIconsFromResources();
+			Application.DoEvents();
+			LoadStartUpStatus();
+			Application.DoEvents();
+		} //MainForm
 
-		
-		private void LoadStartUpStatus(  )
+
+		private void LoadStartUpStatus()
 		{
-			RegistryKey reg = Registry.CurrentUser. 
-				OpenSubKey( "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run" , true );
-			
+			RegistryKey reg = Registry.CurrentUser.
+				OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
 			if (reg.GetValue("PTM") == null)
 			{
 				this.startUpMenuItem.Checked = false;
 			}
 			else
 			{
-				if(reg.GetValue("PTM").ToString() != System.Reflection.Assembly.GetExecutingAssembly().Location) //update path
-					reg.SetValue("PTM", System.Reflection.Assembly.GetExecutingAssembly().Location);
+				if (reg.GetValue("PTM").ToString() != Assembly.GetExecutingAssembly().Location) //update path
+					reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
 				this.startUpMenuItem.Checked = true;
-			}//if-else
+			} //if-else
 			reg.Close();
-		}//LoadStartUpStatus
+		} //LoadStartUpStatus
 
 		private void LoadIconsFromResources()
 		{
-			ResourceManager resourceManager = new ResourceManager ("PTM.View.Controls.Icons", GetType().Assembly);
-	
+			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", GetType().Assembly);
+
 			Icon resIcon;
 			int i = 1;
 			do
 			{
-				resIcon = (Icon) resourceManager.GetObject( 
-					"Icon" + i.ToString( CultureInfo.InvariantCulture ) );
-				if(resIcon!=null)
+				resIcon = (Icon) resourceManager.GetObject(
+				                 	"Icon" + i.ToString(CultureInfo.InvariantCulture));
+				if (resIcon != null)
 				{
 					IconsManager.AddIcon(
-						(i-1).ToString( CultureInfo.InvariantCulture ), resIcon );
-				}//if
+						(i - 1).ToString(CultureInfo.InvariantCulture), resIcon);
+				} //if
 				i++;
-			}while(resIcon!=null);
-		}//LoadIconsFromResources
+			} while (resIcon != null);
+		} //LoadIconsFromResources
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -101,9 +101,9 @@ namespace PTM
 			{
 				foreach (Image i in IconsManager.IconsList.Images)
 				{
-					i.Dispose();	
-				}//foreach
-				
+					i.Dispose();
+				} //foreach
+
 //				this.notifyIcon.Visible = false;
 //				this.notifyIcon.Icon.Dispose();
 //				this.notifyIcon.Dispose();
@@ -111,10 +111,10 @@ namespace PTM
 				if (components != null)
 				{
 					components.Dispose();
-				}//if
-			}//if
+				} //if
+			} //if
 			base.Dispose(disposing);
-		}//Dispose
+		} //Dispose
 
 		#region Windows Form Designer generated code
 
@@ -124,7 +124,7 @@ namespace PTM
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuItem3 = new System.Windows.Forms.MenuItem();
@@ -144,9 +144,9 @@ namespace PTM
 			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
 			this.menuItem4 = new System.Windows.Forms.MenuItem();
 			this.startUpMenuItem = new System.Windows.Forms.MenuItem();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel3)).BeginInit();
 			this.tabControl.SuspendLayout();
 			this.tasksPage.SuspendLayout();
 			this.summaryPage.SuspendLayout();
@@ -155,17 +155,21 @@ namespace PTM
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											this.menuItem1,
-																											this.menuItem4,
-																											this.menuItem2});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.menuItem1,
+			                                 		this.menuItem4,
+			                                 		this.menuItem2
+			                                 	});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.menuItem3,
-																											 this.exitMenuItem});
+			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                  	{
+			                                  		this.menuItem3,
+			                                  		this.exitMenuItem
+			                                  	});
 			this.menuItem1.Text = "File";
 			// 
 			// menuItem3
@@ -184,8 +188,10 @@ namespace PTM
 			// menuItem2
 			// 
 			this.menuItem2.Index = 2;
-			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.aboutMenuItem});
+			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                  	{
+			                                  		this.aboutMenuItem
+			                                  	});
 			this.menuItem2.Text = "Help";
 			// 
 			// aboutMenuItem
@@ -198,10 +204,12 @@ namespace PTM
 			// 
 			this.statusBar.Location = new System.Drawing.Point(0, 400);
 			this.statusBar.Name = "statusBar";
-			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-																												 this.statusBarPanel1,
-																												 this.statusBarPanel2,
-																												 this.statusBarPanel3});
+			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[]
+			                               	{
+			                               		this.statusBarPanel1,
+			                               		this.statusBarPanel2,
+			                               		this.statusBarPanel3
+			                               	});
 			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(432, 22);
 			this.statusBar.TabIndex = 1;
@@ -222,9 +230,11 @@ namespace PTM
 			// 
 			// tabControl
 			// 
-			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.tasksPage);
 			this.tabControl.Controls.Add(this.summaryPage);
 			this.tabControl.Controls.Add(this.statisticsPage);
@@ -293,8 +303,10 @@ namespace PTM
 			// menuItem4
 			// 
 			this.menuItem4.Index = 1;
-			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.startUpMenuItem});
+			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                  	{
+			                                  		this.startUpMenuItem
+			                                  	});
 			this.menuItem4.Text = "Options";
 			// 
 			// startUpMenuItem
@@ -310,22 +322,21 @@ namespace PTM
 			this.ClientSize = new System.Drawing.Size(432, 422);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.statusBar);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu;
 			this.MinimumSize = new System.Drawing.Size(440, 456);
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "People Task Manager ";
 			this.Load += new System.EventHandler(this.MainForm_Load);
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel2)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel3)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
 			this.summaryPage.ResumeLayout(false);
 			this.statisticsPage.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -336,36 +347,36 @@ namespace PTM
 		{
 			this.tasksLogControl.NewTaskLog(true);
 			Logs.StartLogging();
-		}//MainForm_Load
+		} //MainForm_Load
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(tabControl.SelectedTab == this.summaryPage)
+			if (tabControl.SelectedTab == this.summaryPage)
 			{
 				summaryControl.UpdateSummary();
-			}//if
-			if(tabControl.SelectedTab == this.statisticsPage)
+			} //if
+			if (tabControl.SelectedTab == this.statisticsPage)
 			{
 				statisticsControl.UpdateStatistics();
-			}//if
-		}//tabControl_SelectedIndexChanged
+			} //if
+		} //tabControl_SelectedIndexChanged
 
 		private static void SetWindowsStartUp(bool enable)
 		{
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey(
-					"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-			
-			if(enable)
+				"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+			if (enable)
 			{
-				reg.SetValue("PTM", System.Reflection.Assembly.GetExecutingAssembly().Location);
+				reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
 			}
 			else
 			{
 				reg.DeleteValue("PTM", false);
-			}//if-else
+			} //if-else
 
 			reg.Close();
-		}//SetWindowsStartUp
+		} //SetWindowsStartUp
 
 		protected override void WndProc(ref Message m)
 		{
@@ -375,9 +386,9 @@ namespace PTM
 			{
 				systemShutdown = true;
 			}
-			
+
 			base.WndProc(ref m);
-		}//WndProc
+		} //WndProc
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
@@ -396,12 +407,13 @@ namespace PTM
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}//try-cacth
+				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown",
+				                MessageBoxButtons.OK, MessageBoxIcon.Error);
+			} //try-cacth
 
 			base.OnClosing(e);
-		}//OnClosing
-	
+		} //OnClosing
+
 		private void AnimateWindow()
 		{
 			// if the user has not disabled animating windows...
@@ -418,12 +430,11 @@ namespace PTM
 					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo) == true)
 					{
 						ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
-					}//if
-				}//if
-			}//if
-		}//AnimateWindow
+					} //if
+				} //if
+			} //if
+		} //AnimateWindow
 
-		
 		#endregion
 
 		#region Menu
@@ -434,39 +445,38 @@ namespace PTM
 			Application.DoEvents();
 			this.Close();
 			Save();
-			Application.DoEvents();			
+			Application.DoEvents();
 			Application.Exit();
-		}//Exit
+		} //Exit
 
 		private static void Save()
 		{
 			UnitOfWork.Update();
-		}//Save
-		
+		} //Save
+
 		private void exitMenuItem_Click(object sender, EventArgs e)
 		{
 			Exit(sender, e);
-		}//exitMenuItem_Click
+		} //exitMenuItem_Click
 
 		private void aboutMenuItem_Click(object sender, EventArgs e)
 		{
 			AboutForm about = new AboutForm();
 			about.ShowDialog(this);
-		}//aboutMenuItem_Click
-		
-		private void menuItem3_Click(object sender, System.EventArgs e)
+		} //aboutMenuItem_Click
+
+		private void menuItem3_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
 			taskHForm.ShowDialog(this);
-		}//menuItem3_Click
+		} //menuItem3_Click
 
-		private void menuItem5_Click(object sender, System.EventArgs e)
+		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			this.startUpMenuItem.Checked = !this.startUpMenuItem.Checked;
 			SetWindowsStartUp(this.startUpMenuItem.Checked);
-		}//menuItem5_Click
-		
+		} //menuItem5_Click
+
 		#endregion
-		
-	}//MainForm
-}//end of namespace
+	} //MainForm
+} //end of namespace

@@ -1,5 +1,3 @@
-using System;
-
 namespace PTM.Infos
 {
 	/// <summary>
@@ -10,11 +8,11 @@ namespace PTM.Infos
 		public ApplicationSummary()
 		{
 		}
-		
-		int taskId;
-		string name;
-		string applicationFullPath;
-		double totalActiveTime;
+
+		private int taskId;
+		private string name;
+		private string applicationFullPath;
+		private double totalActiveTime;
 
 		public int TaskId
 		{

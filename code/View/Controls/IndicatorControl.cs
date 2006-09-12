@@ -1,16 +1,16 @@
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace PTM.View.Controls
 {
-	class IndicatorControl : UserControl
+	internal class IndicatorControl : UserControl
 	{
-		Int32 _Maximum;
-		Int32 _Minimum;
-		Int32 _Value;
-		Int32 _GraphWidth;
+		private Int32 _Maximum;
+		private Int32 _Minimum;
+		private Int32 _Value;
+		private Int32 _GraphWidth;
 
 		public IndicatorControl()
 		{
@@ -31,11 +31,10 @@ namespace PTM.View.Controls
 			// 
 			// Indicator
 			// 
-			this.BackColor = System.Drawing.Color.Black;
-			this.ForeColor = System.Drawing.Color.Lime;
+			this.BackColor = Color.Black;
+			this.ForeColor = Color.Lime;
 			this.Name = "Indicator";
-			this.Size = new System.Drawing.Size(72, 72);
-
+			this.Size = new Size(72, 72);
 		}
 
 		protected override CreateParams CreateParams
@@ -50,10 +49,7 @@ namespace PTM.View.Controls
 
 		public Int32 Maximum
 		{
-			get
-			{
-				return _Maximum;
-			}
+			get { return _Maximum; }
 			set
 			{
 				if (value < this.Minimum)
@@ -65,10 +61,7 @@ namespace PTM.View.Controls
 
 		public Int32 Minimum
 		{
-			get
-			{
-				return _Minimum;
-			}
+			get { return _Minimum; }
 			set
 			{
 				if (value < 0)
@@ -80,10 +73,7 @@ namespace PTM.View.Controls
 
 		public Int32 Value
 		{
-			get
-			{
-				return _Value;
-			}
+			get { return _Value; }
 			set
 			{
 				if (value < this.Minimum || value > this.Maximum)
@@ -95,10 +85,7 @@ namespace PTM.View.Controls
 
 		public Int32 GraphWidth
 		{
-			get
-			{
-				return _GraphWidth;
-			}
+			get { return _GraphWidth; }
 			set
 			{
 				_GraphWidth = value;
@@ -108,16 +95,14 @@ namespace PTM.View.Controls
 
 		public string TextValue
 		{
-			get
-			{
-				return base.Text;
-			}
+			get { return base.Text; }
 			set
 			{
 				base.Text = value;
 				Invalidate();
 			}
 		}
+
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			SolidBrush b = new SolidBrush(this.ForeColor);
@@ -133,37 +118,37 @@ namespace PTM.View.Controls
 			// draw graph
 			Int32 graphheight = h - 6 - 4 - this.Font.Height - 4;
 			graphheight += 1;
-			Int32 lines = graphheight / 3;
-			Byte red = (Byte)(this.ForeColor.R / 2);
-			Byte green = (Byte)(this.ForeColor.G / 2);
-			Byte blue = (Byte)(this.ForeColor.B / 2);
+			Int32 lines = graphheight/3;
+			Byte red = (Byte) (this.ForeColor.R/2);
+			Byte green = (Byte) (this.ForeColor.G/2);
+			Byte blue = (Byte) (this.ForeColor.B/2);
 			Color dimmed = Color.FromArgb(red, green, blue);
 			Pen dpen = new Pen(dimmed);
 			Pen hpen = new Pen(this.ForeColor);
 			dpen.DashStyle = DashStyle.Dot;
-			Int32 lx = (w - this.GraphWidth) / 2;
+			Int32 lx = (w - this.GraphWidth)/2;
 			Int32 ly = h - 4 - this.Font.Height - 7;
-			Int32 lw = this.GraphWidth / 2;
+			Int32 lw = this.GraphWidth/2;
 			Int32 x0 = lx;
 			Int32 y0 = 0;
 			Int32 x1 = 0;
 			Int32 y1 = 0;
-			Int32 linestohighlite = (Int32)Math.Ceiling(
-				(this.Value - this.Minimum) * 1.0 /
-				((this.Maximum - this.Minimum * 1.0) / lines)
-				);
-			for (Int32 i = 0; i < lines; i++) 
+			Int32 linestohighlite = (Int32) Math.Ceiling(
+			                                	(this.Value - this.Minimum)*1.0/
+			                                	((this.Maximum - this.Minimum*1.0)/lines)
+			                                	);
+			for (Int32 i = 0; i < lines; i++)
 			{
 				x0 = lx;
-				y0 = ly - (i * 3) - 1;
+				y0 = ly - (i*3) - 1;
 				x1 = x0 + lw;
 				y1 = y0;
-				if (i < linestohighlite) 
+				if (i < linestohighlite)
 				{
 					e.Graphics.FillRectangle(b, x0, y0, lw, 2);
 					e.Graphics.FillRectangle(b, x1 + 1, y0, lw, 2);
-				} 
-				else 
+				}
+				else
 				{
 					// left two lines
 					e.Graphics.DrawLine(dpen, x0, y0, x1, y1);

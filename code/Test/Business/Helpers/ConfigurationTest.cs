@@ -15,7 +15,7 @@ namespace PTM.Test.Business.Helpers
 		public ConfigurationTest()
 		{
 		}
-		
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -24,39 +24,39 @@ namespace PTM.Test.Business.Helpers
 			PTMDataset ds = new PTMDataset();
 			MainModule.Initialize(ds, "test");
 		}
-		
+
 		[Test]
 		public void GetConfigurationTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 			Assert.AreEqual(ConfigurationKey.TasksLogDuration, config.Key);
-			Assert.AreEqual(typeof(int), config.Value.GetType());
+			Assert.AreEqual(typeof (int), config.Value.GetType());
 			Assert.AreEqual(10, config.Value);
-			
+
 			config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
 			Assert.AreEqual(ConfigurationKey.DataMaintenanceDays, config.Key);
-			Assert.AreEqual(typeof(int), config.Value.GetType());
+			Assert.AreEqual(typeof (int), config.Value.GetType());
 			Assert.AreEqual(15, config.Value);
 		}
-		
+
 		[Test]
-		[ExpectedException(typeof(ApplicationException), "The log duration can't be less than 1 min. and more than 60 min.")]
+		[ExpectedException(typeof (ApplicationException), "The log duration can't be less than 1 min. and more than 60 min.")]
 		public void SaveLogDurationLessThanPermitedTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 			config.Value = 0;
 			ConfigurationHelper.SaveConfiguration(config);
 		}
-		
+
 		[Test]
-		[ExpectedException(typeof(ApplicationException), "The log duration can't be less than 1 min. and more than 60 min.")]
+		[ExpectedException(typeof (ApplicationException), "The log duration can't be less than 1 min. and more than 60 min.")]
 		public void SaveLogDurationMoreThanPermitedTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 			config.Value = 61;
 			ConfigurationHelper.SaveConfiguration(config);
 		}
-		
+
 		[Test]
 		public void SaveLogDurationTest()
 		{
@@ -67,17 +67,17 @@ namespace PTM.Test.Business.Helpers
 			Assert.AreEqual(ConfigurationKey.TasksLogDuration, config.Key);
 			Assert.AreEqual(30, config.Value);
 		}
-		
-		
+
+
 		[Test]
-		[ExpectedException(typeof(ApplicationException), "Data maintenance days can't be less than 0.")]
+		[ExpectedException(typeof (ApplicationException), "Data maintenance days can't be less than 0.")]
 		public void SaveDataMaintenanceLessThanPermitedTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
 			config.Value = -1;
 			ConfigurationHelper.SaveConfiguration(config);
 		}
-		
+
 		[TearDown]
 		public void TearDown()
 		{

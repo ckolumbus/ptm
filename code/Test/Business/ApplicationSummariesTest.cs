@@ -17,7 +17,7 @@ namespace PTM.Test.Business
 		public ApplicationSummariesTest()
 		{
 		}
-		
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -26,7 +26,7 @@ namespace PTM.Test.Business
 			PTMDataset ds = new PTMDataset();
 			MainModule.Initialize(ds, "test");
 		}
-		
+
 		[Test]
 		public void GetApplicationSummaryTest()
 		{
@@ -41,7 +41,7 @@ namespace PTM.Test.Business
 			row2.Description = "TaskTest2";
 			row2.ParentId = Tasks.RootTasksRow.Id;
 			row2.Id = Tasks.AddTasksRow(row2);
-			
+
 			PTMDataset.TasksRow row3;
 			row3 = Tasks.NewTasksRow();
 			row3.Description = "TaskTest3";
@@ -67,47 +67,48 @@ namespace PTM.Test.Business
 			Logs.StopLogging();
 
 			ArrayList result;
-			result = ApplicationSummaries.GetApplicationsSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
-			Assert.IsTrue(result.Count>0);
+			result =
+				ApplicationSummaries.GetApplicationsSummary(Tasks.RootTasksRow, DateTime.Today,
+				                                            DateTime.Today.AddDays(1).AddSeconds(-1));
+			Assert.IsTrue(result.Count > 0);
 			double total = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{
 				total += applicationSummary.TotalActiveTime;
 			}
-			Assert.IsTrue(total>0);
-			
+			Assert.IsTrue(total > 0);
+
 			result = ApplicationSummaries.GetApplicationsSummary(row1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			double totalTask1 = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{
 				totalTask1 += applicationSummary.TotalActiveTime;
 			}
-			Assert.IsTrue(totalTask1>0);
-			Assert.IsTrue(totalTask1<total);
-			
+			Assert.IsTrue(totalTask1 > 0);
+			Assert.IsTrue(totalTask1 < total);
+
 			result = ApplicationSummaries.GetApplicationsSummary(row2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			double totalTask2 = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{
 				totalTask2 += applicationSummary.TotalActiveTime;
 			}
-			Assert.IsTrue(totalTask2>0);
-			Assert.IsTrue(totalTask2<total);
-			
+			Assert.IsTrue(totalTask2 > 0);
+			Assert.IsTrue(totalTask2 < total);
+
 			result = ApplicationSummaries.GetApplicationsSummary(row3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			double totalTask3 = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{
 				totalTask3 += applicationSummary.TotalActiveTime;
 			}
-			Assert.IsTrue(totalTask3>0);
-			Assert.IsTrue(totalTask3<total);
-			
-			Assert.IsTrue(totalTask1 + totalTask2 <=total);
-			Assert.IsTrue(totalTask3 <totalTask1);
-			
+			Assert.IsTrue(totalTask3 > 0);
+			Assert.IsTrue(totalTask3 < total);
+
+			Assert.IsTrue(totalTask1 + totalTask2 <= total);
+			Assert.IsTrue(totalTask3 < totalTask1);
 		}
-		
+
 		[TearDown]
 		public void TearDown()
 		{

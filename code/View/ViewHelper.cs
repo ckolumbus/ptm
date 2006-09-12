@@ -11,24 +11,23 @@ namespace PTM.View
 	{
 		private ViewHelper()
 		{
-		}//ViewHelper
+		} //ViewHelper
 
 		/// <summary>
 		/// Declaration of external (DLL) functions.
 		/// </summary>
 		[DllImport("User32")]
-		internal static extern IntPtr GetForegroundWindow( );
+		internal static extern IntPtr GetForegroundWindow();
 
 		[DllImport("User32")]
-		internal static extern IntPtr GetParent( IntPtr hwnd );
+		internal static extern IntPtr GetParent(IntPtr hwnd);
 
 		[DllImport("User32")]
-		internal static extern IntPtr GetWindowThreadProcessId( IntPtr hWnd, out IntPtr ProcessId );
+		internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out IntPtr ProcessId);
 
 		[DllImport("User32")]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return : MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool IsWindow(IntPtr hWnd);
-
 
 
 		internal const int WM_QUERYENDSESSION = 0x11;
@@ -49,28 +48,26 @@ namespace PTM.View
 		internal const int SW_SHOWNORMAL = 1;
 
 		[DllImport("User32.dll", EntryPoint="ShowWindow", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return : MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
 		[DllImport("User32.dll", EntryPoint="UpdateWindow", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return : MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool UpdateWindow(IntPtr hWnd);
 
 		[DllImport("user32.dll", EntryPoint="IsIconic", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return : MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool IsIconic(IntPtr hWnd);
 
 		[DllImport("user32.dll", EntryPoint="FindWindowEx", CharSet=CharSet.Auto)]
 		internal static extern IntPtr FindWindowEx(
 			IntPtr hwndParent,
 			IntPtr hwndChildAfter,
-			[MarshalAs(UnmanagedType.LPTStr)]
-			string lpszClass,
-			[MarshalAs(UnmanagedType.LPTStr)]
-			string lpszWindow);
+			[MarshalAs(UnmanagedType.LPTStr)] string lpszClass,
+			[MarshalAs(UnmanagedType.LPTStr)] string lpszWindow);
 
 		[DllImport("user32.dll", EntryPoint="DrawAnimatedRects", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return : MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool DrawAnimatedRects(IntPtr hwnd, int idAni, ref RECT lprcFrom, ref RECT lprcTo);
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -83,31 +80,34 @@ namespace PTM.View
 
 			public override string ToString()
 			{
-				return ("Left :" + left.ToString(CultureInfo.InvariantCulture) + "," + "Top :" + top.ToString(CultureInfo.InvariantCulture) + "," + "Right :" + right.ToString(CultureInfo.InvariantCulture) + "," + "Bottom :" + bottom.ToString(CultureInfo.InvariantCulture));
-			}//ToString
-		}//RECT
+				return
+					("Left :" + left.ToString(CultureInfo.InvariantCulture) + "," + "Top :" +
+					 top.ToString(CultureInfo.InvariantCulture) + "," + "Right :" + right.ToString(CultureInfo.InvariantCulture) + "," +
+					 "Bottom :" + bottom.ToString(CultureInfo.InvariantCulture));
+			} //ToString
+		} //RECT
 
 		[DllImport("user32.dll", EntryPoint="GetWindowRect", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return : MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool GetWindowRect(IntPtr hwnd, ref RECT lpRect);
 
-		internal static IntPtr GetNotificationAreaHandle( )
+		internal static IntPtr GetNotificationAreaHandle()
 		{
-			IntPtr hwnd = ViewHelper.FindWindowEx( IntPtr.Zero, IntPtr.Zero, "Shell_TrayWnd", null );
-			Console.WriteLine( "Shell_TrayWnd" + hwnd.ToString( ) );
-			hwnd = ViewHelper.FindWindowEx( hwnd, IntPtr.Zero, "TrayNotifyWnd", null );
-			Console.WriteLine( "TrayNotifyWnd" + hwnd.ToString( ) );
-			hwnd = ViewHelper.FindWindowEx( hwnd, IntPtr.Zero, "SysPager", null );
-			Console.WriteLine( "SysPager" + hwnd.ToString( ) );
+			IntPtr hwnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, "Shell_TrayWnd", null);
+			Console.WriteLine("Shell_TrayWnd" + hwnd.ToString());
+			hwnd = FindWindowEx(hwnd, IntPtr.Zero, "TrayNotifyWnd", null);
+			Console.WriteLine("TrayNotifyWnd" + hwnd.ToString());
+			hwnd = FindWindowEx(hwnd, IntPtr.Zero, "SysPager", null);
+			Console.WriteLine("SysPager" + hwnd.ToString());
 
-			if ( hwnd != IntPtr.Zero )
+			if (hwnd != IntPtr.Zero)
 			{
-				hwnd = ViewHelper.FindWindowEx( hwnd, IntPtr.Zero, null, "Notification Area" );
-			}//if
+				hwnd = FindWindowEx(hwnd, IntPtr.Zero, null, "Notification Area");
+			} //if
 
 			Console.WriteLine("Notification Area" + hwnd.ToString());
 			return hwnd;
-		}//GetNotificationAreaHandle
+		} //GetNotificationAreaHandle
 
 		/// <summary>
 		/// TimeSpanToTimeString, returns a timeSpan as a formated string
@@ -115,21 +115,21 @@ namespace PTM.View
 		/// </summary>
 		internal static string TimeSpanToTimeString(TimeSpan ts)
 		{
-			return ts.Hours.ToString( CultureInfo.InvariantCulture ).PadLeft(2, '0') + 
-				":" + ts.Minutes.ToString( CultureInfo.InvariantCulture ).PadLeft(2, '0') + 
-				":" + ts.Seconds.ToString( CultureInfo.InvariantCulture ).PadLeft(2, '0');
-		}//TimeSpanToTimeString
+			return ts.Hours.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') +
+			       ":" + ts.Minutes.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') +
+			       ":" + ts.Seconds.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
+		} //TimeSpanToTimeString
 
 
 		/// <summary>
 		/// Int32ToTimeString, returns a time Span conversion of the amount 
 		/// spected in seconds.
 		/// </summary>
-		internal static string Int32ToTimeString( int seconds )
+		internal static string Int32ToTimeString(int seconds)
 		{
 			TimeSpan t = new TimeSpan(0, 0, seconds);
-			return TimeSpanToTimeString( t );
-		}//Int32ToTimeString
+			return TimeSpanToTimeString(t);
+		} //Int32ToTimeString
 
 
 		/// <summary>
@@ -138,16 +138,15 @@ namespace PTM.View
 		/// </summary>
 		internal static string FixTaskPath(string path, int maxLen)
 		{
-			if( path.Length > maxLen )
+			if (path.Length > maxLen)
 			{
-				return "..." + path.Substring( path.Length - ( maxLen - 3 ),
-					( maxLen - 3 ) );
+				return "..." + path.Substring(path.Length - (maxLen - 3),
+				                              (maxLen - 3));
 			}
 			else
 			{
 				return path;
-			}//if-else
-		}//FixTaskPath
-
-	}//end of class
-}//end of namespace
+			} //if-else
+		} //FixTaskPath
+	} //end of class
+} //end of namespace

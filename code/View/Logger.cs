@@ -6,11 +6,11 @@ namespace PTM.View
 	{
 		private Logger()
 		{
-		}//Logger
+		} //Logger
 
 		public static void Write(string message)
 		{
-			Debug.WriteLine( message );
-		}//Write
-	}// end of class Logger
-}//end of namespace
+			Debug.WriteLine(message);
+		} //Write
+	} // end of class Logger
+} //end of namespace

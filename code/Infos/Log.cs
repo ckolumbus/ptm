@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 
 namespace PTM.Infos
 {
@@ -10,20 +9,23 @@ namespace PTM.Infos
 	{
 		public Log()
 		{
-		}//Log
-		
+		} //Log
+
 		/// <summary>
 		/// Log Id
 		/// </summary>
 		private int id;
+
 		/// <summary>
 		/// Task Id.
 		/// </summary>
 		private int taskId;
+
 		/// <summary>
 		/// Duration of this log.
 		/// </summary>
 		private int duration;
+
 		/// <summary>
 		/// Insertion TimeStamp
 		/// </summary>
@@ -36,7 +38,7 @@ namespace PTM.Infos
 		{
 			get { return id; }
 			set { id = value; }
-		}//Id
+		} //Id
 
 		/// <summary>
 		/// InsertTime Accessors
@@ -45,7 +47,7 @@ namespace PTM.Infos
 		{
 			get { return insertTime; }
 			set { insertTime = value; }
-		}//InsertTime
+		} //InsertTime
 
 		/// <summary>
 		/// Duration Accessors
@@ -54,7 +56,7 @@ namespace PTM.Infos
 		{
 			get { return duration; }
 			set { duration = value; }
-		}//Duration
+		} //Duration
 
 		/// <summary>
 		/// TaskId Accessors
@@ -63,6 +65,6 @@ namespace PTM.Infos
 		{
 			get { return taskId; }
 			set { taskId = value; }
-		}//TaskId
-	}// End of class
-}//End of namespace
+		} //TaskId
+	} // End of class
+} //End of namespace

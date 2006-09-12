@@ -105,7 +105,9 @@ namespace PTM.View.Forms
 			// noButton
 			// 
 			this.noButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.noButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.noButton.Font =
+				new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold,
+				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.noButton.Location = new System.Drawing.Point(184, 48);
 			this.noButton.Name = "noButton";
 			this.noButton.Size = new System.Drawing.Size(40, 23);
@@ -116,7 +118,9 @@ namespace PTM.View.Forms
 			// yesButton
 			// 
 			this.yesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.yesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.yesButton.Font =
+				new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold,
+				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.yesButton.Location = new System.Drawing.Point(120, 48);
 			this.yesButton.Name = "yesButton";
 			this.yesButton.Size = new System.Drawing.Size(40, 23);
@@ -127,7 +131,9 @@ namespace PTM.View.Forms
 			// currentTaskLabel
 			// 
 			this.currentTaskLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.currentTaskLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.currentTaskLabel.Font =
+				new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold,
+				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.currentTaskLabel.Location = new System.Drawing.Point(8, 32);
 			this.currentTaskLabel.Name = "currentTaskLabel";
 			this.currentTaskLabel.Size = new System.Drawing.Size(280, 16);
@@ -141,7 +147,7 @@ namespace PTM.View.Forms
 			// NotifyForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(255)), ((System.Byte)(192)));
+			this.BackColor = System.Drawing.Color.FromArgb(((System.Byte) (255)), ((System.Byte) (255)), ((System.Byte) (192)));
 			this.ClientSize = new System.Drawing.Size(296, 78);
 			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -154,12 +160,12 @@ namespace PTM.View.Forms
 			this.TopMost = true;
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
 
 		private NotifyResult result = NotifyResult.Waiting;
+
 		public NotifyResult Result
 		{
 			get { return result; }
@@ -192,9 +198,9 @@ namespace PTM.View.Forms
 //				this.timer.Stop();
 //				this.Close();
 //			}
-			
+
 			this.waitCount ++;
-			if (this.waitCount >= NotifyForm.WAIT_TIME)
+			if (this.waitCount >= WAIT_TIME)
 			{
 				this.timer.Stop();
 				this.Close();
@@ -234,7 +240,5 @@ namespace PTM.View.Forms
 			this.timer.Stop();
 			base.OnClosed(e);
 		}
-
-
 	}
 }

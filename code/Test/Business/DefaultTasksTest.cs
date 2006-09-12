@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 using PTM.Business;
 using PTM.Data;
@@ -27,9 +26,9 @@ namespace PTM.Test.Business
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.IsTrue(DefaultTasks.List.Count>0);
+			Assert.IsTrue(DefaultTasks.List.Count > 0);
 		}
-		
+
 		[Test]
 		public void DefaulttaskIsActive()
 		{
@@ -42,24 +41,24 @@ namespace PTM.Test.Business
 
 			foreach (DefaultTask defaultTask in DefaultTasks.List)
 			{
-				switch(defaultTask.DefaultTaskId)
+				switch (defaultTask.DefaultTaskId)
 				{
-					case (int)DefaultTaskEnum.Idle:
+					case (int) DefaultTaskEnum.Idle:
 						Assert.AreEqual(false, defaultTask.IsActive);
 						break;
-					case (int)DefaultTaskEnum.LunchTime:
+					case (int) DefaultTaskEnum.LunchTime:
 						Assert.AreEqual(false, defaultTask.IsActive);
 						break;
-					case (int)DefaultTaskEnum.OtherPersonal:
+					case (int) DefaultTaskEnum.OtherPersonal:
 						Assert.AreEqual(false, defaultTask.IsActive);
 						break;
-					case (int)DefaultTaskEnum.CheckingJobMail:
-						Assert.AreEqual(true, defaultTask.IsActive);
-						break;	
-					case (int)DefaultTaskEnum.JobMeeting:
+					case (int) DefaultTaskEnum.CheckingJobMail:
 						Assert.AreEqual(true, defaultTask.IsActive);
 						break;
-					case (int)DefaultTaskEnum.JobPhoneCall:
+					case (int) DefaultTaskEnum.JobMeeting:
+						Assert.AreEqual(true, defaultTask.IsActive);
+						break;
+					case (int) DefaultTaskEnum.JobPhoneCall:
 						Assert.AreEqual(true, defaultTask.IsActive);
 						break;
 				}

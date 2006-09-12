@@ -22,29 +22,27 @@ namespace PTM.Business
 		{
 		}
 
-
 		#region Properties
+
 		internal static PTMDataset.TasksRow CurrentTaskRow
 		{
 			get { return CloneRow(currentTaskRow); }
 		}
+
 		internal static PTMDataset.TasksRow RootTasksRow
 		{
-			get
-			{
-				return CloneRow(rootTaskRow);
-			}
+			get { return CloneRow(rootTaskRow); }
 		}
+
 		internal static int Count
 		{
-			get
-			{
-				return tasksDataTable.Count;
-			}
+			get { return tasksDataTable.Count; }
 		}
+
 		#endregion
 
 		#region Public Methods
+
 		internal static void Initialize(PTMDataset.TasksDataTable table, DbDataAdapter adapter)
 		{
 			rootTaskRow = null;
@@ -53,38 +51,43 @@ namespace PTM.Business
 			tasksDataTableInstance = new PTMDataset.TasksDataTable();
 			LoadAllTasks();
 			currentTaskRow = null;
-			Logs.LogChanged+=new PTM.Business.Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			tasksDataTable.TasksRowChanged+=new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowChanged);
-			tasksDataTable.TasksRowDeleting+=new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowDeleting);
+			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			tasksDataTable.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowChanged);
+			tasksDataTable.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowDeleting);
 		}
+
 		public static PTMDataset.TasksRow NewTasksRow()
 		{
 			return tasksDataTableInstance.NewTasksRow();
 		}
+
 		public static PTMDataset.TasksRow FindById(int taskId)
 		{
 			PTMDataset.TasksRow findedRow;
 			findedRow = tasksDataTable.FindById(taskId);
 			return CloneRow(findedRow);
 		}
+
 		public static PTMDataset.TasksRow FindByParentIdAndDescription(int parentId, string description)
 		{
 			PTMDataset.TasksRow[] rows;
 			rows = (PTMDataset.TasksRow[]) tasksDataTable.Select(
-				tasksDataTable.DescriptionColumn.ColumnName +
-				"='" + description + "' AND " +
-				tasksDataTable.ParentIdColumn.ColumnName +
-				"=" + parentId);
+			                               	tasksDataTable.DescriptionColumn.ColumnName +
+			                               	"='" + description + "' AND " +
+			                               	tasksDataTable.ParentIdColumn.ColumnName +
+			                               	"=" + parentId);
 
-			if(rows.Length>0)
+			if (rows.Length > 0)
 				return CloneRow(rows[0]);
 			else
 				return null;
 		}
+
 		public static int AddTasksRow(PTMDataset.TasksRow tasksRow)
 		{
+			tasksRow.Description = tasksRow.Description.Trim();
 			SetDefaultTask(tasksRow);
-			ValidateTaskRow(tasksRow);
+			ValidateTaskRow(tasksRow, true);
 			tasksRow.TotalTime = 0;
 			tasksRow.IsFinished = false;
 			tasksRow.SetStartDateNull();
@@ -96,54 +99,54 @@ namespace PTM.Business
 			tasksDataTable.AddTasksRow(row);
 			//SaveTaskRow(row);
 			SaveTasks();
-			if(TasksRowChanged!=null)
+			if (TasksRowChanged != null)
 			{
 				tasksRow.Id = row.Id;
 				TasksRowChanged(null, new PTMDataset.TasksRowChangeEvent(tasksRow, DataRowAction.Add));
 			}
-				
+
 			return row.Id;
 		}
 
 		public static void UpdateTaskRow(PTMDataset.TasksRow tasksRow)
 		{
+			tasksRow.Description = tasksRow.Description.Trim();
 			SetDefaultTask(tasksRow);
-			ValidateTaskRow(tasksRow);
+			ValidateTaskRow(tasksRow, false);
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
 			row.ItemArray = tasksRow.ItemArray;
-			//SaveTaskRow(row);
 			SaveTasks();
-			if(TasksRowChanged!=null)
+			if (TasksRowChanged != null)
 				TasksRowChanged(null, new PTMDataset.TasksRowChangeEvent(tasksRow, DataRowAction.Change));
 		}
-		
+
 		public static void DeleteTaskRow(PTMDataset.TasksRow tasksRow)
 		{
-			if(Tasks.CurrentTaskRow!=null)
-				if(Tasks.CurrentTaskRow.Id == tasksRow.Id || Tasks.IsParent(tasksRow.Id, Tasks.CurrentTaskRow.Id)>0)
+			if (CurrentTaskRow != null)
+				if (CurrentTaskRow.Id == tasksRow.Id || IsParent(tasksRow.Id, CurrentTaskRow.Id) > 0)
 				{
-					throw new ApplicationException("This task can't be deleted now. You are currently working on it or in a part of it.");
+					throw new ApplicationException(
+						"This task can't be deleted now. You are currently working on it or in a part of it.");
 				}
-			
-			if(tasksRow.Id == Tasks.rootTaskRow.Id)
+
+			if (tasksRow.Id == rootTaskRow.Id)
 				throw new ApplicationException("The root task can't be deleted.");
 
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
 			DeleteOnCascade(row);
-			
 		}
 
 		private static void DeleteOnCascade(PTMDataset.TasksRow row)
 		{
 			PTMDataset.TasksRow[] rows;
-			while(true)
+			while (true)
 			{
 				rows = row.GetTasksRows();
-				if(rows.Length ==0)
+				if (rows.Length == 0)
 				{
-					if(TasksRowDeleting!=null)
+					if (TasksRowDeleting != null)
 						TasksRowDeleting(null, new PTMDataset.TasksRowChangeEvent(row, DataRowAction.Delete));
 					row.Delete();
 					SaveTasks();
@@ -151,7 +154,6 @@ namespace PTM.Business
 				}
 				PTMDataset.TasksRow child = rows[0];
 				DeleteOnCascade(child);
-				
 			}
 		}
 
@@ -162,7 +164,7 @@ namespace PTM.Business
 			foreach (DataRelation relation in tasksDataTable.ChildRelations)
 			{
 				if (relation.ChildTable.TableName == tasksDataTable.TableName)
-				{				
+				{
 					return CloneRows((PTMDataset.TasksRow[]) row.GetChildRows(relation));
 				}
 			}
@@ -176,7 +178,7 @@ namespace PTM.Business
 			while (true)
 			{
 				parents.Insert(0, curRow);
-				if(curRow.IsParentIdNull())
+				if (curRow.IsParentIdNull())
 					break;
 				curRow = tasksDataTable.FindById(curRow.ParentId);
 			}
@@ -190,21 +192,21 @@ namespace PTM.Business
 
 		public static int IsParent(int parentTaskId, int childTaskId)
 		{
-            PTMDataset.TasksRow parentRow;
+			PTMDataset.TasksRow parentRow;
 			parentRow = tasksDataTable.FindById(parentTaskId);
 
 			PTMDataset.TasksRow childRow;
 			childRow = tasksDataTable.FindById(childTaskId);
-			
-			if(parentRow == null || childRow == null)
+
+			if (parentRow == null || childRow == null)
 				return -1;
-			
-			if(parentTaskId == childTaskId)
+
+			if (parentTaskId == childTaskId)
 				return 0;
-			
-			if(childRow.IsParentIdNull())
+
+			if (childRow.IsParentIdNull())
 				return -1;
-			
+
 			int parentId = childRow.ParentId;
 
 			int generation = 1;
@@ -213,36 +215,36 @@ namespace PTM.Business
 			{
 				PTMDataset.TasksRow curRow;
 				curRow = tasksDataTable.FindById(parentId);
-				if(curRow.Id == parentRow.Id) return generation;
-				if(curRow.IsParentIdNull()) return -1;
+				if (curRow.Id == parentRow.Id) return generation;
+				if (curRow.IsParentIdNull()) return -1;
 				parentId = curRow.ParentId;
 				generation++;
 			}
 		}
 
 		public static int AddDeafultTask(int taskParentId, DefaultTaskEnum defaultTaskEnum)
-		{		
+		{
 			PTMDataset.TasksRow[] childRows;
-			childRows = Tasks.GetChildTasks(taskParentId);
-			
+			childRows = GetChildTasks(taskParentId);
+
 			int idleTaskId = -1;
 			foreach (PTMDataset.TasksRow childRow in childRows)
 			{
-				if(childRow.IsDefaultTask && childRow.DefaultTaskId == (int)defaultTaskEnum)
+				if (childRow.IsDefaultTask && childRow.DefaultTaskId == (int) defaultTaskEnum)
 				{
 					idleTaskId = childRow.Id;
 					break;
 				}
 			}
-			
-			if(idleTaskId ==-1)
+
+			if (idleTaskId == -1)
 			{
-				PTMDataset.TasksRow row = Tasks.NewTasksRow();
+				PTMDataset.TasksRow row = NewTasksRow();
 				row.Description = DefaultTasks.GetDefaultTaskDescription(defaultTaskEnum);
 				row.IsDefaultTask = true;
-				row.DefaultTaskId = (int)defaultTaskEnum;
-				row.ParentId =taskParentId;
-				row.Id = Tasks.AddTasksRow(row);
+				row.DefaultTaskId = (int) defaultTaskEnum;
+				row.ParentId = taskParentId;
+				row.Id = AddTasksRow(row);
 				idleTaskId = row.Id;
 			}
 			return idleTaskId;
@@ -251,18 +253,20 @@ namespace PTM.Business
 		public static void UpdateParentTask(int taskId, int parentId)
 		{
 			PTMDataset.TasksRow row;
-			row = Tasks.FindById(taskId);
+			row = FindById(taskId);
 			row.ParentId = parentId;
-			Tasks.UpdateTaskRow(row);
+			UpdateTaskRow(row);
 		}
+
 		#endregion
 
 		#region Private Methods
+
 		private static void LoadAllTasks()
 		{
 			tasksDataTable.BeginLoadData();
 			dataAdapter.Fill(tasksDataTable);
-	
+
 			if (tasksDataTable.Rows.Count == 0)
 			{
 				AddRootTask();
@@ -273,12 +277,12 @@ namespace PTM.Business
 			}
 			tasksDataTable.EndLoadData();
 		}
-		
+
 		private static void SetRootTask()
 		{
 			foreach (PTMDataset.TasksRow tasksRow in tasksDataTable)
 			{
-				if(tasksRow.IsParentIdNull())
+				if (tasksRow.IsParentIdNull())
 				{
 					rootTaskRow = tasksRow;
 					break;
@@ -304,60 +308,73 @@ namespace PTM.Business
 
 		private static void SaveTasks()
 		{
-			foreach(PTMDataset.TasksRow row in tasksDataTable.Rows)
+			foreach (PTMDataset.TasksRow row in tasksDataTable.Rows)
 			{
-				if(row.RowState == DataRowState.Deleted)
+				if (row.RowState == DataRowState.Deleted)
 					Logger.Write("Tasks.SaveTaskRow: Deleted");
-				else if(row.RowState == DataRowState.Added)
+				else if (row.RowState == DataRowState.Added)
 					Logger.Write("Tasks.SaveTaskRow: Added " + row.Description);
-				else if(row.RowState == DataRowState.Modified)
+				else if (row.RowState == DataRowState.Modified)
 					Logger.Write("Tasks.SaveTaskRow: Modified " + row.Description);
 			}
-			
+
 			//PTMDataset.TasksRow[] rows = new PTMDataset.TasksRow[] {row};
 //			try
 //			{
-				dataAdapter.Update(tasksDataTable);
+			dataAdapter.Update(tasksDataTable);
 //			}
 //			catch (DBConcurrencyException ex)
 //			{
 //				Logger.Write("Cascade Delete: " + ex.Message);
 //			}
-			
-			tasksDataTable.AcceptChanges();
 
+			tasksDataTable.AcceptChanges();
 		}
-		private static void ValidateTaskRow(PTMDataset.TasksRow tasksRow)
+
+		private static void ValidateTaskRow(PTMDataset.TasksRow tasksRow, bool insertRules)
 		{
-			if(tasksRow.IsParentIdNull())
+			if (tasksRow.IsParentIdNull())
 				throw new ApplicationException("Parent can't be null");
-			if(tasksRow.IsDescriptionNull())
+			if (tasksRow.IsDescriptionNull())
 				throw new ApplicationException("Description can't be null");
-			if(tasksRow.Description.Length==0)
+			if (tasksRow.Description.Length == 0)
 				throw new ApplicationException("Description can't be empty");
-			if(Tasks.FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description)!=null)
-				throw new ApplicationException("Task already exist");
-			if(tasksRow.IsDefaultTask && Tasks.FindByParentIdAndDefaultTask(tasksRow.ParentId, tasksRow.DefaultTaskId)!=null)
+			PTMDataset.TasksRow sameTaskByDescription;
+			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
+			if (insertRules)
+			{
+				if (sameTaskByDescription != null)
+					throw new ApplicationException("Task already exist");
+			}
+			else
+			{
+				if (sameTaskByDescription != null && string.Compare(sameTaskByDescription.Description, tasksRow.Description, false) == 0)//update isnt case sensitive
+					throw new ApplicationException("Task already exist");
+			}
+
+			if (tasksRow.IsDefaultTask && FindByParentIdAndDefaultTask(tasksRow.ParentId, tasksRow.DefaultTaskId) != null)
 				throw new ApplicationException("Default task already exist");
 
 			PTMDataset.TasksRow parent;
 			parent = tasksDataTable.FindById(tasksRow.ParentId);
-			if(parent.IsDefaultTask)
+			if (parent.IsDefaultTask)
 				throw new ApplicationException("Parent can't be a default task");
 		}
+
 		private static PTMDataset.TasksRow CloneRow(PTMDataset.TasksRow tasksRow)
 		{
-			if(tasksRow==null)
+			if (tasksRow == null)
 				return null;
 			PTMDataset.TasksRow row;
-			row = NewTasksRow();		
+			row = NewTasksRow();
 			row.ItemArray = tasksRow.ItemArray;
 			return row;
 		}
+
 		private static PTMDataset.TasksRow[] CloneRows(PTMDataset.TasksRow[] tasksRows)
 		{
 			PTMDataset.TasksRow[] rowsCopy = new PTMDataset.TasksRow[tasksRows.Length];
-			int i=0;
+			int i = 0;
 			foreach (PTMDataset.TasksRow row in tasksRows)
 			{
 				rowsCopy[i] = CloneRow(row);
@@ -365,15 +382,18 @@ namespace PTM.Business
 			}
 			return rowsCopy;
 		}
+
 		private static void SetDefaultTask(PTMDataset.TasksRow tasksRow)
 		{
-			if(tasksRow.IsDescriptionNull())
+			if (tasksRow.IsDescriptionNull())
 				return;
 			tasksRow.IsDefaultTask = false;
 			tasksRow.SetDefaultTaskIdNull();
 			foreach (DefaultTask defaultTask in DefaultTasks.List)
 			{
-				if (string.Compare(defaultTask.Description.Replace(" ", null), tasksRow.Description.Replace(" ", null), true, CultureInfo.InvariantCulture) == 0)
+				if (
+					string.Compare(defaultTask.Description.Replace(" ", null), tasksRow.Description.Replace(" ", null), true,
+					               CultureInfo.InvariantCulture) == 0)
 				{
 					tasksRow.IsDefaultTask = true;
 					tasksRow.DefaultTaskId = defaultTask.DefaultTaskId;
@@ -382,57 +402,59 @@ namespace PTM.Business
 			}
 		}
 
-		private static void ManageTaskLogRowChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		private static void ManageTaskLogRowChanged(Logs.LogChangeEventArgs e)
 		{
-			if(e.Log.Id == Logs.CurrentLog.Id)
+			if (e.Log.Id == Logs.CurrentLog.Id)
 			{
-				if(Tasks.currentTaskRow == null || e.Log.TaskId != Tasks.currentTaskRow.Id)
+				if (currentTaskRow == null || e.Log.TaskId != currentTaskRow.Id)
 				{
-					Tasks.currentTaskRow = Tasks.tasksDataTable.FindById(e.Log.TaskId);
-					if(Tasks.currentTaskRow.IsStartDateNull())
+					currentTaskRow = tasksDataTable.FindById(e.Log.TaskId);
+					if (currentTaskRow.IsStartDateNull())
 					{
-						Tasks.currentTaskRow.StartDate = DateTime.Now;
+						currentTaskRow.StartDate = DateTime.Now;
 						SaveTasks();
-					}					
+					}
 				}
 			}
 		}
 
-		private static void TasksLog_LogChanged(PTM.Business.Logs.LogChangeEventArgs e)
+		private static void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
 			ManageTaskLogRowChanged(e);
 		}
-		
+
 		private static PTMDataset.TasksRow FindByParentIdAndDefaultTask(int parentId, int defaultTaskId)
 		{
 			PTMDataset.TasksRow[] rows;
 			rows = (PTMDataset.TasksRow[]) tasksDataTable.Select(
-				tasksDataTable.DefaultTaskIdColumn.ColumnName +
-				"=" + defaultTaskId + " AND " +
-				tasksDataTable.ParentIdColumn.ColumnName +
-				"=" + parentId);
+			                               	tasksDataTable.DefaultTaskIdColumn.ColumnName +
+			                               	"=" + defaultTaskId + " AND " +
+			                               	tasksDataTable.ParentIdColumn.ColumnName +
+			                               	"=" + parentId);
 
-			if(rows.Length>0)
+			if (rows.Length > 0)
 				return CloneRow(rows[0]);
 			else
 				return null;
 		}
-		
+
 		#endregion
 
 		#region Events
-			public static event PTMDataset.TasksRowChangeEventHandler TasksRowChanged;
-			public static event PTMDataset.TasksRowChangeEventHandler TasksRowDeleting;
-			private static void tasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
+
+		public static event PTMDataset.TasksRowChangeEventHandler TasksRowChanged;
+		public static event PTMDataset.TasksRowChangeEventHandler TasksRowDeleting;
+
+		private static void tasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
-			if(e.Action == DataRowAction.Add)
+			if (e.Action == DataRowAction.Add)
 			{
 				Logger.Write("tasksDataTable_TasksRowChanged-Add: " + e.Row.Description);
 //				e.Row.TotalTime = 0;
 //				e.Row.IsFinished = false;
 //				SaveTaskRow(e.Row);
 			}
-			else if(e.Action == DataRowAction.Change)
+			else if (e.Action == DataRowAction.Change)
 			{
 				Logger.Write("tasksDataTable_TasksRowChanged-Change: " + e.Row.Description);
 				//SaveTaskRow(e.Row);
@@ -444,17 +466,14 @@ namespace PTM.Business
 //			if(TasksRowChanged!=null)
 //				TasksRowChanged(sender, e);
 		}
-			private static void tasksDataTable_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
+
+		private static void tasksDataTable_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
 			Logger.Write("tasksDataTable_TasksRowDeleting: " + e.Row.Description);
 //			if(TasksRowDeleting!=null)
 //				TasksRowDeleting(sender, e);
 		}
 
-
 		#endregion
-
-		
-
 	}
 }

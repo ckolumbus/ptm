@@ -21,7 +21,6 @@ namespace PTM.View.Controls
 	{
 		private DateTimePicker dateTimePicker;
 		private TreeListView taskList;
-		private ColumnHeader DurationTaskHeader;
 		private Label label1;
 		private ImageList tasksIconsList;
 		private GroupBox groupBox1;
@@ -33,23 +32,25 @@ namespace PTM.View.Controls
 		private ComboBox parentTaskComboBox;
 		private IContainer components;
 		private Button browseButton;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private PTM.View.Controls.IndicatorControl indicator2;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.ToolBar toolBar;
-		private System.Windows.Forms.ToolBarButton toolBarButton1;
-		private System.Windows.Forms.ToolBarButton toolBarButton2;
-		private System.Windows.Forms.ImageList toolBarImages;
+		private GroupBox groupBox2;
+		private IndicatorControl indicator2;
+		private Panel panel1;
+		private ToolBar toolBar;
+		private ToolBarButton toolBarButton1;
+		private ToolBarButton toolBarButton2;
+		private ImageList toolBarImages;
 
 		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
+		private ColumnHeader InactiveTimeHeader;
+		private ColumnHeader ActiveTimeHeader;
 		private PTMDataset.TasksRow parentRow;
-		
+
 		public SummaryControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			ResourceManager resourceManager = new ResourceManager ("PTM.View.Controls.Icons", GetType().Assembly);
+			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", GetType().Assembly);
 
 			this.tasksIconsList.Images.Clear();
 			Icon resIcon;
@@ -58,10 +59,10 @@ namespace PTM.View.Controls
 			{
 				resIcon = (Icon) resourceManager.GetObject("Icon" + i.ToString(CultureInfo.InvariantCulture));
 				i++;
-				if(resIcon!=null)
-					this.tasksIconsList.Images.Add(resIcon);
-			}while(resIcon!=null);
-			
+				if (resIcon != null)
+					tasksIconsList.Images.Add(resIcon);
+			} while (resIcon != null);
+
 			PTMDataset.TasksRow parentTaskRow;
 			parentTaskRow = parentTasksTable.NewTasksRow();
 			parentTaskRow.ItemArray = Tasks.RootTasksRow.ItemArray;
@@ -69,28 +70,28 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.DataSource = parentTasksTable;
 			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
 			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
-			
+
 			this.dateTimePicker.Value = DateTime.Today;
-			
-			if(parentTasksTable.Count>0)
+
+			if (parentTasksTable.Count > 0)
 			{
 				parentRow = (PTMDataset.TasksRow) parentTasksTable.Rows[0];
 				this.parentTaskComboBox.SelectedValue = parentRow.Id;
 			}
 			this.dateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
-			this.parentTaskComboBox.SelectedIndexChanged+=new EventHandler(parentTaskComboBox_SelectedIndexChanged);
-			
-			Logs.TasksLogDurationCountElapsed+=new ElapsedEventHandler(TaskLogTimer_Elapsed);
-			this.taskList.DoubleClick+=new EventHandler(taskList_DoubleClick);
+			this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
+
+			Logs.TasksLogDurationCountElapsed += new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
 		}
 
 		protected override void OnHandleDestroyed(EventArgs e)
 		{
-			Logs.TasksLogDurationCountElapsed-=new ElapsedEventHandler(TaskLogTimer_Elapsed);
-			base.OnHandleDestroyed (e);
+			Logs.TasksLogDurationCountElapsed -= new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			base.OnHandleDestroyed(e);
 		}
 
-		
+
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
@@ -115,11 +116,11 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SummaryControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (SummaryControl));
 			this.label1 = new System.Windows.Forms.Label();
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.TaskHeader = new System.Windows.Forms.ColumnHeader();
-			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
+			this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
 			this.PercentHeader = new System.Windows.Forms.ColumnHeader();
 			this.tasksIconsList = new System.Windows.Forms.ImageList(this.components);
 			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -136,6 +137,7 @@ namespace PTM.View.Controls
 			this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
 			this.toolBarButton2 = new System.Windows.Forms.ToolBarButton();
 			this.toolBarImages = new System.Windows.Forms.ImageList(this.components);
+			this.InactiveTimeHeader = new System.Windows.Forms.ColumnHeader();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -156,13 +158,18 @@ namespace PTM.View.Controls
 			// 
 			this.taskList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
 			this.taskList.AllowColumnReorder = true;
-			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskHeader,
-																					   this.DurationTaskHeader,
-																					   this.PercentHeader});
+			this.taskList.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                               	{
+			                               		this.TaskHeader,
+			                               		this.ActiveTimeHeader,
+			                               		this.InactiveTimeHeader,
+			                               		this.PercentHeader
+			                               	});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -175,21 +182,23 @@ namespace PTM.View.Controls
 			// TaskHeader
 			// 
 			this.TaskHeader.Text = "Description";
-			this.TaskHeader.Width = 230;
+			this.TaskHeader.Width = 200;
 			// 
-			// DurationTaskHeader
+			// ActiveTimeHeader
 			// 
-			this.DurationTaskHeader.Text = "Duration";
-			this.DurationTaskHeader.Width = 80;
+			this.ActiveTimeHeader.Text = "Active Time";
+			this.ActiveTimeHeader.Width = 70;
 			// 
 			// PercentHeader
 			// 
 			this.PercentHeader.Text = "Percent";
+			this.PercentHeader.Width = 50;
 			// 
 			// tasksIconsList
 			// 
 			this.tasksIconsList.ImageSize = new System.Drawing.Size(16, 16);
-			this.tasksIconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("tasksIconsList.ImageStream")));
+			this.tasksIconsList.ImageStream =
+				((System.Windows.Forms.ImageListStreamer) (resources.GetObject("tasksIconsList.ImageStream")));
 			this.tasksIconsList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// dateTimePicker
@@ -229,9 +238,11 @@ namespace PTM.View.Controls
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.taskList);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
@@ -298,7 +309,9 @@ namespace PTM.View.Controls
 			// 
 			// panel1
 			// 
-			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.Controls.Add(this.toolBar);
 			this.panel1.Location = new System.Drawing.Point(352, 120);
 			this.panel1.Name = "panel1";
@@ -307,9 +320,11 @@ namespace PTM.View.Controls
 			// 
 			// toolBar
 			// 
-			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																					   this.toolBarButton1,
-																					   this.toolBarButton2});
+			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[]
+			                              	{
+			                              		this.toolBarButton1,
+			                              		this.toolBarButton2
+			                              	});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;
@@ -334,8 +349,14 @@ namespace PTM.View.Controls
 			// toolBarImages
 			// 
 			this.toolBarImages.ImageSize = new System.Drawing.Size(16, 16);
-			this.toolBarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("toolBarImages.ImageStream")));
+			this.toolBarImages.ImageStream =
+				((System.Windows.Forms.ImageListStreamer) (resources.GetObject("toolBarImages.ImageStream")));
 			this.toolBarImages.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// InactiveTimeHeader
+			// 
+			this.InactiveTimeHeader.Text = "Inactive Time";
+			this.InactiveTimeHeader.Width = 70;
 			// 
 			// SummaryControl
 			// 
@@ -355,7 +376,6 @@ namespace PTM.View.Controls
 			this.groupBox2.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -364,60 +384,70 @@ namespace PTM.View.Controls
 		{
 			UpdateTasksSummary(dateTimePicker.Value);
 		}
-		
+
 
 		private double totalTime = 0;
 		private double totalActiveTime = 0;
-		
+
 		private void Clear()
 		{
 			this.taskList.Items.Clear();
-			indicator1.Maximum = 30600;//8.5 hrs.
+			indicator1.Maximum = 30600; //8.5 hrs.
 			indicator1.Value = 0;
 			indicator1.TextValue = "00.00 hrs.";
 			indicator1.ForeColor = Color.Lime;
-			
+
 			indicator2.Maximum = 100;
 			indicator2.Value = 0;
 			indicator2.TextValue = "0%";
-		
+
 			totalTime = 0;
 			totalActiveTime = 0;
-
 		}
 
-		
+
 		public void UpdateSummary()
 		{
-			if(this.dateTimePicker.Value != DateTime.Today)
+			if (this.dateTimePicker.Value != DateTime.Today)
 				this.dateTimePicker.Value = DateTime.Today;
 			else
 			{
 				UpdateTasksSummary(this.dateTimePicker.Value);
 			}
 		}
-		
+
 		private void UpdateTasksSummary(DateTime day)
 		{
 			try
 			{
 				Clear();
 				this.Refresh();
-				System.Windows.Forms.Cursor.Current = Cursors.WaitCursor;
-				ArrayList summaryList = TasksSummaries.GetTaskSummary( 
-					Tasks.FindById((int)this.parentTaskComboBox.SelectedValue),
+				Cursor.Current = Cursors.WaitCursor;
+				ArrayList summaryList = TasksSummaries.GetTaskSummary(
+					Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
 					day.Date, day.AddDays(1));
-				
+
 				totalTime = 0;
 
 				foreach (TaskSummary summary in summaryList)
 				{
-					totalTime+= summary.TotalTime;
-					if(!summary.IsDefaultTask || (summary.IsDefaultTask && DefaultTasks.IsActive((DefaultTaskEnum) summary.DefaultTaskId)))
-						totalActiveTime += summary.TotalTime;
-					
-					TimeSpan duration = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalTime));
-					TreeListViewItem lvi = new TreeListViewItem(summary.Description, new string[] {ViewHelper.TimeSpanToTimeString(duration), 0.ToString("0.0%", CultureInfo.InvariantCulture), summary.TaskId.ToString(CultureInfo.InvariantCulture)});
+					totalTime += summary.TotalActiveTime;
+					totalTime += summary.TotalInactiveTime;
+					if (!summary.IsDefaultTask ||
+					    (summary.IsDefaultTask && DefaultTasks.IsActive((DefaultTaskEnum) summary.DefaultTaskId)))
+						totalActiveTime += summary.TotalActiveTime;
+
+					TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
+					TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalInactiveTime));
+					TreeListViewItem lvi =
+						new TreeListViewItem(summary.Description,
+						                     new string[]
+						                     	{
+						                     		ViewHelper.TimeSpanToTimeString(activeTimeSpan),
+						                     		ViewHelper.TimeSpanToTimeString(inactiveTimeSpan),
+						                     		0.ToString("0.0%", CultureInfo.InvariantCulture),
+						                     		summary.TaskId.ToString(CultureInfo.InvariantCulture)
+						                     	});
 					lvi.ImageIndex = 0;
 					if (summary.IsDefaultTask)
 					{
@@ -435,7 +465,7 @@ namespace PTM.View.Controls
 			}
 			finally
 			{
-				System.Windows.Forms.Cursor.Current = Cursors.Default;
+				Cursor.Current = Cursors.Default;
 			}
 		}
 
@@ -443,40 +473,45 @@ namespace PTM.View.Controls
 		{
 			foreach (ListViewItem item in this.taskList.Items)
 			{
-				double percent =  0;
-				TimeSpan t = TimeSpan.Parse(item.SubItems[this.DurationTaskHeader.Index].Text);
-				if(totalTime>0)
-					percent = t.TotalSeconds / totalTime;
+				double percent = 0;
+				//TimeSpan t = TimeSpan.Parse(item.SubItems[this.DurationTaskHeader.Index].Text);
+				TaskSummary sum = (TaskSummary) item.Tag;
+				if (totalTime > 0)
+					percent = (sum.TotalActiveTime + sum.TotalInactiveTime)/totalTime;
 				item.SubItems[PercentHeader.Index].Text = percent.ToString("0.0%", CultureInfo.InvariantCulture);
 			}
 		}
 
 		private void SetIndicatorsValues()
 		{
-			indicator1.Value = Convert.ToInt32(Math.Min(30600 , totalTime));
-			indicator1.TextValue = new TimeSpan(0,0, Convert.ToInt32(totalTime, CultureInfo.InvariantCulture)).TotalHours.ToString("0.00", CultureInfo.InvariantCulture) + " hrs.";
-			
-			if(totalTime>0)
+			indicator1.Value = Convert.ToInt32(Math.Min(30600, totalTime));
+			indicator1.TextValue =
+				new TimeSpan(0, 0, Convert.ToInt32(totalTime, CultureInfo.InvariantCulture)).TotalHours.ToString("0.00",
+				                                                                                                 CultureInfo.
+				                                                                                                 	InvariantCulture) +
+				" hrs.";
+
+			if (totalTime > 0)
 			{
 				int percentActiveTime = Convert.ToInt32(this.totalActiveTime*100/totalTime);
 				indicator2.Value = percentActiveTime;
 				indicator2.TextValue = percentActiveTime + "%";
-			}		
+			}
 		}
 
 		private void browseButton_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm tgForm = new TasksHierarchyForm();
 			tgForm.ShowDialog(this);
-			if(tgForm.SelectedTaskRow == null)
+			if (tgForm.SelectedTaskRow == null)
 				return;
-			
+
 			SetParent(tgForm.SelectedTaskRow);
 		}
 
 		private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(parentTaskComboBox.SelectedIndex == -1)
+			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
 			parentRow = parentTasksTable.FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
@@ -486,61 +521,62 @@ namespace PTM.View.Controls
 
 		private void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if(!this.Visible)
+			if (!this.Visible)
 				return;
 
-			if(this.dateTimePicker.Value != DateTime.Today)
+			if (this.dateTimePicker.Value != DateTime.Today)
 				return;
-			
-			ListViewItem currentTaskSummary=null;
-//			foreach (ListViewItem item in this.taskList.Items)
-//			{
-//				TaskSummary sum = (TaskSummary) item.Tag;
-//				if(sum.TaskId == Logs.CurrentLog.TaskId)
-//				{
-//					currentTaskSummary = item;
-//					break;
-//				}
-//			}
+
+			ListViewItem currentTaskSummary = null;
 
 			int minGeneration = Int32.MaxValue;
 			foreach (ListViewItem item in this.taskList.Items)
 			{
 				TaskSummary sum = (TaskSummary) item.Tag;
-				int generations = Tasks.IsParent(sum.TaskId,Logs.CurrentLog.TaskId);
-				if(generations>=0 && generations<minGeneration)
+				int generations = Tasks.IsParent(sum.TaskId, Logs.CurrentLog.TaskId);
+				if (generations >= 0 && generations < minGeneration)
 				{
 					minGeneration = generations;
 					currentTaskSummary = item;
 				}
 			}
 
-			if(currentTaskSummary!=null)
+			if (currentTaskSummary != null)
 			{
+				PTMDataset.TasksRow task;
+				task = Tasks.FindById(Logs.CurrentLog.TaskId);
 				TaskSummary sum = (TaskSummary) currentTaskSummary.Tag;
-				sum.TotalTime++;
-				TimeSpan duration = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalTime));
-				currentTaskSummary.SubItems[DurationTaskHeader.Index].Text = ViewHelper.TimeSpanToTimeString(duration);
-				this.totalTime++;
-				if(!sum.IsDefaultTask)
+				if (task.IsDefaultTask && !DefaultTasks.IsActive((DefaultTaskEnum) task.DefaultTaskId))
+				{
+					sum.TotalInactiveTime++;
+				}
+				else
+				{
 					totalActiveTime ++;
+					sum.TotalActiveTime++;
+				}
+				totalTime++;
+				TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalActiveTime));
+				TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalInactiveTime));
+				currentTaskSummary.SubItems[ActiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(activeTimeSpan);
+				currentTaskSummary.SubItems[InactiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(inactiveTimeSpan);
+
 				this.CalculateTasksPercents();
 				SetIndicatorsValues();
 			}
-
 		}
 
-		private void toolBar_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
+		private void toolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
-			if(e.Button.ImageIndex==0)
+			if (e.Button.ImageIndex == 0)
 				GoToChildDetail();
-			else if(e.Button.ImageIndex == 1)
+			else if (e.Button.ImageIndex == 1)
 				GoToParentDetail();
 		}
 
 		private void SetParent(PTMDataset.TasksRow parent)
 		{
-			if(parentTasksTable.FindById(parent.Id)==null)
+			if (parentTasksTable.FindById(parent.Id) == null)
 			{
 				parentRow = this.parentTasksTable.NewTasksRow();
 				parentRow.ItemArray = parent.ItemArray;
@@ -549,10 +585,10 @@ namespace PTM.View.Controls
 			}
 			this.parentTaskComboBox.SelectedValue = parent.Id;
 		}
-		
+
 		private void GoToParentDetail()
 		{
-			if(Tasks.RootTasksRow.Id == this.parentRow.Id)
+			if (Tasks.RootTasksRow.Id == this.parentRow.Id)
 			{
 				return;
 			}
@@ -561,7 +597,7 @@ namespace PTM.View.Controls
 
 		private void GoToChildDetail()
 		{
-			if(this.taskList.SelectedItems.Count==0)
+			if (this.taskList.SelectedItems.Count == 0)
 			{
 				return;
 			}
@@ -571,9 +607,9 @@ namespace PTM.View.Controls
 
 		private void taskList_DoubleClick(object sender, EventArgs e)
 		{
-			if(this.taskList.SelectedItems.Count==0)
+			if (this.taskList.SelectedItems.Count == 0)
 				return;
-			
+
 			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
 			SetParent(Tasks.FindById(sum.TaskId));
 		}
