@@ -426,6 +426,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "View\Forms\ConfigurationForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "View\Forms\ConfigurationForm.resx"
+                    DependentUpon = "ConfigurationForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "View\Forms\NotifyForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
