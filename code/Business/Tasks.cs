@@ -85,7 +85,6 @@ namespace PTM.Business
 
 		public static int AddTasksRow(PTMDataset.TasksRow tasksRow)
 		{
-			tasksRow.Description = tasksRow.Description.Trim();
 			SetDefaultTask(tasksRow);
 			ValidateTaskRow(tasksRow, true);
 			tasksRow.TotalTime = 0;
@@ -339,6 +338,7 @@ namespace PTM.Business
 				throw new ApplicationException("Description can't be null");
 			if (tasksRow.Description.Length == 0)
 				throw new ApplicationException("Description can't be empty");
+			tasksRow.Description = tasksRow.Description.Trim();
 			PTMDataset.TasksRow sameTaskByDescription;
 			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
 			if (insertRules)
