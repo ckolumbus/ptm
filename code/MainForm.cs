@@ -37,9 +37,9 @@ namespace PTM
 		private MenuItem aboutMenuItem;
 		private MenuItem menuItem3;
 		private MenuItem menuItem4;
-		private MenuItem startUpMenuItem;
 		private IContainer components;
 		private bool systemShutdown = false;
+		private MenuItem menuItem5;
 		private bool AnimationDisabled = false;
 
 		public MainForm()
@@ -50,29 +50,25 @@ namespace PTM
 			this.tasksLogControl.Exit += new EventHandler(Exit);
 			LoadIconsFromResources();
 			Application.DoEvents();
-			LoadStartUpStatus();
+			UpdateStartUpPath();
 			Application.DoEvents();
 		} //MainForm
 
 
-		private void LoadStartUpStatus()
+		private void UpdateStartUpPath()
 		{
 			RegistryKey reg = Registry.CurrentUser.
 				OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
-			if (reg.GetValue("PTM") == null)
-			{
-				this.startUpMenuItem.Checked = false;
-			}
-			else
+			if (reg.GetValue("PTM") != null)
 			{
 				if (reg.GetValue("PTM").ToString() != Assembly.GetExecutingAssembly().Location) //update path
 					reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
-				this.startUpMenuItem.Checked = true;
 			} //if-else
 			reg.Close();
-		} //LoadStartUpStatus
+		} //UpdateStartUpPath
 
+		
 		private void LoadIconsFromResources()
 		{
 			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", GetType().Assembly);
@@ -124,11 +120,13 @@ namespace PTM
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.exitMenuItem = new System.Windows.Forms.MenuItem();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
+			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.MenuItem();
 			this.statusBar = new System.Windows.Forms.StatusBar();
@@ -142,8 +140,6 @@ namespace PTM
 			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
 			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
-			this.menuItem4 = new System.Windows.Forms.MenuItem();
-			this.startUpMenuItem = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel3)).BeginInit();
@@ -155,21 +151,17 @@ namespace PTM
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                 	{
-			                                 		this.menuItem1,
-			                                 		this.menuItem4,
-			                                 		this.menuItem2
-			                                 	});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.menuItem1,
+																					 this.menuItem4,
+																					 this.menuItem2});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                  	{
-			                                  		this.menuItem3,
-			                                  		this.exitMenuItem
-			                                  	});
+			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.menuItem3,
+																					  this.exitMenuItem});
 			this.menuItem1.Text = "File";
 			// 
 			// menuItem3
@@ -185,13 +177,24 @@ namespace PTM
 			this.exitMenuItem.Text = "&Exit People Task Manager";
 			this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
 			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 1;
+			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.menuItem5});
+			this.menuItem4.Text = "Tools";
+			// 
+			// menuItem5
+			// 
+			this.menuItem5.Index = 0;
+			this.menuItem5.Text = "Configuration...";
+			this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
+			// 
 			// menuItem2
 			// 
 			this.menuItem2.Index = 2;
-			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                  	{
-			                                  		this.aboutMenuItem
-			                                  	});
+			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.aboutMenuItem});
 			this.menuItem2.Text = "Help";
 			// 
 			// aboutMenuItem
@@ -202,14 +205,12 @@ namespace PTM
 			// 
 			// statusBar
 			// 
-			this.statusBar.Location = new System.Drawing.Point(0, 400);
+			this.statusBar.Location = new System.Drawing.Point(0, 405);
 			this.statusBar.Name = "statusBar";
-			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[]
-			                               	{
-			                               		this.statusBarPanel1,
-			                               		this.statusBarPanel2,
-			                               		this.statusBarPanel3
-			                               	});
+			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
+																						 this.statusBarPanel1,
+																						 this.statusBarPanel2,
+																						 this.statusBarPanel3});
 			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(432, 22);
 			this.statusBar.TabIndex = 1;
@@ -230,11 +231,9 @@ namespace PTM
 			// 
 			// tabControl
 			// 
-			this.tabControl.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.tasksPage);
 			this.tabControl.Controls.Add(this.summaryPage);
 			this.tabControl.Controls.Add(this.statisticsPage);
@@ -299,44 +298,29 @@ namespace PTM
 			this.statisticsControl.Name = "statisticsControl";
 			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
-			// 
-			// menuItem4
-			// 
-			this.menuItem4.Index = 1;
-			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                  	{
-			                                  		this.startUpMenuItem
-			                                  	});
-			this.menuItem4.Text = "Options";
-			// 
-			// startUpMenuItem
-			// 
-			this.startUpMenuItem.Index = 0;
-			this.startUpMenuItem.Text = "Run at Windows startup";
-			this.startUpMenuItem.Click += new System.EventHandler(this.menuItem5_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(432, 422);
+			this.ClientSize = new System.Drawing.Size(432, 427);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.statusBar);
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu;
 			this.MinimumSize = new System.Drawing.Size(440, 456);
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "People Task Manager ";
 			this.Load += new System.EventHandler(this.MainForm_Load);
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).EndInit();
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel2)).EndInit();
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel3)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
 			this.summaryPage.ResumeLayout(false);
 			this.statisticsPage.ResumeLayout(false);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -361,22 +345,6 @@ namespace PTM
 			} //if
 		} //tabControl_SelectedIndexChanged
 
-		private static void SetWindowsStartUp(bool enable)
-		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey(
-				"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-			if (enable)
-			{
-				reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
-			}
-			else
-			{
-				reg.DeleteValue("PTM", false);
-			} //if-else
-
-			reg.Close();
-		} //SetWindowsStartUp
 
 		protected override void WndProc(ref Message m)
 		{
@@ -473,10 +441,12 @@ namespace PTM
 
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
-			this.startUpMenuItem.Checked = !this.startUpMenuItem.Checked;
-			SetWindowsStartUp(this.startUpMenuItem.Checked);
-		} //menuItem5_Click
+			ConfigurationForm config = new ConfigurationForm();
+			config.ShowDialog(this);
+		}
 
 		#endregion
+
+
 	} //MainForm
 } //end of namespace
