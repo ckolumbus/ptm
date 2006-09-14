@@ -320,5 +320,31 @@ namespace PTM.Data
 			System.Runtime.InteropServices.Marshal.ReleaseComObject(objJRO);
 			objJRO=null;
 		}
+		
+		
+		public static void DeleteColumn(string tableName, string columnName)
+		{
+			ExecuteNonQuery("ALTER TABLE " + tableName + " DROP COLUMN " + columnName);
+		}
+		
+		public static void AddColumn(string tableName, string columnName, string dbType)
+		{
+			ExecuteNonQuery("ALTER TABLE " + tableName + " ADD " + columnName + " " + dbType);
+		}
+		
+		public static void ModifyColumnType(string tableName, string columnName, string dbType)
+		{
+			ExecuteNonQuery("ALTER TABLE " + tableName + " ALTER COLUMN " + columnName + " " + dbType);
+		}
+		
+		public static void DeletePrimaryKey(string tableName)
+		{
+			ExecuteNonQuery("ALTER TABLE " + tableName + " DROP PRIMARY KEY");
+		}
+		
+		public static void AddPrimaryKey(string tableName, string columnName)
+		{
+			ExecuteNonQuery("ALTER TABLE " + tableName + " ADD PRIMARY KEY (" + columnName + ")");
+		}
 	}
 }
