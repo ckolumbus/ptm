@@ -12,8 +12,8 @@ namespace PTM.Business.Helpers
 	/// </summary>
 	public enum ConfigurationKey : int
 	{
-		TasksLogDuration = 1,
-		DataMaintenanceDays = 2
+		TasksLogDuration = 2,
+		DataMaintenanceDays = 3
 	}//ConfigurationKey enum
 
 	/// <summary>
