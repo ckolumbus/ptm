@@ -260,7 +260,7 @@ namespace PTM.View.Forms
 		{
 			this.checkBox.Checked = true;
 			this.trackBar.Value = 10;
-			this.numericUpDown.Value = 15;
+			this.numericUpDown.Value = 7;
 			this.durationLabel.Text = this.trackBar.Value.ToString() + " mins.";
 		}
 		

@@ -337,9 +337,9 @@ namespace PTM.Data
 			ExecuteNonQuery("ALTER TABLE " + tableName + " ALTER COLUMN " + columnName + " " + dbType);
 		}
 		
-		public static void DeletePrimaryKey(string tableName)
+		public static void DeleteConstraint(string tableName, string constraintName)
 		{
-			ExecuteNonQuery("ALTER TABLE " + tableName + " DROP PRIMARY KEY");
+			ExecuteNonQuery("ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName);
 		}
 		
 		public static void AddPrimaryKey(string tableName, string columnName)

@@ -21,6 +21,8 @@ namespace PTM.Business
 		{
 			DbHelper.Initialize(userName);
 			Application.DoEvents();
+			DBUpdaterHelper.UpdateDataBase();
+			Application.DoEvents();
 			DataMaintenanceHelper.DeleteIdleEntries();
 			Application.DoEvents();
 			DataMaintenanceHelper.GroupLogs();

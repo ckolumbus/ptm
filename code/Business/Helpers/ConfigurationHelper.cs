@@ -12,8 +12,9 @@ namespace PTM.Business.Helpers
 	/// </summary>
 	public enum ConfigurationKey : int
 	{
-		TasksLogDuration = 2,
-		DataMaintenanceDays = 3
+		DataBaseVersion = 0,
+		TasksLogDuration = 1,
+		DataMaintenanceDays = 2
 	}//ConfigurationKey enum
 
 	/// <summary>
@@ -34,14 +35,14 @@ namespace PTM.Business.Helpers
 		/// <summary>
 		/// GetConfiguration  receives a configuration key
 		/// @return  the configuration first item asociated with this item.
-		/// TODO check if the configuration key doesn't exist 
 		/// </summary>
 		public static Configuration GetConfiguration( ConfigurationKey key )
 		{
 			Hashtable ht;
 			ht = DbHelper.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
 			                                      ((int) key).ToString());
-			
+			if(ht==null)
+				return null;
 			object configValue;
 			switch(key)
 			{
@@ -50,7 +51,7 @@ namespace PTM.Business.Helpers
 					configValue = Convert.ToInt32(ht["ConfigValue"]);
 					break;				
 				default:
-					configValue = ht["ConfigValue"];
+					configValue = ht["ConfigValue"].ToString().Trim();
 					break;
 			}
 			
@@ -72,9 +73,17 @@ namespace PTM.Business.Helpers
 						throw new ApplicationException("Data maintenance days can't be less than 0.");
 					break;
 			}
-			
-			DbHelper.ExecuteNonQuery("UPDATE Configuration SET ConfigValue = ? WHERE KeyValue = " +
-			                                   ((int) configuration.Key).ToString(), new string[]{"ConfigValue"}, new object[]{configuration.Value});
+			if(GetConfiguration(configuration.Key)!=null)
+			{
+				DbHelper.ExecuteNonQuery("UPDATE Configuration SET ConfigValue = ? WHERE KeyValue = " +
+					((int) configuration.Key).ToString(), new string[]{"ConfigValue"}, new object[]{configuration.Value});				
+			}
+			else
+			{
+				DbHelper.ExecuteNonQuery("INSERT INTO Configuration (KeyValue, Description, ConfigValue) VALUES (?, ?, ?)", 
+				                         new string[]{"KeyValue", "Description", "ConfigValue"}, 
+				                         new object[]{(int)configuration.Key,configuration.Key.ToString(), configuration.Value});	
+			}
 		}
 
 	}//ConfigurationHelper
