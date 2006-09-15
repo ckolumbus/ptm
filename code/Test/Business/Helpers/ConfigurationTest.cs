@@ -36,7 +36,7 @@ namespace PTM.Test.Business.Helpers
 			config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
 			Assert.AreEqual(ConfigurationKey.DataMaintenanceDays, config.Key);
 			Assert.AreEqual(typeof (int), config.Value.GetType());
-			Assert.AreEqual(15, config.Value);
+			Assert.AreEqual(7, config.Value);
 		}
 
 		[Test]
