@@ -45,6 +45,18 @@ namespace PTM.View.Controls
 		private MenuItem menuItem7;
 		private DateTimePicker logDate;
 		private Label label1;
+		private System.Windows.Forms.ContextMenu rigthClickMenu;
+		private System.Windows.Forms.MenuItem mnuEdit;
+		private System.Windows.Forms.MenuItem mnuSwitchTo;
+		private System.Windows.Forms.MenuItem menuItem11;
+		private System.Windows.Forms.MenuItem mnuLunchTime;
+		private System.Windows.Forms.MenuItem mnuOtherPersonal;
+		private System.Windows.Forms.MenuItem mnuJobPhoneCall;
+		private System.Windows.Forms.MenuItem mnuCheckJobMail;
+		private System.Windows.Forms.MenuItem mnuJobMeeting;
+		private System.Windows.Forms.MenuItem mnuDelete;
+		private System.Windows.Forms.ComboBox newDefaultTaskComboBox;
+		private System.Windows.Forms.ToolTip shortcutToolTip;
 		private DateTime currentDay;
 
 		public TasksLogControl()
@@ -120,13 +132,9 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TasksLogControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksLogControl));
 			this.editButton = new System.Windows.Forms.Button();
 			this.addTaskButton = new System.Windows.Forms.Button();
-			this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
-			this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
-			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
-			this.notifyAnswerTimer = new System.Timers.Timer();
 			this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
 			this.exitContextMenuItem = new System.Windows.Forms.MenuItem();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
@@ -138,41 +146,126 @@ namespace PTM.View.Controls
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItem10 = new System.Windows.Forms.MenuItem();
+			this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
+			this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
+			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
+			this.notifyAnswerTimer = new System.Timers.Timer();
 			this.notifyTimer = new System.Timers.Timer();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
+			this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
+			this.mnuEdit = new System.Windows.Forms.MenuItem();
+			this.mnuSwitchTo = new System.Windows.Forms.MenuItem();
+			this.mnuDelete = new System.Windows.Forms.MenuItem();
+			this.menuItem11 = new System.Windows.Forms.MenuItem();
+			this.mnuLunchTime = new System.Windows.Forms.MenuItem();
+			this.mnuOtherPersonal = new System.Windows.Forms.MenuItem();
+			this.mnuJobPhoneCall = new System.Windows.Forms.MenuItem();
+			this.mnuCheckJobMail = new System.Windows.Forms.MenuItem();
+			this.mnuJobMeeting = new System.Windows.Forms.MenuItem();
 			this.switchToButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.logDate = new System.Windows.Forms.DateTimePicker();
 			this.label1 = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize) (this.notifyAnswerTimer)).BeginInit();
-			((System.ComponentModel.ISupportInitialize) (this.notifyTimer)).BeginInit();
+			this.newDefaultTaskComboBox = new System.Windows.Forms.ComboBox();
+			this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
+			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// editButton
 			// 
-			this.editButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.editButton.Location = new System.Drawing.Point(152, 280);
+			this.editButton.Location = new System.Drawing.Point(136, 280);
 			this.editButton.Name = "editButton";
 			this.editButton.Size = new System.Drawing.Size(72, 23);
 			this.editButton.TabIndex = 3;
-			this.editButton.Text = "&Edit...";
+			this.editButton.Text = "Edit...";
+			this.shortcutToolTip.SetToolTip(this.editButton, "Enter");
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
 			// 
 			// addTaskButton
 			// 
-			this.addTaskButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.addTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.addTaskButton.Location = new System.Drawing.Point(312, 280);
+			this.addTaskButton.Location = new System.Drawing.Point(296, 280);
 			this.addTaskButton.Name = "addTaskButton";
 			this.addTaskButton.Size = new System.Drawing.Size(72, 23);
 			this.addTaskButton.TabIndex = 5;
-			this.addTaskButton.Text = "&New Log...";
+			this.addTaskButton.Text = "New Log...";
+			this.shortcutToolTip.SetToolTip(this.addTaskButton, "Ins");
+			// 
+			// notifyContextMenu
+			// 
+			this.notifyContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																														this.exitContextMenuItem,
+																														this.menuItem1,
+																														this.menuItem2,
+																														this.menuItem3,
+																														this.menuItem4,
+																														this.menuItem5,
+																														this.menuItem6,
+																														this.menuItem7,
+																														this.menuItem9,
+																														this.menuItem10});
+			// 
+			// exitContextMenuItem
+			// 
+			this.exitContextMenuItem.Index = 0;
+			this.exitContextMenuItem.Text = "Exit";
+			// 
+			// menuItem1
+			// 
+			this.menuItem1.Index = 1;
+			this.menuItem1.Text = "-";
+			// 
+			// menuItem2
+			// 
+			this.menuItem2.Index = 2;
+			this.menuItem2.Text = "Idle";
+			this.menuItem2.Click += new System.EventHandler(this.menuIdle_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 3;
+			this.menuItem3.Text = "Lunch Time";
+			this.menuItem3.Click += new System.EventHandler(this.menuLunchTime_Click);
+			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 4;
+			this.menuItem4.Text = "Other/Personal";
+			this.menuItem4.Click += new System.EventHandler(this.menuOtherPersonal_Click);
+			// 
+			// menuItem5
+			// 
+			this.menuItem5.Index = 5;
+			this.menuItem5.Text = "Job Phone Call";
+			this.menuItem5.Click += new System.EventHandler(this.menuJobPhoneCall_Click);
+			// 
+			// menuItem6
+			// 
+			this.menuItem6.Index = 6;
+			this.menuItem6.Text = "Checking Job Email";
+			this.menuItem6.Click += new System.EventHandler(this.menuCheckingJobMail_Click);
+			// 
+			// menuItem7
+			// 
+			this.menuItem7.Index = 7;
+			this.menuItem7.Text = "Job Meeting";
+			this.menuItem7.Click += new System.EventHandler(this.menuJobMeeting_Click);
+			// 
+			// menuItem9
+			// 
+			this.menuItem9.Index = 8;
+			this.menuItem9.Text = "-";
+			// 
+			// menuItem10
+			// 
+			this.menuItem10.Index = 9;
+			this.menuItem10.Text = "About...";
+			this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
 			// 
 			// TaskDescriptionHeader
 			// 
@@ -193,79 +286,6 @@ namespace PTM.View.Controls
 			// 
 			this.notifyAnswerTimer.SynchronizingObject = this;
 			// 
-			// notifyContextMenu
-			// 
-			this.notifyContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                          	{
-			                                          		this.exitContextMenuItem,
-			                                          		this.menuItem1,
-			                                          		this.menuItem2,
-			                                          		this.menuItem3,
-			                                          		this.menuItem4,
-			                                          		this.menuItem5,
-			                                          		this.menuItem6,
-			                                          		this.menuItem7,
-			                                          		this.menuItem9,
-			                                          		this.menuItem10
-			                                          	});
-			// 
-			// exitContextMenuItem
-			// 
-			this.exitContextMenuItem.Index = 0;
-			this.exitContextMenuItem.Text = "Exit";
-			// 
-			// menuItem1
-			// 
-			this.menuItem1.Index = 1;
-			this.menuItem1.Text = "-";
-			// 
-			// menuItem2
-			// 
-			this.menuItem2.Index = 2;
-			this.menuItem2.Text = "Idle";
-			this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 3;
-			this.menuItem3.Text = "Lunch Time";
-			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
-			// 
-			// menuItem4
-			// 
-			this.menuItem4.Index = 4;
-			this.menuItem4.Text = "Other/Personal";
-			this.menuItem4.Click += new System.EventHandler(this.menuItem4_Click);
-			// 
-			// menuItem5
-			// 
-			this.menuItem5.Index = 5;
-			this.menuItem5.Text = "Job Phone Call";
-			this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
-			// 
-			// menuItem6
-			// 
-			this.menuItem6.Index = 6;
-			this.menuItem6.Text = "Checking Job Email";
-			this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
-			// 
-			// menuItem7
-			// 
-			this.menuItem7.Index = 7;
-			this.menuItem7.Text = "Job Meeting";
-			this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
-			// 
-			// menuItem9
-			// 
-			this.menuItem9.Index = 8;
-			this.menuItem9.Text = "-";
-			// 
-			// menuItem10
-			// 
-			this.menuItem10.Index = 9;
-			this.menuItem10.Text = "About...";
-			this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
-			// 
 			// notifyTimer
 			// 
 			this.notifyTimer.Interval = 1000;
@@ -274,56 +294,121 @@ namespace PTM.View.Controls
 			// notifyIcon
 			// 
 			this.notifyIcon.ContextMenu = this.notifyContextMenu;
-			this.notifyIcon.Icon = ((System.Drawing.Icon) (resources.GetObject("notifyIcon.Icon")));
+			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
 			this.notifyIcon.Text = "Current task";
 			this.notifyIcon.Visible = true;
 			// 
 			// taskList
 			// 
-			this.taskList.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.AutoArrange = false;
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-			                               	{
-			                               		this.TaskDescriptionHeader,
-			                               		this.DurationTaskHeader,
-			                               		this.StartTimeHeader
-			                               	});
+			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																											  this.TaskDescriptionHeader,
+																											  this.DurationTaskHeader,
+																											  this.StartTimeHeader});
+			this.taskList.ContextMenu = this.rigthClickMenu;
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 32);
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 240);
 			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 1;
+			this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskList_KeyDown);
 			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
+			// 
+			// rigthClickMenu
+			// 
+			this.rigthClickMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																													this.mnuEdit,
+																													this.mnuSwitchTo,
+																													this.mnuDelete,
+																													this.menuItem11,
+																													this.mnuLunchTime,
+																													this.mnuOtherPersonal,
+																													this.mnuJobPhoneCall,
+																													this.mnuCheckJobMail,
+																													this.mnuJobMeeting});
+			// 
+			// mnuEdit
+			// 
+			this.mnuEdit.DefaultItem = true;
+			this.mnuEdit.Index = 0;
+			this.mnuEdit.Text = "Edit...";
+			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);
+			// 
+			// mnuSwitchTo
+			// 
+			this.mnuSwitchTo.Index = 1;
+			this.mnuSwitchTo.Shortcut = System.Windows.Forms.Shortcut.ShiftIns;
+			this.mnuSwitchTo.Text = "Switch To";
+			this.mnuSwitchTo.Click += new System.EventHandler(this.mnuSwitchTo_Click);
+			// 
+			// mnuDelete
+			// 
+			this.mnuDelete.Index = 2;
+			this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
+			this.mnuDelete.Text = "Delete";
+			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
+			// 
+			// menuItem11
+			// 
+			this.menuItem11.Index = 3;
+			this.menuItem11.Text = "-";
+			// 
+			// mnuLunchTime
+			// 
+			this.mnuLunchTime.Index = 4;
+			this.mnuLunchTime.Text = "Set to Lunch Time";
+			this.mnuLunchTime.Click += new System.EventHandler(this.menuLunchTime_Click);
+			// 
+			// mnuOtherPersonal
+			// 
+			this.mnuOtherPersonal.Index = 5;
+			this.mnuOtherPersonal.Text = "Set to Other/Personal";
+			this.mnuOtherPersonal.Click += new System.EventHandler(this.menuOtherPersonal_Click);
+			// 
+			// mnuJobPhoneCall
+			// 
+			this.mnuJobPhoneCall.Index = 6;
+			this.mnuJobPhoneCall.Text = "Set to Job Phone Call";
+			this.mnuJobPhoneCall.Click += new System.EventHandler(this.menuJobPhoneCall_Click);
+			// 
+			// mnuCheckJobMail
+			// 
+			this.mnuCheckJobMail.Index = 7;
+			this.mnuCheckJobMail.Text = "Set to Checking Job Mail";
+			this.mnuCheckJobMail.Click += new System.EventHandler(this.menuCheckingJobMail_Click);
+			// 
+			// mnuJobMeeting
+			// 
+			this.mnuJobMeeting.Index = 8;
+			this.mnuJobMeeting.Text = "Set to Job Meeting";
+			this.mnuJobMeeting.Click += new System.EventHandler(this.menuJobMeeting_Click);
 			// 
 			// switchToButton
 			// 
-			this.switchToButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.switchToButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.switchToButton.Location = new System.Drawing.Point(232, 280);
+			this.switchToButton.Location = new System.Drawing.Point(216, 280);
 			this.switchToButton.Name = "switchToButton";
 			this.switchToButton.Size = new System.Drawing.Size(72, 23);
 			this.switchToButton.TabIndex = 4;
-			this.switchToButton.Text = "&Switch To";
+			this.switchToButton.Text = "Switch To";
+			this.shortcutToolTip.SetToolTip(this.switchToButton, "Shift+Ins");
 			this.switchToButton.Click += new System.EventHandler(this.switchToButton_Click);
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.deleteButton.Location = new System.Drawing.Point(72, 280);
+			this.deleteButton.Location = new System.Drawing.Point(56, 280);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(72, 23);
 			this.deleteButton.TabIndex = 2;
-			this.deleteButton.Text = "&Delete";
+			this.deleteButton.Text = "Delete";
+			this.shortcutToolTip.SetToolTip(this.deleteButton, "Del");
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
 			// 
 			// logDate
@@ -344,6 +429,24 @@ namespace PTM.View.Controls
 			this.label1.Text = "Date:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// newDefaultTaskComboBox
+			// 
+			this.newDefaultTaskComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.newDefaultTaskComboBox.BackColor = System.Drawing.SystemColors.Window;
+			this.newDefaultTaskComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.newDefaultTaskComboBox.DropDownWidth = 104;
+			this.newDefaultTaskComboBox.Items.AddRange(new object[] {
+																						  "Lunch Time",
+																						  "Other/Personal",
+																						  "Job Phone Call",
+																						  "Checking Job Email",
+																						  "Job Meeting"});
+			this.newDefaultTaskComboBox.Location = new System.Drawing.Point(297, 281);
+			this.newDefaultTaskComboBox.Name = "newDefaultTaskComboBox";
+			this.newDefaultTaskComboBox.Size = new System.Drawing.Size(88, 21);
+			this.newDefaultTaskComboBox.TabIndex = 7;
+			this.newDefaultTaskComboBox.SelectedIndexChanged += new System.EventHandler(this.newDefaultTaskComboBox_SelectedIndexChanged);
+			// 
 			// TasksLogControl
 			// 
 			this.Controls.Add(this.label1);
@@ -353,11 +456,13 @@ namespace PTM.View.Controls
 			this.Controls.Add(this.taskList);
 			this.Controls.Add(this.editButton);
 			this.Controls.Add(this.addTaskButton);
+			this.Controls.Add(this.newDefaultTaskComboBox);
 			this.Name = "TasksLogControl";
 			this.Size = new System.Drawing.Size(392, 312);
-			((System.ComponentModel.ISupportInitialize) (this.notifyAnswerTimer)).EndInit();
-			((System.ComponentModel.ISupportInitialize) (this.notifyTimer)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -424,6 +529,14 @@ namespace PTM.View.Controls
 			}
 		}
 
+		private void SwitchToSelectedLog()
+		{
+			if (!isValidEditableLog())
+				return;
+			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+			AddTaskLog(taskId,
+				(int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+		}
 		private void DeleteSelectedTaskLog()
 		{
 			if (!isValidEditableLog())
@@ -468,47 +581,65 @@ namespace PTM.View.Controls
 
 		private void switchToButton_Click(object sender, EventArgs e)
 		{
-			if (!isValidEditableLog())
-				return;
-			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
-			AddTaskLog(taskId,
-			           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+			SwitchToSelectedLog();
 		}
 
 		private void taskList_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.taskList.SelectedItems.Count <= 0)
-				this.editButton.Enabled = false;
+			{
+				SetNoEditable();
+			}
 			else if (this.taskList.SelectedItems.Count == 1)
 			{
 				if (taskList.SelectedItems[0].Parent == null)
-					this.editButton.Enabled = true;
+				{
+					SetEditable();
+				}
 				else
-					this.editButton.Enabled = false;
+				{
+					SetNoEditable();
+				}
 			}
 			else
 			{
 				if (taskList.SelectedItems[0].Parent != null)
 				{
-					this.editButton.Enabled = false;
+					SetNoEditable();
 					return;
 				}
-				int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+//				int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
 				for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
 				{
 					if (taskList.SelectedItems[i].Parent != null)
 					{
-						this.editButton.Enabled = false;
+						SetNoEditable();
 						return;
 					}
-					if (((Log) taskList.SelectedItems[i].Tag).TaskId != taskId)
-					{
-						this.editButton.Enabled = false;
-						return;
-					}
+//					if (((Log) taskList.SelectedItems[i].Tag).TaskId != taskId)
+//					{
+//						this.editButton.Enabled = false;
+//						return;
+//					}
 				}
-				this.editButton.Enabled = true;
+				SetEditable();
 			}
+		}
+
+		private void SetEditable()
+		{
+			this.editButton.Enabled = true;
+			this.deleteButton.Enabled = true;
+			this.switchToButton.Enabled = true;
+			this.taskList.ContextMenu = this.rigthClickMenu;
+		}
+
+		private void SetNoEditable()
+		{
+			this.editButton.Enabled = false;
+			this.deleteButton.Enabled = false;
+			this.switchToButton.Enabled = false;
+			this.taskList.ContextMenu = null;
 		}
 
 		private void logDate_ValueChanged(object sender, EventArgs e)
@@ -526,6 +657,20 @@ namespace PTM.View.Controls
 			SetLogDay(logDate.Value.Date);
 		}
 
+		private void mnuEdit_Click(object sender, System.EventArgs e)
+		{
+			EditSelectedTaskLog();
+		}
+
+		private void mnuSwitchTo_Click(object sender, System.EventArgs e)
+		{
+			SwitchToSelectedLog();
+		}
+
+		private void mnuDelete_Click(object sender, System.EventArgs e)
+		{
+			DeleteSelectedTaskLog();
+		}
 		#endregion
 
 		#region Notifications
@@ -607,7 +752,7 @@ namespace PTM.View.Controls
 			this.Exit(this, e);
 		}
 
-		private void menuItem2_Click(object sender, EventArgs e)
+		private void menuIdle_Click(object sender, EventArgs e)
 		{
 			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
@@ -615,7 +760,7 @@ namespace PTM.View.Controls
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.Idle);
 		}
 
-		private void menuItem3_Click(object sender, EventArgs e)
+		private void menuLunchTime_Click(object sender, EventArgs e)
 		{
 			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.LunchTime);
@@ -623,7 +768,7 @@ namespace PTM.View.Controls
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.LunchTime);
 		}
 
-		private void menuItem4_Click(object sender, EventArgs e)
+		private void menuOtherPersonal_Click(object sender, EventArgs e)
 		{
 			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.OtherPersonal);
@@ -631,7 +776,7 @@ namespace PTM.View.Controls
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.OtherPersonal);
 		}
 
-		private void menuItem5_Click(object sender, EventArgs e)
+		private void menuJobPhoneCall_Click(object sender, EventArgs e)
 		{
 			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.JobPhoneCall);
@@ -639,7 +784,7 @@ namespace PTM.View.Controls
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.JobPhoneCall);
 		}
 
-		private void menuItem6_Click(object sender, EventArgs e)
+		private void menuCheckingJobMail_Click(object sender, EventArgs e)
 		{
 			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.CheckingJobMail);
@@ -647,7 +792,7 @@ namespace PTM.View.Controls
 				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTaskEnum.CheckingJobMail);
 		}
 
-		private void menuItem7_Click(object sender, EventArgs e)
+		private void menuJobMeeting_Click(object sender, EventArgs e)
 		{
 			if (Tasks.CurrentTaskRow == null)
 				AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTaskEnum.JobMeeting);
@@ -798,5 +943,38 @@ namespace PTM.View.Controls
 		}
 
 		#endregion
+
+
+		private void taskList_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			if(e.KeyData == Keys.Enter)
+			{
+				EditSelectedTaskLog();
+			}
+			if(e.KeyData == Keys.Insert)
+			{
+				NewTaskLog(false);
+			}
+		}
+
+		private void newDefaultTaskComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			if(this.newDefaultTaskComboBox.SelectedIndex==-1)
+				return;
+			if(this.newDefaultTaskComboBox.SelectedIndex==0)
+				this.menuLunchTime_Click(sender, e);
+			if(this.newDefaultTaskComboBox.SelectedIndex==1)
+				this.menuOtherPersonal_Click(sender, e);
+			if(this.newDefaultTaskComboBox.SelectedIndex==2)
+				this.menuJobPhoneCall_Click(sender, e);
+			if(this.newDefaultTaskComboBox.SelectedIndex==3)
+				this.menuCheckingJobMail_Click(sender, e);
+			if(this.newDefaultTaskComboBox.SelectedIndex==4)
+				this.menuJobMeeting_Click(sender, e);
+		}
+
+
+
+
 	}
 }

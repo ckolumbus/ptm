@@ -21,7 +21,7 @@ namespace PTM
 		/// <summary>
 		/// Boolean value to store single instance configuration 
 		/// </summary>
-		internal static bool runSingleInstance = true;
+		internal static bool runSingleInstance = false;
 
 		/// <summary>
 		/// MemoryMappedFile to share between instances
@@ -179,7 +179,7 @@ namespace PTM
 
 		public static string GetVersionString()
 		{
-			return " beta v. 1.0";
+			return " beta v. 1.1";
 		} //GetVersionString
 
 

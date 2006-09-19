@@ -167,23 +167,23 @@ namespace PTM.View.Forms
 			// 
 			this.numericUpDown.Location = new System.Drawing.Point(8, 24);
 			this.numericUpDown.Maximum = new System.Decimal(new int[] {
-																		  30,
-																		  0,
-																		  0,
-																		  0});
+																							 30,
+																							 0,
+																							 0,
+																							 0});
 			this.numericUpDown.Minimum = new System.Decimal(new int[] {
-																		  1,
-																		  0,
-																		  0,
-																		  0});
+																							 1,
+																							 0,
+																							 0,
+																							 0});
 			this.numericUpDown.Name = "numericUpDown";
 			this.numericUpDown.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDown.TabIndex = 0;
 			this.numericUpDown.Value = new System.Decimal(new int[] {
-																		15,
-																		0,
-																		0,
-																		0});
+																						  15,
+																						  0,
+																						  0,
+																						  0});
 			// 
 			// btnReset
 			// 
@@ -197,6 +197,7 @@ namespace PTM.View.Forms
 			// 
 			// btnOk
 			// 
+			this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnOk.Location = new System.Drawing.Point(80, 256);
 			this.btnOk.Name = "btnOk";
