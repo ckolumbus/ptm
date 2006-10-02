@@ -17,8 +17,6 @@ namespace PTM.View.Forms
 		private Label lblVersion;
 		private Label label2;
 		private Label label4;
-		private Label label5;
-		private PictureBox pictureBox3;
 
 		/// <summary>
 		/// Required designer variable.
@@ -60,7 +58,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (AboutForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AboutForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
@@ -69,13 +67,11 @@ namespace PTM.View.Forms
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.pictureBox3 = new System.Windows.Forms.PictureBox();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
 			this.pictureBox1.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(72, 64);
@@ -85,9 +81,7 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Font =
-				new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold,
-				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.label1.Location = new System.Drawing.Point(80, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(168, 23);
@@ -98,7 +92,7 @@ namespace PTM.View.Forms
 			// 
 			this.button1.BackColor = System.Drawing.SystemColors.Control;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button1.Location = new System.Drawing.Point(264, 128);
+			this.button1.Location = new System.Drawing.Point(264, 96);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(64, 23);
 			this.button1.TabIndex = 2;
@@ -123,7 +117,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox2
 			// 
-			this.pictureBox2.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox2.Image")));
+			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
 			this.pictureBox2.Location = new System.Drawing.Point(176, 56);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(24, 16);
@@ -132,7 +126,7 @@ namespace PTM.View.Forms
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(80, 112);
+			this.label2.Location = new System.Drawing.Point(80, 80);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(176, 23);
 			this.label2.TabIndex = 6;
@@ -140,37 +134,17 @@ namespace PTM.View.Forms
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(80, 136);
+			this.label4.Location = new System.Drawing.Point(80, 104);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(176, 23);
 			this.label4.TabIndex = 7;
 			this.label4.Text = "cestradac@users.sourceforge.net";
 			// 
-			// label5
-			// 
-			this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label5.Location = new System.Drawing.Point(80, 80);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(96, 23);
-			this.label5.TabIndex = 8;
-			this.label5.Text = "Manuel Castro";
-			// 
-			// pictureBox3
-			// 
-			this.pictureBox3.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox3.Image")));
-			this.pictureBox3.Location = new System.Drawing.Point(176, 80);
-			this.pictureBox3.Name = "pictureBox3";
-			this.pictureBox3.Size = new System.Drawing.Size(24, 16);
-			this.pictureBox3.TabIndex = 9;
-			this.pictureBox3.TabStop = false;
-			// 
 			// AboutForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(334, 164);
-			this.Controls.Add(this.pictureBox3);
-			this.Controls.Add(this.label5);
+			this.ClientSize = new System.Drawing.Size(334, 129);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.pictureBox2);
@@ -180,7 +154,7 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
@@ -189,6 +163,7 @@ namespace PTM.View.Forms
 			this.Text = "About People Task Manager";
 			this.TopMost = true;
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
