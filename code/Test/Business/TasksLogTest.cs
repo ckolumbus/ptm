@@ -99,6 +99,29 @@ namespace PTM.Test.Business
 			Assert.AreEqual(taskrow2.Id, Tasks.CurrentTaskRow.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowUpdatedCount);
 		}
+		
+		[Test]
+		public void UpdateLogDefaultTaskTest()
+		{
+			PTMDataset.TasksRow taskrow1;
+			taskrow1 = Tasks.NewTasksRow();
+			taskrow1.Description = "TaskTest1";
+			taskrow1.ParentId = Tasks.RootTasksRow.Id;
+			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
+
+			Log logRow;
+			logRow = Logs.AddLog(taskrow1.Id);
+
+			Logs.UpdateLogDefaultTask(logRow.Id, DefaultTaskEnum.CheckingJobMail);
+			Assert.AreEqual(true, Tasks.CurrentTaskRow.IsDefaultTask);
+			Assert.AreEqual((int)DefaultTaskEnum.CheckingJobMail,Tasks.CurrentTaskRow.DefaultTaskId);
+			
+			Logs.UpdateLogTaskId(logRow.Id, taskrow1.Id);
+			Assert.AreEqual(false, Tasks.CurrentTaskRow.IsDefaultTask);
+			Logs.UpdateLogDefaultTask(logRow.Id, DefaultTaskEnum.JobMeeting);
+			Assert.AreEqual(true, Tasks.CurrentTaskRow.IsDefaultTask);
+			Assert.AreEqual((int)DefaultTaskEnum.JobMeeting,Tasks.CurrentTaskRow.DefaultTaskId);
+		}
 
 		[Test]
 		public void DeleteTaskLogTest()

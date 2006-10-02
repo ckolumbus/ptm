@@ -199,16 +199,16 @@ namespace PTM.View.Controls
 			// notifyContextMenu
 			// 
 			this.notifyContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																														this.exitContextMenuItem,
-																														this.menuItem1,
-																														this.menuItem2,
-																														this.menuItem3,
-																														this.menuItem4,
-																														this.menuItem5,
-																														this.menuItem6,
-																														this.menuItem7,
-																														this.menuItem9,
-																														this.menuItem10});
+																							  this.exitContextMenuItem,
+																							  this.menuItem1,
+																							  this.menuItem2,
+																							  this.menuItem3,
+																							  this.menuItem4,
+																							  this.menuItem5,
+																							  this.menuItem6,
+																							  this.menuItem7,
+																							  this.menuItem9,
+																							  this.menuItem10});
 			// 
 			// exitContextMenuItem
 			// 
@@ -305,9 +305,9 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.AutoArrange = false;
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																											  this.TaskDescriptionHeader,
-																											  this.DurationTaskHeader,
-																											  this.StartTimeHeader});
+																					   this.TaskDescriptionHeader,
+																					   this.DurationTaskHeader,
+																					   this.StartTimeHeader});
 			this.taskList.ContextMenu = this.rigthClickMenu;
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 32);
@@ -321,15 +321,15 @@ namespace PTM.View.Controls
 			// rigthClickMenu
 			// 
 			this.rigthClickMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																													this.mnuEdit,
-																													this.mnuSwitchTo,
-																													this.mnuDelete,
-																													this.menuItem11,
-																													this.mnuLunchTime,
-																													this.mnuOtherPersonal,
-																													this.mnuJobPhoneCall,
-																													this.mnuCheckJobMail,
-																													this.mnuJobMeeting});
+																						   this.mnuEdit,
+																						   this.mnuSwitchTo,
+																						   this.mnuDelete,
+																						   this.menuItem11,
+																						   this.mnuLunchTime,
+																						   this.mnuOtherPersonal,
+																						   this.mnuJobPhoneCall,
+																						   this.mnuCheckJobMail,
+																						   this.mnuJobMeeting});
 			// 
 			// mnuEdit
 			// 
@@ -361,31 +361,31 @@ namespace PTM.View.Controls
 			// 
 			this.mnuLunchTime.Index = 4;
 			this.mnuLunchTime.Text = "Set to Lunch Time";
-			this.mnuLunchTime.Click += new System.EventHandler(this.menuLunchTime_Click);
+			this.mnuLunchTime.Click += new System.EventHandler(this.mnuLunchTime_Click);
 			// 
 			// mnuOtherPersonal
 			// 
 			this.mnuOtherPersonal.Index = 5;
 			this.mnuOtherPersonal.Text = "Set to Other/Personal";
-			this.mnuOtherPersonal.Click += new System.EventHandler(this.menuOtherPersonal_Click);
+			this.mnuOtherPersonal.Click += new System.EventHandler(this.mnuOtherPersonal_Click);
 			// 
 			// mnuJobPhoneCall
 			// 
 			this.mnuJobPhoneCall.Index = 6;
 			this.mnuJobPhoneCall.Text = "Set to Job Phone Call";
-			this.mnuJobPhoneCall.Click += new System.EventHandler(this.menuJobPhoneCall_Click);
+			this.mnuJobPhoneCall.Click += new System.EventHandler(this.mnuJobPhoneCall_Click);
 			// 
 			// mnuCheckJobMail
 			// 
 			this.mnuCheckJobMail.Index = 7;
 			this.mnuCheckJobMail.Text = "Set to Checking Job Mail";
-			this.mnuCheckJobMail.Click += new System.EventHandler(this.menuCheckingJobMail_Click);
+			this.mnuCheckJobMail.Click += new System.EventHandler(this.mnuCheckJobMail_Click);
 			// 
 			// mnuJobMeeting
 			// 
 			this.mnuJobMeeting.Index = 8;
 			this.mnuJobMeeting.Text = "Set to Job Meeting";
-			this.mnuJobMeeting.Click += new System.EventHandler(this.menuJobMeeting_Click);
+			this.mnuJobMeeting.Click += new System.EventHandler(this.mnuJobMeeting_Click);
 			// 
 			// switchToButton
 			// 
@@ -436,11 +436,11 @@ namespace PTM.View.Controls
 			this.newDefaultTaskComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.newDefaultTaskComboBox.DropDownWidth = 104;
 			this.newDefaultTaskComboBox.Items.AddRange(new object[] {
-																						  "Lunch Time",
-																						  "Other/Personal",
-																						  "Job Phone Call",
-																						  "Checking Job Email",
-																						  "Job Meeting"});
+																		"Lunch Time",
+																		"Other/Personal",
+																		"Job Phone Call",
+																		"Checking Job Email",
+																		"Job Meeting"});
 			this.newDefaultTaskComboBox.Location = new System.Drawing.Point(297, 281);
 			this.newDefaultTaskComboBox.Name = "newDefaultTaskComboBox";
 			this.newDefaultTaskComboBox.Size = new System.Drawing.Size(88, 21);
@@ -971,6 +971,51 @@ namespace PTM.View.Controls
 				this.menuCheckingJobMail_Click(sender, e);
 			if(this.newDefaultTaskComboBox.SelectedIndex==4)
 				this.menuJobMeeting_Click(sender, e);
+		}
+
+		private void mnuLunchTime_Click(object sender, System.EventArgs e)
+		{
+			foreach (ListViewItem item in this.taskList.SelectedItems)
+			{
+				Log log = (Log) item.Tag;
+				Logs.UpdateLogDefaultTask(log.Id, DefaultTaskEnum.LunchTime);
+			}
+		}
+
+		private void mnuOtherPersonal_Click(object sender, System.EventArgs e)
+		{
+			foreach (ListViewItem item in this.taskList.SelectedItems)
+			{
+				Log log = (Log) item.Tag;
+				Logs.UpdateLogDefaultTask(log.Id, DefaultTaskEnum.OtherPersonal);
+			}
+		}
+
+		private void mnuJobPhoneCall_Click(object sender, System.EventArgs e)
+		{
+			foreach (ListViewItem item in this.taskList.SelectedItems)
+			{
+				Log log = (Log) item.Tag;
+				Logs.UpdateLogDefaultTask(log.Id, DefaultTaskEnum.JobPhoneCall);
+			}
+		}
+
+		private void mnuCheckJobMail_Click(object sender, System.EventArgs e)
+		{
+			foreach (ListViewItem item in this.taskList.SelectedItems)
+			{
+				Log log = (Log) item.Tag;
+				Logs.UpdateLogDefaultTask(log.Id, DefaultTaskEnum.CheckingJobMail);
+			}
+		}
+
+		private void mnuJobMeeting_Click(object sender, System.EventArgs e)
+		{
+			foreach (ListViewItem item in this.taskList.SelectedItems)
+			{
+				Log log = (Log) item.Tag;
+				Logs.UpdateLogDefaultTask(log.Id, DefaultTaskEnum.JobMeeting);
+			}
 		}
 
 

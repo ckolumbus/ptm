@@ -50,14 +50,14 @@ namespace PTM.Business
 			return log;
 		}
 
-		public static void UpdateLogTaskId(int id, int taskId)
+		public static void UpdateLogTaskId(int logId, int taskId)
 		{
 			Log log;
-			log = FindById(id);
+			log = FindById(logId);
 			log.TaskId = taskId;
-			DbHelper.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + id);
+			DbHelper.ExecuteNonQuery("UPDATE TasksLog SET TaskId = " + taskId + " WHERE Id = " + logId);
 			
-			if(currentLog !=null && currentLog.Id == id)
+			if(currentLog !=null && currentLog.Id == logId)
 				currentLog.TaskId = taskId;
 			
 			if(LogChanged!=null)
@@ -66,6 +66,14 @@ namespace PTM.Business
 			}
 		}
 		
+		public static void UpdateLogDefaultTask(int logId, DefaultTaskEnum defaultTaskEnum)
+		{
+			Log log = Logs.FindById(logId);
+			PTMDataset.TasksRow task;
+			task = Tasks.FindById(log.TaskId);
+			int defaultTaskId = Tasks.AddDeafultTask(task.ParentId, defaultTaskEnum);
+			Logs.UpdateLogTaskId(log.Id, defaultTaskId);
+		}
 		public static void DeleteLog(int id)
 		{
 			Log log;
@@ -80,8 +88,8 @@ namespace PTM.Business
 		
 		public static Log AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
 		{
-			int idleTaskId = Tasks.AddDeafultTask(taskParentId, defaultTaskEnum);
-			return AddLog(idleTaskId);
+			int defaultTaskId = Tasks.AddDeafultTask(taskParentId, defaultTaskEnum);
+			return AddLog(defaultTaskId);
 		}
 		
 		public static Log FindById(int id)
@@ -197,5 +205,7 @@ namespace PTM.Business
 		public static event EventHandler AfterStartLogging;
 		public static event EventHandler AfterStopLogging;
 		#endregion
+
+
 	}
 }
