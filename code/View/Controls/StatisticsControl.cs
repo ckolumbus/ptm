@@ -20,13 +20,11 @@ namespace PTM.View.Controls
 		private ColumnHeader colName;
 		private ColumnHeader colActiveTime;
 		private ColumnHeader colProcessId;
-		private Label label3;
 		private GroupBox groupBox3;
 		private GroupBox groupBox4;
 		private Label label1;
 		private ColumnHeader colAppPercent;
 		private Label label8;
-		private DateTimePicker dateTimePicker;
 		private Label totalTasksLoggedValue;
 		private Label AppsActiveTimeValue;
 		private Button browseButton;
@@ -37,6 +35,10 @@ namespace PTM.View.Controls
 		/// Required designer variable.
 		/// </summary>
 		private Container components = null;
+		private System.Windows.Forms.DateTimePicker toDateTimePicker;
+		private System.Windows.Forms.RadioButton toRadioButton;
+		private System.Windows.Forms.RadioButton fromRadioButton;
+		private System.Windows.Forms.DateTimePicker fromDateTimePicker;
 
 		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
 
@@ -53,11 +55,13 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
 			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
 
-			this.dateTimePicker.Value = DateTime.Today;
+			this.fromDateTimePicker.Value = DateTime.Today;
+			this.toDateTimePicker.Value = DateTime.Today;
 
 			if (parentTaskComboBox.Items.Count > 0)
 				parentTaskComboBox.SelectedIndex = 0;
-			this.dateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
+			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
+			this.toDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 		}
 
@@ -89,8 +93,6 @@ namespace PTM.View.Controls
 			this.colActiveTime = new System.Windows.Forms.ColumnHeader();
 			this.colAppPercent = new System.Windows.Forms.ColumnHeader();
 			this.colProcessId = new System.Windows.Forms.ColumnHeader();
-			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
-			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.AppsActiveTimeValue = new System.Windows.Forms.Label();
@@ -100,24 +102,24 @@ namespace PTM.View.Controls
 			this.browseButton = new System.Windows.Forms.Button();
 			this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
+			this.toRadioButton = new System.Windows.Forms.RadioButton();
+			this.fromRadioButton = new System.Windows.Forms.RadioButton();
+			this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// applicationsList
 			// 
-			this.applicationsList.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
-			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-			                                       	{
-			                                       		this.colName,
-			                                       		this.colActiveTime,
-			                                       		this.colAppPercent,
-			                                       		this.colProcessId
-			                                       	});
+			this.applicationsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																							   this.colName,
+																							   this.colActiveTime,
+																							   this.colAppPercent,
+																							   this.colProcessId});
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
@@ -143,29 +145,11 @@ namespace PTM.View.Controls
 			this.colProcessId.Text = "Process Id";
 			this.colProcessId.Width = 0;
 			// 
-			// dateTimePicker
-			// 
-			this.dateTimePicker.Location = new System.Drawing.Point(80, 9);
-			this.dateTimePicker.Name = "dateTimePicker";
-			this.dateTimePicker.TabIndex = 0;
-			// 
-			// label3
-			// 
-			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label3.Location = new System.Drawing.Point(8, 8);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(64, 23);
-			this.label3.TabIndex = 5;
-			this.label3.Text = "Date:";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.applicationsList);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
@@ -178,10 +162,8 @@ namespace PTM.View.Controls
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.AppsActiveTimeValue);
 			this.groupBox4.Controls.Add(this.label8);
 			this.groupBox4.Controls.Add(this.totalTasksLoggedValue);
@@ -262,6 +244,49 @@ namespace PTM.View.Controls
 			this.label2.Text = "Detail Level:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// toDateTimePicker
+			// 
+			this.toDateTimePicker.CustomFormat = "";
+			this.toDateTimePicker.Enabled = false;
+			this.toDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+			this.toDateTimePicker.Location = new System.Drawing.Point(224, 8);
+			this.toDateTimePicker.Name = "toDateTimePicker";
+			this.toDateTimePicker.Size = new System.Drawing.Size(88, 20);
+			this.toDateTimePicker.TabIndex = 21;
+			this.toDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
+			// 
+			// toRadioButton
+			// 
+			this.toRadioButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.toRadioButton.Location = new System.Drawing.Point(184, 8);
+			this.toRadioButton.Name = "toRadioButton";
+			this.toRadioButton.Size = new System.Drawing.Size(40, 24);
+			this.toRadioButton.TabIndex = 20;
+			this.toRadioButton.Text = "To:";
+			this.toRadioButton.CheckedChanged += new System.EventHandler(this.toRadioButton_CheckedChanged);
+			// 
+			// fromRadioButton
+			// 
+			this.fromRadioButton.Checked = true;
+			this.fromRadioButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.fromRadioButton.Location = new System.Drawing.Point(32, 8);
+			this.fromRadioButton.Name = "fromRadioButton";
+			this.fromRadioButton.Size = new System.Drawing.Size(48, 24);
+			this.fromRadioButton.TabIndex = 19;
+			this.fromRadioButton.TabStop = true;
+			this.fromRadioButton.Text = "Date:";
+			this.fromRadioButton.CheckedChanged += new System.EventHandler(this.fromRadioButton_CheckedChanged);
+			// 
+			// fromDateTimePicker
+			// 
+			this.fromDateTimePicker.CustomFormat = "";
+			this.fromDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+			this.fromDateTimePicker.Location = new System.Drawing.Point(80, 8);
+			this.fromDateTimePicker.Name = "fromDateTimePicker";
+			this.fromDateTimePicker.Size = new System.Drawing.Size(88, 20);
+			this.fromDateTimePicker.TabIndex = 18;
+			this.fromDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
+			// 
 			// StatisticsControl
 			// 
 			this.Controls.Add(this.browseButton);
@@ -269,14 +294,17 @@ namespace PTM.View.Controls
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.dateTimePicker);
+			this.Controls.Add(this.toRadioButton);
+			this.Controls.Add(this.fromRadioButton);
+			this.Controls.Add(this.fromDateTimePicker);
+			this.Controls.Add(this.toDateTimePicker);
 			this.Name = "StatisticsControl";
 			this.Size = new System.Drawing.Size(408, 288);
 			this.Load += new System.EventHandler(this.Statistics_Load);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -302,30 +330,51 @@ namespace PTM.View.Controls
 
 		public void UpdateStatistics()
 		{
-			if (this.dateTimePicker.Value != DateTime.Today)
-				this.dateTimePicker.Value = DateTime.Today;
+			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
+			{
+				this.fromRadioButton.Checked = true;
+				this.fromDateTimePicker.Value = DateTime.Today;
+				this.toDateTimePicker.Value = DateTime.Today;
+			}
 			else
 			{
-				GetTaskDetail(this.dateTimePicker.Value);
+				GetTaskDetail();
 			}
 		}
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
 		{
-			GetTaskDetail(dateTimePicker.Value);
+			if(this.fromRadioButton.Checked)
+			{
+				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
+				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+				this.toDateTimePicker.ValueChanged+=new EventHandler(dateTimePicker_ValueChanged);
+			}
+			GetTaskDetail();
 		}
 
-		private void GetTaskDetail(DateTime day)
+		private void GetTaskDetail()
 		{
 			try
 			{
+				DateTime fromDate;
+				DateTime toDate;
+				fromDate = fromDateTimePicker.Value.Date;
+				if(this.toRadioButton.Checked)
+				{
+					toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+				}
+				else
+				{
+					toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);						
+				}
 				ClearContent();
 				this.Refresh();
 				Cursor.Current = Cursors.WaitCursor;
 
 				ArrayList appsSummaryList = ApplicationSummaries.GetApplicationsSummary(
 					Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
-					day, day.AddDays(1));
+					fromDate, toDate);
 				int appActiveTime = 0;
 				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
 				{
@@ -362,7 +411,7 @@ namespace PTM.View.Controls
 			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
-			GetTaskDetail(dateTimePicker.Value);
+			GetTaskDetail();
 		}
 
 		private void browseButton_Click(object sender, EventArgs e)
@@ -380,6 +429,19 @@ namespace PTM.View.Controls
 				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
 			}
 			this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskRow.Id;
+		}
+
+		private void toRadioButton_CheckedChanged(object sender, System.EventArgs e)
+		{
+			this.toDateTimePicker.Enabled = true;
+			this.fromRadioButton.Text = "From:";
+		}
+
+		private void fromRadioButton_CheckedChanged(object sender, System.EventArgs e)
+		{
+			this.toDateTimePicker.Enabled = false;
+			this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+			this.fromRadioButton.Text = "Date:";	
 		}
 	}
 }

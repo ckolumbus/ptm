@@ -404,6 +404,13 @@ namespace PTM.View.Controls
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
 		{
+			if(this.fromRadioButton.Checked)
+			{
+				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
+				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+				this.toDateTimePicker.ValueChanged+=new EventHandler(dateTimePicker_ValueChanged);
+			}
+				
 			UpdateTasksSummary();
 		}
 
@@ -663,5 +670,6 @@ namespace PTM.View.Controls
 			this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
 			this.fromRadioButton.Text = "Date:";			
 		}
+
 	}
 }
