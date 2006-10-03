@@ -95,8 +95,8 @@ namespace PTM.Business.Helpers
 		
 		public static string GetInternalVersionString()
 		{
-			return Application.ProductVersion;
-		} //GetVersionString
+			return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		} //GetInternalVersionString
 		
 	}//ConfigurationHelper
 	
