@@ -173,6 +173,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Business\Helpers\UpdaterHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\DataAdapterManager.cs"
                     SubType = "Component"
                     BuildAction = "Compile"

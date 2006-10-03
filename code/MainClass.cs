@@ -177,11 +177,6 @@ namespace PTM
 			Application.DoEvents();
 		} //timer_Elapsed
 
-		public static string GetVersionString()
-		{
-			return " beta v. 1.2";
-		} //GetVersionString
-
 
 		private static void main_HandleCreated(object sender, EventArgs e)
 		{

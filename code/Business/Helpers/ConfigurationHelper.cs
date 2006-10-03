@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data.Common;
 using System.Globalization;
+using System.Windows.Forms;
 using PTM.Data;
 
 namespace PTM.Business.Helpers
@@ -86,6 +87,17 @@ namespace PTM.Business.Helpers
 			}
 		}
 
+		
+		public static string GetVersionString()
+		{
+			return "beta v. 1.2";
+		} //GetVersionString
+		
+		public static string GetInternalVersionString()
+		{
+			return Application.ProductVersion;
+		} //GetVersionString
+		
 	}//ConfigurationHelper
 	
 		

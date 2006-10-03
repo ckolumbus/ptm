@@ -7,6 +7,7 @@ using System.Resources;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using PTM.Business;
+using PTM.Business.Helpers;
 using PTM.Data;
 using PTM.View;
 using PTM.View.Controls;
@@ -46,7 +47,7 @@ namespace PTM
 		{
 			InitializeComponent();
 			Application.DoEvents();
-			this.Text += MainClass.GetVersionString();
+			this.Text += " " + ConfigurationHelper.GetVersionString();
 			this.tasksLogControl.Exit += new EventHandler(Exit);
 			LoadIconsFromResources();
 			Application.DoEvents();

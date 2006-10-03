@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using PTM.Business.Helpers;
 
 namespace PTM.View.Forms
 {
@@ -29,7 +30,7 @@ namespace PTM.View.Forms
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			this.lblVersion.Text += MainClass.GetVersionString();
+			this.lblVersion.Text += ConfigurationHelper.GetVersionString();
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
