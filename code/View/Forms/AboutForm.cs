@@ -16,8 +16,8 @@ namespace PTM.View.Forms
 		private Label label3;
 		private PictureBox pictureBox2;
 		private Label lblVersion;
-		private Label label2;
 		private Label label4;
+		private System.Windows.Forms.LinkLabel linkLabel;
 
 		/// <summary>
 		/// Required designer variable.
@@ -66,8 +66,8 @@ namespace PTM.View.Forms
 			this.lblVersion = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.linkLabel = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -125,14 +125,6 @@ namespace PTM.View.Forms
 			this.pictureBox2.TabIndex = 5;
 			this.pictureBox2.TabStop = false;
 			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(80, 80);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(176, 23);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "http://sourceforge.net/projects/ptm";
-			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(80, 104);
@@ -141,13 +133,25 @@ namespace PTM.View.Forms
 			this.label4.TabIndex = 7;
 			this.label4.Text = "cestradac@users.sourceforge.net";
 			// 
+			// linkLabel
+			// 
+			this.linkLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.linkLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.linkLabel.Location = new System.Drawing.Point(80, 80);
+			this.linkLabel.Name = "linkLabel";
+			this.linkLabel.Size = new System.Drawing.Size(176, 23);
+			this.linkLabel.TabIndex = 8;
+			this.linkLabel.TabStop = true;
+			this.linkLabel.Text = "http://sourceforge.net/projects/ptm";
+			this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(334, 129);
+			this.Controls.Add(this.linkLabel);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.pictureBox2);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.lblVersion);
@@ -172,6 +176,11 @@ namespace PTM.View.Forms
 		private void button1_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+
+		private void linkLabel_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+		{
+			System.Diagnostics.Process.Start(linkLabel.Text);
 		}
 	}
 }

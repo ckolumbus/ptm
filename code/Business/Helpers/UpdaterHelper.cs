@@ -22,26 +22,36 @@ namespace PTM.Business.Helpers
 			public bool UpdateAvailable;
 		}
 		
-		public UpdateInfo CheckFromUpdates()
+		public static UpdateInfo CheckFromUpdates()
 		{
 			UpdateInfo info = new UpdateInfo();
 			info.ThisInternalVersion = ConfigurationHelper.GetInternalVersionString();
 			info.ThisVersion = ConfigurationHelper.GetVersionString();
 			info.UpdateAvailable = false;
-			XmlDocument doc = new XmlDocument();
-			try
+
+			Configuration config;
+			config = ConfigurationHelper.GetConfiguration(ConfigurationKey.CheckForUpdates);
+			if(Convert.ToInt32(config.Value)==0)
 			{
-				doc.Load(@"http://svn.sourceforge.net/viewvc/*checkout*/ptm/trunk/info.xml");
-				info.CurrentVersion = doc.SelectSingleNode(@"/root/CurrentVersion").InnerText;
-				info.CurrentInternalVersion = doc.SelectSingleNode(@"/root/CurrentInternalVersion").InnerText;
-				if(string.CompareOrdinal(info.CurrentInternalVersion, info.ThisInternalVersion)> 0)
-				{
-					info.UpdateAvailable = true;
-				}
+				return info;
 			}
-			catch(Exception ex)
+			else if(Convert.ToInt32(config.Value)==1)
 			{
-				ex = ex;//do nothing
+				XmlDocument doc = new XmlDocument();
+				try
+				{
+					doc.Load(@"http://svn.sourceforge.net/viewvc/*checkout*/ptm/trunk/info.xml");
+					info.CurrentVersion = doc.SelectSingleNode(@"/root/CurrentVersion").InnerText;
+					info.CurrentInternalVersion = doc.SelectSingleNode(@"/root/CurrentInternalVersion").InnerText;
+					if(string.CompareOrdinal(info.CurrentInternalVersion, info.ThisInternalVersion)> 0)
+					{
+						info.UpdateAvailable = true;
+					}
+				}
+				catch(Exception ex)
+				{
+					ex = ex;//do nothing
+				}
 			}
 			return info;
 		}

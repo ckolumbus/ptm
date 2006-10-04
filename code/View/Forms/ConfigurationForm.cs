@@ -26,6 +26,7 @@ namespace PTM.View.Forms
 		private System.Windows.Forms.NumericUpDown numericUpDown;
 		private System.Windows.Forms.CheckBox checkBox;
 		private System.Windows.Forms.Label durationLabel;
+		private System.Windows.Forms.CheckBox checkBox1;
 		/// <summary>
 		/// Variable del diseñador requerida.
 		/// </summary>
@@ -77,6 +78,7 @@ namespace PTM.View.Forms
 			this.btnReset = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
 			this.groupBox2.SuspendLayout();
@@ -90,7 +92,7 @@ namespace PTM.View.Forms
 			this.groupBox1.Controls.Add(this.trackBar);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(8, 80);
+			this.groupBox1.Location = new System.Drawing.Point(8, 112);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(240, 88);
 			this.groupBox1.TabIndex = 0;
@@ -148,7 +150,7 @@ namespace PTM.View.Forms
 			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.Controls.Add(this.numericUpDown);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(8, 184);
+			this.groupBox2.Location = new System.Drawing.Point(8, 208);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(240, 56);
 			this.groupBox2.TabIndex = 2;
@@ -167,23 +169,23 @@ namespace PTM.View.Forms
 			// 
 			this.numericUpDown.Location = new System.Drawing.Point(8, 24);
 			this.numericUpDown.Maximum = new System.Decimal(new int[] {
-																							 30,
-																							 0,
-																							 0,
-																							 0});
+																		  30,
+																		  0,
+																		  0,
+																		  0});
 			this.numericUpDown.Minimum = new System.Decimal(new int[] {
-																							 1,
-																							 0,
-																							 0,
-																							 0});
+																		  1,
+																		  0,
+																		  0,
+																		  0});
 			this.numericUpDown.Name = "numericUpDown";
 			this.numericUpDown.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDown.TabIndex = 0;
 			this.numericUpDown.Value = new System.Decimal(new int[] {
-																						  15,
-																						  0,
-																						  0,
-																						  0});
+																		15,
+																		0,
+																		0,
+																		0});
 			// 
 			// btnReset
 			// 
@@ -199,7 +201,7 @@ namespace PTM.View.Forms
 			// 
 			this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOk.Location = new System.Drawing.Point(80, 256);
+			this.btnOk.Location = new System.Drawing.Point(80, 280);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.TabIndex = 4;
 			this.btnOk.Text = "Ok";
@@ -209,18 +211,28 @@ namespace PTM.View.Forms
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnCancel.Location = new System.Drawing.Point(168, 256);
+			this.btnCancel.Location = new System.Drawing.Point(168, 280);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 5;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkBox1.Location = new System.Drawing.Point(8, 80);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(216, 24);
+			this.checkBox1.TabIndex = 6;
+			this.checkBox1.Text = "Check for newer versions automatically";
 			// 
 			// ConfigurationForm
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(256, 291);
+			this.ClientSize = new System.Drawing.Size(256, 312);
+			this.Controls.Add(this.checkBox1);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOk);
 			this.Controls.Add(this.btnReset);
@@ -260,6 +272,7 @@ namespace PTM.View.Forms
 		private void btnReset_Click(object sender, System.EventArgs e)
 		{
 			this.checkBox.Checked = true;
+			this.checkBox1.Checked = true;
 			this.trackBar.Value = 10;
 			this.numericUpDown.Value = 7;
 			this.durationLabel.Text = this.trackBar.Value.ToString() + " mins.";
@@ -304,6 +317,8 @@ namespace PTM.View.Forms
 			Configuration c = new Configuration(ConfigurationKey.DataMaintenanceDays, Convert.ToInt32(this.numericUpDown.Value));
 			ConfigurationHelper.SaveConfiguration(c);
 			c = new Configuration(ConfigurationKey.TasksLogDuration, Convert.ToInt32(this.trackBar.Value));
+			ConfigurationHelper.SaveConfiguration(c);
+			c = new Configuration(ConfigurationKey.CheckForUpdates, Convert.ToInt32(this.trackBar.Value));
 			ConfigurationHelper.SaveConfiguration(c);
 			this.Close();
 		}

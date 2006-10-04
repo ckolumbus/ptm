@@ -15,7 +15,8 @@ namespace PTM.Business.Helpers
 	{
 		DataBaseVersion = 0,
 		TasksLogDuration = 1,
-		DataMaintenanceDays = 2
+		DataMaintenanceDays = 2,
+		CheckForUpdates = 3
 	}//ConfigurationKey enum
 
 	/// <summary>

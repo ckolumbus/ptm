@@ -22,12 +22,33 @@ namespace PTM.Business.Helpers
 				Configuration oldVersion = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataBaseVersion);
 				if(UpdateFromV00ToV09(oldVersion))
 					continue;
-				//if(UpdateFromV09ToVXX(oldVersion)) //Next check
+				if(UpdateFromV09ToV091(oldVersion)) //Next check
+					continue;
+				//if(UpdateFromV091ToVXX(oldVersion)) //Next check
 				//	continue;
 				findNextUpdate = false;
 			}
 		}
-		
+
+		private static bool UpdateFromV09ToV091(Configuration oldVersion)
+		{
+			if(string.Compare(oldVersion.Value.ToString().Trim(), "0.9")==0)
+			{
+				try
+				{
+					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.1"));
+					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.CheckForUpdates, "1"));
+					return true;					
+				}
+				catch(OleDbException ex)
+				{
+					Logger.Write(ex.Message);
+					return false;
+				}
+			}
+			return false;
+		}
+
 		private static bool UpdateFromV00ToV09(Configuration oldVersion)
 		{
 			if(oldVersion==null)
