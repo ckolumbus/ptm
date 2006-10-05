@@ -15,7 +15,7 @@ namespace PTM.Business
 	/// <summary>
 	/// Summary description for ApplicationsLog.
 	/// </summary>
-	internal sealed class ApplicationsLog
+	public sealed class ApplicationsLog
 	{
 		private ApplicationsLog()
 		{

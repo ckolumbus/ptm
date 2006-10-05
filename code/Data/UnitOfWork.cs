@@ -20,7 +20,7 @@ namespace PTM.Data
 			dataAdapterManager = adapterManager;
 		}//Initialize
 
-		internal static void Update()
+		public static void Update()
 		{
 				ptmDataset.Tasks.BeginLoadData();
 				dataAdapterManager.tasksDataAdapter.Update(ptmDataset.Tasks);

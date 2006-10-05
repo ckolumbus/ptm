@@ -27,7 +27,7 @@ namespace PTM.Business
 			list.Add(new DefaultTask(DefaultTaskEnum.JobMeeting));
 		}
 
-		internal static DefaultTasks List
+		public static DefaultTasks List
 		{
 			get { return instance; }
 		}

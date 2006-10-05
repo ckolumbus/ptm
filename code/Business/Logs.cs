@@ -8,7 +8,7 @@ using PTM.Infos;
 
 namespace PTM.Business
 {
-	internal sealed class Logs
+	public sealed class Logs
 	{
 		private Logs()
 		{

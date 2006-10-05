@@ -9,7 +9,7 @@ using PTM.View;
 
 namespace PTM.Business
 {
-	internal sealed class Tasks
+	public sealed class Tasks
 	{
 		private static DbDataAdapter dataAdapter;
 		private static PTMDataset.TasksDataTable tasksDataTable;
@@ -24,17 +24,17 @@ namespace PTM.Business
 
 		#region Properties
 
-		internal static PTMDataset.TasksRow CurrentTaskRow
+		public static PTMDataset.TasksRow CurrentTaskRow
 		{
 			get { return CloneRow(currentTaskRow); }
 		}
 
-		internal static PTMDataset.TasksRow RootTasksRow
+		public static PTMDataset.TasksRow RootTasksRow
 		{
 			get { return CloneRow(rootTaskRow); }
 		}
 
-		internal static int Count
+		public static int Count
 		{
 			get { return tasksDataTable.Count; }
 		}
@@ -43,7 +43,7 @@ namespace PTM.Business
 
 		#region Public Methods
 
-		internal static void Initialize(PTMDataset.TasksDataTable table, DbDataAdapter adapter)
+		public static void Initialize(PTMDataset.TasksDataTable table, DbDataAdapter adapter)
 		{
 			rootTaskRow = null;
 			dataAdapter = adapter;

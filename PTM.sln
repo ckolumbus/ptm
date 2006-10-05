@@ -3,6 +3,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM.csproj", "{
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Test", "test\PTM.Test.csproj", "{394ABD67-5EE0-4C35-AF98-0564E91C0551}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -15,6 +19,10 @@ Global
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.Build.0 = Debug|.NET
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.ActiveCfg = Release|.NET
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.Build.0 = Release|.NET
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Debug.ActiveCfg = Debug|.NET
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Debug.Build.0 = Debug|.NET
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Release.ActiveCfg = Release|.NET
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		info.xml = info.xml
