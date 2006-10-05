@@ -54,15 +54,16 @@ namespace PTM.Business.Helpers
 			
 				date = ((DateTime) value).Date;
 				
-				ArrayList list = Logs.GetLogsByDay(date);
-				bool mergeNeeded = GroupLogsList(list);
+				//ArrayList list = Logs.GetLogsByDay(date);
+				bool mergeNeeded = GroupLogsList(date);
 				if(!mergeNeeded)
 					break;
 			}
 		}
 
-		private static bool GroupLogsList(ArrayList logs)
+		private static bool GroupLogsList(DateTime date)
 		{
+			/*
 			ArrayList mergedList = new ArrayList();
 			ArrayList needsDelete = new ArrayList();
 			ArrayList needsUpdate = new ArrayList();
@@ -87,9 +88,12 @@ namespace PTM.Business.Helpers
 				}
 				mergedList.Add(log);
 				m++;
-			}
-			if(needsDelete.Count == 0 && needsUpdate.Count== 0)
-				return false;
+			}*/
+			MergedLogs mergeList;
+			mergeList = MergedLogs.GetMergedLogsByDay(date);
+			bool mergeNeeded = false;
+//			if(needsDelete.Count == 0 && needsUpdate.Count== 0)
+//				return false;
 			
 			OleDbConnection con;
 			con = DbHelper.GetConnection();
@@ -97,17 +101,38 @@ namespace PTM.Business.Helpers
 			OleDbTransaction trans = con.BeginTransaction();
 			try
 			{
-				foreach (Log log in needsDelete)
+				foreach (MergedLog mergedLog in mergeList)
 				{
-					OleDbCommand command = new OleDbCommand("Delete from TasksLog Where Id = " + log.Id, con, trans);
+					if(mergedLog.DeletedLogs.Count==0)
+						continue;
+					OleDbCommand command;
+					foreach (Log log in mergedLog.DeletedLogs)
+					{
+						command = new OleDbCommand("Update ApplicationsLog Set TaskLogId = " +  mergedLog.MergeLog.Id + " Where TaskLogId = " + log.Id, con, trans);
+						command.ExecuteNonQuery();
+						
+						command = new OleDbCommand("Delete from TasksLog Where Id = " + log.Id, con, trans);
+						command.ExecuteNonQuery();
+					}
+					
+					command = new OleDbCommand("Update TasksLog Set Duration = " + mergedLog.MergeLog.Duration+ " Where Id = " + mergedLog.MergeLog.Id, con, trans);
 					command.ExecuteNonQuery();
+					mergeNeeded = true;
 				}
-				foreach (Log log in needsUpdate)
-				{
-					OleDbCommand command = new OleDbCommand("Update TasksLog Set Duration = " + log.Duration+ " Where Id = " + log.Id, con, trans);
-					command.ExecuteNonQuery();
-				}
-				trans.Commit();				
+				
+//				foreach (Log log in needsDelete)
+//				{
+//					OleDbCommand command = new OleDbCommand("Delete from TasksLog Where Id = " + log.Id, con, trans);
+//					command.ExecuteNonQuery();
+//				}
+//				foreach (Log log in needsUpdate)
+//				{
+//					OleDbCommand command = new OleDbCommand("Update TasksLog Set Duration = " + log.Duration+ " Where Id = " + log.Id, con, trans);
+//					command.ExecuteNonQuery();
+//				}
+				
+				trans.Commit();
+				return mergeNeeded;
 			}
 			catch
 			{
@@ -118,7 +143,6 @@ namespace PTM.Business.Helpers
 			{
 				con.Close();
 			}
-			return true;
 		}
 	}
 }
