@@ -160,10 +160,11 @@ namespace PTM
 			
 			UpdaterHelper.UpdateInfo info;
 			info = UpdaterHelper.CheckFromUpdates();
+			Application.DoEvents();
 			if(info.UpdateAvailable)
 			{
 				UpdateForm updateForm;
-				updateForm = new UpdateForm();
+				updateForm = new UpdateForm(info);
 				updateForm.ShowDialog();
 				Application.DoEvents();
 			}

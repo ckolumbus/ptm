@@ -43,7 +43,6 @@ namespace PTM.View.Forms
 			{
 				tasksTree.SelectedTaskId = Tasks.RootTasksRow.Id;
 			}
-			//taskTree_SelectedTaskChanged(null, null);
 		}
 
 		public TaskLogForm(int editTaskId)
@@ -57,7 +56,6 @@ namespace PTM.View.Forms
 
 			this.tasksTree.SelectedTaskId = row.ParentId;
 
-			//taskTree_SelectedTaskChanged(null, null);
 			SetChildTask(row);
 		}
 

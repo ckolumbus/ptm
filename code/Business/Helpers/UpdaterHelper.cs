@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Xml;
 
 namespace PTM.Business.Helpers
@@ -12,6 +13,16 @@ namespace PTM.Business.Helpers
 		private UpdaterHelper()
 		{
 		}
+
+		[DllImport("wininet.dll")]
+		private extern static bool InternetGetConnectedState(out int desc, int ReservedValue);
+		public static bool IsConnectedToInternet()
+		{
+			int Desc ;
+			return InternetGetConnectedState( out Desc, 0 ) ;
+		}
+
+
 		
 		public struct UpdateInfo
 		{
@@ -37,6 +48,8 @@ namespace PTM.Business.Helpers
 			}
 			else if(Convert.ToInt32(config.Value)==1)
 			{
+				if(!IsConnectedToInternet())
+					return info;
 				XmlDocument doc = new XmlDocument();
 				try
 				{

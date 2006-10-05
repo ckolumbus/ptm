@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using PTM.Business.Helpers;
 
 namespace PTM.View.Forms
 {
@@ -13,23 +14,20 @@ namespace PTM.View.Forms
 	{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.LinkLabel linkLabel;
-		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		/// <summary>
 		/// Variable del diseñador requerida.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public UpdateForm()
+		public UpdateForm(UpdaterHelper.UpdateInfo info)
 		{
 			//
 			// Necesario para admitir el Diseñador de Windows Forms
 			//
 			InitializeComponent();
 
-			//
-			// TODO: agregar código de constructor después de llamar a InitializeComponent
-			//
+			this.label1.Text = this.label1.Text.Replace("{0}", info.ThisVersion).Replace("{1}", info.CurrentVersion);
 		}
 
 		/// <summary>
@@ -55,28 +53,19 @@ namespace PTM.View.Forms
 		private void InitializeComponent()
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(UpdateForm));
-			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.linkLabel = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
-			// btnCancel
-			// 
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnCancel.Location = new System.Drawing.Point(176, 64);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.TabIndex = 0;
-			this.btnCancel.Text = "Cancel";
-			// 
 			// btnOk
 			// 
 			this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOk.Location = new System.Drawing.Point(272, 64);
+			this.btnOk.Location = new System.Drawing.Point(272, 56);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.TabIndex = 1;
 			this.btnOk.Text = "Ok";
+			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
 			// label1
 			// 
@@ -84,7 +73,7 @@ namespace PTM.View.Forms
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(344, 32);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "A new version is available, current version is {0} and this version is {1}.";
+			this.label1.Text = "A new version is available, this version is {0} and the new version is {1}.";
 			// 
 			// linkLabel
 			// 
@@ -96,17 +85,16 @@ namespace PTM.View.Forms
 			this.linkLabel.TabIndex = 9;
 			this.linkLabel.TabStop = true;
 			this.linkLabel.Text = "http://sourceforge.net/projects/ptm";
+			this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// UpdateForm
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(360, 99);
+			this.ClientSize = new System.Drawing.Size(360, 88);
 			this.Controls.Add(this.linkLabel);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.btnOk);
-			this.Controls.Add(this.btnCancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -120,5 +108,15 @@ namespace PTM.View.Forms
 
 		}
 		#endregion
+
+		private void btnOk_Click(object sender, System.EventArgs e)
+		{
+			this.Close();
+		}
+
+		private void linkLabel_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+		{
+			System.Diagnostics.Process.Start(linkLabel.Text);
+		}
 	}
 }

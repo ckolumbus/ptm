@@ -267,6 +267,12 @@ namespace PTM.View.Forms
 			c = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 			this.trackBar.Value = Convert.ToInt32(c.Value);
 			this.durationLabel.Text = this.trackBar.Value.ToString() + " mins.";
+			
+			c = ConfigurationHelper.GetConfiguration(ConfigurationKey.CheckForUpdates);
+			if(Convert.ToInt32(c.Value)==1)
+				this.checkBox1.Checked = true;
+			else
+				this.checkBox1.Checked = false;
 		}
 
 		private void btnReset_Click(object sender, System.EventArgs e)
@@ -318,7 +324,10 @@ namespace PTM.View.Forms
 			ConfigurationHelper.SaveConfiguration(c);
 			c = new Configuration(ConfigurationKey.TasksLogDuration, Convert.ToInt32(this.trackBar.Value));
 			ConfigurationHelper.SaveConfiguration(c);
-			c = new Configuration(ConfigurationKey.CheckForUpdates, Convert.ToInt32(this.trackBar.Value));
+			if(this.checkBox1.Checked)
+				c = new Configuration(ConfigurationKey.CheckForUpdates, 1);
+			else
+				c = new Configuration(ConfigurationKey.CheckForUpdates, 0);
 			ConfigurationHelper.SaveConfiguration(c);
 			this.Close();
 		}
