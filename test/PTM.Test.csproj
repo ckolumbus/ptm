@@ -82,7 +82,7 @@
                 <Reference
                     Name = "PTM"
                     AssemblyName = "PTM"
-                    HintPath = "..\code\bin\Debug\ptm.exe"
+                    HintPath = "..\code\PTM\bin\Debug\ptm.exe"
                 />
                 <Reference
                     Name = "nunit.framework"
@@ -95,11 +95,6 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Class1.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
