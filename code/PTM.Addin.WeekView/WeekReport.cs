@@ -8,7 +8,7 @@ namespace PTM.Addin.WeekView
 {
 	public class WeekReport : PTM.Addin.TabPageAddin
 	{
-		private System.Windows.Forms.Label label1;
+		private Calendar.DayView dayView;
 		private System.ComponentModel.IContainer components = null;
 
 		public WeekReport()
@@ -41,20 +41,28 @@ namespace PTM.Addin.WeekView
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.label1 = new System.Windows.Forms.Label();
+			this.dayView = new Calendar.DayView();
 			this.SuspendLayout();
 			// 
-			// label1
+			// dayView
 			// 
-			this.label1.Location = new System.Drawing.Point(120, 88);
-			this.label1.Name = "label1";
-			this.label1.TabIndex = 0;
-			this.label1.Text = "prueba";
+			this.dayView.AllowInplaceEditing = false;
+			this.dayView.AllowNew = false;
+			this.dayView.DaysToShow = 7;
+			this.dayView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+			this.dayView.Location = new System.Drawing.Point(8, 72);
+			this.dayView.Name = "dayView";
+			this.dayView.SelectionEnd = new System.DateTime(((long)(0)));
+			this.dayView.SelectionStart = new System.DateTime(((long)(0)));
+			this.dayView.Size = new System.Drawing.Size(392, 272);
+			this.dayView.StartDate = new System.DateTime(((long)(0)));
+			this.dayView.TabIndex = 0;
 			// 
 			// WeekReport
 			// 
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.dayView);
 			this.Name = "WeekReport";
+			this.Size = new System.Drawing.Size(408, 352);
 			this.ResumeLayout(false);
 
 		}
