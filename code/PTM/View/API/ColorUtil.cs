@@ -6,7 +6,7 @@ namespace System.Runtime.InteropServices.APIs
 	/// <summary>
 	/// Summary description for ColorConvert.
 	/// </summary>
-	public class ColorUtil
+	internal class ColorUtil
 	{
 		
 		#region Class Variables
@@ -28,14 +28,14 @@ namespace System.Runtime.InteropServices.APIs
 		#endregion
 
 		#region Properties
-		static public bool UsingCustomColor
+		static internal bool UsingCustomColor
 		{
 			get { return useCustomColor;}
 		}
 		#endregion
 
 		#region Knowncolor names
-		static public string[] KnownColorNames = 
+		static internal string[] KnownColorNames = 
 		{ "Transparent", "Black", "DimGray", "Gray", "DarkGray", "Silver", "LightGray", "Gainsboro", "WhiteSmoke", "White",
 		  "RosyBrown", "IndianRed", "Brown", "Firebrick", "LightCoral", "Maroon", "DarkRed", "Red", "Snow", "MistyRose",
 		  "Salmon", "Tomato", "DarkSalmon", "Coral", "OrangeRed", "LightSalmon", "Sienna", "SeaShell", "Chocalate",
@@ -55,7 +55,7 @@ namespace System.Runtime.InteropServices.APIs
 		#endregion
 		
 		#region Systemcolors names
-		static public string[] SystemColorNames = 
+		static internal string[] SystemColorNames = 
 		{
 			"ActiveBorder", "ActiveCaption", "ActiveCaptionText", "AppWorkspace", "Control", "ControlDark", "ControlDarkDark",
 			"ControlLight", "ControlLightLight", "ControlText", "Desktop", "GrayText", "HighLight", "HighLightText", 
@@ -64,7 +64,7 @@ namespace System.Runtime.InteropServices.APIs
 		#endregion
 		
 		#region Conversion between RGB and Hue, Saturation and Luminosity function helpers
-		static public void HSLToRGB(float h, float s, float l, ref float r, ref float g, ref float b)
+		static internal void HSLToRGB(float h, float s, float l, ref float r, ref float g, ref float b)
 		{
 			// given h,s,l,[240 and r,g,b [0-255]
 			// convert h [0-360], s,l,r,g,b [0-1]
@@ -143,7 +143,7 @@ namespace System.Runtime.InteropServices.APIs
 			}
 		}
 
-		static public void RGBToHSL(int r, int g, int b, ref float h, ref float s, ref float l)
+		static internal void RGBToHSL(int r, int g, int b, ref float h, ref float s, ref float l)
 		{
 
 			float delta;
@@ -210,7 +210,7 @@ namespace System.Runtime.InteropServices.APIs
 
 		#region Visual Studio .NET colors calculation helpers
        
-		static public Color VSNetBackgroundColor
+		static internal Color VSNetBackgroundColor
 		{
 			get 
 			{
@@ -230,7 +230,7 @@ namespace System.Runtime.InteropServices.APIs
 			}
 		}
 
-		static public Color VSNetSelectionUnfocusedColor
+		static internal Color VSNetSelectionUnfocusedColor
 		{
 			get 
 			{
@@ -250,7 +250,7 @@ namespace System.Runtime.InteropServices.APIs
 			}
 		}
 
-		static public Color VSNetSelectionColor
+		static internal Color VSNetSelectionColor
 		{
 			get 
 			{
@@ -271,7 +271,7 @@ namespace System.Runtime.InteropServices.APIs
 		}
 
 
-		static public Color VSNetControlColor
+		static internal Color VSNetControlColor
 		{
 			get 
 			{	if ( useCustomColor && controlColor != Color.Empty )
@@ -291,7 +291,7 @@ namespace System.Runtime.InteropServices.APIs
 
 		}
 
-		static public Color VSNetPressedColor
+		static internal Color VSNetPressedColor
 		{
 			get 
 			{
@@ -312,7 +312,7 @@ namespace System.Runtime.InteropServices.APIs
 		}
 
 
-		static public Color VSNetCheckedColor
+		static internal Color VSNetCheckedColor
 		{
 			get 
 			{
@@ -332,7 +332,7 @@ namespace System.Runtime.InteropServices.APIs
 			}
 		}
 
-		static public Color VSNetBorderColor
+		static internal Color VSNetBorderColor
 		{
 			get 
 			{
@@ -356,7 +356,7 @@ namespace System.Runtime.InteropServices.APIs
 			}
 		}
 
-		public static Color CalculateColor(Color front, Color back, int alpha)
+		internal static Color CalculateColor(Color front, Color back, int alpha)
 		{
 			
 			// Use alpha blending to brigthen the colors but don't use it
@@ -387,7 +387,7 @@ namespace System.Runtime.InteropServices.APIs
 		#endregion
 
 		#region General functions
-		static public Color ColorFromPoint(Graphics g, int x, int y)
+		static internal Color ColorFromPoint(Graphics g, int x, int y)
 		{
 			IntPtr hDC = g.GetHdc();
 			// Get the color of the pixel first
@@ -399,7 +399,7 @@ namespace System.Runtime.InteropServices.APIs
 			return  Color.FromArgb(Red, Green, Blue);
 		}
 
-		static public bool IsKnownColor(Color color, ref Color knownColor, bool useTransparent)
+		static internal bool IsKnownColor(Color color, ref Color knownColor, bool useTransparent)
 		{
 
 			// Using the Color structrure "FromKnowColor" does not work if 
@@ -426,7 +426,7 @@ namespace System.Runtime.InteropServices.APIs
 
 		}
 
-		static public bool IsSystemColor(Color color, ref Color knownColor)
+		static internal bool IsSystemColor(Color color, ref Color knownColor)
 		{
 
 			// Using the Color structrure "FromKnowColor" does not work if 
@@ -448,12 +448,12 @@ namespace System.Runtime.InteropServices.APIs
 			return false;
 		}
 
-		static public uint GetCOLORREF(Color color)
+		static internal uint GetCOLORREF(Color color)
 		{
 			return RGB(color.R, color.G, color.B);
 		}
 
-		static public Color ColorFromRGBString(string text)
+		static internal Color ColorFromRGBString(string text)
 		{
 			
 			Color rgbColor = Color.Empty;
@@ -499,7 +499,7 @@ namespace System.Runtime.InteropServices.APIs
 
 			return rgbColor;
 		}
-		static public Color LightColor(Color color, int inc)
+		static internal Color LightColor(Color color, int inc)
 		{
 			int red = color.R;
 			int green = color.G;
@@ -514,7 +514,7 @@ namespace System.Runtime.InteropServices.APIs
 
             return Color.FromArgb(red, green, blue);
 		}
-		static public Color DarkColor(Color color, int inc)
+		static internal Color DarkColor(Color color, int inc)
 		{
 			int red = color.R;
 			int green = color.G;
@@ -533,22 +533,22 @@ namespace System.Runtime.InteropServices.APIs
        	#endregion
 		
 		#region Windows RGB related macros
-		static public byte GetRValue(uint color)
+		static internal byte GetRValue(uint color)
 		{
 			return (byte)color;
 		}
 
-		static public byte GetGValue(uint color)
+		static internal byte GetGValue(uint color)
 		{
 			return ((byte)(((short)(color)) >> 8));
 		}
 
-		static public byte GetBValue(uint color)
+		static internal byte GetBValue(uint color)
 		{
 			return ((byte)((color)>>16));
 		}
 
-		static public uint RGB(int r, int g, int b)
+		static internal uint RGB(int r, int g, int b)
 		{
 			return ((uint)(((byte)(r)|((short)((byte)(g))<<8))|(((short)(byte)(b))<<16)));
 

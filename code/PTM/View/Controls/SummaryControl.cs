@@ -17,7 +17,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for Summary.
 	/// </summary>
-	public class SummaryControl : UserControl
+	internal class SummaryControl : UserControl
 	{
 		private TreeListView taskList;
 		private ImageList tasksIconsList;
@@ -47,7 +47,7 @@ namespace PTM.View.Controls
 		private System.Windows.Forms.RadioButton toRadioButton;
 		private PTMDataset.TasksRow parentRow;
 
-		public SummaryControl()
+		internal SummaryControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
@@ -435,7 +435,7 @@ namespace PTM.View.Controls
 		}
 
 
-		public void UpdateSummary()
+		internal void UpdateSummary()
 		{
 			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
 			{

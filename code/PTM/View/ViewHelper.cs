@@ -7,7 +7,7 @@ namespace PTM.View
 	/// <summary>
 	/// ViewHelper.
 	/// </summary>
-	public sealed class ViewHelper
+	internal sealed class ViewHelper
 	{
 		private ViewHelper()
 		{
@@ -71,7 +71,7 @@ namespace PTM.View
 		internal static extern bool DrawAnimatedRects(IntPtr hwnd, int idAni, ref RECT lprcFrom, ref RECT lprcTo);
 
 		[StructLayout(LayoutKind.Sequential)]
-		public struct RECT
+		internal struct RECT
 		{
 			internal int left;
 			internal int top;

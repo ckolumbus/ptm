@@ -9,11 +9,11 @@ using PTM.Data;
 
 namespace PTM.View.Controls
 {
-	public class TasksTreeViewControl : UserControl
+	internal class TasksTreeViewControl : UserControl
 	{
 		private IContainer components;
 
-		public TasksTreeViewControl()
+		internal TasksTreeViewControl()
 		{
 			InitializeComponent();
 			InitCommonControls();
@@ -27,7 +27,7 @@ namespace PTM.View.Controls
 			timer.Interval = 200;
 		}
 
-		public event EventHandler SelectedTaskChanged;
+		internal event EventHandler SelectedTaskChanged;
 
 		protected override void Dispose(bool disposing)
 		{
@@ -86,8 +86,8 @@ namespace PTM.View.Controls
 		private ImageList groupsImageList;
 		private TreeView treeView;
 		private int currentSelectedTask = -1;
-		public bool includeDefaultTask;
-		public const string NEW_TASK = "New Task";
+		internal bool includeDefaultTask;
+		internal const string NEW_TASK = "New Task";
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -108,7 +108,7 @@ namespace PTM.View.Controls
 			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
-		public void Initialize(bool includeDefaultTask)
+		internal void Initialize(bool includeDefaultTask)
 		{
 			this.includeDefaultTask = includeDefaultTask;
 			LoadTree();
@@ -116,7 +116,7 @@ namespace PTM.View.Controls
 			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
-		public void AddNewTask()
+		internal void AddNewTask()
 		{
 			PTMDataset.TasksRow row = Tasks.NewTasksRow();
 			row.Description = NEW_TASK;
@@ -139,13 +139,13 @@ namespace PTM.View.Controls
 			node.BeginEdit();
 		}
 
-		public void EditSelectedTaskDescription()
+		internal void EditSelectedTaskDescription()
 		{
 			treeView.LabelEdit = true;
 			treeView.SelectedNode.BeginEdit();
 		}
 
-		public void DeleteSelectedTask()
+		internal void DeleteSelectedTask()
 		{
 			if (MessageBox.Show(
 			    	"All tasks and sub-tasks assigned to this task will be deleted too. \nAre you sure you want to delete '" +
@@ -276,7 +276,7 @@ namespace PTM.View.Controls
 		}
 
 
-		public int SelectedTaskId
+		internal int SelectedTaskId
 		{
 			get { return currentSelectedTask; }
 			set
@@ -316,26 +316,26 @@ namespace PTM.View.Controls
 		private TreeNode tempDropNode = null;
 
 		[DllImport("comctl32.dll")]
-		public static extern bool InitCommonControls();
+		internal static extern bool InitCommonControls();
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		public static extern bool ImageList_BeginDrag(IntPtr himlTrack, int
+		internal static extern bool ImageList_BeginDrag(IntPtr himlTrack, int
 		                                                                	iTrack, int dxHotspot, int dyHotspot);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		public static extern bool ImageList_DragMove(int x, int y);
+		internal static extern bool ImageList_DragMove(int x, int y);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		public static extern void ImageList_EndDrag();
+		internal static extern void ImageList_EndDrag();
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		public static extern bool ImageList_DragEnter(IntPtr hwndLock, int x, int y);
+		internal static extern bool ImageList_DragEnter(IntPtr hwndLock, int x, int y);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		public static extern bool ImageList_DragLeave(IntPtr hwndLock);
+		internal static extern bool ImageList_DragLeave(IntPtr hwndLock);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		public static extern bool ImageList_DragShowNolock(bool fShow);
+		internal static extern bool ImageList_DragShowNolock(bool fShow);
 
 		private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
 		{

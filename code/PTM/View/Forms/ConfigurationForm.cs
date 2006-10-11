@@ -12,7 +12,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Descripción breve de ConfigurationForm.
 	/// </summary>
-	public class ConfigurationForm : System.Windows.Forms.Form
+	internal class ConfigurationForm : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
@@ -32,7 +32,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public ConfigurationForm()
+		internal ConfigurationForm()
 		{
 			//
 			// Necesario para admitir el Diseñador de Windows Forms

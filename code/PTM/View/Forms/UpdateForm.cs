@@ -10,7 +10,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Descripción breve de UpdateForm.
 	/// </summary>
-	public class UpdateForm : System.Windows.Forms.Form
+	internal class UpdateForm : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.LinkLabel linkLabel;
@@ -20,7 +20,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public UpdateForm(UpdaterHelper.UpdateInfo info)
+		internal UpdateForm(UpdaterHelper.UpdateInfo info)
 		{
 			//
 			// Necesario para admitir el Diseñador de Windows Forms

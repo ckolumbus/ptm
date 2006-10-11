@@ -11,7 +11,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for AddinForm.
 	/// </summary>
-	public class AddinForm : System.Windows.Forms.Form
+	internal class AddinForm : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -28,7 +28,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public AddinForm()
+		internal AddinForm()
 		{
 			//
 			// Required for Windows Form Designer support

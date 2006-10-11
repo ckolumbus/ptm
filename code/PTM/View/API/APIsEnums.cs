@@ -3,13 +3,13 @@ using System.Runtime.InteropServices;
 
 namespace System.Runtime.InteropServices.APIs
 {
-	public class APIsEnums
+	internal class APIsEnums
 	{
 		#region Window messages / WM
 		/// <summary>
 		/// Window messages / WM
 		/// </summary>
-		public enum WindowMessages
+		internal enum WindowMessages
 		{
 			APP = 32768,
 			ACTIVATE = 6,
@@ -207,7 +207,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Key State Masks / MK
 		/// </summary>
-		public enum KeyStatesMasks
+		internal enum KeyStatesMasks
 		{
 			LBUTTON          = 0x0001,
 			RBUTTON          = 0x0002,
@@ -223,7 +223,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Edit Control Notification Codes / EN
 		/// </summary>
-		public enum EditControlNotificationCodes
+		internal enum EditControlNotificationCodes
 		{
 			SETFOCUS         = 0x0100,
 			KILLFOCUS        = 0x0200,
@@ -242,7 +242,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Combo Box Notification Codes / CBN
 		/// </summary>
-		public enum ComboBoxNotificationCodes
+		internal enum ComboBoxNotificationCodes
 		{
 			ERRSPACE        = (-1),
 			SELCHANGE       = 1,
@@ -261,7 +261,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Combo Box Messages / CB
 		/// </summary>
-		public enum ComboBoxMessages
+		internal enum ComboBoxMessages
 		{
 			GETEDITSEL               = 0x0140,
 			LIMITTEXT                = 0x0141,
@@ -309,7 +309,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ScrollBar flags / SB
 		/// </summary>
-		public enum ScrollBarFlags
+		internal enum ScrollBarFlags
 		{
 			/// <summary>
 			/// Scrolls one line up
@@ -361,7 +361,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Edit Control Messages / EM
 		/// </summary>
-		public enum EditControlMessages
+		internal enum EditControlMessages
 		{
 			GETSEL               = 0x00B0,
 			SETSEL               = 0x00B1,
@@ -409,7 +409,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// MenuItem Masks / MIIM
 		/// </summary>
-		public	enum MenuItemMasks : uint
+		internal	enum MenuItemMasks : uint
 		{
 			STATE =			0x00000001,
 			ID =	        0x00000002,
@@ -426,7 +426,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// MenuItem Flags / MF
 		/// </summary>
-		public	enum	MenuItemFlags : uint
+		internal	enum	MenuItemFlags : uint
 		{
 			INSERT =        0x00000000,
 			CHANGE =        0x00000080,
@@ -461,7 +461,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// MenuItem States / MFS
 		/// </summary>
-		public	enum MenuItemStates : uint
+		internal	enum MenuItemStates : uint
 		{
 			GRAYED =        0x00000003,
 			DISABLED =      GRAYED,
@@ -483,7 +483,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// QueryContextMenuFlags / CMF
 		/// </summary>
-		public enum QueryContextMenuFlags: uint
+		internal enum QueryContextMenuFlags: uint
 		{
 			NORMAL		= 0x00000000,
 			DEFAULTONLY	= 0x00000001,
@@ -500,7 +500,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// TrackPopupMenuFlags / TPM
 		/// </summary>
-		public enum TrackPopupMenuFlags :uint
+		internal enum TrackPopupMenuFlags :uint
 		{
 			LEFTBUTTON     = 0x0000,
 			RIGHTBUTTON    = 0x0002,
@@ -527,7 +527,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// MenuItemTypes / MFT
 		/// </summary>
-		public enum MenuItemTypes :long
+		internal enum MenuItemTypes :long
 		{
 			STRING          = 0x00000000L,
 			BITMAP          = 0x00000004L,
@@ -545,7 +545,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ClipboardFormats / CLIPFORMAT
 		/// </summary>
-		public	enum ClipboardFormats : uint
+		internal	enum ClipboardFormats : uint
 		{
 			TEXT =		1,
 			BITMAP =		2,
@@ -582,7 +582,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// TargetDevices / DVASPECT
 		/// </summary>
-		public	enum TargetDevices: uint
+		internal	enum TargetDevices: uint
 		{
 			CONTENT = 1,
 			THUMBNAIL = 2,
@@ -594,7 +594,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// StorageMediumTypes / TYMED
 		/// </summary>
-		public	enum StorageMediumTypes: uint
+		internal	enum StorageMediumTypes: uint
 		{
 			HGLOBAL = 1,
 			FILE =	2,
@@ -612,7 +612,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// ShellSpecialFolders / CSIDL
 		/// </summary>
 		[Flags()]
-			public enum ShellSpecialFolders
+			internal enum ShellSpecialFolders
 		{
 			DESKTOP                   = 0x0000,		 // <desktop>
 			INTERNET                  = 0x0001,
@@ -683,7 +683,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// ShellFolderGetaFromIDList / SHGDFIL
 		/// </summary>
 		[Flags()]
-			public enum ShellFolderGetaFromIDList :int
+			internal enum ShellFolderGetaFromIDList :int
 		{
 			FINDDATA = 1,
 			NETRESOURCE = 2,
@@ -695,7 +695,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// ShellFolderEnumObjectsTypes / SHCONTF
 		/// </summary>
 		[Flags()]
-			public enum ShellFolderEnumObjectsTypes
+			internal enum ShellFolderEnumObjectsTypes
 		{
 			FOLDERS = 0x20,
 			NONFOLDERS = 0x40,
@@ -711,7 +711,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// ShellFolderAttributes / SFGAOF
 		/// </summary>
 		[Flags()]
-			public enum ShellFolderAttributes
+			internal enum ShellFolderAttributes
 		{
 			CANCOPY = 0x1,
 			CANMOVE = 0x2,
@@ -753,7 +753,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// ShellFolderDisplayNames / SHGNO
 		/// </summary>
 		[Flags()]
-			public enum ShellFolderDisplayNames
+			internal enum ShellFolderDisplayNames
 		{  
 			NORMAL = 0x0,
 			INFOLDER = 0x1,
@@ -766,7 +766,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Shell Execute Flags / SEE
 		/// </summary>
-		public enum ShellExecuteFlags
+		internal enum ShellExecuteFlags
 		{
 			CLASSNAME        = 0x00000001,
 			CLASSKEY         = 0x00000003,
@@ -792,7 +792,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Shell Get File Information Flags / SHGFI
 		/// </summary>
-		public enum ShellGetFileInformationFlags
+		internal enum ShellGetFileInformationFlags
 		{
 			SmallIcon   = 0x00000001,
 			OpenIcon   = 0x00000002,
@@ -807,7 +807,7 @@ namespace System.Runtime.InteropServices.APIs
 		#endregion
 
 		#region Form HitTest
-		public enum FormHitTest : int
+		internal enum FormHitTest : int
 		{
 			MinButton = 8,
 			MaxButton = 9,
@@ -818,7 +818,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// System Commands / SC
 		/// </summary>
-		public enum SystemCommands
+		internal enum SystemCommands
 		{
 			/// <summary>
 			/// Sizes the window
@@ -906,7 +906,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// GetCommandString informations / GCS
 		/// </summary>
-		public enum GetCommandStringInformations
+		internal enum GetCommandStringInformations
 		{
 			VERB        = 0x00000004,
 			HELPTEXT    = 0x00000005,
@@ -917,7 +917,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// File Operations / FO
 		/// </summary>
-		public enum FileOperations: int
+		internal enum FileOperations: int
 		{
 			Move           = 0x0001,
 			Copy           = 0x0002,
@@ -929,7 +929,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// FileOperation Flag / FOF
 		/// </summary>
-		public enum FileOperationFlags: short
+		internal enum FileOperationFlags: short
 		{
 			MULTIDESTFILES         = 0x0001,
 			CONFIRMMOUSE           = 0x0002,
@@ -958,7 +958,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ListView Messages / LVM
 		/// </summary>
-		public enum ListViewMessages : int
+		internal enum ListViewMessages : int
 		{
 			FIRST				= 0x1000,
 			SCROLL				= FIRST + 20,
@@ -997,7 +997,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ListView Notifications / LVN
 		/// </summary>
-		public enum ListViewNotifications
+		internal enum ListViewNotifications
 		{
 			FIRST               = (0-100),
 			LAST                = (0-199),
@@ -1035,7 +1035,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ListViewItem Flags / LVIF
 		/// </summary>
-		public enum ListViewItemFlags : int
+		internal enum ListViewItemFlags : int
 		{
 			TEXT               = 0x0001,
 			IMAGE              = 0x0002,
@@ -1051,7 +1051,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ListViewItemState / LVIS
 		/// </summary>
-		public enum ListViewItemStates : int
+		internal enum ListViewItemStates : int
 		{
 			FOCUSED            = 0x0001,
 			SELECTED           = 0x0002,
@@ -1064,7 +1064,7 @@ namespace System.Runtime.InteropServices.APIs
 		}
 		#endregion
 		#region ListView Extended Styles / LVS_EX
-		public enum ListViewExtendedStyles
+		internal enum ListViewExtendedStyles
 		{
 			GRIDLINES        =0x00000001,
 			SUBITEMIMAGES    =0x00000002,
@@ -1093,7 +1093,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// List View sub item portion / LVIR
 		/// </summary>
-		public enum ListViewSubItemPortion
+		internal enum ListViewSubItemPortion
 		{
 			BOUNDS = 0,
 			ICON   = 1,
@@ -1104,7 +1104,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ListView HitTest Flags / LVHT
 		/// </summary>
-		public enum ListViewHitTestFlags
+		internal enum ListViewHitTestFlags
 		{
 			NOWHERE           = 0x0001,
 			ONITEMICON        = 0x0002,
@@ -1121,7 +1121,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Reflected Messages / OCM
 		/// </summary>
-		public enum ReflectedMessages
+		internal enum ReflectedMessages
 		{
 			_BASE           = (WindowMessages.USER+0x1c00),
 			COMMAND         = (_BASE + WindowMessages.COMMAND),
@@ -1150,7 +1150,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// HeaderItem flags / HDI
 		/// </summary>
-		public enum HeaderItemFlags
+		internal enum HeaderItemFlags
 		{
 			WIDTH               = 0x0001,
 			HEIGHT              = WIDTH,
@@ -1167,7 +1167,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Header Control Messages / HDM
 		/// </summary>
-		public enum HeaderControlMessages : int
+		internal enum HeaderControlMessages : int
 		{
 			FIRST        =  0x1200,
 			GETITEMRECT  = (FIRST + 7),
@@ -1183,7 +1183,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Header Control Notifications / HDN
 		/// </summary>
-		public enum HeaderControlNotifications
+		internal enum HeaderControlNotifications
 		{
 			FIRST              = (0-300),
 			ITEMCHANGING       = (FIRST-20),
@@ -1205,7 +1205,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Header Control HitTest Flags / HHT
 		/// </summary>
-		public enum HeaderControlHitTestFlags : uint
+		internal enum HeaderControlHitTestFlags : uint
 		{
 			NOWHERE             = 0x0001,
 			ONHEADER            = 0x0002,
@@ -1222,7 +1222,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Custom Draw Return Flags / CDRF
 		/// </summary>
-		public enum CustomDrawReturnFlags
+		internal enum CustomDrawReturnFlags
 		{
 			DODEFAULT          = 0x00000000,
 			NEWFONT            = 0x00000002,
@@ -1237,7 +1237,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// CustomDrawItemStateFlags / CDIS
 		/// </summary>
-		public enum CustomDrawItemStateFlags : uint 
+		internal enum CustomDrawItemStateFlags : uint 
 		{
 			SELECTED       = 0x0001,
 			GRAYED         = 0x0002,
@@ -1254,7 +1254,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// CustomDrawDrawStateFlags / CDDS
 		/// </summary>
-		public enum CustomDrawDrawStateFlags
+		internal enum CustomDrawDrawStateFlags
 		{
 			PREPAINT           = 0x00000001,
 			POSTPAINT          = 0x00000002,
@@ -1273,7 +1273,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// PatBlt Types
 		/// </summary>
-		public enum PatBltTypes
+		internal enum PatBltTypes
 		{
 			SRCCOPY          =   0x00CC0020,
 			SRCPAINT         =   0x00EE0086,
@@ -1296,14 +1296,14 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Background Mode
 		/// </summary>
-		public enum BackgroundMode
+		internal enum BackgroundMode
 		{
 			TRANSPARENT = 1,
 			OPAQUE = 2
 		}
 		#endregion
 		#region StrechModeFlags
-		public enum StrechModeFlags
+		internal enum StrechModeFlags
 		{
 			BLACKONWHITE		= 1,
 			WHITEONBLACK        = 2,
@@ -1316,7 +1316,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ShowWindow Styles / SW
 		/// </summary>
-		public enum ShowWindowStyles : short
+		internal enum ShowWindowStyles : short
 		{
 			HIDE             = 0,
 			SHOWNORMAL       = 1,
@@ -1340,7 +1340,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Windows Hook Codes / WH
 		/// </summary>
-		public enum WindowsHookCodes
+		internal enum WindowsHookCodes
 		{
 			MSGFILTER        = (-1),
 			JOURNALRECORD    = 0,
@@ -1365,7 +1365,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Cursor Types / IDC
 		/// </summary>
-		public enum CursorTypes : uint
+		internal enum CursorTypes : uint
 		{
 			ARROW		= 32512U,
 			IBEAM       = 32513U,
@@ -1389,7 +1389,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// System Metrics Codes / SM
 		/// </summary>
-		public enum SystemMetricsCodes
+		internal enum SystemMetricsCodes
 		{
 			CXSCREEN             = 0,
 			CYSCREEN             = 1,
@@ -1481,7 +1481,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Windows System Objects / OBJID
 		/// </summary>
-		public enum SystemObjects : uint
+		internal enum SystemObjects : uint
 		{
 			// Reserved IDs for system objects
 			WINDOW        = 0x00000000,
@@ -1502,7 +1502,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Tracker Event Flags / TME
 		/// </summary>
-		public enum TrackerEventFlags : uint
+		internal enum TrackerEventFlags : uint
 		{
 			HOVER	= 0x00000001,
 			LEAVE	= 0x00000002,
@@ -1514,7 +1514,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Draw Text format flags / DT
 		/// </summary>
-		public enum DrawTextFormatFlags
+		internal enum DrawTextFormatFlags
 		{
 			TOP              = 0x00000000,
 			LEFT             = 0x00000000,
@@ -1543,7 +1543,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Update Layered Windows Flags / ULW
 		/// </summary>
-		public enum UpdateLayeredWindowFlags
+		internal enum UpdateLayeredWindowFlags
 		{
 			COLORKEY = 0x00000001,
 			ALPHA    = 0x00000002,
@@ -1555,7 +1555,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Peek Message Flags / PM
 		/// </summary>
-		public enum PeekMessageFlags
+		internal enum PeekMessageFlags
 		{
 			NOREMOVE	= 0,
 			REMOVE		= 1,
@@ -1567,7 +1567,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Notification Messages / NM
 		/// </summary>
-		public enum NotificationMessages
+		internal enum NotificationMessages
 		{
 			FIRST      = (0-0),
 			CUSTOMDRAW = (FIRST-12),
@@ -1579,7 +1579,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// System Colors / COLOR
 		/// </summary>
-		public enum SystemColors : int
+		internal enum SystemColors : int
 		{
 			SCROLLBAR         = 0,
 			BACKGROUND        = 1,
@@ -1609,7 +1609,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Draw Frame Control Flags / DFC
 		/// </summary>
-		public enum DrawFrameControlFlags : uint
+		internal enum DrawFrameControlFlags : uint
 		{
 			CAPTION             = 1,
 			MENU                = 2,
@@ -1622,7 +1622,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// Draw Frame Control State Flags / DFC
 		/// </summary>
-		public enum DrawFrameControlStateFlags : uint
+		internal enum DrawFrameControlStateFlags : uint
 		{
 			CAPTIONCLOSE       = 0x0000,
 			CAPTIONMIN         = 0x0001,
@@ -1665,7 +1665,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// UxTheme MinButton States / MINBS
 		/// </summary>
-		public enum UxThemeMinButtonStates
+		internal enum UxThemeMinButtonStates
 		{
 			NORMAL = 1,
 			HOT = 2,
@@ -1677,7 +1677,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// UxTheme Window Parts / WP
 		/// </summary>
-		public enum UxThemeWindowParts
+		internal enum UxThemeWindowParts
 		{
 			CAPTION = 1,
 			SMALLCAPTION = 2,
@@ -1719,7 +1719,7 @@ namespace System.Runtime.InteropServices.APIs
 		}
 		#endregion
 
-		public enum MouseEventFlags
+		internal enum MouseEventFlags
 		{
 			MOVE        = 0x0001,
 			LEFTDOWN    = 0x0002,

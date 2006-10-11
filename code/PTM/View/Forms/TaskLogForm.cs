@@ -10,7 +10,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for TaskNotificationForm.
 	/// </summary>
-	public class TaskLogForm : Form
+	internal class TaskLogForm : Form
 	{
 		private Label label1;
 		private ComboBox taskComboBox;
@@ -28,7 +28,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private Container components = null;
 
-		public TaskLogForm()
+		internal TaskLogForm()
 		{
 			InitializeComponent();
 
@@ -45,7 +45,7 @@ namespace PTM.View.Forms
 			}
 		}
 
-		public TaskLogForm(int editTaskId)
+		internal TaskLogForm(int editTaskId)
 		{
 			InitializeComponent();
 			tasksTree.Initialize(false);
@@ -264,7 +264,7 @@ namespace PTM.View.Forms
 		private PTMDataset.TasksRow selectedTaskRow = null;
 		private PTMDataset.TasksRow selectedParentTaskRow = null;
 
-		public PTMDataset.TasksRow SelectedTaskRow
+		internal PTMDataset.TasksRow SelectedTaskRow
 		{
 			get { return selectedTaskRow; }
 		}

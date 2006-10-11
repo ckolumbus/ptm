@@ -17,7 +17,7 @@ namespace PTM
 	/// <summary>
 	/// Application Starter class
 	/// </summary>
-	public sealed class MainClass
+	internal sealed class MainClass
 	{
 		/// <summary>
 		/// Boolean value to store single instance configuration 

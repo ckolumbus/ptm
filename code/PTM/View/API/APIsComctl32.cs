@@ -3,10 +3,10 @@ using System.Runtime.InteropServices;
 
 namespace System.Runtime.InteropServices.APIs
 {
-	public class APIsComctl32
+	internal class APIsComctl32
 	{
 		#region GetMajorVersion
-		public static int GetMajorVersion()
+		internal static int GetMajorVersion()
 		{
 			APIsStructs.DLLVERSIONINFO2 pdvi = new APIsStructs.DLLVERSIONINFO2();
 			pdvi.info1.cbSize = Marshal.SizeOf(typeof(APIsStructs.DLLVERSIONINFO2));

@@ -18,7 +18,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for TasksLog.
 	/// </summary>
-	public class TasksLogControl : UserControl
+	internal class TasksLogControl : UserControl
 	{
 		private Button editButton;
 		private Button addTaskButton;
@@ -59,7 +59,7 @@ namespace PTM.View.Controls
 		private System.Windows.Forms.ToolTip shortcutToolTip;
 		private DateTime currentDay;
 
-		public TasksLogControl()
+		internal TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
@@ -475,7 +475,7 @@ namespace PTM.View.Controls
 			SetLogDay(currentDay);
 		}
 
-		public void NewTaskLog(bool mustAddATask)
+		internal void NewTaskLog(bool mustAddATask)
 		{
 			notifyTimer.Stop();
 			TaskLogForm tasklog = new TaskLogForm();
@@ -742,7 +742,7 @@ namespace PTM.View.Controls
 
 		#region NotifyContextMenu
 
-		public event EventHandler Exit;
+		internal event EventHandler Exit;
 
 		private void exitContextMenuItem_Click(object sender, EventArgs e)
 		{

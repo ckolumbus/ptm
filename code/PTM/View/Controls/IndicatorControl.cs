@@ -12,7 +12,7 @@ namespace PTM.View.Controls
 		private Int32 _Value;
 		private Int32 _GraphWidth;
 
-		public IndicatorControl()
+		internal IndicatorControl()
 		{
 			SetStyle(
 				ControlStyles.UserPaint |
@@ -47,7 +47,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		public Int32 Maximum
+		internal Int32 Maximum
 		{
 			get { return _Maximum; }
 			set
@@ -59,7 +59,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		public Int32 Minimum
+		internal Int32 Minimum
 		{
 			get { return _Minimum; }
 			set
@@ -71,7 +71,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		public Int32 Value
+		internal Int32 Value
 		{
 			get { return _Value; }
 			set
@@ -83,7 +83,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		public Int32 GraphWidth
+		internal Int32 GraphWidth
 		{
 			get { return _GraphWidth; }
 			set
@@ -93,7 +93,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		public string TextValue
+		internal string TextValue
 		{
 			get { return base.Text; }
 			set

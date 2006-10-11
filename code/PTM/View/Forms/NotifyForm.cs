@@ -7,12 +7,12 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for NotifyForm.
 	/// </summary>
-	public class NotifyForm : Form
+	internal class NotifyForm : Form
 	{
 		private Panel panel1;
 		private Timer timer;
 		private IContainer components;
-		public const int WAIT_TIME = 10;
+		internal const int WAIT_TIME = 10;
 		private int waitCount = 0;
 		private Label currentTaskLabel;
 		private Label label1;
@@ -27,7 +27,7 @@ namespace PTM.View.Forms
 //			Close
 //		}
 
-		public enum NotifyResult
+		internal enum NotifyResult
 		{
 			Waiting,
 			Yes,
@@ -37,7 +37,7 @@ namespace PTM.View.Forms
 
 		//private Status status;
 
-		public NotifyForm(string currentTask)
+		internal NotifyForm(string currentTask)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -166,7 +166,7 @@ namespace PTM.View.Forms
 
 		private NotifyResult result = NotifyResult.Waiting;
 
-		public NotifyResult Result
+		internal NotifyResult Result
 		{
 			get { return result; }
 		}

@@ -2,13 +2,13 @@ using System.Diagnostics;
 
 namespace PTM.View
 {
-	public class Logger
+	internal class Logger
 	{
 		private Logger()
 		{
 		} //Logger
 
-		public static void Write(string message)
+		internal static void Write(string message)
 		{
 			Debug.WriteLine(message);
 		} //Write

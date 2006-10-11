@@ -21,7 +21,7 @@ namespace PTM
 	/// <summary>
 	/// Summary description for Form1.
 	/// </summary>
-	public class MainForm : Form
+	internal class MainForm : Form
 	{
 		private MainMenu mainMenu;
 		private TabControl tabControl;
@@ -47,7 +47,7 @@ namespace PTM
 		private System.Windows.Forms.MenuItem menuItem6;
 		private bool AnimationDisabled = false;
 
-		public MainForm()
+		internal MainForm()
 		{
 			InitializeComponent();
 			Application.DoEvents();

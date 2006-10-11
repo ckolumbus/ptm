@@ -8,7 +8,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for AboutForm.
 	/// </summary>
-	public class AboutForm : Form
+	internal class AboutForm : Form
 	{
 		private PictureBox pictureBox1;
 		private Label label1;
@@ -24,7 +24,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private Container components = null;
 
-		public AboutForm()
+		internal AboutForm()
 		{
 			//
 			// Required for Windows Form Designer support

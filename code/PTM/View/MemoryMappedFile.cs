@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace PTM.View
 {
-	public sealed class MemoryMappedFile : IDisposable
+	internal sealed class MemoryMappedFile : IDisposable
 	{
 		private const int FILE_MAP_WRITE = 0x2;
 		private const int FILE_MAP_READ = 0x0004;
@@ -34,7 +34,7 @@ namespace PTM.View
 		private IntPtr memoryFileHandle;
 
 		[FlagsAttribute]
-		public enum FileAccess : int
+		internal enum FileAccess : int
 		{
 			ReadOnly = 2,
 			ReadWrite = 4
@@ -45,7 +45,7 @@ namespace PTM.View
 			this.memoryFileHandle = memoryFileHandle;
 		} //MemoryMappedFile
 
-		public static MemoryMappedFile CreateMMF(string fileName, FileAccess access, int size)
+		internal static MemoryMappedFile CreateMMF(string fileName, FileAccess access, int size)
 		{
 			if (size < 0)
 			{
@@ -61,7 +61,7 @@ namespace PTM.View
 			return new MemoryMappedFile(memoryFileHandle);
 		} //CreateMMF
 
-		public static IntPtr ReadHandle(string fileName)
+		internal static IntPtr ReadHandle(string fileName)
 		{
 			IntPtr mappedFileHandle = OpenFileMapping((int) FileAccess.ReadWrite, false, fileName);
 			if (mappedFileHandle == IntPtr.Zero)
@@ -86,7 +86,7 @@ namespace PTM.View
 			return windowHandle;
 		} //ReadHandle
 
-		public void WriteHandle(IntPtr windowHandle)
+		internal void WriteHandle(IntPtr windowHandle)
 		{
 			IntPtr mappedViewHandle = MapViewOfFile(memoryFileHandle, (uint) FILE_MAP_WRITE, 0, 0, 8);
 			if (mappedViewHandle == IntPtr.Zero)
@@ -115,17 +115,17 @@ namespace PTM.View
 	} //end of MemoryMappedFile class
 
 	[Serializable]
-	public class SharedMemoryException : Exception
+	internal class SharedMemoryException : Exception
 	{
-		public SharedMemoryException()
+		internal SharedMemoryException()
 		{
 		} //SharedMemoryException
 
-		public SharedMemoryException(string message) : base(message)
+		internal SharedMemoryException(string message) : base(message)
 		{
 		} //SharedMemoryException
 
-		public SharedMemoryException(string message, Exception inner) : base(message, inner)
+		internal SharedMemoryException(string message, Exception inner) : base(message, inner)
 		{
 		} //SharedMemoryException
 	} //end of SharedMemoryException class

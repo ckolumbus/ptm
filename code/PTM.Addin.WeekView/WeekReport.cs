@@ -24,7 +24,7 @@ namespace PTM.Addin.WeekView
 			// This call is required by the Windows Form Designer.
 			InitializeComponent();
 
-			base.Text = "Week Calendar";
+			base.Text = "Week Report";
 			// TODO: Add any initialization after the InitializeComponent call
 			this.dayView.ResolveAppointments+=new Calendar.ResolveAppointmentsEventHandler(dayView_ResolveAppointments);
 			currentWeek = 0;
@@ -68,6 +68,7 @@ namespace PTM.Addin.WeekView
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.dayView.DaysToShow = 7;
 			this.dayView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+			this.dayView.HalfHourHeight = 34;
 			this.dayView.Location = new System.Drawing.Point(8, 32);
 			this.dayView.Name = "dayView";
 			this.dayView.SelectionEnd = new System.DateTime(((long)(0)));
@@ -75,6 +76,10 @@ namespace PTM.Addin.WeekView
 			this.dayView.Size = new System.Drawing.Size(368, 304);
 			this.dayView.StartDate = new System.DateTime(((long)(0)));
 			this.dayView.TabIndex = 0;
+			this.dayView.WorkingHourEnd = 23;
+			this.dayView.WorkingHourStart = 0;
+			this.dayView.WorkingMinuteEnd = 59;
+			this.dayView.WorkingMinuteStart = 0;
 			// 
 			// backButton
 			// 
@@ -122,23 +127,40 @@ namespace PTM.Addin.WeekView
 
 		private void dayView_ResolveAppointments(object sender, Calendar.ResolveAppointmentsEventArgs args)
 		{
-			DateTime day = args.StartDate;
-			do
+			try
 			{
-				MergedLogs logs;
-				logs = PTM.Business.MergedLogs.GetMergedLogsByDay(day);
-				foreach (MergedLog log in logs)
-				{				
-					Appointment appointment = new Appointment();
-					appointment.StartDate = log.MergeLog.InsertTime;
-					appointment.EndDate = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration);
-					PTMDataset.TasksRow task;
-					task = Tasks.FindById(log.MergeLog.TaskId);
-					appointment.Title = task.Description;
-					args.Appointments.Add(appointment);
-				}
-				day = day.AddDays(1);
-			} while (day <= args.EndDate);
+				Cursor.Current = Cursors.WaitCursor;
+				DateTime day = args.StartDate;
+				do
+				{
+					MergedLogs logs;
+					logs = PTM.Business.MergedLogs.GetMergedLogsByDay(day);
+					foreach (MergedLog log in logs)
+					{				
+						PTMDataset.TasksRow task;
+						task = Tasks.FindById(log.MergeLog.TaskId);
+						if(task.IsDefaultTask && task.DefaultTaskId == (int)DefaultTaskEnum.Idle)
+							continue;
+					
+						Appointment appointment = new Appointment();
+						appointment.StartDate = log.MergeLog.InsertTime;
+						appointment.EndDate = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration);
+						appointment.Title = task.Description;
+						appointment.Color = Color.Green;
+						if(task.IsDefaultTask && !DefaultTasks.IsActive( (DefaultTaskEnum)task.DefaultTaskId))
+						{
+							appointment.Color = Color.Yellow;
+						}
+					
+						args.Appointments.Add(appointment);
+					}
+					day = day.AddDays(1);
+				} while (day <= args.EndDate);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -161,40 +183,17 @@ namespace PTM.Addin.WeekView
 		
 		private void SetWeek(int week)
 		{
-			this.SuspendLayout();
-			this.dayView.StartDate = DateTime.Today.AddDays(- Convert.ToInt32(DateTime.Today.DayOfWeek) + week*7);
-			this.weekLabel.Text = this.dayView.StartDate.ToShortDateString() + " - " +
-				this.dayView.StartDate.AddDays(6).ToShortDateString();
-			
-			DateTime day = this.dayView.StartDate;
-			int workHourStart = int.MaxValue;
-			int workHourEnd = int.MinValue;
-			do
+			try
 			{
-				MergedLogs logs;
-				logs = PTM.Business.MergedLogs.GetMergedLogsByDay(day);
-				foreach (MergedLog log in logs)
-				{
-					if(workHourStart > log.MergeLog.InsertTime.Hour)
-						workHourStart = log.MergeLog.InsertTime.Hour;
-					
-					if(workHourEnd < log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration).Hour)
-						workHourEnd = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration).Hour;
-				}
-				day = day.AddDays(1);
-			} while (day <= this.dayView.StartDate.AddDays(6));
-			
-			if(workHourStart != int.MaxValue)
-			{
-				this.dayView.WorkingMinuteStart = 0;
-				this.dayView.WorkingHourStart = workHourStart-1<0?0:workHourStart-1;
+				Cursor.Current = Cursors.WaitCursor;
+				this.dayView.StartDate = DateTime.Today.AddDays(- Convert.ToInt32(DateTime.Today.DayOfWeek) + week*7);
+				this.weekLabel.Text = this.dayView.StartDate.ToShortDateString() + " - " +
+					this.dayView.StartDate.AddDays(6).ToShortDateString();
 			}
-			if(workHourEnd != int.MinValue)
+			finally
 			{
-				this.dayView.WorkingMinuteEnd = 59;
-				this.dayView.WorkingHourEnd = workHourEnd+1>23?23:workHourEnd+1;		
+				Cursor.Current = Cursors.Default;
 			}
-			this.ResumeLayout(false);
 		}
 
 		

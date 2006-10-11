@@ -10,7 +10,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for TasksGroupsForm.
 	/// </summary>
-	public class TasksHierarchyForm : Form
+	internal class TasksHierarchyForm : Form
 	{
 		private TasksTreeViewControl tasksTreeViewControl;
 		private Button newButton;
@@ -22,12 +22,12 @@ namespace PTM.View.Forms
 
 		private PTMDataset.TasksRow selectedTaskRow = null;
 
-		public PTMDataset.TasksRow SelectedTaskRow
+		internal PTMDataset.TasksRow SelectedTaskRow
 		{
 			get { return selectedTaskRow; }
 		}
 
-		public TasksHierarchyForm()
+		internal TasksHierarchyForm()
 		{
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);

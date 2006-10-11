@@ -7,7 +7,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for SplashForm.
 	/// </summary>
-	public class SplashForm : Form
+	internal class SplashForm : Form
 	{
 		private PictureBox pictureBox1;
 		private Label label1;
@@ -16,7 +16,7 @@ namespace PTM.View.Forms
 		private ProgressBar progressBar;
 		private IContainer components;
 
-		public SplashForm()
+		internal SplashForm()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -132,7 +132,7 @@ namespace PTM.View.Forms
 
 		#endregion
 
-		public void SetLoadProgress(int percent)
+		internal void SetLoadProgress(int percent)
 		{
 			if (percent > 100)
 				return;
@@ -141,7 +141,7 @@ namespace PTM.View.Forms
 			Application.DoEvents();
 		}
 
-		public void AddProgress(int percent)
+		internal void AddProgress(int percent)
 		{
 			SetLoadProgress(this.progressBar.Value + 10);
 		}

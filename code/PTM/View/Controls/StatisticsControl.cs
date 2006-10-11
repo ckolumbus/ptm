@@ -14,7 +14,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for Statistics.
 	/// </summary>
-	public class StatisticsControl : UserControl
+	internal class StatisticsControl : UserControl
 	{
 		private TreeListView applicationsList;
 		private ColumnHeader colName;
@@ -42,7 +42,7 @@ namespace PTM.View.Controls
 
 		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
 
-		public StatisticsControl()
+		internal StatisticsControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
@@ -328,7 +328,7 @@ namespace PTM.View.Controls
 			this.applicationsList.Items.Clear();
 		}
 
-		public void UpdateStatistics()
+		internal void UpdateStatistics()
 		{
 			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
 			{

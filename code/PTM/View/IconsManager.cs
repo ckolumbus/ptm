@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace PTM.View
 {
-	public sealed class IconsManager
+	internal sealed class IconsManager
 	{
 		private IconsManager()
 		{
@@ -14,23 +14,23 @@ namespace PTM.View
 		private static ArrayList iconsArray = new ArrayList();
 		private static Hashtable iconsMapTable = new Hashtable();
 
-		public static ImageList IconsList
+		internal static ImageList IconsList
 		{
 			get { return iconsList; }
 		} //IconsList
 
 
-		public static Icon GetIcon(string key)
+		internal static Icon GetIcon(string key)
 		{
 			return (Icon) iconsArray[(int) iconsMapTable[key]];
 		} //GetIcon
 
-		public static int GetIndex(string key)
+		internal static int GetIndex(string key)
 		{
 			return (int) iconsMapTable[key];
 		} //GetIndex
 
-		public static int AddIcon(string key, Icon icon)
+		internal static int AddIcon(string key, Icon icon)
 		{
 			if (iconsMapTable.Contains(key))
 			{
@@ -45,7 +45,7 @@ namespace PTM.View
 			} //if-else
 		} //AddIcon
 
-		public static int AddIconFromFile(string fileName)
+		internal static int AddIconFromFile(string fileName)
 		{
 			if (iconsMapTable.Contains(fileName))
 			{
