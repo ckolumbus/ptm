@@ -40,6 +40,8 @@ namespace Calendar
         {
         		//COMP2003: Not compatible with 2003
         		//SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        		SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+        		SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.Selectable, true);
 

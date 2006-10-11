@@ -85,7 +85,7 @@ namespace PTM.View.Forms
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(80, 23);
 			this.okButton.TabIndex = 4;
-			this.okButton.Text = "Ok";
+			this.okButton.Text = "Close";
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
 			// deleteButton

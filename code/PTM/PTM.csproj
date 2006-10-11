@@ -118,6 +118,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Addin\TabPageAddin.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Addin\TabPageAddin.resx"
+                    DependentUpon = "TabPageAddin.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Business\ApplicationsLog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -398,6 +408,16 @@
                 <File
                     RelPath = "View\Forms\AboutForm.resx"
                     DependentUpon = "AboutForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "View\Forms\AddinForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "View\Forms\AddinForm.resx"
+                    DependentUpon = "AddinForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

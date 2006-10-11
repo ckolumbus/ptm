@@ -169,23 +169,23 @@ namespace PTM.View.Forms
 			// 
 			this.numericUpDown.Location = new System.Drawing.Point(8, 24);
 			this.numericUpDown.Maximum = new System.Decimal(new int[] {
-																		  30,
-																		  0,
-																		  0,
-																		  0});
+																							 30,
+																							 0,
+																							 0,
+																							 0});
 			this.numericUpDown.Minimum = new System.Decimal(new int[] {
-																		  1,
-																		  0,
-																		  0,
-																		  0});
+																							 1,
+																							 0,
+																							 0,
+																							 0});
 			this.numericUpDown.Name = "numericUpDown";
 			this.numericUpDown.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDown.TabIndex = 0;
 			this.numericUpDown.Value = new System.Decimal(new int[] {
-																		15,
-																		0,
-																		0,
-																		0});
+																						  15,
+																						  0,
+																						  0,
+																						  0});
 			// 
 			// btnReset
 			// 
@@ -239,7 +239,9 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.checkBox);
 			this.Controls.Add(this.groupBox1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "ConfigurationForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

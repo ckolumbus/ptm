@@ -65,6 +65,11 @@
             </Settings>
             <References>
                 <Reference
+                    Name = "PTM"
+                    AssemblyName = "PTM"
+                    HintPath = "..\PTM\bin\Debug\ptm.exe"
+                />
+                <Reference
                     Name = "System"
                     AssemblyName = "System"
                     HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
@@ -78,11 +83,6 @@
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "PTM.Addin"
-                    Project = "{593678CC-2AB3-49B2-8E36-2897551EE6E4}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "System.Windows.Forms"

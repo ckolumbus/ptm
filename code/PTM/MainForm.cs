@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Resources;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using PTM.Addin;
 using PTM.Business;
 using PTM.Business.Helpers;
 using PTM.Data;
@@ -42,6 +43,7 @@ namespace PTM
 		private IContainer components;
 		private bool systemShutdown = false;
 		private MenuItem menuItem5;
+		private System.Windows.Forms.MenuItem menuItem6;
 		private bool AnimationDisabled = false;
 
 		public MainForm()
@@ -56,25 +58,24 @@ namespace PTM
 			Application.DoEvents();
 			
 			LoadAddins();
+			Application.DoEvents();
 		}
 
 		private void LoadAddins()
 		{
 			string appdir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			Assembly addinBase = System.Reflection.Assembly.LoadFile(appdir + @"\PTM.Addin.dll");
-			Type tabAddinType;
-			tabAddinType = addinBase.GetType("PTM.Addin.TabPageAddin");
-			Assembly a = System.Reflection.Assembly.LoadFile(appdir + @"\PTM.Addin.WeekView.dll");
-			Type[] ts;
-			ts = a.GetTypes();
-			foreach (Type t in ts)
+			Assembly addinAssembly = System.Reflection.Assembly.LoadFile(appdir + @"\PTM.Addin.WeekView.dll");
+			Type[] addinTypes;
+			addinTypes = addinAssembly.GetTypes();
+			foreach (Type addinType in addinTypes)
 			{
-				if(t.IsSubclassOf(tabAddinType))
+				if(addinType.IsSubclassOf(typeof(TabPageAddin)))
 				{
-					UserControl c = (UserControl) a.CreateInstance(t.ToString());
-					TabPage tp = new TabPage(c.Text);
-					tp.Controls.Add(c);
-					this.tabControl.Controls.Add(tp);
+					TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
+					TabPage tabPage = new TabPage(tabPageAddin.Text);
+					tabPageAddin.Dock = DockStyle.Fill;
+					tabPage.Controls.Add(tabPageAddin);
+					this.tabControl.Controls.Add(tabPage);
 				}
 			}
 		}
@@ -164,31 +165,28 @@ namespace PTM
 			this.tasksPage = new System.Windows.Forms.TabPage();
 			this.tasksLogControl = new PTM.View.Controls.TasksLogControl();
 			this.summaryPage = new System.Windows.Forms.TabPage();
-			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
-			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel3)).BeginInit();
+			this.menuItem6 = new System.Windows.Forms.MenuItem();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
 			this.tabControl.SuspendLayout();
 			this.tasksPage.SuspendLayout();
-			this.summaryPage.SuspendLayout();
-			this.statisticsPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainMenu
 			// 
 			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuItem1,
-																					 this.menuItem4,
-																					 this.menuItem2});
+																											this.menuItem1,
+																											this.menuItem4,
+																											this.menuItem2});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem3,
-																					  this.exitMenuItem});
+																											 this.menuItem3,
+																											 this.exitMenuItem});
 			this.menuItem1.Text = "File";
 			// 
 			// menuItem3
@@ -208,7 +206,8 @@ namespace PTM
 			// 
 			this.menuItem4.Index = 1;
 			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem5});
+																											 this.menuItem5,
+																											 this.menuItem6});
 			this.menuItem4.Text = "Tools";
 			// 
 			// menuItem5
@@ -221,7 +220,7 @@ namespace PTM
 			// 
 			this.menuItem2.Index = 2;
 			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.aboutMenuItem});
+																											 this.aboutMenuItem});
 			this.menuItem2.Text = "Help";
 			// 
 			// aboutMenuItem
@@ -235,9 +234,9 @@ namespace PTM
 			this.statusBar.Location = new System.Drawing.Point(0, 405);
 			this.statusBar.Name = "statusBar";
 			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-																						 this.statusBarPanel1,
-																						 this.statusBarPanel2,
-																						 this.statusBarPanel3});
+																												 this.statusBarPanel1,
+																												 this.statusBarPanel2,
+																												 this.statusBarPanel3});
 			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(432, 22);
 			this.statusBar.TabIndex = 1;
@@ -292,39 +291,26 @@ namespace PTM
 			// 
 			// summaryPage
 			// 
-			this.summaryPage.Controls.Add(this.summaryControl);
 			this.summaryPage.Location = new System.Drawing.Point(4, 22);
 			this.summaryPage.Name = "summaryPage";
 			this.summaryPage.Size = new System.Drawing.Size(408, 358);
 			this.summaryPage.TabIndex = 2;
 			this.summaryPage.Text = "Summary";
 			// 
-			// summaryControl
-			// 
-			this.summaryControl.BackColor = System.Drawing.SystemColors.Control;
-			this.summaryControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.summaryControl.Location = new System.Drawing.Point(0, 0);
-			this.summaryControl.Name = "summaryControl";
-			this.summaryControl.Size = new System.Drawing.Size(408, 358);
-			this.summaryControl.TabIndex = 0;
-			// 
 			// statisticsPage
 			// 
-			this.statisticsPage.Controls.Add(this.statisticsControl);
 			this.statisticsPage.Location = new System.Drawing.Point(4, 22);
 			this.statisticsPage.Name = "statisticsPage";
 			this.statisticsPage.Size = new System.Drawing.Size(408, 358);
 			this.statisticsPage.TabIndex = 3;
 			this.statisticsPage.Text = "Statistics";
 			// 
-			// statisticsControl
+			// menuItem6
 			// 
-			this.statisticsControl.BackColor = System.Drawing.SystemColors.Control;
-			this.statisticsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.statisticsControl.Location = new System.Drawing.Point(0, 0);
-			this.statisticsControl.Name = "statisticsControl";
-			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
-			this.statisticsControl.TabIndex = 0;
+			this.menuItem6.Index = 1;
+			this.menuItem6.Text = "Add-in Manager...";
+			this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -344,8 +330,6 @@ namespace PTM
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
-			this.summaryPage.ResumeLayout(false);
-			this.statisticsPage.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -471,8 +455,14 @@ namespace PTM
 			ConfigurationForm config = new ConfigurationForm();
 			config.ShowDialog(this);
 		}
-
+		private void menuItem6_Click(object sender, System.EventArgs e)
+		{
+			AddinForm addinForm = new AddinForm();
+			addinForm.ShowDialog(this);
+		}
 		#endregion
+
+
 
 
 	} //MainForm
