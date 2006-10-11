@@ -123,20 +123,12 @@ namespace PTM.Addin.WeekView
 		private void dayView_ResolveAppointments(object sender, Calendar.ResolveAppointmentsEventArgs args)
 		{
 			DateTime day = args.StartDate;
-			int workHourStart = int.MaxValue;
-			int workHourEnd = int.MinValue;
 			do
 			{
 				MergedLogs logs;
 				logs = PTM.Business.MergedLogs.GetMergedLogsByDay(day);
 				foreach (MergedLog log in logs)
-				{
-					if(workHourStart > log.MergeLog.InsertTime.Hour)
-						workHourStart = log.MergeLog.InsertTime.Hour;
-					
-					if(workHourEnd > log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration).Hour)
-						workHourEnd = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration).Hour;
-					
+				{				
 					Appointment appointment = new Appointment();
 					appointment.StartDate = log.MergeLog.InsertTime;
 					appointment.EndDate = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration);
@@ -147,15 +139,6 @@ namespace PTM.Addin.WeekView
 				}
 				day = day.AddDays(1);
 			} while (day <= args.EndDate);
-			
-			if(workHourStart != int.MaxValue)
-			{
-				this.dayView.WorkingHourStart = workHourStart-1;
-			}
-			if(workHourEnd != int.MinValue)
-			{
-				this.dayView.WorkingHourEnd = workHourEnd+1;				
-			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -178,10 +161,40 @@ namespace PTM.Addin.WeekView
 		
 		private void SetWeek(int week)
 		{
-			this.weekLabel.Text = this.dayView.StartDate.ToShortDateString() + " - " +
-				this.dayView.StartDate.AddDays(7).ToShortDateString();
-			
+			this.SuspendLayout();
 			this.dayView.StartDate = DateTime.Today.AddDays(- Convert.ToInt32(DateTime.Today.DayOfWeek) + week*7);
+			this.weekLabel.Text = this.dayView.StartDate.ToShortDateString() + " - " +
+				this.dayView.StartDate.AddDays(6).ToShortDateString();
+			
+			DateTime day = this.dayView.StartDate;
+			int workHourStart = int.MaxValue;
+			int workHourEnd = int.MinValue;
+			do
+			{
+				MergedLogs logs;
+				logs = PTM.Business.MergedLogs.GetMergedLogsByDay(day);
+				foreach (MergedLog log in logs)
+				{
+					if(workHourStart > log.MergeLog.InsertTime.Hour)
+						workHourStart = log.MergeLog.InsertTime.Hour;
+					
+					if(workHourEnd < log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration).Hour)
+						workHourEnd = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration).Hour;
+				}
+				day = day.AddDays(1);
+			} while (day <= this.dayView.StartDate.AddDays(6));
+			
+			if(workHourStart != int.MaxValue)
+			{
+				this.dayView.WorkingMinuteStart = 0;
+				this.dayView.WorkingHourStart = workHourStart-1<0?0:workHourStart-1;
+			}
+			if(workHourEnd != int.MinValue)
+			{
+				this.dayView.WorkingMinuteEnd = 59;
+				this.dayView.WorkingHourEnd = workHourEnd+1>23?23:workHourEnd+1;		
+			}
+			this.ResumeLayout(false);
 		}
 
 		

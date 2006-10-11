@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -59,28 +60,22 @@ namespace PTM
 			
 			LoadAddins();
 			Application.DoEvents();
-		}
+		}//MainForm
 
 		private void LoadAddins()
 		{
-			string appdir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			Assembly addinAssembly = System.Reflection.Assembly.LoadFile(appdir + @"\PTM.Addin.WeekView.dll");
-			Type[] addinTypes;
-			addinTypes = addinAssembly.GetTypes();
-			foreach (Type addinType in addinTypes)
+			ArrayList list;
+			list = AddinHelper.GetTabPageAddins();
+			foreach (TabPageAddin addin in list)
 			{
-				if(addinType.IsSubclassOf(typeof(TabPageAddin)))
-				{
-					TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
-					TabPage tabPage = new TabPage(tabPageAddin.Text);
-					tabPageAddin.Dock = DockStyle.Fill;
-					tabPage.Controls.Add(tabPageAddin);
-					this.tabControl.Controls.Add(tabPage);
-				}
+				TabPage tabPage = new TabPage(addin.Text);
+				addin.Dock = DockStyle.Fill;
+				tabPage.Controls.Add(addin);
+				this.tabControl.Controls.Add(tabPage);
 			}
 		}
 
-//MainForm
+
 
 
 		private void UpdateStartUpPath()
@@ -165,13 +160,17 @@ namespace PTM
 			this.tasksPage = new System.Windows.Forms.TabPage();
 			this.tasksLogControl = new PTM.View.Controls.TasksLogControl();
 			this.summaryPage = new System.Windows.Forms.TabPage();
+			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
+			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
 			this.tabControl.SuspendLayout();
 			this.tasksPage.SuspendLayout();
+			this.summaryPage.SuspendLayout();
+			this.statisticsPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainMenu
@@ -291,19 +290,39 @@ namespace PTM
 			// 
 			// summaryPage
 			// 
+			this.summaryPage.Controls.Add(this.summaryControl);
 			this.summaryPage.Location = new System.Drawing.Point(4, 22);
 			this.summaryPage.Name = "summaryPage";
 			this.summaryPage.Size = new System.Drawing.Size(408, 358);
 			this.summaryPage.TabIndex = 2;
 			this.summaryPage.Text = "Summary";
 			// 
+			// summaryControl
+			// 
+			this.summaryControl.BackColor = System.Drawing.SystemColors.Control;
+			this.summaryControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.summaryControl.Location = new System.Drawing.Point(0, 0);
+			this.summaryControl.Name = "summaryControl";
+			this.summaryControl.Size = new System.Drawing.Size(408, 358);
+			this.summaryControl.TabIndex = 0;
+			// 
 			// statisticsPage
 			// 
+			this.statisticsPage.Controls.Add(this.statisticsControl);
 			this.statisticsPage.Location = new System.Drawing.Point(4, 22);
 			this.statisticsPage.Name = "statisticsPage";
 			this.statisticsPage.Size = new System.Drawing.Size(408, 358);
 			this.statisticsPage.TabIndex = 3;
 			this.statisticsPage.Text = "Statistics";
+			// 
+			// statisticsControl
+			// 
+			this.statisticsControl.BackColor = System.Drawing.SystemColors.Control;
+			this.statisticsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.statisticsControl.Location = new System.Drawing.Point(0, 0);
+			this.statisticsControl.Name = "statisticsControl";
+			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
+			this.statisticsControl.TabIndex = 0;
 			// 
 			// menuItem6
 			// 
@@ -330,6 +349,8 @@ namespace PTM
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
+			this.summaryPage.ResumeLayout(false);
+			this.statisticsPage.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

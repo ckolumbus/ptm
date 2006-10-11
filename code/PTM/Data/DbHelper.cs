@@ -144,6 +144,11 @@ namespace PTM.Data
 				reader.Close();
 				return list;
 			}
+			catch(Exception ex)
+			{
+				ex = ex;
+				throw;
+			}
 			finally
 			{
 				cmd.Connection.Close();
@@ -345,6 +350,11 @@ namespace PTM.Data
 		public static void AddPrimaryKey(string tableName, string columnName)
 		{
 			ExecuteNonQuery("ALTER TABLE " + tableName + " ADD PRIMARY KEY (" + columnName + ")");
+		}
+
+		public static void CreateTable(string tableName)
+		{
+			ExecuteNonQuery("CREATE TABLE " + tableName);
 		}
 	}
 }

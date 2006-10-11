@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using PTM.Business.Helpers;
 using PTM.View.Controls.TreeListViewComponents;
 
 namespace PTM.View.Forms
@@ -84,12 +85,12 @@ namespace PTM.View.Forms
 			// 
 			// addinList
 			// 
-			this.addinList.CheckBoxes = true;
 			this.addinList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																												this.columnHeader3,
-																												this.columnHeader4});
+																						this.columnHeader3,
+																						this.columnHeader4});
 			this.addinList.FullRowSelect = true;
 			this.addinList.GridLines = true;
+			this.addinList.HideSelection = false;
 			this.addinList.Location = new System.Drawing.Point(8, 8);
 			this.addinList.MultiSelect = false;
 			this.addinList.Name = "addinList";
@@ -105,7 +106,7 @@ namespace PTM.View.Forms
 			// columnHeader4
 			// 
 			this.columnHeader4.Text = "Location";
-			this.columnHeader4.Width = 400;
+			this.columnHeader4.Width = 600;
 			// 
 			// addButton
 			// 
@@ -123,6 +124,7 @@ namespace PTM.View.Forms
 			this.removeButton.Name = "removeButton";
 			this.removeButton.TabIndex = 7;
 			this.removeButton.Text = "Remove";
+			this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
 			// 
 			// closeButton
 			// 
@@ -132,6 +134,7 @@ namespace PTM.View.Forms
 			this.closeButton.Name = "closeButton";
 			this.closeButton.TabIndex = 8;
 			this.closeButton.Text = "Close";
+			this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
 			// 
 			// openAddinDialog
 			// 
@@ -161,12 +164,50 @@ namespace PTM.View.Forms
 
 		private void AddinForm_Load(object sender, System.EventArgs e)
 		{
+			ArrayList addins = AddinHelper.GetAddins();
+			foreach (string path in addins)
+			{
+				AddAddinToList(path);
+			}
+		}
+
+		private void AddAddinToList(string path)
+		{
+			this.addinList.Items.Add(new ListViewItem(new string[] {AddinHelper.GetAddinDescription(path), path}));
 		}
 
 		private void addButton_Click(object sender, System.EventArgs e)
 		{
-			this.openAddinDialog.ShowDialog(this);
+			if(this.openAddinDialog.ShowDialog(this) == DialogResult.OK)
+			{
+				try
+				{
+					AddinHelper.AddAddinAssembly(this.openAddinDialog.FileName);
+					AddAddinToList(this.openAddinDialog.FileName);
+				}
+				catch(ApplicationException aex)
+				{
+					MessageBox.Show(aex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				}
+			}
+			
 		}
+
+		private void closeButton_Click(object sender, System.EventArgs e)
+		{
+			this.Close();
+		}
+
+		private void removeButton_Click(object sender, System.EventArgs e)
+		{
+			if(this.addinList.SelectedItems.Count == 0)
+				return;
+			
+			AddinHelper.DeleteAddinAssembly(this.addinList.SelectedItems[0].SubItems[1].Text);
+			this.addinList.Items.Remove(this.addinList.SelectedItems[0]);
+		}
+		
+		
 
 	}
 }
