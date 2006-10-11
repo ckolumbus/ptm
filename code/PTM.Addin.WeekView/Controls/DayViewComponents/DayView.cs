@@ -516,6 +516,20 @@ namespace Calendar
             base.OnMouseUp(e);
         }
 
+		  protected override void OnMouseWheel(MouseEventArgs e)
+		  {
+			 base.OnMouseWheel(e);
+
+			 if ((scrollbar.Value - e.Delta) < scrollbar.Minimum)
+				 scrollbar.Value = scrollbar.Minimum;
+			 else
+				 if ((scrollbar.Value - e.Delta) > scrollbar.Maximum)
+				 scrollbar.Value = scrollbar.Maximum;
+			 else
+				 scrollbar.Value -= e.Delta / 3;
+
+			 Invalidate(true);
+		  } 
         System.Collections.Hashtable cachedAppointments = new System.Collections.Hashtable();
 
         protected virtual void OnResolveAppointments(ResolveAppointmentsEventArgs args)
@@ -817,8 +831,30 @@ namespace Calendar
             }
         }
 
+		 private Rectangle GetHourRangeRectangle(DateTime start, DateTime end, Rectangle baseRectangle, bool correctScrollValue)
+		 {
+			 Rectangle rect = baseRectangle;
+
+			 int startY;
+			 int endY;
+
+			 startY = (start.Hour * halfHourHeight * 2) + ((start.Minute * halfHourHeight) / 30);
+			 endY = (end.Hour * halfHourHeight * 2) + ((end.Minute * halfHourHeight) / 30);
+
+			 rect.Y = startY - scrollbar.Value + this.HeaderHeight;
+
+			 if (correctScrollValue && scrollbar.Value > startY)
+				 rect.Height = endY - scrollbar.Value;
+			 else
+				 rect.Height = endY - startY;
+
+			 return rect;
+		 }
+
         private Rectangle GetHourRangeRectangle(DateTime start, DateTime end, Rectangle baseRectangle)
         {
+			  return GetHourRangeRectangle(start, end, baseRectangle, false);
+        	/*
             Rectangle rect = baseRectangle;
 
             int startY;
@@ -832,13 +868,14 @@ namespace Calendar
             rect.Height = endY - startY;
 
             return rect;
+				*/
         }
 
         private void DrawDay(PaintEventArgs e, Rectangle rect, DateTime time)
         {
             //renderer.DrawDayBackground(e.Graphics, rect);
 
-            Rectangle workingHoursRectangle = GetHourRangeRectangle(workStart, workEnd, rect);
+            Rectangle workingHoursRectangle = GetHourRangeRectangle(workStart, workEnd, rect, true);
 
             if (workingHoursRectangle.Y < this.HeaderHeight)
                 workingHoursRectangle.Y = this.HeaderHeight;
@@ -966,7 +1003,8 @@ namespace Calendar
             {
                 int firstHalfHour = appointment.StartDate.Hour * 2 + (appointment.StartDate.Minute / 30);
                 int lastHalfHour = appointment.EndDate.Hour * 2 + (appointment.EndDate.Minute / 30);
-
+					
+            	
                 for (int halfHour = firstHalfHour; halfHour < lastHalfHour; halfHour++)
                 {
                     HalfHourLayout layout = appLayouts[halfHour];
@@ -981,7 +1019,6 @@ namespace Calendar
                     layout.Appointments[layout.Count] = appointment;
                     layout.Count++;
 
-                    // update conflicts
                     foreach (Appointment app2 in layout.Appointments)
                     {
                         if (app2 != null)
@@ -1042,6 +1079,9 @@ namespace Calendar
                 time = time.AddDays(1);
             }
         }
+
+    	
+		 
 
         #endregion
 
