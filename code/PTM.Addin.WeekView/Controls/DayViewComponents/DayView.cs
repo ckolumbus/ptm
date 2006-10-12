@@ -930,7 +930,30 @@ namespace Calendar
             timeEnd = timeEnd.AddSeconds(-1);
 
             Appointments appointments = (Appointments)cachedAppointments[time.Day];
+        	 if (appointments != null)
+        	foreach (Appointment appointment in appointments)
+        	{
+				Rectangle appRect = rect;
+				int appointmentWidth;
+				
+				appointmentWidth = rect.Width;
 
+				
+				appRect.Width = appointmentWidth - 5;
+
+				appRect = GetHourRangeRectangle(appointment.StartDate, appointment.EndDate, appRect);
+        		if(appRect.Height == 0)
+        			continue;
+
+				appointment.Rectangle = appRect;
+
+				e.Graphics.SetClip(rect);
+
+				renderer.DrawAppointment(e.Graphics, appRect, appointment, appointment == selectedAppointment, appointmentGripWidth);
+
+				e.Graphics.ResetClip();
+        	}
+/*
             if (appointments != null)
             {
                 HalfHourLayout[] layout = GetMaxParalelAppointments(appointments);
@@ -995,9 +1018,9 @@ namespace Calendar
                         }
                     }
                 }
-            }
+            }*/
         }
-
+/*
         private HalfHourLayout[] GetMaxParalelAppointments(Appointments appointments)
         {
             HalfHourLayout[] appLayouts = new HalfHourLayout[24 * 2];
@@ -1038,7 +1061,7 @@ namespace Calendar
 
             return appLayouts;
         }
-
+*/
         private void DrawDays(PaintEventArgs e, Rectangle rect)
         {
             int dayWidth = rect.Width / daysToShow;

@@ -45,8 +45,8 @@ namespace PTM.Business
 				{
 					MergedLog merged = mergedList[m];
 					DateTime mergedEndTime = merged.MergeLog.InsertTime.AddSeconds(merged.MergeLog.Duration);
-					Debug.Assert(merged.MergeLog.InsertTime<log.InsertTime, "The list must be always ordered.");
-					if(log.TaskId==merged.MergeLog.TaskId && (mergedEndTime - log.InsertTime).Seconds<timeTolerance)
+					Debug.Assert(merged.MergeLog.InsertTime<=log.InsertTime, "The list must be always ordered.");
+					if(log.TaskId==merged.MergeLog.TaskId && (mergedEndTime - log.InsertTime).TotalSeconds<timeTolerance)
 					{
 						merged.MergeLog.Duration += log.Duration;
 						merged.DeletedLogs.Add(log);

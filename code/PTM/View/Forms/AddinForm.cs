@@ -22,6 +22,7 @@ namespace PTM.View.Forms
 		private System.Windows.Forms.Button removeButton;
 		private System.Windows.Forms.Button closeButton;
 		private System.Windows.Forms.OpenFileDialog openAddinDialog;
+		private System.Windows.Forms.Label label1;
 		
 		/// <summary>
 		/// Required designer variable.
@@ -71,6 +72,7 @@ namespace PTM.View.Forms
 			this.removeButton = new System.Windows.Forms.Button();
 			this.closeButton = new System.Windows.Forms.Button();
 			this.openAddinDialog = new System.Windows.Forms.OpenFileDialog();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// columnHeader1
@@ -86,15 +88,15 @@ namespace PTM.View.Forms
 			// addinList
 			// 
 			this.addinList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						this.columnHeader3,
-																						this.columnHeader4});
+																												this.columnHeader3,
+																												this.columnHeader4});
 			this.addinList.FullRowSelect = true;
 			this.addinList.GridLines = true;
 			this.addinList.HideSelection = false;
 			this.addinList.Location = new System.Drawing.Point(8, 8);
 			this.addinList.MultiSelect = false;
 			this.addinList.Name = "addinList";
-			this.addinList.Size = new System.Drawing.Size(328, 216);
+			this.addinList.Size = new System.Drawing.Size(328, 176);
 			this.addinList.TabIndex = 4;
 			this.addinList.View = System.Windows.Forms.View.Details;
 			// 
@@ -140,11 +142,20 @@ namespace PTM.View.Forms
 			// 
 			this.openAddinDialog.Filter = "Assembly Files (*.exe; *.dll)|*.exe; *.dll|All Files (*.*)|*.*";
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(8, 192);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(328, 32);
+			this.label1.TabIndex = 9;
+			this.label1.Text = "* You need to restart the application before your changes take effect";
+			// 
 			// AddinForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.closeButton;
 			this.ClientSize = new System.Drawing.Size(426, 232);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.closeButton);
 			this.Controls.Add(this.removeButton);
 			this.Controls.Add(this.addButton);

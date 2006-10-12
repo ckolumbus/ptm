@@ -147,6 +147,7 @@ namespace PTM.Addin.WeekView
 						appointment.EndDate = log.MergeLog.InsertTime.AddSeconds(log.MergeLog.Duration);
 						appointment.Title = task.Description;
 						appointment.Color = Color.Green;
+						appointment.Locked = false;
 						if(task.IsDefaultTask && !DefaultTasks.IsActive( (DefaultTaskEnum)task.DefaultTaskId))
 						{
 							appointment.Color = Color.Yellow;

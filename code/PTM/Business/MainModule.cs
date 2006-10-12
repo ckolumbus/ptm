@@ -39,6 +39,8 @@ namespace PTM.Business
 			Application.DoEvents();
 			Logs.Initialize();
 			Application.DoEvents();
+			Logs.FillMissingTimeUntilNow();
+			Application.DoEvents();
 			ApplicationsLog.Initialize();
 			Application.DoEvents();
 		}

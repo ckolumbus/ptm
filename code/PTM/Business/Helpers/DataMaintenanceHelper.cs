@@ -63,37 +63,9 @@ namespace PTM.Business.Helpers
 
 		private static bool GroupLogsList(DateTime date)
 		{
-			/*
-			ArrayList mergedList = new ArrayList();
-			ArrayList needsDelete = new ArrayList();
-			ArrayList needsUpdate = new ArrayList();
-			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
-			int timeTolerance = (int)config.Value*60;
-			int m = -1;
-			for(int i = 0; i<logs.Count;i++)
-			{
-				Log log = (Log) logs[i];
-				if(m>=0)
-				{
-					Log merged = (Log) mergedList[m];
-					DateTime mergedEndTime = merged.InsertTime.AddSeconds(merged.Duration);
-					Debug.Assert(merged.InsertTime<log.InsertTime, "The list must be always ordered.");
-					if(log.TaskId==merged.TaskId && (mergedEndTime - log.InsertTime).Seconds<timeTolerance)
-					{
-							merged.Duration += log.Duration;
-							needsDelete.Add(log);
-							needsUpdate.Add(merged);
-							continue;
-					}
-				}
-				mergedList.Add(log);
-				m++;
-			}*/
 			MergedLogs mergeList;
 			mergeList = MergedLogs.GetMergedLogsByDay(date);
 			bool mergeNeeded = false;
-//			if(needsDelete.Count == 0 && needsUpdate.Count== 0)
-//				return false;
 			
 			OleDbConnection con;
 			con = DbHelper.GetConnection();

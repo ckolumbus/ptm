@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Globalization;
 using System.Timers;
+using PTM.Business.Helpers;
 using PTM.Data;
 using PTM.Infos;
 
@@ -121,6 +122,47 @@ namespace PTM.Business
 			if(AfterStopLogging!=null)
 				AfterStopLogging(null, null);
 		}
+		/// <summary>
+		/// Fill with Idle logs the time that the application was off.
+		/// </summary>
+		public static void FillMissingTimeUntilNow()
+		{
+			//Check db is not empty
+			int logCount = (int) DbHelper.ExecuteScalar("Select Count(1) From TasksLog");
+			if(logCount == 0)
+				return;
+			
+			DateTime lastLogInsert = (DateTime) DbHelper.ExecuteScalar("Select max(InsertTime) from TasksLog");
+			
+			int lastLogDuration = (int)DbHelper.ExecuteScalar("Select Duration from TasksLog Where InsertTime >= ?", 
+				new string[]{"Duration"}, new object[]{lastLogInsert});
+			
+			FillMissingTimeUntilNowRecursively(lastLogInsert, lastLogDuration);
+		}
+		private static void FillMissingTimeUntilNowRecursively(DateTime lastLogInsert, int lastLogDuration)
+		{
+			if(DateTime.Now.Subtract(lastLogInsert).TotalSeconds<60) // less than 1 minute is ignored
+			{
+				return;
+			}
+			
+			DateTime lastLogFinish = lastLogInsert.AddSeconds(lastLogDuration);
+			if((DateTime.Now - lastLogFinish).TotalSeconds<60) // less than 1 minute is ignored
+			{
+				return;
+			}
+			
+			int defaultTaskId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
+			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
+			int duration = (int) ((DateTime.Now - lastLogFinish).TotalSeconds > ((int) config.Value)*60
+			                      	? (int) config.Value*60
+			                      	: (DateTime.Now - lastLogFinish).TotalSeconds);
+			
+			DbHelper.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)", 
+				new string[]{"Duration", "InsertTime", "TaskId"}, new object[] {duration, lastLogFinish, defaultTaskId});
+			FillMissingTimeUntilNowRecursively(lastLogFinish, duration);	
+		}
+		
 		public static ArrayList GetLogsByDay(DateTime day)
 		{
 			DateTime date = day.Date;
