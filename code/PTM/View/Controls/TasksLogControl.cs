@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Business;
@@ -887,8 +888,14 @@ namespace PTM.View.Controls
 				item.Text = taskRow.Description;
 			}
 			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
-			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
-
+			//item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
+			CultureInfo cultureInfo;
+			cultureInfo = (CultureInfo) CultureInfo.CurrentCulture.Clone();
+			cultureInfo.DateTimeFormat.ShortTimePattern = "hh:mm tt";
+			cultureInfo.DateTimeFormat.AMDesignator = "a.m.";
+			cultureInfo.DateTimeFormat.PMDesignator = "p.m.";
+			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);
+			
 			if (taskRow.IsDefaultTask)
 			{
 				item.ImageIndex = IconsManager.GetIndex(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
