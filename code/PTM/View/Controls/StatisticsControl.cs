@@ -3,9 +3,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 

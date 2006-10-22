@@ -3,7 +3,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Xml;
 
-namespace PTM.Business.Helpers
+namespace PTM.Framework.Helpers
 {
 	/// <summary>
 	/// Summary description for UpdaterHelper.

@@ -4,9 +4,9 @@ using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 
-namespace PTM.Business.Helpers
+namespace PTM.Framework.Helpers
 {
 	/// <summary>
 	/// Summary description for DataMaintenanceHelper.

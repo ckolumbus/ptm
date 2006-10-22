@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using PTM.Data;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	/// <summary>
 	/// Descripción breve de DefaultTasks.

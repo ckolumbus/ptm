@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
 using PTM.View.Controls;
 

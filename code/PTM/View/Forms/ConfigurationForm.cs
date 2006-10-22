@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using PTM.Business.Helpers;
+using PTM.Framework.Helpers;
 
 namespace PTM.View.Forms
 {

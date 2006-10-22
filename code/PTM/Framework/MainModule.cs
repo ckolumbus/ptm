@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Windows.Forms;
-using PTM.Business.Helpers;
+using PTM.Framework.Helpers;
 using PTM.Data;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	
 	

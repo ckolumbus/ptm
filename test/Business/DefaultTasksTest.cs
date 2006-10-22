@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
 
 namespace PTM.Test.Business

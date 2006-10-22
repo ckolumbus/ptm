@@ -4,7 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
 
 namespace PTM.View.Controls

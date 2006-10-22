@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	/// <summary>
 	/// Summary description for ApplicationSummaries.

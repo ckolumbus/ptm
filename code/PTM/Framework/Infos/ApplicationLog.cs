@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace PTM.Infos
+namespace PTM.Framework.Infos
 {
 	/// <summary>
 	/// ApplicationLog contains the information associatied with each running application.
@@ -96,4 +96,4 @@ namespace PTM.Infos
 		DateTime lastUpdateTime;
 	
 	}//end of class ApplicationLog
-}//end of namespace PTM.Infos
+}//end of namespace PTM.Framework.Infos

@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Calendar;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 
 namespace PTM.Addin.WeekView
 {
@@ -134,7 +134,7 @@ namespace PTM.Addin.WeekView
 				do
 				{
 					MergedLogs logs;
-					logs = PTM.Business.MergedLogs.GetMergedLogsByDay(day);
+					logs = PTM.Framework.MergedLogs.GetMergedLogsByDay(day);
 					foreach (MergedLog log in logs)
 					{				
 						PTMDataset.TasksRow task;

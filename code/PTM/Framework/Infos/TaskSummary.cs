@@ -1,4 +1,4 @@
-namespace PTM.Infos
+namespace PTM.Framework.Infos
 {
 	/// <summary>
 	/// TaskSummary

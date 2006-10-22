@@ -3,7 +3,7 @@ using System.Data.OleDb;
 using PTM.Data;
 using PTM.View;
 
-namespace PTM.Business.Helpers
+namespace PTM.Framework.Helpers
 {
 	/// <summary>
 	/// Summary description for DBUpdaterHelper.

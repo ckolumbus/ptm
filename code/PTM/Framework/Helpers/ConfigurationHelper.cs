@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using PTM.Data;
 
-namespace PTM.Business.Helpers
+namespace PTM.Framework.Helpers
 {
 	/// <summary>
 	/// ConfigurationKey enumeration 

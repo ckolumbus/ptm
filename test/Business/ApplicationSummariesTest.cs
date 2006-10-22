@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Threading;
 using NUnit.Framework;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 
 namespace PTM.Test.Business
 {

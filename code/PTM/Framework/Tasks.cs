@@ -7,7 +7,7 @@ using System.Text;
 using PTM.Data;
 using PTM.View;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	public sealed class Tasks
 	{

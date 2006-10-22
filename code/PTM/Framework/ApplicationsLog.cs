@@ -6,11 +6,11 @@ using System.Diagnostics;
 using System.Threading;
 using System.Timers;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 using PTM.View;
 using Timer = System.Timers.Timer;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	/// <summary>
 	/// Summary description for ApplicationsLog.
@@ -114,7 +114,7 @@ namespace PTM.Business
 				}
 				else
 				{
-					// This is a PTM.Infos.ApplicationLog
+					// This is a PTM.Framework.Infos.ApplicationLog
 					ApplicationLog applicationLog = FindCurrentApplication( currentProcess.Id );
 					if ( applicationLog == null )
 					{	// First time this application is detected

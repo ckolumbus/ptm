@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
-using PTM.Business;
-using PTM.Business.Helpers;
+using PTM.Framework;
+using PTM.Framework.Helpers;
 using PTM.Data;
 
 namespace PTM.Test.Business.Helpers

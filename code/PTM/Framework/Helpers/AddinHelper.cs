@@ -5,7 +5,7 @@ using System.Text;
 using PTM.Addin;
 using PTM.Data;
 
-namespace PTM.Business.Helpers
+namespace PTM.Framework.Helpers
 {
 	/// <summary>
 	/// Descripción breve de AddinHelper.

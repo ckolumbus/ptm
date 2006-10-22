@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using PTM.Business.Helpers;
-using PTM.Infos;
+using PTM.Framework.Helpers;
+using PTM.Framework.Infos;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	/// <summary>
 	/// Summary description for MergedLogs.

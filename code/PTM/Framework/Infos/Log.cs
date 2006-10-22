@@ -1,6 +1,6 @@
 using System;
 
-namespace PTM.Infos
+namespace PTM.Framework.Infos
 {
 	/// <summary>
 	/// Base class for Logged Items.

@@ -4,9 +4,9 @@ using System.Data;
 using System.Threading;
 using System.Timers;
 using NUnit.Framework;
-using PTM.Business;
+using PTM.Framework;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 
 namespace PTM.Test.Business
 {

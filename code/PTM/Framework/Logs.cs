@@ -3,11 +3,11 @@ using System.Collections;
 using System.Data;
 using System.Globalization;
 using System.Timers;
-using PTM.Business.Helpers;
+using PTM.Framework.Helpers;
 using PTM.Data;
-using PTM.Infos;
+using PTM.Framework.Infos;
 
-namespace PTM.Business
+namespace PTM.Framework
 {
 	public sealed class Logs
 	{
