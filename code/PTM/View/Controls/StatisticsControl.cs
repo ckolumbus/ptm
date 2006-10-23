@@ -19,7 +19,6 @@ namespace PTM.View.Controls
 		private TreeListView applicationsList;
 		private ColumnHeader colName;
 		private ColumnHeader colActiveTime;
-		private ColumnHeader colProcessId;
 		private GroupBox groupBox3;
 		private GroupBox groupBox4;
 		private Label label1;
@@ -92,7 +91,6 @@ namespace PTM.View.Controls
 			this.colName = new System.Windows.Forms.ColumnHeader();
 			this.colActiveTime = new System.Windows.Forms.ColumnHeader();
 			this.colAppPercent = new System.Windows.Forms.ColumnHeader();
-			this.colProcessId = new System.Windows.Forms.ColumnHeader();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.AppsActiveTimeValue = new System.Windows.Forms.Label();
@@ -116,10 +114,9 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																							   this.colName,
-																							   this.colActiveTime,
-																							   this.colAppPercent,
-																							   this.colProcessId});
+																														 this.colName,
+																														 this.colActiveTime,
+																														 this.colAppPercent});
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
@@ -139,11 +136,7 @@ namespace PTM.View.Controls
 			// colAppPercent
 			// 
 			this.colAppPercent.Text = "Percent";
-			// 
-			// colProcessId
-			// 
-			this.colProcessId.Text = "Process Id";
-			this.colProcessId.Width = 0;
+			this.colAppPercent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// groupBox3
 			// 

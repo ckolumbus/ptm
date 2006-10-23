@@ -87,6 +87,7 @@ namespace PTM.View.Controls
 
 			Logs.TasksLogDurationCountElapsed += new ElapsedEventHandler(TaskLogTimer_Elapsed);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
+			
 		}
 
 		protected override void OnHandleDestroyed(EventArgs e)
@@ -158,10 +159,10 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskHeader,
-																					   this.ActiveTimeHeader,
-																					   this.InactiveTimeHeader,
-																					   this.PercentHeader});
+																											  this.TaskHeader,
+																											  this.ActiveTimeHeader,
+																											  this.InactiveTimeHeader,
+																											  this.PercentHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -189,6 +190,7 @@ namespace PTM.View.Controls
 			// PercentHeader
 			// 
 			this.PercentHeader.Text = "Percent";
+			this.PercentHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.PercentHeader.Width = 50;
 			// 
 			// tasksIconsList
@@ -224,15 +226,10 @@ namespace PTM.View.Controls
 			this.indicator1.BackColor = System.Drawing.Color.Black;
 			this.indicator1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indicator1.ForeColor = System.Drawing.Color.Lime;
-			this.indicator1.GraphWidth = 33;
 			this.indicator1.Location = new System.Drawing.Point(3, 16);
-			this.indicator1.Maximum = 2147483647;
-			this.indicator1.Minimum = 0;
 			this.indicator1.Name = "indicator1";
 			this.indicator1.Size = new System.Drawing.Size(66, 61);
 			this.indicator1.TabIndex = 0;
-			this.indicator1.TextValue = "";
-			this.indicator1.Value = 0;
 			// 
 			// groupBox3
 			// 
@@ -293,15 +290,10 @@ namespace PTM.View.Controls
 			this.indicator2.BackColor = System.Drawing.Color.Black;
 			this.indicator2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indicator2.ForeColor = System.Drawing.Color.Lime;
-			this.indicator2.GraphWidth = 33;
 			this.indicator2.Location = new System.Drawing.Point(3, 16);
-			this.indicator2.Maximum = 2147483647;
-			this.indicator2.Minimum = 0;
 			this.indicator2.Name = "indicator2";
 			this.indicator2.Size = new System.Drawing.Size(66, 61);
 			this.indicator2.TabIndex = 0;
-			this.indicator2.TextValue = "";
-			this.indicator2.Value = 0;
 			// 
 			// panel1
 			// 
@@ -315,8 +307,8 @@ namespace PTM.View.Controls
 			// toolBar
 			// 
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																					   this.toolBarButton1,
-																					   this.toolBarButton2});
+																											  this.toolBarButton1,
+																											  this.toolBarButton2});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;

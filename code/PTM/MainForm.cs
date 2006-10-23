@@ -483,8 +483,5 @@ namespace PTM
 		}
 		#endregion
 
-
-
-
 	} //MainForm
 } //end of namespace

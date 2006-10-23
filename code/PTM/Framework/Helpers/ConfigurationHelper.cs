@@ -91,7 +91,7 @@ namespace PTM.Framework.Helpers
 		
 		public static string GetVersionString()
 		{
-			return "beta v. 1.3";
+			return "beta v. 1.4";
 		} //GetVersionString
 		
 		public static string GetInternalVersionString()

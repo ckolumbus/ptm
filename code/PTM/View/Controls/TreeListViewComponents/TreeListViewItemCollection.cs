@@ -73,7 +73,16 @@ namespace PTM.View.Controls.TreeListViewComponents
 				TreeListViewItem b = (TreeListViewItem) y;
 				int res = 1;
 				if(Column < a.SubItems.Count && Column < b.SubItems.Count)
-					res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
+				{
+					try
+					{
+						res =Convert.ToInt32(double.Parse(a.SubItems[Column].Text.Replace("%", null)) - double.Parse(b.SubItems[Column].Text.Replace("%", null)));
+					}
+					catch
+					{
+						res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
+					}					
+				}
 				switch(SortOrder)
 				{
 					case SortOrder.Ascending:
