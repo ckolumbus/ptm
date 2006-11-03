@@ -472,7 +472,7 @@ namespace PTM.View.Controls
 					totalTime += summary.TotalActiveTime;
 					totalTime += summary.TotalInactiveTime;
 					if (!summary.IsDefaultTask ||
-					    (summary.IsDefaultTask && DefaultTasks.IsActive((DefaultTaskEnum) summary.DefaultTaskId)))
+					    (summary.IsDefaultTask && DefaultTasks.GetDefaultTask(summary.DefaultTaskId).IsActive))
 						totalActiveTime += summary.TotalActiveTime;
 
 					TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
@@ -589,7 +589,7 @@ namespace PTM.View.Controls
 				PTMDataset.TasksRow task;
 				task = Tasks.FindById(Logs.CurrentLog.TaskId);
 				TaskSummary sum = (TaskSummary) currentTaskSummary.Tag;
-				if (task.IsDefaultTask && !DefaultTasks.IsActive((DefaultTaskEnum) task.DefaultTaskId))
+				if (task.IsDefaultTask && !DefaultTasks.GetDefaultTask(task.DefaultTaskId).IsActive)
 				{
 					sum.TotalInactiveTime++;
 				}

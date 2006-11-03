@@ -29,13 +29,13 @@ namespace PTM.Framework.Helpers
 			//Delete Idle logs
 			DbHelper.ExecuteNonQuery("DELETE FROM TasksLog " +
 				" WHERE TasksLog.TaskId IN " +
-				" (select Id from Tasks where Tasks.IsDefaultTask = 1 and Tasks.DefaultTaskId = "+ (int)DefaultTaskEnum.Idle +")" +
+				" (select Id from Tasks where Tasks.IsDefaultTask = 1 and Tasks.DefaultTaskId = "+ DefaultTasks.IdleTaskId +")" +
 				" AND TasksLog.InsertTime < ?", new string[] {"InsertTime"},
 				new object[] {limitDate});
 			
 			//Delete Idle tasks without any log
 			DbHelper.ExecuteNonQuery("DELETE FROM Tasks " +
-				"WHERE Tasks.IsDefaultTask = 1 AND Tasks.DefaultTaskId = " + (int)DefaultTaskEnum.Idle +
+				"WHERE Tasks.IsDefaultTask = 1 AND Tasks.DefaultTaskId = " + DefaultTasks.IdleTaskId +
 				" AND Tasks.Id Not In (select distinct TasksLog.TaskId from TasksLog inner join Tasks on TasksLog.TaskId = Tasks.Id )");
 			
 		}

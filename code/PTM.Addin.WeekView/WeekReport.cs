@@ -1,22 +1,21 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Calendar;
-using PTM.Framework;
 using PTM.Data;
+using PTM.Framework;
 using PTM.Framework.Infos;
 
 namespace PTM.Addin.WeekView
 {
-	public class WeekReport : PTM.Addin.TabPageAddin
+	public class WeekReport : TabPageAddin
 	{
 		private Calendar.DayView dayView;
-		private System.Windows.Forms.Button backButton;
-		private System.Windows.Forms.Button forwardButton;
-		private System.Windows.Forms.Label weekLabel;
-		private System.ComponentModel.IContainer components = null;
+		private Button backButton;
+		private Button forwardButton;
+		private Label weekLabel;
+		private IContainer components = null;
 		private int currentWeek;
 
 		public WeekReport()
@@ -26,7 +25,7 @@ namespace PTM.Addin.WeekView
 
 			base.Text = "Week Report";
 			// TODO: Add any initialization after the InitializeComponent call
-			this.dayView.ResolveAppointments+=new Calendar.ResolveAppointmentsEventHandler(dayView_ResolveAppointments);
+			this.dayView.ResolveAppointments+=new ResolveAppointmentsEventHandler(dayView_ResolveAppointments);
 			currentWeek = 0;
 		}
 
@@ -125,7 +124,7 @@ namespace PTM.Addin.WeekView
 		
 		#endregion
 
-		private void dayView_ResolveAppointments(object sender, Calendar.ResolveAppointmentsEventArgs args)
+		private void dayView_ResolveAppointments(object sender, ResolveAppointmentsEventArgs args)
 		{
 			try
 			{
@@ -134,12 +133,12 @@ namespace PTM.Addin.WeekView
 				do
 				{
 					MergedLogs logs;
-					logs = PTM.Framework.MergedLogs.GetMergedLogsByDay(day);
+					logs = MergedLogs.GetMergedLogsByDay(day);
 					foreach (MergedLog log in logs)
 					{				
 						PTMDataset.TasksRow task;
 						task = Tasks.FindById(log.MergeLog.TaskId);
-						if(task.IsDefaultTask && task.DefaultTaskId == (int)DefaultTaskEnum.Idle)
+						if(task.IsDefaultTask && task.DefaultTaskId == DefaultTasks.IdleTaskId)
 							continue;
 					
 						Appointment appointment = new Appointment();
@@ -148,7 +147,7 @@ namespace PTM.Addin.WeekView
 						appointment.Title = task.Description;
 						appointment.Color = Color.Green;
 						appointment.Locked = false;
-						if(task.IsDefaultTask && !DefaultTasks.IsActive( (DefaultTaskEnum)task.DefaultTaskId))
+						if(task.IsDefaultTask && !DefaultTasks.GetDefaultTask(task.DefaultTaskId).IsActive)
 						{
 							appointment.Color = Color.Yellow;
 						}
@@ -170,13 +169,13 @@ namespace PTM.Addin.WeekView
 			base.OnLoad (e);
 		}
 
-		private void backButton_Click(object sender, System.EventArgs e)
+		private void backButton_Click(object sender, EventArgs e)
 		{
 			this.currentWeek--;
 			SetWeek(currentWeek);
 		}
 		
-		private void forwardButton_Click(object sender, System.EventArgs e)
+		private void forwardButton_Click(object sender, EventArgs e)
 		{
 			this.currentWeek++;
 			SetWeek(currentWeek);

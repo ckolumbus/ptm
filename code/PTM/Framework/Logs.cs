@@ -67,13 +67,13 @@ namespace PTM.Framework
 			}
 		}
 		
-		public static void UpdateLogDefaultTask(int logId, DefaultTaskEnum defaultTaskEnum)
+		public static void UpdateLogDefaultTask(int logId, int defaultTaskId)
 		{
 			Log log = Logs.FindById(logId);
 			PTMDataset.TasksRow task;
 			task = Tasks.FindById(log.TaskId);
-			int defaultTaskId = Tasks.AddDeafultTask(task.ParentId, defaultTaskEnum);
-			Logs.UpdateLogTaskId(log.Id, defaultTaskId);
+			int taskId = Tasks.AddDeafultTask(task.ParentId, defaultTaskId);
+			Logs.UpdateLogTaskId(log.Id, taskId);
 		}
 		public static void DeleteLog(int id)
 		{
@@ -83,14 +83,14 @@ namespace PTM.Framework
 			PTMDataset.TasksRow taskRow;
 			taskRow = Tasks.FindById(log.TaskId);
 						
-			int idleTaskId = Tasks.AddDeafultTask(taskRow.ParentId, DefaultTaskEnum.Idle);
+			int idleTaskId = Tasks.AddDeafultTask(taskRow.ParentId, DefaultTasks.IdleTaskId);
 			UpdateLogTaskId(id, idleTaskId);
 		}
 		
-		public static Log AddDefaultTaskLog(int taskParentId, DefaultTaskEnum defaultTaskEnum)
+		public static Log AddDefaultTaskLog(int taskParentId, int defaultTaskId)
 		{
-			int defaultTaskId = Tasks.AddDeafultTask(taskParentId, defaultTaskEnum);
-			return AddLog(defaultTaskId);
+			int taskId = Tasks.AddDeafultTask(taskParentId, defaultTaskId);
+			return AddLog(taskId);
 		}
 		
 		public static Log FindById(int id)
@@ -152,7 +152,7 @@ namespace PTM.Framework
 				return;
 			}
 			
-			int defaultTaskId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
+			int defaultTaskId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.IdleTaskId);
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 			int duration = (int) ((DateTime.Now - lastLogFinish).TotalSeconds > ((int) config.Value)*60
 			                      	? (int) config.Value*60

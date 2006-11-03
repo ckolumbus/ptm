@@ -312,6 +312,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "View\Controls\DefaultTaskMenuItem.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "View\Controls\Icons.resx"
                     BuildAction = "EmbeddedResource"
                 />

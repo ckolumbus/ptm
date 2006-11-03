@@ -48,15 +48,15 @@ namespace PTM.Test.Business.Helpers
 			task3.ParentId = task1.Id;
 			task3.Id = Tasks.AddTasksRow(task3);
 
-			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTaskEnum.OtherPersonal);
-			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTaskEnum.LunchTime);
-			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTaskEnum.CheckingJobMail);
-			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTaskEnum.JobMeeting);
+			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
+			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
+			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
+			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.GetDefaultTask(5).DefaultTaskId);
 
-			int rootchildidleId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTaskEnum.Idle);
-			int task1childidleId = Tasks.AddDeafultTask(task1.Id, DefaultTaskEnum.Idle);
-			int task2childidleId = Tasks.AddDeafultTask(task2.Id, DefaultTaskEnum.Idle);
-			int task3childidleId = Tasks.AddDeafultTask(task3.Id, DefaultTaskEnum.Idle);
+			int rootchildidleId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.IdleTaskId);
+			int task1childidleId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.IdleTaskId);
+			int task2childidleId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.IdleTaskId);
+			int task3childidleId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.IdleTaskId);
 
 			int duration = (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value*60;
 			
@@ -97,7 +97,7 @@ namespace PTM.Test.Business.Helpers
 			int idleTasksCount =
 				(int)
 				DbHelper.ExecuteScalar("select count(Id) from Tasks where Tasks.IsDefaultTask = 1 and Tasks.DefaultTaskId = " +
-				                       (int) DefaultTaskEnum.Idle);
+				                       DefaultTasks.IdleTaskId);
 			Assert.AreEqual(3, idleTasksCount);
 		}
 
@@ -131,10 +131,10 @@ namespace PTM.Test.Business.Helpers
 			task3.ParentId = task1.Id;
 			task3.Id = Tasks.AddTasksRow(task3);
 
-			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTaskEnum.OtherPersonal);
-			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTaskEnum.LunchTime);
-			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTaskEnum.CheckingJobMail);
-			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTaskEnum.JobMeeting);
+			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
+			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
+			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
+			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.GetDefaultTask(5).DefaultTaskId);
 
 			int duration = (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value*60;
 			

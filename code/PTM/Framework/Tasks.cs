@@ -221,7 +221,7 @@ namespace PTM.Framework
 			}
 		}
 
-		public static int AddDeafultTask(int taskParentId, DefaultTaskEnum defaultTaskEnum)
+		public static int AddDeafultTask(int taskParentId, int defaultTaskId)
 		{
 			PTMDataset.TasksRow[] childRows;
 			childRows = GetChildTasks(taskParentId);
@@ -229,7 +229,7 @@ namespace PTM.Framework
 			int idleTaskId = -1;
 			foreach (PTMDataset.TasksRow childRow in childRows)
 			{
-				if (childRow.IsDefaultTask && childRow.DefaultTaskId == (int) defaultTaskEnum)
+				if (childRow.IsDefaultTask && childRow.DefaultTaskId == defaultTaskId)
 				{
 					idleTaskId = childRow.Id;
 					break;
@@ -239,9 +239,9 @@ namespace PTM.Framework
 			if (idleTaskId == -1)
 			{
 				PTMDataset.TasksRow row = NewTasksRow();
-				row.Description = DefaultTasks.GetDefaultTaskDescription(defaultTaskEnum);
+				row.Description = DefaultTasks.GetDefaultTask(defaultTaskId).Description;
 				row.IsDefaultTask = true;
-				row.DefaultTaskId = (int) defaultTaskEnum;
+				row.DefaultTaskId = defaultTaskId;
 				row.ParentId = taskParentId;
 				row.Id = AddTasksRow(row);
 				idleTaskId = row.Id;

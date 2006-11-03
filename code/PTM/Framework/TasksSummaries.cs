@@ -59,14 +59,14 @@ namespace PTM.Framework
 				if ( sumRow.IsDefaultTask )
 				{
 					sumRow.DefaultTaskId = row.DefaultTaskId;
-					if(!DefaultTasks.IsActive((DefaultTaskEnum) sumRow.DefaultTaskId))
+					if(!DefaultTasks.GetDefaultTask(sumRow.DefaultTaskId).IsActive)
 					{
 						sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
 						sumRow.TotalActiveTime = 0;
 					}
 				}//if
 				
-				if(sumRow.DefaultTaskId!=(int)DefaultTaskEnum.Idle)//ignore idle time
+				if(sumRow.DefaultTaskId!=DefaultTasks.IdleTaskId)//ignore idle time
 				{
 					if (row.Id != parentRow.Id)
 					{
