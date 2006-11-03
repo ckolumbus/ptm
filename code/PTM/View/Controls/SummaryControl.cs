@@ -45,6 +45,7 @@ namespace PTM.View.Controls
 		private System.Windows.Forms.DateTimePicker toDateTimePicker;
 		private System.Windows.Forms.RadioButton fromRadioButton;
 		private System.Windows.Forms.RadioButton toRadioButton;
+		private System.Windows.Forms.ToolTip toolTip;
 		private PTMDataset.TasksRow parentRow;
 
 		internal SummaryControl()
@@ -145,6 +146,7 @@ namespace PTM.View.Controls
 			this.fromRadioButton = new System.Windows.Forms.RadioButton();
 			this.toRadioButton = new System.Windows.Forms.RadioButton();
 			this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -159,10 +161,10 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																											  this.TaskHeader,
-																											  this.ActiveTimeHeader,
-																											  this.InactiveTimeHeader,
-																											  this.PercentHeader});
+																					   this.TaskHeader,
+																					   this.ActiveTimeHeader,
+																					   this.InactiveTimeHeader,
+																					   this.PercentHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -293,7 +295,7 @@ namespace PTM.View.Controls
 			this.indicator2.Location = new System.Drawing.Point(3, 16);
 			this.indicator2.Name = "indicator2";
 			this.indicator2.Size = new System.Drawing.Size(66, 61);
-			this.indicator2.TabIndex = 0;
+			this.indicator2.TabIndex = 0;			
 			// 
 			// panel1
 			// 
@@ -307,8 +309,8 @@ namespace PTM.View.Controls
 			// toolBar
 			// 
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																											  this.toolBarButton1,
-																											  this.toolBarButton2});
+																					   this.toolBarButton1,
+																					   this.toolBarButton2});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;
@@ -532,6 +534,11 @@ namespace PTM.View.Controls
 				int percentActiveTime = Convert.ToInt32(this.totalActiveTime*100/totalTime);
 				indicator2.Value = percentActiveTime;
 				indicator2.TextValue = percentActiveTime + "%";
+				string activeTime = new TimeSpan(0, 0, Convert.ToInt32(totalActiveTime, CultureInfo.InvariantCulture)).TotalHours.ToString("0.00",
+					CultureInfo.
+					InvariantCulture) +
+					" hrs.";
+				toolTip.SetToolTip(this.indicator2, activeTime);
 			}
 		}
 
