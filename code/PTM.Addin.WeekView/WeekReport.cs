@@ -196,6 +196,13 @@ namespace PTM.Addin.WeekView
 			}
 		}
 
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.F5)
+				SetWeek(currentWeek);
+			base.OnKeyDown (e);
+		}
+
 		
 	}
 }

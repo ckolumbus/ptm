@@ -538,50 +538,17 @@ namespace PTM.View.Controls
 			this.rigthClickMenu.MergeMenu(defaultTasksMenu);
 		}
 		
-		private void CreateNotifyMenu()
-		{
-			MenuItem exitContextMenuItem = new MenuItem();
-			MenuItem menuItem1 = new MenuItem();
-			this.notifyContextMenu.MenuItems.Clear();
-			this.notifyContextMenu.MenuItems.AddRange(new MenuItem[] {
-																							  exitContextMenuItem,
-																							  menuItem1});
-
-			exitContextMenuItem.Index = 0;
-			exitContextMenuItem.Text = "Exit";
-			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);
-			
-			menuItem1.Index = 1;
-			menuItem1.Text = "-";
-			
-			ArrayList a = new ArrayList();
-			foreach (DefaultTask defaultTask in DefaultTasks.List)
-			{
-				DefaultTaskMenuItem menuItem = new DefaultTaskMenuItem(defaultTask.DefaultTaskId);
-				menuItem.Text = defaultTask.Description;
-				menuItem.Click+=new EventHandler(mnuDefaulTaskAdd_Click);
-				a.Add(menuItem);
-			}
-			ContextMenu defaultTasksMenu = new ContextMenu((MenuItem[]) a.ToArray(typeof(MenuItem)));
-			this.notifyContextMenu.MergeMenu(defaultTasksMenu);
-		}
+		
 		
 		private void CreateNewDefaultTaskComboBox()
 		{
 			this.newDefaultTaskComboBox.Items.Clear();
 			
+			this.newDefaultTaskComboBox.SelectedIndexChanged-=new EventHandler(newDefaultTaskComboBox_SelectedIndexChanged);
 			this.newDefaultTaskComboBox.ValueMember = "DefaultTaskId";
 			this.newDefaultTaskComboBox.DisplayMember = "Description";
 			this.newDefaultTaskComboBox.DataSource = DefaultTasks.List;
-			
-			
-//			this.newDefaultTaskComboBox.Items.AddRange(new object[] {
-//																		"Lunch Time",
-//																		"Other/Personal",
-//																		"Job Phone Call",
-//																		"Checking Job Email",
-//																		"Job Meeting"});
-			
+			this.newDefaultTaskComboBox.SelectedIndexChanged+=new EventHandler(newDefaultTaskComboBox_SelectedIndexChanged);			
 		}
 		#endregion
 
@@ -655,7 +622,33 @@ namespace PTM.View.Controls
 		#region NotifyContextMenu
 
 		internal event EventHandler Exit;
+		private void CreateNotifyMenu()
+		{
+			MenuItem exitContextMenuItem = new MenuItem();
+			MenuItem menuItem1 = new MenuItem();
+			this.notifyContextMenu.MenuItems.Clear();
+			this.notifyContextMenu.MenuItems.AddRange(new MenuItem[] {
+																							exitContextMenuItem,
+																							menuItem1});
 
+			exitContextMenuItem.Index = 0;
+			exitContextMenuItem.Text = "Exit";
+			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);
+			
+			menuItem1.Index = 1;
+			menuItem1.Text = "-";
+			
+			ArrayList a = new ArrayList();
+			foreach (DefaultTask defaultTask in DefaultTasks.List)
+			{
+				DefaultTaskMenuItem menuItem = new DefaultTaskMenuItem(defaultTask.DefaultTaskId);
+				menuItem.Text = defaultTask.Description;
+				menuItem.Click+=new EventHandler(mnuDefaulTaskAdd_Click);
+				a.Add(menuItem);
+			}
+			ContextMenu defaultTasksMenu = new ContextMenu((MenuItem[]) a.ToArray(typeof(MenuItem)));
+			this.notifyContextMenu.MergeMenu(defaultTasksMenu);
+		}
 		private void exitContextMenuItem_Click(object sender, EventArgs e)
 		{
 			this.notifyTimer.Stop();
@@ -834,6 +827,11 @@ namespace PTM.View.Controls
 		{
 			if(this.newDefaultTaskComboBox.SelectedIndex==-1)
 				return;
+			
+			if (Tasks.CurrentTaskRow == null)
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, (int) this.newDefaultTaskComboBox.SelectedValue);
+			else
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, (int) this.newDefaultTaskComboBox.SelectedValue);
 			
 //			if(this.newDefaultTaskComboBox.SelectedIndex==0)
 //				this.menuLunchTime_Click(sender, e);
