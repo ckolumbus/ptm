@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Drawing;
+using System.Globalization;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace PTM.View
@@ -30,7 +33,7 @@ namespace PTM.View
 			return (int) iconsMapTable[key];
 		} //GetIndex
 
-		internal static int AddIcon(string key, Icon icon)
+		private static int AddIcon(string key, Icon icon)
 		{
 			if (iconsMapTable.Contains(key))
 			{
@@ -79,5 +82,30 @@ namespace PTM.View
 //			if(ri!= null) return ri;
 //			return null;
 		} //GetFileIcon
+		
+		
+		private static void LoadIconsFromResources()
+		{
+			
+			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", System.Reflection.Assembly.GetExecutingAssembly());
+
+			Icon resIcon;
+			int i = 1;
+			do
+			{
+				resIcon = (Icon) resourceManager.GetObject(
+					"Icon" + i.ToString(CultureInfo.InvariantCulture));
+				if (resIcon != null)
+				{
+					IconsManager.AddIcon(
+						(i - 1).ToString(CultureInfo.InvariantCulture), resIcon);
+				} //if
+				i++;
+			} while (resIcon != null);
+		} //LoadIconsFromResources
+		public static void Initialize()
+		{
+			LoadIconsFromResources();
+		}
 	} //end of class IconsManager
 } //end of namespace

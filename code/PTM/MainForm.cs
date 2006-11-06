@@ -54,7 +54,7 @@ namespace PTM
 			Application.DoEvents();
 			base.Text += " " + ConfigurationHelper.GetVersionString();
 			this.tasksLogControl.Exit += new EventHandler(Exit);
-			LoadIconsFromResources();
+			//LoadIconsFromResources();
 			Application.DoEvents();
 			UpdateStartUpPath();
 			Application.DoEvents();
@@ -93,25 +93,6 @@ namespace PTM
 		} //UpdateStartUpPath
 
 		
-		private void LoadIconsFromResources()
-		{
-			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", GetType().Assembly);
-
-			Icon resIcon;
-			int i = 1;
-			do
-			{
-				resIcon = (Icon) resourceManager.GetObject(
-				                 	"Icon" + i.ToString(CultureInfo.InvariantCulture));
-				if (resIcon != null)
-				{
-					IconsManager.AddIcon(
-						(i - 1).ToString(CultureInfo.InvariantCulture), resIcon);
-				} //if
-				i++;
-			} while (resIcon != null);
-		} //LoadIconsFromResources
-
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>

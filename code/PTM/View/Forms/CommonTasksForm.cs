@@ -264,12 +264,17 @@ namespace PTM.View.Forms
 		{
 			foreach (DefaultTask defaultTask in DefaultTasks.List)
 			{
+				if(defaultTask.DefaultTaskId == DefaultTasks.IdleTaskId)
+					continue;
 				TreeListViewItem item = new TreeListViewItem(defaultTask.Description, new string[]{defaultTask.IsActive.ToString()});
-				item.ImageIndex = IconsManager.GetIndex(defaultTask.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
+				item.ImageIndex = IconsManager.GetIndex(defaultTask.IconId.ToString());
 				item.Tag = defaultTask.DefaultTaskId;
 				this.list.Items.Add(item);				
 			}
-			
+			if(this.list.Items.Count>0)
+			{
+				this.list.Items[0].Selected = true;
+			}
 		}
 
 		private void list_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -301,7 +306,7 @@ namespace PTM.View.Forms
 
 		private void btnNew_Click(object sender, System.EventArgs e)
 		{
-			New();
+			New();			
 		}
 
 		private void New()
@@ -310,6 +315,7 @@ namespace PTM.View.Forms
 			this.txtDescription.Text = String.Empty;
 			this.chkIsActive.Checked = false;
 			this.picture.Image = IconsManager.GetIcon("0").ToBitmap();
+			this.txtDescription.Focus();
 		}
 
 		private void btnSave_Click(object sender, System.EventArgs e)

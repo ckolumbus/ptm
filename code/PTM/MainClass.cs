@@ -172,7 +172,8 @@ namespace PTM
 			splash.SetLoadProgress(60);
 			splash.Refresh();
 			Application.DoEvents();
-			
+			IconsManager.Initialize();
+			Application.DoEvents();
 			MainForm main = new MainForm();
 			if (runSingleInstance)
 			{
