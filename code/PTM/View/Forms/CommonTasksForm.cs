@@ -28,6 +28,8 @@ namespace PTM.View.Forms
 		private System.Windows.Forms.Button btnNew;
 		private System.Windows.Forms.Button btnRemove;
 		private System.Windows.Forms.Button btnSave;
+		private System.Windows.Forms.Button btnLeft;
+		private System.Windows.Forms.Button btnRigth;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -65,11 +67,14 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(CommonTasksForm));
 			this.list = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.btnRigth = new System.Windows.Forms.Button();
+			this.btnLeft = new System.Windows.Forms.Button();
 			this.chkIsActive = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtDescription = new System.Windows.Forms.TextBox();
@@ -85,9 +90,10 @@ namespace PTM.View.Forms
 			// 
 			// list
 			// 
+			this.list.AutoArrange = false;
 			this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																										 this.columnHeader1,
-																										 this.columnHeader2});
+																				   this.columnHeader1,
+																				   this.columnHeader2});
 			this.list.HideSelection = false;
 			this.list.Location = new System.Drawing.Point(8, 16);
 			this.list.MultiSelect = false;
@@ -118,6 +124,8 @@ namespace PTM.View.Forms
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.btnRigth);
+			this.groupBox2.Controls.Add(this.btnLeft);
 			this.groupBox2.Controls.Add(this.chkIsActive);
 			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.Controls.Add(this.txtDescription);
@@ -129,6 +137,22 @@ namespace PTM.View.Forms
 			this.groupBox2.TabIndex = 2;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Preferences";
+			// 
+			// btnRigth
+			// 
+			this.btnRigth.Image = ((System.Drawing.Image)(resources.GetObject("btnRigth.Image")));
+			this.btnRigth.Location = new System.Drawing.Point(40, 64);
+			this.btnRigth.Name = "btnRigth";
+			this.btnRigth.Size = new System.Drawing.Size(18, 18);
+			this.btnRigth.TabIndex = 6;
+			// 
+			// btnLeft
+			// 
+			this.btnLeft.Image = ((System.Drawing.Image)(resources.GetObject("btnLeft.Image")));
+			this.btnLeft.Location = new System.Drawing.Point(16, 64);
+			this.btnLeft.Name = "btnLeft";
+			this.btnLeft.Size = new System.Drawing.Size(18, 18);
+			this.btnLeft.TabIndex = 5;
 			// 
 			// chkIsActive
 			// 
@@ -292,5 +316,7 @@ namespace PTM.View.Forms
 		{
 			
 		}
+
+
 	}
 }
