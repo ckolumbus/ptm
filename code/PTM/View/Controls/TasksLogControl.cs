@@ -757,15 +757,17 @@ namespace PTM.View.Controls
 			
 			if (taskRow.IsDefaultTask)
 			{
-				item.ImageIndex = IconsManager.GetIndex(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
+				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.List[taskRow.DefaultTaskId];
+				item.ImageIndex = defaultTasks.IconId;
 				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon = IconsManager.GetIcon(taskRow.DefaultTaskId.ToString(CultureInfo.InvariantCulture));
+					notifyIcon.Icon = IconsManager.GetCommonTaskIcon(defaultTasks.IconId);
 			}
 			else
 			{
-				item.ImageIndex = IconsManager.GetIndex("0");
+				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.List[DefaultTasks.IdleTaskId];
+				item.ImageIndex = defaultTasks.IconId;
 				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon = IconsManager.GetIcon("0");
+					notifyIcon.Icon = IconsManager.GetCommonTaskIcon(defaultTasks.IconId);
 			}
 		}
 

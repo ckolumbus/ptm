@@ -14,52 +14,30 @@ namespace PTM.View
 		} //IconsManager
 
 		private static ImageList iconsList = new ImageList();
-		private static ArrayList iconsArray = new ArrayList();
-		private static Hashtable iconsMapTable = new Hashtable();
+		//private static ArrayList iconsArray = new ArrayList();
+		private static Hashtable iconsCommonTasks = new Hashtable();
 
 		internal static ImageList IconsList
 		{
 			get { return iconsList; }
 		} //IconsList
 
-
-		internal static Icon GetIcon(string key)
+		internal static Icon GetCommonTaskIcon(int iconId)
 		{
-			return (Icon) iconsArray[(int) iconsMapTable[key]];
-		} //GetIcon
-
-		internal static int GetIndex(string key)
-		{
-			return (int) iconsMapTable[key];
-		} //GetIndex
-
-		private static int AddIcon(string key, Icon icon)
-		{
-			if (iconsMapTable.Contains(key))
-			{
-				return (int) iconsMapTable[key];
-			}
-			else
-			{
-				iconsList.Images.Add(icon);
-				iconsArray.Add(icon);
-				iconsMapTable.Add(key, iconsList.Images.Count - 1);
-				return iconsList.Images.Count - 1;
-			} //if-else
-		} //AddIcon
-
+			return (Icon) iconsCommonTasks[iconId];
+		}
+		
 		internal static int AddIconFromFile(string fileName)
 		{
-			if (iconsMapTable.Contains(fileName))
+			if (iconsCommonTasks.Contains(fileName))
 			{
-				return (int) iconsMapTable[fileName];
+				return (int) iconsCommonTasks[fileName];
 			}
 			else
 			{
 				Icon icon = GetFileIcon(fileName);
 				iconsList.Images.Add(icon);
-				iconsArray.Add(icon);
-				iconsMapTable.Add(fileName, iconsList.Images.Count - 1);
+				iconsCommonTasks.Add(fileName, iconsList.Images.Count - 1);
 				return iconsList.Images.Count - 1;
 			} //if-else
 		} //AddIconFromFile
@@ -96,9 +74,9 @@ namespace PTM.View
 				resIcon = (Icon) resourceManager.GetObject(
 					"Icon" + i.ToString(CultureInfo.InvariantCulture));
 				if (resIcon != null)
-				{
-					IconsManager.AddIcon(
-						(i - 1).ToString(CultureInfo.InvariantCulture), resIcon);
+				{				
+					iconsList.Images.Add(resIcon);
+					iconsCommonTasks.Add(i - 1, resIcon);
 				} //if
 				i++;
 			} while (resIcon != null);

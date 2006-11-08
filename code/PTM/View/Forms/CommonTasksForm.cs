@@ -215,6 +215,7 @@ namespace PTM.View.Forms
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 7;
 			this.btnCancel.Text = "Cancel";
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// btnOk
 			// 
@@ -236,7 +237,9 @@ namespace PTM.View.Forms
 			// 
 			// CommonTasksForm
 			// 
+			this.AcceptButton = this.btnOk;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(370, 328);
 			this.Controls.Add(this.btnSave);
 			this.Controls.Add(this.btnCancel);
@@ -267,13 +270,17 @@ namespace PTM.View.Forms
 				if(defaultTask.DefaultTaskId == DefaultTasks.IdleTaskId)
 					continue;
 				TreeListViewItem item = new TreeListViewItem(defaultTask.Description, new string[]{defaultTask.IsActive.ToString()});
-				item.ImageIndex = IconsManager.GetIndex(defaultTask.IconId.ToString());
-				item.Tag = defaultTask.DefaultTaskId;
+				item.ImageIndex = defaultTask.IconId;
+				item.Tag = defaultTask;
 				this.list.Items.Add(item);				
 			}
 			if(this.list.Items.Count>0)
 			{
 				this.list.Items[0].Selected = true;
+			}
+			else
+			{
+				New();
 			}
 		}
 
@@ -283,7 +290,9 @@ namespace PTM.View.Forms
 				return;
 			TreeListViewItem item;
 			item = list.SelectedItems[0];
-			this.picture.Image = IconsManager.GetIcon(item.ImageIndex.ToString()).ToBitmap();
+			DefaultTask defaultTask = (DefaultTask) item.Tag;
+			this.picture.Image = IconsManager.GetCommonTaskIcon(defaultTask.IconId).ToBitmap();
+			this.picture.Tag = defaultTask.IconId;
 			this.txtDescription.Text = item.Text;
 			this.chkIsActive.Checked = bool.Parse(item.SubItems[1].Text);
 		}
@@ -314,13 +323,40 @@ namespace PTM.View.Forms
 			this.list.SelectedItems.Clear();
 			this.txtDescription.Text = String.Empty;
 			this.chkIsActive.Checked = false;
-			this.picture.Image = IconsManager.GetIcon("0").ToBitmap();
+			this.picture.Image = IconsManager.GetCommonTaskIcon(0).ToBitmap();
+			this.picture.Tag = 0;
 			this.txtDescription.Focus();
 		}
 
 		private void btnSave_Click(object sender, System.EventArgs e)
 		{
-			
+			if(this.list.SelectedItems.Count ==0)
+			{
+				DefaultTask defaultTask = new DefaultTask();
+				defaultTask.DefaultTaskId = -1;
+				defaultTask.Description = this.txtDescription.Text;
+				defaultTask.IconId = (int) this.picture.Tag;
+				defaultTask.IsActive = this.chkIsActive.Checked;
+				TreeListViewItem item = new TreeListViewItem(defaultTask.Description, new string[]{defaultTask.IsActive.ToString()});
+				item.ImageIndex = defaultTask.IconId;
+				item.Tag = defaultTask;
+				this.list.Items.Add(item);
+			}
+			else
+			{
+				DefaultTask defaultTask = (DefaultTask) this.list.SelectedItems[0].Tag;
+				defaultTask.Description = this.txtDescription.Text;
+				defaultTask.IconId = (int) this.picture.Tag;
+				defaultTask.IsActive = this.chkIsActive.Checked;
+				this.list.SelectedItems[0].SubItems[0].Text = defaultTask.Description;
+				this.list.SelectedItems[0].SubItems[1].Text = defaultTask.IsActive.ToString();
+				this.list.SelectedItems[0].ImageIndex = defaultTask.IconId;
+			}
+		}
+
+		private void btnCancel_Click(object sender, System.EventArgs e)
+		{
+			this.Close();
 		}
 
 
