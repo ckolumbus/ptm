@@ -275,6 +275,8 @@ namespace PTM.Data
 				return OleDbType.Date;
 			if(paramValue.GetType() == typeof(string))
 				return OleDbType.VarWChar;
+			if(paramValue.GetType() == typeof(bool))
+				return OleDbType.Boolean;
 			
 			throw new DataException("Type Db type not found:" + paramValue.ToString());
 		}

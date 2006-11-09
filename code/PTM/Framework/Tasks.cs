@@ -52,6 +52,7 @@ namespace PTM.Framework
 			LoadAllTasks();
 			currentTaskRow = null;
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+			DefaultTasks.DefaultTaskChanged+=new PTM.Framework.DefaultTasks.DefaultTaskChangeEventHandler(DefaultTasks_DefaultTaskChanged);
 			tasksDataTable.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowChanged);
 			tasksDataTable.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowDeleting);
 		}
@@ -423,6 +424,20 @@ namespace PTM.Framework
 			ManageTaskLogRowChanged(e);
 		}
 
+		private static void DefaultTasks_DefaultTaskChanged(PTM.Framework.DefaultTasks.DefaultTaskChangeEventArgs e)
+		{
+			if(e.Action == DataRowAction.Change)
+			{
+				PTMDataset.TasksRow[] rows;
+				rows = (PTMDataset.TasksRow[]) tasksDataTable.Select("DefaultTaskId = " + e.DefaultTask.DefaultTaskId);
+				for (int i = 0;i<rows.Length;i++)
+				{
+					PTMDataset.TasksRow tasksRow = CloneRow(rows[i]);
+					tasksRow.Description = e.DefaultTask.Description;
+					UpdateTaskRow(tasksRow);
+				}
+			}
+		}
 		private static PTMDataset.TasksRow FindByParentIdAndDefaultTask(int parentId, int defaultTaskId)
 		{
 			PTMDataset.TasksRow[] rows;
@@ -475,5 +490,7 @@ namespace PTM.Framework
 		}
 
 		#endregion
+
+		
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Data;
 using PTM.Data;
 
 namespace PTM.Framework
@@ -51,8 +52,13 @@ namespace PTM.Framework
 		{
 			if(table.ContainsKey(defaultTaskId))
 			{
-				DbHelper.ExecuteNonQuery("Update Set Hidden = 1 from DefaultTasks Where Id  = " + defaultTaskId.ToString());
+				DbHelper.ExecuteNonQuery("Update DefaultTasks Set Hidden = 1 Where Id  = " + defaultTaskId.ToString());
+				DefaultTask df = (DefaultTask) table[defaultTaskId];
 				table.Remove(defaultTaskId);
+				if(DefaultTaskChanged!=null)
+				{
+					DefaultTaskChanged(new DefaultTaskChangeEventArgs(df, DataRowAction.Delete));
+				}
 			}
 			else
 			{
@@ -63,9 +69,9 @@ namespace PTM.Framework
 		public static int Add(string description, bool isActive, int iconId)
 		{
 			int id = Convert.ToInt32(DbHelper.ExecuteScalar("Select Max(Id) from DefaultTasks")) + 1;
-			DbHelper.ExecuteNonQuery("Insert into DefaultTasks (Id, Description, IsActive, Icon) values (?, ?, ?, ?)",
-			                         new string[] {"Id", "Description", "IsActive", "Icon"}, 
-			                         new object[] {id, description, isActive, iconId});
+			DbHelper.ExecuteNonQuery("Insert into DefaultTasks (Id, Description, IsActive, Icon, Hidden) values (?, ?, ?, ?, ?)",
+			                         new string[] {"Id", "Description", "IsActive", "Icon", "Hidden"}, 
+			                         new object[] {id, description, isActive, iconId, false});
 			
 			DefaultTask df = new DefaultTask();
 			df.DefaultTaskId = id;
@@ -73,6 +79,10 @@ namespace PTM.Framework
 			df.IsActive = isActive;
 			df.IconId = iconId;
 			table.Add(id, df);
+			if(DefaultTaskChanged!=null)
+			{
+				DefaultTaskChanged(new DefaultTaskChangeEventArgs(df, DataRowAction.Add));
+			}
 			return id;
 		}
 
@@ -80,7 +90,7 @@ namespace PTM.Framework
 		{
 			if(table.ContainsKey(defaultTaskId))
 			{
-				DbHelper.ExecuteNonQuery("Update Set Description = ?, IsActive = ?, Icon = ? from DefaultTasks Where Id  = " + defaultTaskId.ToString(), 
+				DbHelper.ExecuteNonQuery("Update DefaultTasks Set Description = ?, IsActive = ?, Icon = ? Where Id  = " + defaultTaskId.ToString(), 
 					new string[]{"Description", "IsActive", "Icon"}, new object[]{description, isActive, iconId} );
 				DefaultTask df = new DefaultTask();
 				df.DefaultTaskId = defaultTaskId;
@@ -88,12 +98,38 @@ namespace PTM.Framework
 				df.IsActive = isActive;
 				df.IconId = iconId;
 				table[defaultTaskId] = df;
+				if(DefaultTaskChanged!=null)
+				{
+					DefaultTaskChanged(new DefaultTaskChangeEventArgs(df, DataRowAction.Change));
+				}
 			}
 			else
 			{
 				throw new ApplicationException("Update failed. The common task with Id = " + defaultTaskId + " doesn't exists.");
 			}	
 		}
+		
+		public delegate void DefaultTaskChangeEventHandler(DefaultTaskChangeEventArgs e);
+		public class DefaultTaskChangeEventArgs : EventArgs
+		{
+			private DefaultTask defaultTask;
+			private DataRowAction action;
+			public DefaultTaskChangeEventArgs(DefaultTask defaultTask, DataRowAction action)
+			{
+				this.defaultTask = defaultTask;
+				this.action = action;
+			}
+			public DefaultTask DefaultTask
+			{
+				get { return defaultTask; }
+			}
+			
+			public DataRowAction Action
+			{
+				get { return action; }
+			}
+		}
+		public static event DefaultTaskChangeEventHandler DefaultTaskChanged;
 	}
 	
 	public class DefaultTask
