@@ -39,6 +39,29 @@
 	<resheader name="Writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
+	  <!--Sad User -->
+	 <data name="Icon0" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAAAC
+        AAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/
+        AAAA//8A/wAAAP8A/wD//wAA////ABEREREREREREREREREREREZmQDMzMzMzMzMzMzMAJmRGZmZAADM
+        zMzMzAAAAJmZkRmZmQAAzMzMzMwAAACZmZEZmZmZAADMzMzMAJmZmZmRGZmZmQAAzMzMzACZmZmZkRmZ
+        mZmZAP//AAAAAJmZmZEZmZmZmQD//wAAAACZmZmRGZmZmQAAAP//////AJmZkRmZmZkAAAD///8P/wCZ
+        mZEZmZmZAAAA////AAAAmZmRGZmZmQAAAP////AAAJmZkRmZmQAAAAD//////wCZmZEZmZkAAAAA////
+        //8AmZmRGZkAAAAA/////////wCZkRmZAAAAAP////////8AmZEZmQAAAAAAAP//AP8AmZmRGZkAAAAA
+        AAD//wD/AJmZkRmZAAAAAAD///8AAJmZmZEZmQAAAAAA////AACZmZmRGZkAAAAA//////8AmZmZkRmZ
+        AAAAAP//////AJmZmZEZmQAAAAAAAP//AJmZmZmRGZkAAAAAAAD//wCZmZmZkRmZmQAAAAAAAAAAAJmZ
+        mZEZmZkAAAAAAAAAAACZmZmRGZmZmQAAAAAAAACZmZmZkRmZmZkAAAAAAAAAmZmZmZEZmZmZmZmZmZmZ
+        mZmZmZmRGZmZmZmZmZmZmZmZmZmZkRmZmZmZmZmZmZmZmZmZmZERERERERERERERERERERERAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAoAAAAEAAAACAAAAABAAQAAAAAAIAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAA
+        AACAAIAAgIAAAMDAwACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////ABERERERERERGZAMzMwA
+        CZEZmQDMzAmZkRmZkP8AAJmRGZkAD///CZEZmQAP8AAJkRmQAA///wmRGQAA////8JEZAAAA/w8JkRkA
+        AA//AJmRGQAA///wmZEZAAAA/wmZkRmQAAAAAJmRGZkAAAAJmZEZmZmZmZmZkRERERERERERAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+</value>
+  </data>
 	<!--Happy User -->
 	<data name="Icon1" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -62,31 +85,8 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 </value>
   </data>
-  <!--Sad User -->
-	 <data name="Icon2" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAAAC
-        AAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/
-        AAAA//8A/wAAAP8A/wD//wAA////ABEREREREREREREREREREREZmQDMzMzMzMzMzMzMAJmRGZmZAADM
-        zMzMzAAAAJmZkRmZmQAAzMzMzMwAAACZmZEZmZmZAADMzMzMAJmZmZmRGZmZmQAAzMzMzACZmZmZkRmZ
-        mZmZAP//AAAAAJmZmZEZmZmZmQD//wAAAACZmZmRGZmZmQAAAP//////AJmZkRmZmZkAAAD///8P/wCZ
-        mZEZmZmZAAAA////AAAAmZmRGZmZmQAAAP////AAAJmZkRmZmQAAAAD//////wCZmZEZmZkAAAAA////
-        //8AmZmRGZkAAAAA/////////wCZkRmZAAAAAP////////8AmZEZmQAAAAAAAP//AP8AmZmRGZkAAAAA
-        AAD//wD/AJmZkRmZAAAAAAD///8AAJmZmZEZmQAAAAAA////AACZmZmRGZkAAAAA//////8AmZmZkRmZ
-        AAAAAP//////AJmZmZEZmQAAAAAAAP//AJmZmZmRGZkAAAAAAAD//wCZmZmZkRmZmQAAAAAAAAAAAJmZ
-        mZEZmZkAAAAAAAAAAACZmZmRGZmZmQAAAAAAAACZmZmZkRmZmZkAAAAAAAAAmZmZmZEZmZmZmZmZmZmZ
-        mZmZmZmRGZmZmZmZmZmZmZmZmZmZkRmZmZmZmZmZmZmZmZmZmZERERERERERERERERERERERAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAoAAAAEAAAACAAAAABAAQAAAAAAIAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAA
-        AACAAIAAgIAAAMDAwACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////ABERERERERERGZAMzMwA
-        CZEZmQDMzAmZkRmZkP8AAJmRGZkAD///CZEZmQAP8AAJkRmQAA///wmRGQAA////8JEZAAAA/w8JkRkA
-        AA//AJmRGQAA///wmZEZAAAA/wmZkRmQAAAAAJmRGZkAAAAJmZEZmZmZmZmZkRERERERERERAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-</value>
-  </data>
   <!-- Lunch -->
-	 <data name="Icon3" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+	 <data name="Icon2" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
@@ -109,7 +109,7 @@
 </value>
   </data>
   <!-- Other Personal -->
-   <data name="Icon4" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+   <data name="Icon3" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
@@ -132,7 +132,7 @@
 </value>
   </data>
   <!-- Phone -->
-  <data name="Icon5" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Icon4" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
@@ -155,7 +155,7 @@
 </value>
   </data>
   <!-- Mail -->
-  <data name="Icon6" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Icon5" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
@@ -178,7 +178,7 @@
 </value>
   </data>
   <!-- Out of my Place -->
-  <data name="Icon7" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Icon6" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
@@ -201,7 +201,7 @@
 </value>
   </data>
   <!-- On a Meeting-->
-  <data name="Icon8" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Icon7" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/

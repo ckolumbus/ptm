@@ -387,7 +387,7 @@ namespace PTM.View.Controls
 						                     		activeTime, percent.ToString("0.0%", CultureInfo.InvariantCulture),
 						                     		applicationsSummaryRow.TaskId.ToString(CultureInfo.InvariantCulture)
 						                     	});
-					lvi.ImageIndex = IconsManager.AddIconFromFile(applicationsSummaryRow.ApplicationFullPath);
+					lvi.ImageIndex = IconsManager.GetIconFromFile(applicationsSummaryRow.ApplicationFullPath);
 					this.applicationsList.Items.Add(lvi);
 				}
 				AppsActiveTimeValue.Text = ViewHelper.TimeSpanToTimeString(new TimeSpan(0, 0, appActiveTime));

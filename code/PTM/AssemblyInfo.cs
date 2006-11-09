@@ -5,10 +5,10 @@ using System.Reflection;
 // associated with an assembly.
 //
 [assembly : AssemblyTitle("PTM")]
-[assembly : AssemblyDescription("People Task Manager")]
+[assembly : AssemblyDescription("PTM")]
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("Carlos D. Estrada")]
-[assembly : AssemblyProduct("People Task Manager")]
+[assembly : AssemblyProduct("PTM")]
 [assembly : AssemblyCopyright("Carlos D. Estrada")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]

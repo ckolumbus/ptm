@@ -181,7 +181,7 @@ namespace PTM
 			// exitMenuItem
 			// 
 			this.exitMenuItem.Index = 1;
-			this.exitMenuItem.Text = "&Exit People Task Manager";
+			this.exitMenuItem.Text = "&Exit PTM";
 			this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
 			// 
 			// menuItem4
@@ -209,7 +209,7 @@ namespace PTM
 			// aboutMenuItem
 			// 
 			this.aboutMenuItem.Index = 0;
-			this.aboutMenuItem.Text = "About People Task Manager...";
+			this.aboutMenuItem.Text = "About PTM...";
 			this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
 			// 
 			// statusBar
@@ -332,7 +332,7 @@ namespace PTM
 			this.MinimumSize = new System.Drawing.Size(440, 456);
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "People Task Manager ";
+			this.Text = "PTM ";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();

@@ -14,20 +14,52 @@ namespace PTM.View
 		} //IconsManager
 
 		private static ImageList iconsList = new ImageList();
-		//private static ArrayList iconsArray = new ArrayList();
 		private static Hashtable iconsCommonTasks = new Hashtable();
-
 		internal static ImageList IconsList
 		{
 			get { return iconsList; }
 		} //IconsList
-
-		internal static Icon GetCommonTaskIcon(int iconId)
+		
+		internal static Hashtable CommonTaskIconsTable
 		{
-			return (Icon) iconsCommonTasks[iconId];
+			get
+			{
+				return (Hashtable) iconsCommonTasks.Clone();
+			}
 		}
 		
-		internal static int AddIconFromFile(string fileName)
+		private static void LoadIconsFromResources()
+		{
+			
+			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", System.Reflection.Assembly.GetExecutingAssembly());
+
+			Icon resIcon;
+			int i = 0;
+			do
+			{
+				resIcon = (Icon) resourceManager.GetObject(
+					"Icon" + i.ToString(CultureInfo.InvariantCulture));
+				if (resIcon != null)
+				{				
+					iconsList.Images.Add(resIcon);
+					iconsCommonTasks.Add(i, resIcon);
+				} //if
+				i++;
+			} while (resIcon != null);
+		} //LoadIconsFromResources
+		public static void Initialize()
+		{
+			LoadIconsFromResources();
+		}
+
+		
+//		internal static Icon GetCommonTaskIcon(int iconId)
+//		{
+//			return (Icon) iconsCommonTasks[iconId];
+//		}
+		
+		
+		internal static int GetIconFromFile(string fileName)
 		{
 			if (iconsCommonTasks.Contains(fileName))
 			{
@@ -37,10 +69,10 @@ namespace PTM.View
 			{
 				Icon icon = GetFileIcon(fileName);
 				iconsList.Images.Add(icon);
-				iconsCommonTasks.Add(fileName, iconsList.Images.Count - 1);
+				//iconsCommonTasks.Add(fileName, iconsList.Images.Count - 1);
 				return iconsList.Images.Count - 1;
 			} //if-else
-		} //AddIconFromFile
+		} //GetIconFromFile
 
 		private static Icon GetFileIcon(string fileName)
 		{
@@ -62,28 +94,5 @@ namespace PTM.View
 		} //GetFileIcon
 		
 		
-		private static void LoadIconsFromResources()
-		{
-			
-			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", System.Reflection.Assembly.GetExecutingAssembly());
-
-			Icon resIcon;
-			int i = 1;
-			do
-			{
-				resIcon = (Icon) resourceManager.GetObject(
-					"Icon" + i.ToString(CultureInfo.InvariantCulture));
-				if (resIcon != null)
-				{				
-					iconsList.Images.Add(resIcon);
-					iconsCommonTasks.Add(i - 1, resIcon);
-				} //if
-				i++;
-			} while (resIcon != null);
-		} //LoadIconsFromResources
-		public static void Initialize()
-		{
-			LoadIconsFromResources();
-		}
 	} //end of class IconsManager
 } //end of namespace

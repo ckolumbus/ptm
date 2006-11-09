@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.Timers;
 using System.Windows.Forms;
@@ -525,7 +526,7 @@ namespace PTM.View.Controls
 			menuItem11.Text = "-";
 			
 			ArrayList a = new ArrayList();
-			foreach (DefaultTask defaultTask in DefaultTasks.List)
+			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
 			{
 				if(defaultTask.DefaultTaskId == DefaultTasks.IdleTaskId)
 					continue;
@@ -538,8 +539,6 @@ namespace PTM.View.Controls
 			this.rigthClickMenu.MergeMenu(defaultTasksMenu);
 		}
 		
-		
-		
 		private void CreateNewDefaultTaskComboBox()
 		{
 			this.newDefaultTaskComboBox.Items.Clear();
@@ -547,9 +546,56 @@ namespace PTM.View.Controls
 			this.newDefaultTaskComboBox.SelectedIndexChanged-=new EventHandler(newDefaultTaskComboBox_SelectedIndexChanged);
 			this.newDefaultTaskComboBox.ValueMember = "DefaultTaskId";
 			this.newDefaultTaskComboBox.DisplayMember = "Description";
-			this.newDefaultTaskComboBox.DataSource = DefaultTasks.List;
+			DefaultTask[] defArr = new DefaultTask[DefaultTasks.Table.Count];
+			DefaultTasks.Table.Values.CopyTo(defArr, 0);
+			this.newDefaultTaskComboBox.DataSource = defArr;
 			this.newDefaultTaskComboBox.SelectedIndexChanged+=new EventHandler(newDefaultTaskComboBox_SelectedIndexChanged);			
 		}
+		
+		private void taskList_KeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.KeyData == Keys.Enter)
+			{
+				EditSelectedTaskLog();
+			}
+			if(e.KeyData == Keys.Insert)
+			{
+				NewTaskLog(false);
+			}
+		}
+
+		private void newDefaultTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(this.newDefaultTaskComboBox.SelectedIndex==-1)
+				return;
+			
+			if (Tasks.CurrentTaskRow == null)
+				AddDefaultTaskLog(Tasks.RootTasksRow.Id, (int) this.newDefaultTaskComboBox.SelectedValue);
+			else
+				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, (int) this.newDefaultTaskComboBox.SelectedValue);
+			
+			//			if(this.newDefaultTaskComboBox.SelectedIndex==0)
+			//				this.menuLunchTime_Click(sender, e);
+			//			if(this.newDefaultTaskComboBox.SelectedIndex==1)
+			//				this.menuOtherPersonal_Click(sender, e);
+			//			if(this.newDefaultTaskComboBox.SelectedIndex==2)
+			//				this.menuJobPhoneCall_Click(sender, e);
+			//			if(this.newDefaultTaskComboBox.SelectedIndex==3)
+			//				this.menuCheckingJobMail_Click(sender, e);
+			//			if(this.newDefaultTaskComboBox.SelectedIndex==4)
+			//				this.menuJobMeeting_Click(sender, e);
+		}
+
+		private void mnuDefaulTaskSetTo_Click(object sender, EventArgs e)
+		{
+			DefaultTaskMenuItem mnu = (DefaultTaskMenuItem) sender;
+			foreach (ListViewItem item in this.taskList.SelectedItems)
+			{
+				Log log = (Log) item.Tag;
+				Logs.UpdateLogDefaultTask(log.Id, mnu.DefaultTaskId);
+			}
+		}	
+		
 		#endregion
 
 		#region Notifications
@@ -639,7 +685,7 @@ namespace PTM.View.Controls
 			menuItem1.Text = "-";
 			
 			ArrayList a = new ArrayList();
-			foreach (DefaultTask defaultTask in DefaultTasks.List)
+			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
 			{
 				DefaultTaskMenuItem menuItem = new DefaultTaskMenuItem(defaultTask.DefaultTaskId);
 				menuItem.Text = defaultTask.Description;
@@ -757,17 +803,17 @@ namespace PTM.View.Controls
 			
 			if (taskRow.IsDefaultTask)
 			{
-				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.List[taskRow.DefaultTaskId];
+				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.Table[taskRow.DefaultTaskId];
 				item.ImageIndex = defaultTasks.IconId;
 				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon = IconsManager.GetCommonTaskIcon(defaultTasks.IconId);
+					notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[defaultTasks.IconId];
 			}
 			else
 			{
-				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.List[DefaultTasks.IdleTaskId];
+				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.Table[DefaultTasks.IdleTaskId];
 				item.ImageIndex = defaultTasks.IconId;
 				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon = IconsManager.GetCommonTaskIcon(defaultTasks.IconId);
+					notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[defaultTasks.IconId];
 			}
 		}
 
@@ -799,7 +845,7 @@ namespace PTM.View.Controls
 						new TreeListViewItem(caption,
 						                     new string[] {activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture)});
 					lvi.Tag = applicationLog;
-					lvi.ImageIndex = IconsManager.AddIconFromFile(applicationLog.ApplicationFullPath);
+					lvi.ImageIndex = IconsManager.GetIconFromFile(applicationLog.ApplicationFullPath);
 					logItem.Items.Add(lvi);
 				}
 			}
@@ -812,50 +858,6 @@ namespace PTM.View.Controls
 
 		#endregion
 
-
-		private void taskList_KeyDown(object sender, KeyEventArgs e)
-		{
-			if(e.KeyData == Keys.Enter)
-			{
-				EditSelectedTaskLog();
-			}
-			if(e.KeyData == Keys.Insert)
-			{
-				NewTaskLog(false);
-			}
-		}
-
-		private void newDefaultTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if(this.newDefaultTaskComboBox.SelectedIndex==-1)
-				return;
-			
-			if (Tasks.CurrentTaskRow == null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, (int) this.newDefaultTaskComboBox.SelectedValue);
-			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, (int) this.newDefaultTaskComboBox.SelectedValue);
-			
-//			if(this.newDefaultTaskComboBox.SelectedIndex==0)
-//				this.menuLunchTime_Click(sender, e);
-//			if(this.newDefaultTaskComboBox.SelectedIndex==1)
-//				this.menuOtherPersonal_Click(sender, e);
-//			if(this.newDefaultTaskComboBox.SelectedIndex==2)
-//				this.menuJobPhoneCall_Click(sender, e);
-//			if(this.newDefaultTaskComboBox.SelectedIndex==3)
-//				this.menuCheckingJobMail_Click(sender, e);
-//			if(this.newDefaultTaskComboBox.SelectedIndex==4)
-//				this.menuJobMeeting_Click(sender, e);
-		}
-
-		private void mnuDefaulTaskSetTo_Click(object sender, EventArgs e)
-		{
-			DefaultTaskMenuItem mnu = (DefaultTaskMenuItem) sender;
-			foreach (ListViewItem item in this.taskList.SelectedItems)
-			{
-				Log log = (Log) item.Tag;
-				Logs.UpdateLogDefaultTask(log.Id, mnu.DefaultTaskId);
-			}
-		}
 
 
 

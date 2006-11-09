@@ -7,7 +7,7 @@ namespace PTM.Framework
 	/// <summary>
 	/// Descripción breve de DefaultTasks.
 	/// </summary>
-	public sealed class DefaultTasks : ICollection
+	public sealed class DefaultTasks
 	{
 		private DefaultTasks()
 		{
@@ -15,14 +15,14 @@ namespace PTM.Framework
 		}
 		
 		public const int IdleTaskId = 1;
-		private static ArrayList list;
+		private static Hashtable table;
 		
 		public static void Initialize()
 		{
-			list = new ArrayList();
+			table = new Hashtable();
 
 			ArrayList rows;
-			rows = DbHelper.ExecuteGetRows("Select * from DefaultTasks");
+			rows = DbHelper.ExecuteGetRows("Select * from DefaultTasks Where Hidden = 0");
 			foreach (Hashtable ht in rows)
 			{
 				DefaultTask dt = new DefaultTask();
@@ -30,49 +30,69 @@ namespace PTM.Framework
 				dt.Description = (string) ht["Description"];
 				dt.IsActive = (bool) ht["IsActive"];
 				dt.IconId = (int) ht["Icon"];
-				list.Add(dt);
+				table.Add(dt.DefaultTaskId, dt);
 			}
 		}
 
 		public static DefaultTask GetDefaultTask(int defaultTaskId)
 		{
-			foreach (DefaultTask defaultTask in list)
-			{
-				if(defaultTask.DefaultTaskId == defaultTaskId)
-					return defaultTask;
-			}
-			return null;			
+			if(table.Contains(defaultTaskId))
+				return (DefaultTask) table[defaultTaskId];
+			else
+				return null;		
 		}
 		
-		public static ArrayList List
+		public static Hashtable Table
 		{
-			get{ return (ArrayList) list.Clone();}
+			get{ return (Hashtable) table.Clone();}
+		}
+		
+		public static void Delete(int defaultTaskId)
+		{
+			if(table.ContainsKey(defaultTaskId))
+			{
+				DbHelper.ExecuteNonQuery("Update Set Hidden = 1 from DefaultTasks Where Id  = " + defaultTaskId.ToString());
+				table.Remove(defaultTaskId);
+			}
+			else
+			{
+				throw new ApplicationException("Delete failed. The common task with Id = " + defaultTaskId + " doesn't exists.");		
+			}			
 		}
 
-
-		public void CopyTo(Array array, int index)
+		public static int Add(string description, bool isActive, int iconId)
 		{
-			throw new NotImplementedException();
+			int id = Convert.ToInt32(DbHelper.ExecuteScalar("Select Max(Id) from DefaultTasks")) + 1;
+			DbHelper.ExecuteNonQuery("Insert into DefaultTasks (Id, Description, IsActive, Icon) values (?, ?, ?, ?)",
+			                         new string[] {"Id", "Description", "IsActive", "Icon"}, 
+			                         new object[] {id, description, isActive, iconId});
+			
+			DefaultTask df = new DefaultTask();
+			df.DefaultTaskId = id;
+			df.Description = description;
+			df.IsActive = isActive;
+			df.IconId = iconId;
+			table.Add(id, df);
+			return id;
 		}
 
-		public int Count
+		public static void Update(int defaultTaskId, string description, bool isActive, int iconId)
 		{
-			get { return list.Count; }
-		}
-
-		public object SyncRoot
-		{
-			get { return list.SyncRoot; }
-		}
-
-		public bool IsSynchronized
-		{
-			get {return list.IsSynchronized; }
-		}
-
-		public IEnumerator GetEnumerator()
-		{
-			return list.GetEnumerator();
+			if(table.ContainsKey(defaultTaskId))
+			{
+				DbHelper.ExecuteNonQuery("Update Set Description = ?, IsActive = ?, Icon = ? from DefaultTasks Where Id  = " + defaultTaskId.ToString(), 
+					new string[]{"Description", "IsActive", "Icon"}, new object[]{description, isActive, iconId} );
+				DefaultTask df = new DefaultTask();
+				df.DefaultTaskId = defaultTaskId;
+				df.Description = description;
+				df.IsActive = isActive;
+				df.IconId = iconId;
+				table[defaultTaskId] = df;
+			}
+			else
+			{
+				throw new ApplicationException("Update failed. The common task with Id = " + defaultTaskId + " doesn't exists.");
+			}	
 		}
 	}
 	

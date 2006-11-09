@@ -87,7 +87,7 @@ namespace PTM.View.Forms
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(168, 23);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "People Task Manager";
+			this.label1.Text = "PTM";
 			// 
 			// button1
 			// 
@@ -165,7 +165,7 @@ namespace PTM.View.Forms
 			this.Name = "AboutForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "About People Task Manager";
+			this.Text = "About PTM";
 			this.TopMost = true;
 			this.ResumeLayout(false);
 

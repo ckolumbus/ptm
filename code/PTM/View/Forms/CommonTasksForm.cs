@@ -92,13 +92,14 @@ namespace PTM.View.Forms
 			// 
 			this.list.AutoArrange = false;
 			this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																				   this.columnHeader1,
-																				   this.columnHeader2});
+																										 this.columnHeader1,
+																										 this.columnHeader2});
 			this.list.HideSelection = false;
 			this.list.Location = new System.Drawing.Point(8, 16);
 			this.list.MultiSelect = false;
 			this.list.Name = "list";
 			this.list.Size = new System.Drawing.Size(336, 136);
+			this.list.Sorting = System.Windows.Forms.SortOrder.None;
 			this.list.TabIndex = 0;
 			this.list.SelectedIndexChanged += new System.EventHandler(this.list_SelectedIndexChanged);
 			// 
@@ -145,6 +146,7 @@ namespace PTM.View.Forms
 			this.btnRigth.Name = "btnRigth";
 			this.btnRigth.Size = new System.Drawing.Size(18, 18);
 			this.btnRigth.TabIndex = 6;
+			this.btnRigth.Click += new System.EventHandler(this.btnRigth_Click);
 			// 
 			// btnLeft
 			// 
@@ -153,15 +155,16 @@ namespace PTM.View.Forms
 			this.btnLeft.Name = "btnLeft";
 			this.btnLeft.Size = new System.Drawing.Size(18, 18);
 			this.btnLeft.TabIndex = 5;
+			this.btnLeft.Click += new System.EventHandler(this.btnLeft_Click);
 			// 
 			// chkIsActive
 			// 
 			this.chkIsActive.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkIsActive.Location = new System.Drawing.Point(136, 56);
 			this.chkIsActive.Name = "chkIsActive";
-			this.chkIsActive.Size = new System.Drawing.Size(96, 24);
+			this.chkIsActive.Size = new System.Drawing.Size(112, 24);
 			this.chkIsActive.TabIndex = 4;
-			this.chkIsActive.Text = "Is active tasks";
+			this.chkIsActive.Text = "Is an active tasks";
 			// 
 			// label1
 			// 
@@ -225,6 +228,7 @@ namespace PTM.View.Forms
 			this.btnOk.Name = "btnOk";
 			this.btnOk.TabIndex = 6;
 			this.btnOk.Text = "Ok";
+			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
 			// btnSave
 			// 
@@ -265,7 +269,7 @@ namespace PTM.View.Forms
 		
 		private void CommonTasksForm_Load(object sender, System.EventArgs e)
 		{
-			foreach (DefaultTask defaultTask in DefaultTasks.List)
+			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
 			{
 				if(defaultTask.DefaultTaskId == DefaultTasks.IdleTaskId)
 					continue;
@@ -277,6 +281,7 @@ namespace PTM.View.Forms
 			if(this.list.Items.Count>0)
 			{
 				this.list.Items[0].Selected = true;
+				this.list.Items[0].Focused = true;
 			}
 			else
 			{
@@ -291,7 +296,7 @@ namespace PTM.View.Forms
 			TreeListViewItem item;
 			item = list.SelectedItems[0];
 			DefaultTask defaultTask = (DefaultTask) item.Tag;
-			this.picture.Image = IconsManager.GetCommonTaskIcon(defaultTask.IconId).ToBitmap();
+			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[defaultTask.IconId]).ToBitmap();
 			this.picture.Tag = defaultTask.IconId;
 			this.txtDescription.Text = item.Text;
 			this.chkIsActive.Checked = bool.Parse(item.SubItems[1].Text);
@@ -323,8 +328,8 @@ namespace PTM.View.Forms
 			this.list.SelectedItems.Clear();
 			this.txtDescription.Text = String.Empty;
 			this.chkIsActive.Checked = false;
-			this.picture.Image = IconsManager.GetCommonTaskIcon(0).ToBitmap();
-			this.picture.Tag = 0;
+			this.picture.Tag = 1;
+			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[(int)this.picture.Tag]).ToBitmap();			
 			this.txtDescription.Focus();
 		}
 
@@ -359,6 +364,68 @@ namespace PTM.View.Forms
 			this.Close();
 		}
 
+		private void btnLeft_Click(object sender, System.EventArgs e)
+		{
+			this.picture.Tag = (int)this.picture.Tag - 1;
+			if((int)this.picture.Tag < 1)
+				this.picture.Tag = IconsManager.CommonTaskIconsTable.Count - 1;
+			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[this.picture.Tag]).ToBitmap();
+			
+		}
+		
+		private void btnRigth_Click(object sender, System.EventArgs e)
+		{
+			this.picture.Tag = (int)this.picture.Tag + 1;
+			if((int)this.picture.Tag > IconsManager.CommonTaskIconsTable.Count-1)
+				this.picture.Tag = 1;
+			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[this.picture.Tag]).ToBitmap();
+	
+		}
+
+		private void btnOk_Click(object sender, System.EventArgs e)
+		{
+			try
+			{
+				Cursor.Current = Cursors.WaitCursor;
+				
+				foreach (DefaultTask defaulTask in DefaultTasks.Table.Values)
+				{
+					bool deleted = true;
+					foreach (ListViewItem item in this.list.Items)
+					{
+						DefaultTask dt = (DefaultTask) item.Tag;
+						if(defaulTask.DefaultTaskId == dt.DefaultTaskId)
+						{
+							deleted = false;
+							break;
+						}
+					}
+					if(deleted)
+					{
+						DefaultTasks.Delete(defaulTask.DefaultTaskId);
+					}
+				}
+				
+				foreach (ListViewItem item in this.list.Items)
+				{
+					DefaultTask dt = (DefaultTask) item.Tag;
+					if(dt.DefaultTaskId==-1)
+						DefaultTasks.Add(dt.Description, dt.IsActive, dt.IconId);
+					else
+						DefaultTasks.Update(dt.DefaultTaskId, dt.Description, dt.IsActive, dt.IconId);
+				}
+				this.Close();
+			}
+			catch(ApplicationException aex)
+			{
+				Cursor.Current = Cursors.Default;
+				MessageBox.Show(aex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
+		}
 
 	}
 }

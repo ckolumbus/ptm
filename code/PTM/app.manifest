@@ -6,7 +6,7 @@
     name="PTM"
     type="win32"
 />
-<description>People Tasks Manager</description>
+<description>PTM</description>
 <dependency>
     <dependentAssembly>
         <assemblyIdentity

@@ -389,7 +389,7 @@ namespace PTM.Framework
 				return;
 			tasksRow.IsDefaultTask = false;
 			tasksRow.SetDefaultTaskIdNull();
-			foreach (DefaultTask defaultTask in DefaultTasks.List)
+			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
 			{
 				if (
 					string.Compare(defaultTask.Description.Replace(" ", null), tasksRow.Description.Replace(" ", null), true,
