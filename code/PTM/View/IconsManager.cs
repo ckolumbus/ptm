@@ -13,6 +13,7 @@ namespace PTM.View
 		{
 		} //IconsManager
 
+		public const int DefaultTaskIconId = 1;
 		private static ImageList iconsList = new ImageList();
 		private static Hashtable iconsCommonTasks = new Hashtable();
 		internal static ImageList IconsList
@@ -27,7 +28,7 @@ namespace PTM.View
 				return (Hashtable) iconsCommonTasks.Clone();
 			}
 		}
-		
+
 		private static void LoadIconsFromResources()
 		{
 			

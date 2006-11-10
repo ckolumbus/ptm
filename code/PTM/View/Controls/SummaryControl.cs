@@ -20,7 +20,6 @@ namespace PTM.View.Controls
 	internal class SummaryControl : UserControl
 	{
 		private TreeListView taskList;
-		private ImageList tasksIconsList;
 		private GroupBox groupBox1;
 		private GroupBox groupBox3;
 		private ColumnHeader PercentHeader;
@@ -53,19 +52,7 @@ namespace PTM.View.Controls
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", GetType().Assembly);
-
-			this.tasksIconsList.Images.Clear();
-			Icon resIcon;
-			int i = 1;
-			do
-			{
-				resIcon = (Icon) resourceManager.GetObject("Icon" + i.ToString(CultureInfo.InvariantCulture));
-				i++;
-				if (resIcon != null)
-					tasksIconsList.Images.Add(resIcon);
-			} while (resIcon != null);
-
+			this.taskList.SmallImageList = IconsManager.IconsList;
 			PTMDataset.TasksRow parentTaskRow;
 			parentTaskRow = parentTasksTable.NewTasksRow();
 			parentTaskRow.ItemArray = Tasks.RootTasksRow.ItemArray;
@@ -128,7 +115,6 @@ namespace PTM.View.Controls
 			this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
 			this.InactiveTimeHeader = new System.Windows.Forms.ColumnHeader();
 			this.PercentHeader = new System.Windows.Forms.ColumnHeader();
-			this.tasksIconsList = new System.Windows.Forms.ImageList(this.components);
 			this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.indicator1 = new PTM.View.Controls.IndicatorControl();
@@ -170,7 +156,6 @@ namespace PTM.View.Controls
 			this.taskList.MultiSelect = false;
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 184);
-			this.taskList.SmallImageList = this.tasksIconsList;
 			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 0;
 			// 
@@ -194,12 +179,6 @@ namespace PTM.View.Controls
 			this.PercentHeader.Text = "Percent";
 			this.PercentHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.PercentHeader.Width = 50;
-			// 
-			// tasksIconsList
-			// 
-			this.tasksIconsList.ImageSize = new System.Drawing.Size(16, 16);
-			this.tasksIconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("tasksIconsList.ImageStream")));
-			this.tasksIconsList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// fromDateTimePicker
 			// 
@@ -295,7 +274,7 @@ namespace PTM.View.Controls
 			this.indicator2.Location = new System.Drawing.Point(3, 16);
 			this.indicator2.Name = "indicator2";
 			this.indicator2.Size = new System.Drawing.Size(66, 61);
-			this.indicator2.TabIndex = 0;			
+			this.indicator2.TabIndex = 0;
 			// 
 			// panel1
 			// 
@@ -370,6 +349,11 @@ namespace PTM.View.Controls
 			this.toDateTimePicker.Size = new System.Drawing.Size(88, 20);
 			this.toDateTimePicker.TabIndex = 17;
 			this.toDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
+			// 
+			// toolTip
+			// 
+			this.toolTip.AutomaticDelay = 0;
+			this.toolTip.ShowAlways = true;
 			// 
 			// SummaryControl
 			// 
@@ -489,11 +473,12 @@ namespace PTM.View.Controls
 					lvi.ImageIndex = 0;
 					if (summary.IsDefaultTask)
 					{
-						lvi.ImageIndex = summary.DefaultTaskId;
+						DefaultTask defaultTasks = (DefaultTask) DefaultTasks.Table[summary.DefaultTaskId];
+						lvi.ImageIndex = defaultTasks.IconId;
 					}
 					else
 					{
-						lvi.ImageIndex = 0;
+						lvi.ImageIndex = IconsManager.DefaultTaskIconId;
 					}
 					lvi.Tag = summary;
 					this.taskList.Items.Add(lvi);
@@ -539,6 +524,7 @@ namespace PTM.View.Controls
 					InvariantCulture) +
 					" hrs.";
 				toolTip.SetToolTip(this.indicator2, activeTime);
+				toolTip.SetToolTip(this.groupBox2, activeTime);
 			}
 		}
 
@@ -669,6 +655,8 @@ namespace PTM.View.Controls
 			this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
 			this.fromRadioButton.Text = "Date:";			
 		}
+
+
 
 	}
 }

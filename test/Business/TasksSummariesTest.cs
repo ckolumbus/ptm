@@ -51,8 +51,8 @@ namespace PTM.Test.Business
 			PTMDataset.TasksRow row4;
 			row4 = Tasks.NewTasksRow();
 			row4.IsDefaultTask = true;
-			row4.Description = DefaultTasks.GetDefaultTask(4).Description;
-			row4.DefaultTaskId = DefaultTasks.GetDefaultTask(4).DefaultTaskId;
+			row4.Description = DefaultTasks.GetDefaultTask(3).Description;
+			row4.DefaultTaskId = DefaultTasks.GetDefaultTask(3).DefaultTaskId;
 			row4.ParentId = row1.Id;
 			row4.Id = Tasks.AddTasksRow(row4);
 

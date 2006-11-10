@@ -60,6 +60,13 @@ namespace PTM.Test.Business
 		}
 		
 		[Test]
+		[ExpectedException(typeof(ApplicationException))]
+		public void AddEmptyDescriptionTest()
+		{
+			 DefaultTasks.Add(" ", true, 1);
+		}
+		
+		[Test]
 		public void UpdateTest()
 		{
 			DefaultTasks.Update(1, "UpdateTest", true, 1);
@@ -97,14 +104,20 @@ namespace PTM.Test.Business
 		}
 		
 		[Test]
+		[ExpectedException(typeof(ApplicationException))]
+		public void UpdateEmptyDescriptionTest()
+		{
+			DefaultTasks.Update(3, " ", true, 1);
+		}
+		[Test]
 		public void DeleteTest()
 		{
-			DefaultTasks.Delete(1);
+			DefaultTasks.Delete(5);
 			Assert.AreEqual(1, this.deletedCount);
-			Assert.IsFalse(DefaultTasks.Table.Contains(1));
+			Assert.IsTrue(((DefaultTask)DefaultTasks.Table[5]).Hidden);
 			
 			Hashtable ht;
-			ht = DbHelper.ExecuteGetFirstRow("Select Hidden From DefaultTasks Where Id = 1");
+			ht = DbHelper.ExecuteGetFirstRow("Select Hidden From DefaultTasks Where Id = 5");
 			Assert.AreEqual(true, ht["Hidden"]);
 		}
 
@@ -113,6 +126,13 @@ namespace PTM.Test.Business
 		public void DeleteDontExitsTest()
 		{
 			DefaultTasks.Delete(99);
+		}
+		
+		[Test]
+		[ExpectedException(typeof(ApplicationException))]
+		public void DeleteIdleTask()
+		{
+			DefaultTasks.Delete(DefaultTasks.IdleTaskId);
 		}
 		
 		[TearDown]

@@ -337,24 +337,31 @@ namespace PTM.Framework
 				throw new ApplicationException("Parent can't be null");
 			if (tasksRow.IsDescriptionNull())
 				throw new ApplicationException("Description can't be null");
-			if (tasksRow.Description.Length == 0)
+			if (tasksRow.Description.Trim().Length == 0)
 				throw new ApplicationException("Description can't be empty");
 			tasksRow.Description = tasksRow.Description.Trim();
 			PTMDataset.TasksRow sameTaskByDescription;
 			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
+			
+			PTMDataset.TasksRow sameTaskByDefaultTask = null;
+			if(tasksRow.IsDefaultTask)
+				 sameTaskByDefaultTask = FindByParentIdAndDefaultTask(tasksRow.ParentId, tasksRow.DefaultTaskId);
 			if (insertRules)
 			{
 				if (sameTaskByDescription != null)
 					throw new ApplicationException("Task already exist");
+				if (tasksRow.IsDefaultTask && sameTaskByDefaultTask != null)
+					throw new ApplicationException("Default task already exist");
 			}
 			else
 			{
-				if (sameTaskByDescription != null && string.Compare(sameTaskByDescription.Description, tasksRow.Description, false) == 0)//update isnt case sensitive
-					throw new ApplicationException("Task already exist");
+				if (sameTaskByDescription != null && sameTaskByDescription.Id !=tasksRow.Id)
+					throw new ApplicationException("Task already exist");			
+//				if (sameTaskByDescription != null && string.Compare(sameTaskByDescription.Description, tasksRow.Description, false) == 0)//update isnt case sensitive
+//					throw new ApplicationException("Task already exist");
+				if (tasksRow.IsDefaultTask && sameTaskByDefaultTask != null && sameTaskByDefaultTask.Id != tasksRow.Id)
+					throw new ApplicationException("Default task already exist");
 			}
-
-			if (tasksRow.IsDefaultTask && FindByParentIdAndDefaultTask(tasksRow.ParentId, tasksRow.DefaultTaskId) != null)
-				throw new ApplicationException("Default task already exist");
 
 			PTMDataset.TasksRow parent;
 			parent = tasksDataTable.FindById(tasksRow.ParentId);

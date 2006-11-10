@@ -23,7 +23,7 @@ namespace PTM.Framework
 			table = new Hashtable();
 
 			ArrayList rows;
-			rows = DbHelper.ExecuteGetRows("Select * from DefaultTasks Where Hidden = 0");
+			rows = DbHelper.ExecuteGetRows("Select * from DefaultTasks");
 			foreach (Hashtable ht in rows)
 			{
 				DefaultTask dt = new DefaultTask();
@@ -31,6 +31,7 @@ namespace PTM.Framework
 				dt.Description = (string) ht["Description"];
 				dt.IsActive = (bool) ht["IsActive"];
 				dt.IconId = (int) ht["Icon"];
+				dt.Hidden = (bool) ht["Hidden"];
 				table.Add(dt.DefaultTaskId, dt);
 			}
 		}
@@ -52,9 +53,12 @@ namespace PTM.Framework
 		{
 			if(table.ContainsKey(defaultTaskId))
 			{
-				DbHelper.ExecuteNonQuery("Update DefaultTasks Set Hidden = 1 Where Id  = " + defaultTaskId.ToString());
+				if(defaultTaskId == DefaultTasks.IdleTaskId)
+					throw new ApplicationException("Idle common task can't be deleted.");
+				DbHelper.ExecuteNonQuery("Update DefaultTasks Set Hidden = ? Where Id  = ?", new string[] {"Hidden", "Id"},
+				                         new object[] {true, defaultTaskId});
 				DefaultTask df = (DefaultTask) table[defaultTaskId];
-				table.Remove(defaultTaskId);
+				df.Hidden = true;
 				if(DefaultTaskChanged!=null)
 				{
 					DefaultTaskChanged(new DefaultTaskChangeEventArgs(df, DataRowAction.Delete));
@@ -68,6 +72,11 @@ namespace PTM.Framework
 
 		public static int Add(string description, bool isActive, int iconId)
 		{
+			if (description.Trim().Length == 0)
+				throw new ApplicationException("Description can't be empty");
+			
+			description = description.Trim();
+			
 			int id = Convert.ToInt32(DbHelper.ExecuteScalar("Select Max(Id) from DefaultTasks")) + 1;
 			DbHelper.ExecuteNonQuery("Insert into DefaultTasks (Id, Description, IsActive, Icon, Hidden) values (?, ?, ?, ?, ?)",
 			                         new string[] {"Id", "Description", "IsActive", "Icon", "Hidden"}, 
@@ -90,6 +99,11 @@ namespace PTM.Framework
 		{
 			if(table.ContainsKey(defaultTaskId))
 			{
+				if (description.Trim().Length == 0)
+					throw new ApplicationException("Description can't be empty");
+				
+				description = description.Trim();
+				
 				DbHelper.ExecuteNonQuery("Update DefaultTasks Set Description = ?, IsActive = ?, Icon = ? Where Id  = " + defaultTaskId.ToString(), 
 					new string[]{"Description", "IsActive", "Icon"}, new object[]{description, isActive, iconId} );
 				DefaultTask df = new DefaultTask();
@@ -142,6 +156,7 @@ namespace PTM.Framework
 		private string description;
 		private bool isActive;
 		private int iconId;
+		private bool hidden;
 
 		public int DefaultTaskId
 		{
@@ -166,15 +181,12 @@ namespace PTM.Framework
 			get { return iconId; }
 			set { iconId = value; }
 		}
+
+		public bool Hidden
+		{
+			get{return hidden;}
+			set { hidden = value;}
+		}
 	}
-	/*
-	public enum DefaultTaskEnum : int
-	{
-		Idle = 1,
-		LunchTime = 2,
-		OtherPersonal = 3,
-		JobPhoneCall = 4,
-		CheckingJobMail = 5,
-		JobMeeting = 7
-	}*/
+
 }

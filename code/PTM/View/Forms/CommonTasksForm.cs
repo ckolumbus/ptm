@@ -270,23 +270,19 @@ namespace PTM.View.Forms
 		private void CommonTasksForm_Load(object sender, System.EventArgs e)
 		{
 			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
-			{
+			{				
 				if(defaultTask.DefaultTaskId == DefaultTasks.IdleTaskId)
+					continue;
+				if(defaultTask.Hidden)
 					continue;
 				TreeListViewItem item = new TreeListViewItem(defaultTask.Description, new string[]{defaultTask.IsActive.ToString()});
 				item.ImageIndex = defaultTask.IconId;
 				item.Tag = defaultTask;
 				this.list.Items.Add(item);				
 			}
-			if(this.list.Items.Count>0)
-			{
-				this.list.Items[0].Selected = true;
-				this.list.Items[0].Focused = true;
-			}
-			else
-			{
-				New();
-			}
+			
+			New();
+			
 		}
 
 		private void list_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -310,12 +306,12 @@ namespace PTM.View.Forms
 			TreeListViewItem item;
 			item = list.SelectedItems[0];
 			
-			if(MessageBox.Show("The logs associated with this common tasks will be deleted too.\nAre you sure you want to delete '"
-				+ item.Text + "'?", this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
-				return;
+//			if(MessageBox.Show("The logs associated with this common tasks will be deleted too.\nAre you sure you want to delete '"
+//				+ item.Text + "'?", this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
+//				return;
 			
 			this.list.Items.Remove(item);
-			
+			New();
 		}
 
 		private void btnNew_Click(object sender, System.EventArgs e)
@@ -390,6 +386,8 @@ namespace PTM.View.Forms
 				
 				foreach (DefaultTask defaulTask in DefaultTasks.Table.Values)
 				{
+					if(defaulTask.DefaultTaskId == DefaultTasks.IdleTaskId)
+						continue;
 					bool deleted = true;
 					foreach (ListViewItem item in this.list.Items)
 					{
