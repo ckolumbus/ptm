@@ -6,12 +6,12 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Week View Addin")]
+[assembly: AssemblyDescription("PTM WeekViewAddin")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Carlos D. Estrada")]
+[assembly: AssemblyProduct("PTM")]
+[assembly: AssemblyCopyright("Carlos D. Estrada")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
@@ -26,7 +26,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.9.0")]
+[assembly: AssemblyVersion("0.9.4")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
