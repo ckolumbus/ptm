@@ -131,6 +131,7 @@ namespace PTM.View.Forms
 			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.Controls.Add(this.txtDescription);
 			this.groupBox2.Controls.Add(this.picture);
+			this.groupBox2.Controls.Add(this.btnSave);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(8, 200);
 			this.groupBox2.Name = "groupBox2";
@@ -195,7 +196,7 @@ namespace PTM.View.Forms
 			// btnNew
 			// 
 			this.btnNew.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnNew.Location = new System.Drawing.Point(104, 176);
+			this.btnNew.Location = new System.Drawing.Point(192, 176);
 			this.btnNew.Name = "btnNew";
 			this.btnNew.TabIndex = 3;
 			this.btnNew.Text = "New";
@@ -233,7 +234,7 @@ namespace PTM.View.Forms
 			// btnSave
 			// 
 			this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnSave.Location = new System.Drawing.Point(192, 176);
+			this.btnSave.Location = new System.Drawing.Point(272, 56);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.TabIndex = 8;
 			this.btnSave.Text = "Save";
@@ -245,7 +246,6 @@ namespace PTM.View.Forms
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(370, 328);
-			this.Controls.Add(this.btnSave);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOk);
 			this.Controls.Add(this.btnRemove);
