@@ -111,13 +111,14 @@ namespace PTM.View
 
 		/// <summary>
 		/// TimeSpanToTimeString, returns a timeSpan as a formated string
-		/// "00:00:00"
+		/// "0.00:00:00"
 		/// </summary>
 		internal static string TimeSpanToTimeString(TimeSpan ts)
 		{
-			return ts.Hours.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') +
-			       ":" + ts.Minutes.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') +
-			       ":" + ts.Seconds.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
+			return ts.ToString();
+//			return ts.Hours.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') +
+//			       ":" + ts.Minutes.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0') +
+//			       ":" + ts.Seconds.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
 		} //TimeSpanToTimeString
 
 

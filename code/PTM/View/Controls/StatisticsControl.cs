@@ -21,10 +21,8 @@ namespace PTM.View.Controls
 		private ColumnHeader colActiveTime;
 		private GroupBox groupBox3;
 		private GroupBox groupBox4;
-		private Label label1;
 		private ColumnHeader colAppPercent;
 		private Label label8;
-		private Label totalTasksLoggedValue;
 		private Label AppsActiveTimeValue;
 		private Button browseButton;
 		private ComboBox parentTaskComboBox;
@@ -95,8 +93,6 @@ namespace PTM.View.Controls
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.AppsActiveTimeValue = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
-			this.totalTasksLoggedValue = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.browseButton = new System.Windows.Forms.Button();
 			this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -131,6 +127,7 @@ namespace PTM.View.Controls
 			// colActiveTime
 			// 
 			this.colActiveTime.Text = "Active Time";
+			this.colActiveTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.colActiveTime.Width = 78;
 			// 
 			// colAppPercent
@@ -159,8 +156,6 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.AppsActiveTimeValue);
 			this.groupBox4.Controls.Add(this.label8);
-			this.groupBox4.Controls.Add(this.totalTasksLoggedValue);
-			this.groupBox4.Controls.Add(this.label1);
 			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox4.ForeColor = System.Drawing.Color.Blue;
 			this.groupBox4.Location = new System.Drawing.Point(8, 232);
@@ -176,7 +171,7 @@ namespace PTM.View.Controls
 			this.AppsActiveTimeValue.ForeColor = System.Drawing.Color.Black;
 			this.AppsActiveTimeValue.Location = new System.Drawing.Point(112, 16);
 			this.AppsActiveTimeValue.Name = "AppsActiveTimeValue";
-			this.AppsActiveTimeValue.Size = new System.Drawing.Size(48, 23);
+			this.AppsActiveTimeValue.Size = new System.Drawing.Size(80, 23);
 			this.AppsActiveTimeValue.TabIndex = 1;
 			// 
 			// label8
@@ -188,27 +183,6 @@ namespace PTM.View.Controls
 			this.label8.Size = new System.Drawing.Size(104, 23);
 			this.label8.TabIndex = 0;
 			this.label8.Text = "Apps. Active Time:";
-			// 
-			// totalTasksLoggedValue
-			// 
-			this.totalTasksLoggedValue.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.totalTasksLoggedValue.ForeColor = System.Drawing.Color.Black;
-			this.totalTasksLoggedValue.Location = new System.Drawing.Point(336, 16);
-			this.totalTasksLoggedValue.Name = "totalTasksLoggedValue";
-			this.totalTasksLoggedValue.Size = new System.Drawing.Size(48, 23);
-			this.totalTasksLoggedValue.TabIndex = 3;
-			this.totalTasksLoggedValue.Visible = false;
-			// 
-			// label1
-			// 
-			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.ForeColor = System.Drawing.Color.Black;
-			this.label1.Location = new System.Drawing.Point(232, 16);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(104, 23);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Total Task Logged:";
-			this.label1.Visible = false;
 			// 
 			// browseButton
 			// 
@@ -316,7 +290,6 @@ namespace PTM.View.Controls
 
 		private void ClearContent()
 		{
-			this.totalTasksLoggedValue.Text = "";
 			this.AppsActiveTimeValue.Text = "";
 			this.applicationsList.Items.Clear();
 		}

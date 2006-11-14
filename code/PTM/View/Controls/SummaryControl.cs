@@ -147,10 +147,10 @@ namespace PTM.View.Controls
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskHeader,
-																					   this.ActiveTimeHeader,
-																					   this.InactiveTimeHeader,
-																					   this.PercentHeader});
+																											  this.TaskHeader,
+																											  this.ActiveTimeHeader,
+																											  this.InactiveTimeHeader,
+																											  this.PercentHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -167,11 +167,13 @@ namespace PTM.View.Controls
 			// ActiveTimeHeader
 			// 
 			this.ActiveTimeHeader.Text = "Active Time";
+			this.ActiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.ActiveTimeHeader.Width = 70;
 			// 
 			// InactiveTimeHeader
 			// 
 			this.InactiveTimeHeader.Text = "Inactive Time";
+			this.InactiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.InactiveTimeHeader.Width = 70;
 			// 
 			// PercentHeader
@@ -288,8 +290,8 @@ namespace PTM.View.Controls
 			// toolBar
 			// 
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																					   this.toolBarButton1,
-																					   this.toolBarButton2});
+																											  this.toolBarButton1,
+																											  this.toolBarButton2});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;
