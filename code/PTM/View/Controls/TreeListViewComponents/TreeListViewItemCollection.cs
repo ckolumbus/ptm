@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PTM.View.Controls.TreeListViewComponents
@@ -76,10 +77,16 @@ namespace PTM.View.Controls.TreeListViewComponents
 				{
 					try
 					{
-						res =Convert.ToInt32(double.Parse(a.SubItems[Column].Text.Replace("%", null)) - double.Parse(b.SubItems[Column].Text.Replace("%", null)));
+						if(IsNumeric(a.SubItems[Column].Text))
+							res =Convert.ToInt32(double.Parse(a.SubItems[Column].Text.Replace("%", null)) - double.Parse(b.SubItems[Column].Text.Replace("%", null)));
+						else if(IsDateTime(a.SubItems[Column].Text))
+							res =DateTime.Compare(DateTime.Parse(a.SubItems[Column].Text.Replace(".", null)) , DateTime.Parse(b.SubItems[Column].Text.Replace(".", null)));
+						else
+							res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
 					}
-					catch
+					catch(System.FormatException fex)
 					{
+						fex = fex;
 						res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
 					}					
 				}
@@ -93,6 +100,85 @@ namespace PTM.View.Controls.TreeListViewComponents
 						return(1);
 				}
 			}
+
+			private bool IsDateTime(string text)
+			{
+				byte state = 1;
+				string cmptext = text + Convert.ToChar(0);
+				for (int i = 0; i<cmptext.Length;i ++)
+				{
+					char c = cmptext[i];
+					switch(state)
+					{
+						case 1:
+						case 2:
+						case 4:
+						case 5:
+							if(char.IsDigit(c))
+								state++;
+							else return false;
+						break;
+						case 3:
+							if(c == ':')
+								state++;
+							else return false;
+						break;
+						case 6:
+							if(c == Convert.ToChar(0)) 	//24 hrs format.
+								return true;
+							if(c == ' ')
+								state++;
+							else return false;
+							break;
+						case 7:
+							if(c=='a' || c == 'p')
+								state++;
+							else return false;
+							break;
+						case 8:
+							if(c=='m')
+								state = 9;
+							else if(c=='.')
+								state = 10;
+							else return false;
+							break;
+						case 9:
+							if(c==Convert.ToChar(0)) //am, pm
+								return true; 
+							else if(c=='.') //am. pm.
+								state = 12 ;
+							else
+								return false;
+							break;
+						case 10:
+							if(c=='m')
+								state++;
+							else return false;
+							break;
+						case 11:
+							if(c=='.') //a.m., p.m.
+								state++; 
+							else return false;
+							break;
+						case 12:
+							if(c==Convert.ToChar(0))
+								return true; 
+							else return false;
+					}
+				}
+				return false;
+			}
+
+			private bool IsNumeric(string text)
+			{
+				foreach (char c in text)
+				{
+					if(!char.IsDigit(c) && c != ',' && c != '.' && c != '-' && c != '%')
+						return false;
+				}
+				return true;
+			}
+
 			#endregion
 		}
 		#region Private delegates
