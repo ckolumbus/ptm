@@ -39,6 +39,7 @@ namespace PTM.View.Controls
 		private ContextMenu rigthClickMenu;
 		private ComboBox newDefaultTaskComboBox;
 		private ToolTip shortcutToolTip;
+		private System.Windows.Forms.CheckBox pathCheckBox;
 		private DateTime currentDay;
 
 		internal TasksLogControl()
@@ -63,6 +64,14 @@ namespace PTM.View.Controls
 			this.taskList.SmallImageList = IconsManager.IconsList;
 			this.Load += new EventHandler(TasksLogControl_Load);
 
+			Configuration config;
+			config = ConfigurationHelper.GetConfiguration(ConfigurationKey.ShowTasksFullPath);
+			
+			if(config.Value.ToString().CompareTo("1") ==0)
+				this.pathCheckBox.Checked = true;
+			else
+				this.pathCheckBox.Checked = false;
+			
 			CreateRigthClickMenu();
 			CreateNotifyMenu();
 			CreateNewDefaultTaskComboBox();
@@ -137,6 +146,7 @@ namespace PTM.View.Controls
 			this.label1 = new System.Windows.Forms.Label();
 			this.newDefaultTaskComboBox = new System.Windows.Forms.ComboBox();
 			this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.pathCheckBox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
 			this.SuspendLayout();
@@ -214,7 +224,6 @@ namespace PTM.View.Controls
 			this.taskList.TabIndex = 1;
 			this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskList_KeyDown);
 			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
-
 			// 
 			// switchToButton
 			// 
@@ -244,7 +253,7 @@ namespace PTM.View.Controls
 			// 
 			this.logDate.Location = new System.Drawing.Point(48, 8);
 			this.logDate.Name = "logDate";
-			this.logDate.Size = new System.Drawing.Size(256, 20);
+			this.logDate.Size = new System.Drawing.Size(248, 20);
 			this.logDate.TabIndex = 0;
 			this.logDate.ValueChanged += new System.EventHandler(this.logDate_ValueChanged);
 			// 
@@ -270,8 +279,18 @@ namespace PTM.View.Controls
 			this.newDefaultTaskComboBox.TabIndex = 7;
 			this.newDefaultTaskComboBox.SelectedIndexChanged += new System.EventHandler(this.newDefaultTaskComboBox_SelectedIndexChanged);
 			// 
+			// pathCheckBox
+			// 
+			this.pathCheckBox.Location = new System.Drawing.Point(304, 8);
+			this.pathCheckBox.Name = "pathCheckBox";
+			this.pathCheckBox.Size = new System.Drawing.Size(80, 24);
+			this.pathCheckBox.TabIndex = 8;
+			this.pathCheckBox.Text = "Show path";
+			this.pathCheckBox.CheckedChanged += new System.EventHandler(this.pathCheckBox_CheckedChanged);
+			// 
 			// TasksLogControl
 			// 
+			this.Controls.Add(this.pathCheckBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.logDate);
 			this.Controls.Add(this.deleteButton);
@@ -797,10 +816,15 @@ namespace PTM.View.Controls
 		private void SetListItemValues(ListViewItem item, Log log, PTMDataset.TasksRow taskRow)
 		{
 			item.Tag = log;
-			if (item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
-			{
+//			if (item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
+//			{
+//				item.Text = taskRow.Description;
+//			}
+			if(this.pathCheckBox.Checked)
+				item.Text = Tasks.GetFullPath(taskRow.Id);
+			else
 				item.Text = taskRow.Description;
-			}
+			
 			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
 			//item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
 			CultureInfo cultureInfo;
@@ -819,7 +843,6 @@ namespace PTM.View.Controls
 			}
 			else
 			{
-				//DefaultTask defaultTasks = (DefaultTask) DefaultTasks.Table[IconsManager.DefaultTaskIconId];
 				item.ImageIndex = IconsManager.DefaultTaskIconId;
 				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
 					notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[IconsManager.DefaultTaskIconId];
@@ -872,6 +895,38 @@ namespace PTM.View.Controls
 			CreateNotifyMenu();
 		}
 		#endregion
+
+		private void pathCheckBox_CheckedChanged(object sender, System.EventArgs e)
+		{
+			try
+			{
+				Cursor.Current = Cursors.WaitCursor;
+				for(int i = 0; i<this.taskList.Items.Count;i++)
+				{
+					TreeListViewItem item = this.taskList.Items[i];
+					if(this.pathCheckBox.Checked)
+					{
+						item.Text = Tasks.GetFullPath(((Log) item.Tag).TaskId);
+					}
+					else
+					{
+						item.Text = Tasks.FindById(((Log) item.Tag).TaskId).Description;
+					}	
+						
+				}
+				Configuration config;
+				config = ConfigurationHelper.GetConfiguration(ConfigurationKey.ShowTasksFullPath);
+				if(this.pathCheckBox.Checked)
+					config.Value = "1";
+				else
+					config.Value = "0";
+				ConfigurationHelper.SaveConfiguration(config);
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
+		}
 
 		
 	}

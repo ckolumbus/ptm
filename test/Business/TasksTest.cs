@@ -369,7 +369,7 @@ namespace PTM.Test.Business
 		public void GetFullPathTest()
 		{
 			string path;
-			path = Tasks.GetFullPath(Tasks.RootTasksRow);
+			path = Tasks.GetFullPath(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(@"My Job\", path);
 
 			PTMDataset.TasksRow row1;
@@ -390,16 +390,16 @@ namespace PTM.Test.Business
 			row3.ParentId = row1.Id;
 			row3.Id = Tasks.AddTasksRow(row3);
 
-			path = Tasks.GetFullPath(Tasks.RootTasksRow);
+			path = Tasks.GetFullPath(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(@"My Job\", path);
 
-			path = Tasks.GetFullPath(row1);
+			path = Tasks.GetFullPath(row1.Id);
 			Assert.AreEqual(@"My Job\TaskTest1\", path);
 
-			path = Tasks.GetFullPath(row2);
+			path = Tasks.GetFullPath(row2.Id);
 			Assert.AreEqual(@"My Job\TaskTest2\", path);
 
-			path = Tasks.GetFullPath(row3);
+			path = Tasks.GetFullPath(row3.Id);
 			Assert.AreEqual(@"My Job\TaskTest1\TaskTest3\", path);
 		}
 

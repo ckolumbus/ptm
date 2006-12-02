@@ -417,16 +417,16 @@ namespace PTM.View.Controls
 
 		internal void UpdateSummary()
 		{
-			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
-			{
-				this.fromRadioButton.Checked = true;
-				this.fromDateTimePicker.Value = DateTime.Today;
-				this.toDateTimePicker.Value = DateTime.Today;
-			}
-			else
-			{
+//			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
+//			{
+//				this.fromRadioButton.Checked = true;
+//				this.fromDateTimePicker.Value = DateTime.Today;
+//				this.toDateTimePicker.Value = DateTime.Today;
+//			}
+//			else
+//			{
 				UpdateTasksSummary();
-			}
+//			}
 		}
 
 		private void UpdateTasksSummary()
@@ -611,7 +611,7 @@ namespace PTM.View.Controls
 			{
 				parentRow = this.parentTasksTable.NewTasksRow();
 				parentRow.ItemArray = parent.ItemArray;
-				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow), this.parentTaskComboBox.MaxLength);
+				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow.Id), this.parentTaskComboBox.MaxLength);
 				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
 			}
 			this.parentTaskComboBox.SelectedValue = parent.Id;

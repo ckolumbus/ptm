@@ -171,8 +171,10 @@ namespace PTM.Framework
 			return null;
 		}
 
-		public static string GetFullPath(PTMDataset.TasksRow row)
+		public static string GetFullPath(int taskId)
 		{
+			PTMDataset.TasksRow row;
+			row = Tasks.FindById(taskId);
 			ArrayList parents = new ArrayList();
 			PTMDataset.TasksRow curRow = row;
 			while (true)

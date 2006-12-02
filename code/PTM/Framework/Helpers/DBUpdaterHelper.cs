@@ -26,12 +26,33 @@ namespace PTM.Framework.Helpers
 					continue;
 				if(UpdateFromV091ToV092(oldVersion))
 					continue;
-				if(UpdateFromV092ToV093(oldVersion)) //Next check
+				if(UpdateFromV092ToV093(oldVersion)) 
+					continue;
+				if(UpdateFromV093ToV094(oldVersion)) 
 					continue;
 				//if(UpdateFromV093ToVXX(oldVersion)) //Next check
 				//	continue;
 				findNextUpdate = false;
 			}
+		}
+
+		private static bool UpdateFromV093ToV094(Configuration oldVersion)
+		{
+			if(string.Compare(oldVersion.Value.ToString().Trim(), "0.9.3")==0)
+			{
+				try
+				{
+					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.ShowTasksFullPath, "1"));
+					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.4"));
+					return true;					
+				}
+				catch(OleDbException ex)
+				{
+					Logger.Write(ex.Message);
+					return false;
+				}
+			}
+			return false;
 		}
 
 		private static bool UpdateFromV092ToV093(Configuration oldVersion)

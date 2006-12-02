@@ -296,16 +296,16 @@ namespace PTM.View.Controls
 
 		internal void UpdateStatistics()
 		{
-			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
-			{
-				this.fromRadioButton.Checked = true;
-				this.fromDateTimePicker.Value = DateTime.Today;
-				this.toDateTimePicker.Value = DateTime.Today;
-			}
-			else
-			{
-				GetTaskDetail();
-			}
+//			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
+//			{
+//				this.fromRadioButton.Checked = true;
+//				this.fromDateTimePicker.Value = DateTime.Today;
+//				this.toDateTimePicker.Value = DateTime.Today;
+//			}
+//			else
+//			{
+				GetTaskDetails();
+//			}
 		}
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
@@ -316,10 +316,10 @@ namespace PTM.View.Controls
 				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
 				this.toDateTimePicker.ValueChanged+=new EventHandler(dateTimePicker_ValueChanged);
 			}
-			GetTaskDetail();
+			GetTaskDetails();
 		}
 
-		private void GetTaskDetail()
+		private void GetTaskDetails()
 		{
 			try
 			{
@@ -377,7 +377,7 @@ namespace PTM.View.Controls
 			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
-			GetTaskDetail();
+			GetTaskDetails();
 		}
 
 		private void browseButton_Click(object sender, EventArgs e)
@@ -391,7 +391,7 @@ namespace PTM.View.Controls
 			{
 				PTMDataset.TasksRow parentRow = this.parentTasksTable.NewTasksRow();
 				parentRow.ItemArray = tgForm.SelectedTaskRow.ItemArray;
-				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow), this.parentTaskComboBox.MaxLength);
+				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow.Id), this.parentTaskComboBox.MaxLength);
 				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
 			}
 			this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskRow.Id;
