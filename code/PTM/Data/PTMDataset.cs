@@ -150,23 +150,23 @@ namespace PTM.Data {
         [System.Diagnostics.DebuggerStepThrough()]
         public class TasksDataTable : DataTable, System.Collections.IEnumerable {
             
-            private DataColumn columnDefaultTaskId;
-            
-            private DataColumn columnDescription;
-            
             private DataColumn columnId;
             
-            private DataColumn columnIsDefaultTask;
-            
-            private DataColumn columnIsFinished;
-            
             private DataColumn columnParentId;
+            
+            private DataColumn columnDescription;
             
             private DataColumn columnStartDate;
             
             private DataColumn columnStopDate;
             
+            private DataColumn columnIsFinished;
+            
             private DataColumn columnTotalTime;
+            
+            private DataColumn columnIconId;
+            
+            private DataColumn columnIsActive;
             
             internal TasksDataTable() : 
                     base("Tasks") {
@@ -196,39 +196,21 @@ namespace PTM.Data {
                 }
             }
             
-            internal DataColumn DefaultTaskIdColumn {
-                get {
-                    return this.columnDefaultTaskId;
-                }
-            }
-            
-            internal DataColumn DescriptionColumn {
-                get {
-                    return this.columnDescription;
-                }
-            }
-            
             internal DataColumn IdColumn {
                 get {
                     return this.columnId;
                 }
             }
             
-            internal DataColumn IsDefaultTaskColumn {
-                get {
-                    return this.columnIsDefaultTask;
-                }
-            }
-            
-            internal DataColumn IsFinishedColumn {
-                get {
-                    return this.columnIsFinished;
-                }
-            }
-            
             internal DataColumn ParentIdColumn {
                 get {
                     return this.columnParentId;
+                }
+            }
+            
+            internal DataColumn DescriptionColumn {
+                get {
+                    return this.columnDescription;
                 }
             }
             
@@ -244,9 +226,27 @@ namespace PTM.Data {
                 }
             }
             
+            internal DataColumn IsFinishedColumn {
+                get {
+                    return this.columnIsFinished;
+                }
+            }
+            
             internal DataColumn TotalTimeColumn {
                 get {
                     return this.columnTotalTime;
+                }
+            }
+            
+            internal DataColumn IconIdColumn {
+                get {
+                    return this.columnIconId;
+                }
+            }
+            
+            internal DataColumn IsActiveColumn {
+                get {
+                    return this.columnIsActive;
                 }
             }
             
@@ -268,18 +268,18 @@ namespace PTM.Data {
                 this.Rows.Add(row);
             }
             
-            public TasksRow AddTasksRow(int DefaultTaskId, string Description, bool IsDefaultTask, bool IsFinished, TasksRow parentTasksRowByTasksTasks, System.DateTime StartDate, System.DateTime StopDate, int TotalTime) {
+            public TasksRow AddTasksRow(TasksRow parentTasksRowByTasksTasks, string Description, System.DateTime StartDate, System.DateTime StopDate, bool IsFinished, int TotalTime, int IconId, bool IsActive) {
                 TasksRow rowTasksRow = ((TasksRow)(this.NewRow()));
                 rowTasksRow.ItemArray = new object[] {
-                        DefaultTaskId,
-                        Description,
                         null,
-                        IsDefaultTask,
-                        IsFinished,
-                        parentTasksRowByTasksTasks[2],
+                        parentTasksRowByTasksTasks[0],
+                        Description,
                         StartDate,
                         StopDate,
-                        TotalTime};
+                        IsFinished,
+                        TotalTime,
+                        IconId,
+                        IsActive};
                 this.Rows.Add(rowTasksRow);
                 return rowTasksRow;
             }
@@ -304,37 +304,37 @@ namespace PTM.Data {
             }
             
             internal void InitVars() {
-                this.columnDefaultTaskId = this.Columns["DefaultTaskId"];
-                this.columnDescription = this.Columns["Description"];
                 this.columnId = this.Columns["Id"];
-                this.columnIsDefaultTask = this.Columns["IsDefaultTask"];
-                this.columnIsFinished = this.Columns["IsFinished"];
                 this.columnParentId = this.Columns["ParentId"];
+                this.columnDescription = this.Columns["Description"];
                 this.columnStartDate = this.Columns["StartDate"];
                 this.columnStopDate = this.Columns["StopDate"];
+                this.columnIsFinished = this.Columns["IsFinished"];
                 this.columnTotalTime = this.Columns["TotalTime"];
+                this.columnIconId = this.Columns["IconId"];
+                this.columnIsActive = this.Columns["IsActive"];
             }
             
             private void InitClass() {
-                this.columnDefaultTaskId = new DataColumn("DefaultTaskId", typeof(int), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnDefaultTaskId);
-                this.columnDescription = new DataColumn("Description", typeof(string), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnDescription);
                 this.columnId = new DataColumn("Id", typeof(int), null, System.Data.MappingType.Element);
                 this.Columns.Add(this.columnId);
-                this.columnIsDefaultTask = new DataColumn("IsDefaultTask", typeof(bool), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnIsDefaultTask);
-                this.columnIsFinished = new DataColumn("IsFinished", typeof(bool), null, System.Data.MappingType.Element);
-                this.Columns.Add(this.columnIsFinished);
                 this.columnParentId = new DataColumn("ParentId", typeof(int), null, System.Data.MappingType.Element);
                 this.Columns.Add(this.columnParentId);
+                this.columnDescription = new DataColumn("Description", typeof(string), null, System.Data.MappingType.Element);
+                this.Columns.Add(this.columnDescription);
                 this.columnStartDate = new DataColumn("StartDate", typeof(System.DateTime), null, System.Data.MappingType.Element);
                 this.Columns.Add(this.columnStartDate);
                 this.columnStopDate = new DataColumn("StopDate", typeof(System.DateTime), null, System.Data.MappingType.Element);
                 this.Columns.Add(this.columnStopDate);
+                this.columnIsFinished = new DataColumn("IsFinished", typeof(bool), null, System.Data.MappingType.Element);
+                this.Columns.Add(this.columnIsFinished);
                 this.columnTotalTime = new DataColumn("TotalTime", typeof(int), null, System.Data.MappingType.Element);
                 this.Columns.Add(this.columnTotalTime);
-                this.Constraints.Add(new UniqueConstraint("Constraint1", new DataColumn[] {
+                this.columnIconId = new DataColumn("IconId", typeof(int), null, System.Data.MappingType.Element);
+                this.Columns.Add(this.columnIconId);
+                this.columnIsActive = new DataColumn("IsActive", typeof(bool), null, System.Data.MappingType.Element);
+                this.Columns.Add(this.columnIsActive);
+                this.Constraints.Add(new UniqueConstraint("PTMDatasetKey1", new DataColumn[] {
                                 this.columnId}, true));
                 this.columnId.AutoIncrement = true;
                 this.columnId.AllowDBNull = false;
@@ -396,34 +396,6 @@ namespace PTM.Data {
                 this.tableTasks = ((TasksDataTable)(this.Table));
             }
             
-            public int DefaultTaskId {
-                get {
-                    try {
-                        return ((int)(this[this.tableTasks.DefaultTaskIdColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasks.DefaultTaskIdColumn] = value;
-                }
-            }
-            
-            public string Description {
-                get {
-                    try {
-                        return ((string)(this[this.tableTasks.DescriptionColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasks.DescriptionColumn] = value;
-                }
-            }
-            
             public int Id {
                 get {
                     return ((int)(this[this.tableTasks.IdColumn]));
@@ -433,45 +405,31 @@ namespace PTM.Data {
                 }
             }
             
-            public bool IsDefaultTask {
-                get {
-                    try {
-                        return ((bool)(this[this.tableTasks.IsDefaultTaskColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasks.IsDefaultTaskColumn] = value;
-                }
-            }
-            
-            public bool IsFinished {
-                get {
-                    try {
-                        return ((bool)(this[this.tableTasks.IsFinishedColumn]));
-                    }
-                    catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableTasks.IsFinishedColumn] = value;
-                }
-            }
-            
             public int ParentId {
                 get {
                     try {
                         return ((int)(this[this.tableTasks.ParentIdColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
                     }
                 }
                 set {
                     this[this.tableTasks.ParentIdColumn] = value;
+                }
+            }
+            
+            public string Description {
+                get {
+                    try {
+                        return ((string)(this[this.tableTasks.DescriptionColumn]));
+                    }
+                    catch (InvalidCastException e) {
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTasks.DescriptionColumn] = value;
                 }
             }
             
@@ -481,7 +439,7 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableTasks.StartDateColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
                     }
                 }
                 set {
@@ -495,11 +453,25 @@ namespace PTM.Data {
                         return ((System.DateTime)(this[this.tableTasks.StopDateColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
                     }
                 }
                 set {
                     this[this.tableTasks.StopDateColumn] = value;
+                }
+            }
+            
+            public bool IsFinished {
+                get {
+                    try {
+                        return ((bool)(this[this.tableTasks.IsFinishedColumn]));
+                    }
+                    catch (InvalidCastException e) {
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTasks.IsFinishedColumn] = value;
                 }
             }
             
@@ -509,11 +481,39 @@ namespace PTM.Data {
                         return ((int)(this[this.tableTasks.TotalTimeColumn]));
                     }
                     catch (InvalidCastException e) {
-                        throw new StrongTypingException("No se puede obtener el valor porque es DBNull.", e);
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
                     }
                 }
                 set {
                     this[this.tableTasks.TotalTimeColumn] = value;
+                }
+            }
+            
+            public int IconId {
+                get {
+                    try {
+                        return ((int)(this[this.tableTasks.IconIdColumn]));
+                    }
+                    catch (InvalidCastException e) {
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTasks.IconIdColumn] = value;
+                }
+            }
+            
+            public bool IsActive {
+                get {
+                    try {
+                        return ((bool)(this[this.tableTasks.IsActiveColumn]));
+                    }
+                    catch (InvalidCastException e) {
+                        throw new StrongTypingException("Cannot get value because it is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTasks.IsActiveColumn] = value;
                 }
             }
             
@@ -526,12 +526,12 @@ namespace PTM.Data {
                 }
             }
             
-            public bool IsDefaultTaskIdNull() {
-                return this.IsNull(this.tableTasks.DefaultTaskIdColumn);
+            public bool IsParentIdNull() {
+                return this.IsNull(this.tableTasks.ParentIdColumn);
             }
             
-            public void SetDefaultTaskIdNull() {
-                this[this.tableTasks.DefaultTaskIdColumn] = System.Convert.DBNull;
+            public void SetParentIdNull() {
+                this[this.tableTasks.ParentIdColumn] = System.Convert.DBNull;
             }
             
             public bool IsDescriptionNull() {
@@ -540,30 +540,6 @@ namespace PTM.Data {
             
             public void SetDescriptionNull() {
                 this[this.tableTasks.DescriptionColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsIsDefaultTaskNull() {
-                return this.IsNull(this.tableTasks.IsDefaultTaskColumn);
-            }
-            
-            public void SetIsDefaultTaskNull() {
-                this[this.tableTasks.IsDefaultTaskColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsIsFinishedNull() {
-                return this.IsNull(this.tableTasks.IsFinishedColumn);
-            }
-            
-            public void SetIsFinishedNull() {
-                this[this.tableTasks.IsFinishedColumn] = System.Convert.DBNull;
-            }
-            
-            public bool IsParentIdNull() {
-                return this.IsNull(this.tableTasks.ParentIdColumn);
-            }
-            
-            public void SetParentIdNull() {
-                this[this.tableTasks.ParentIdColumn] = System.Convert.DBNull;
             }
             
             public bool IsStartDateNull() {
@@ -582,12 +558,36 @@ namespace PTM.Data {
                 this[this.tableTasks.StopDateColumn] = System.Convert.DBNull;
             }
             
+            public bool IsIsFinishedNull() {
+                return this.IsNull(this.tableTasks.IsFinishedColumn);
+            }
+            
+            public void SetIsFinishedNull() {
+                this[this.tableTasks.IsFinishedColumn] = System.Convert.DBNull;
+            }
+            
             public bool IsTotalTimeNull() {
                 return this.IsNull(this.tableTasks.TotalTimeColumn);
             }
             
             public void SetTotalTimeNull() {
                 this[this.tableTasks.TotalTimeColumn] = System.Convert.DBNull;
+            }
+            
+            public bool IsIconIdNull() {
+                return this.IsNull(this.tableTasks.IconIdColumn);
+            }
+            
+            public void SetIconIdNull() {
+                this[this.tableTasks.IconIdColumn] = System.Convert.DBNull;
+            }
+            
+            public bool IsIsActiveNull() {
+                return this.IsNull(this.tableTasks.IsActiveColumn);
+            }
+            
+            public void SetIsActiveNull() {
+                this[this.tableTasks.IsActiveColumn] = System.Convert.DBNull;
             }
             
             public TasksRow[] GetTasksRows() {
