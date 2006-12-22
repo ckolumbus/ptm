@@ -38,7 +38,7 @@ namespace PTM.Test.Business
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.AreEqual(1, UnitOfWork.PtmDataset.Tasks.Count);
+			Assert.AreEqual(2, UnitOfWork.PtmDataset.Tasks.Count);
 			Assert.IsNotNull(Tasks.RootTasksRow);
 		}
 
@@ -57,6 +57,7 @@ namespace PTM.Test.Business
 			row = Tasks.NewTasksRow();
 			row.Description = "AddTaskTest";
 			row.ParentId = Tasks.RootTasksRow.Id;
+			row.IsActive = true;
 			int count = Tasks.Count;
 			int eventCount = tasksRowChangedEvent_RowAddedCount;
 			int id = Tasks.AddTasksRow(row);
@@ -68,8 +69,7 @@ namespace PTM.Test.Business
 			Assert.AreEqual("AddTaskTest", addedTaskRow.Description);
 			Assert.AreEqual(0, addedTaskRow.TotalTime);
 			Assert.AreEqual(false, addedTaskRow.IsFinished);
-			Assert.AreEqual(false, addedTaskRow.IsDefaultTask);
-			Assert.AreEqual(true, addedTaskRow.IsDefaultTaskIdNull());
+			Assert.AreEqual(true, addedTaskRow.IsActive);
 			Assert.AreEqual(true, addedTaskRow.IsStartDateNull());
 			Assert.AreEqual(true, addedTaskRow.IsStopDateNull());
 		}
@@ -117,47 +117,6 @@ namespace PTM.Test.Business
 			Tasks.AddTasksRow(row);
 		}
 
-		[Test]
-		public void AddDefaultTask()
-		{
-			DefaultTask defaultTaskRow;
-			defaultTaskRow = (DefaultTask) DefaultTasks.Table[1];
-
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
-			row.Description = defaultTaskRow.Description;
-			row.ParentId = Tasks.RootTasksRow.Id;
-			int id = Tasks.AddTasksRow(row);
-			PTMDataset.TasksRow addedTaskRow;
-			addedTaskRow = Tasks.FindById(id);
-			Assert.AreEqual(row.ParentId, addedTaskRow.ParentId);
-			Assert.AreEqual(defaultTaskRow.Description, addedTaskRow.Description);
-			Assert.AreEqual(0, addedTaskRow.TotalTime);
-			Assert.AreEqual(false, addedTaskRow.IsFinished);
-			Assert.AreEqual(true, addedTaskRow.IsDefaultTask);
-			Assert.AreEqual(false, addedTaskRow.IsDefaultTaskIdNull());
-		}
-
-
-		[Test]
-		[ExpectedException(typeof (ApplicationException), "Parent can't be a default task")]
-		public void AddTaskIsParentDefaultTask()
-		{
-			DefaultTask defaultTaskRow;
-			defaultTaskRow = (DefaultTask) DefaultTasks.Table[1];
-
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
-			row.Description = defaultTaskRow.Description;
-			row.ParentId = Tasks.RootTasksRow.Id;
-			row.Id = Tasks.AddTasksRow(row);
-			PTMDataset.TasksRow taskRow;
-			taskRow = Tasks.NewTasksRow();
-			taskRow.Description = "TaskTest";
-			taskRow.ParentId = row.Id;
-			Tasks.AddTasksRow(taskRow);
-		}
-
 
 		[Test]
 		public void UpdateTask()
@@ -177,51 +136,6 @@ namespace PTM.Test.Business
 			Assert.AreEqual("UpdatedTaskTest", updatedRow.Description);
 			Assert.AreEqual(eventCount + 1, this.tasksRowChangedEvent_RowUpdatedCount);
 		}
-
-		[Test]
-		public void UpdateTaskToDefaultTask()
-		{
-			DefaultTask defaultTaskRow;
-			defaultTaskRow = (DefaultTask) DefaultTasks.Table[1];
-
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
-			row.Description = "TaskTest";
-			row.ParentId = Tasks.RootTasksRow.Id;
-			row.Id = Tasks.AddTasksRow(row);
-			int count = Tasks.Count;
-			row.Description = defaultTaskRow.Description;
-			Tasks.UpdateTaskRow(row);
-			Assert.AreEqual(count, Tasks.Count);
-			PTMDataset.TasksRow updatedRow;
-			updatedRow = Tasks.FindById(row.Id);
-			Assert.AreEqual(defaultTaskRow.Description, updatedRow.Description);
-			Assert.AreEqual(true, updatedRow.IsDefaultTask);
-			Assert.AreEqual(defaultTaskRow.DefaultTaskId, updatedRow.DefaultTaskId);
-		}
-
-		[Test]
-		public void UpdateDefaultTaskToTask()
-		{
-			DefaultTask defaultTaskRow;
-			defaultTaskRow = (DefaultTask) DefaultTasks.Table[1];
-
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
-			row.Description = defaultTaskRow.Description;
-			row.ParentId = Tasks.RootTasksRow.Id;
-			row.Id = Tasks.AddTasksRow(row);
-			int count = Tasks.Count;
-			row.Description = "UpdateDefaultTaskTest";
-			Tasks.UpdateTaskRow(row);
-			Assert.AreEqual(count, Tasks.Count);
-			PTMDataset.TasksRow updatedRow;
-			updatedRow = Tasks.FindById(row.Id);
-			Assert.AreEqual("UpdateDefaultTaskTest", updatedRow.Description);
-			Assert.AreEqual(false, updatedRow.IsDefaultTask);
-			Assert.AreEqual(true, updatedRow.IsDefaultTaskIdNull());
-		}
-
 
 		[Test]
 		public void UpdateParentTask()
@@ -331,7 +245,7 @@ namespace PTM.Test.Business
 		{
 			PTMDataset.TasksRow[] childs;
 			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
-			Assert.AreEqual(0, childs.Length);
+			Assert.AreEqual(1, childs.Length, "Just get the default idle row");
 
 			PTMDataset.TasksRow row1;
 			row1 = Tasks.NewTasksRow();
@@ -352,7 +266,7 @@ namespace PTM.Test.Business
 			row3.Id = Tasks.AddTasksRow(row3);
 
 			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
-			Assert.AreEqual(2, childs.Length);
+			Assert.AreEqual(2 + 1, childs.Length, "2 plus default idle row");
 
 			childs = Tasks.GetChildTasks(row1.Id);
 			Assert.AreEqual(1, childs.Length);

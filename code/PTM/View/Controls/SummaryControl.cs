@@ -457,8 +457,7 @@ namespace PTM.View.Controls
 				{
 					totalTime += summary.TotalActiveTime;
 					totalTime += summary.TotalInactiveTime;
-					if (!summary.IsDefaultTask ||
-					    (summary.IsDefaultTask && DefaultTasks.GetDefaultTask(summary.DefaultTaskId).IsActive))
+					if (summary.IsActive)
 						totalActiveTime += summary.TotalActiveTime;
 
 					TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
@@ -473,15 +472,9 @@ namespace PTM.View.Controls
 						                     		summary.TaskId.ToString(CultureInfo.InvariantCulture)
 						                     	});
 					lvi.ImageIndex = 0;
-					if (summary.IsDefaultTask)
-					{
-						DefaultTask defaultTasks = (DefaultTask) DefaultTasks.Table[summary.DefaultTaskId];
-						lvi.ImageIndex = defaultTasks.IconId;
-					}
-					else
-					{
-						lvi.ImageIndex = IconsManager.DefaultTaskIconId;
-					}
+
+					lvi.ImageIndex = IconsManager.DefaultTaskIconId;
+					
 					lvi.Tag = summary;
 					this.taskList.Items.Add(lvi);
 				}
@@ -574,10 +567,8 @@ namespace PTM.View.Controls
 
 			if (currentTaskSummary != null)
 			{
-				PTMDataset.TasksRow task;
-				task = Tasks.FindById(Logs.CurrentLog.TaskId);
 				TaskSummary sum = (TaskSummary) currentTaskSummary.Tag;
-				if (task.IsDefaultTask && !DefaultTasks.GetDefaultTask(task.DefaultTaskId).IsActive)
+				if (!sum.IsActive)
 				{
 					sum.TotalInactiveTime++;
 				}

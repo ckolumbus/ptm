@@ -33,14 +33,15 @@ namespace PTM.Framework.Infos
 		private string description;
 
 		/// <summary>
-		/// Stores if this task is one of the Default tasks.
+		/// Stores if this task is active
 		/// </summary>
-		private bool isDefaultTask;
+		private bool isActive;
 
-		/// <summary>
-		/// In case of being a Defautl Task stores its defaultTask Id.
-		/// </summary>
-		private int defaultTaskId;
+		public bool IsActive
+		{
+			get { return isActive; }
+			set { isActive = value; }
+		}
 
 		/// <summary>
 		/// TaskId Accessors
@@ -78,22 +79,6 @@ namespace PTM.Framework.Infos
 			set { description = value; }
 		} //Description
 
-		/// <summary>
-		/// IsDefaultTask Accessors
-		/// </summary>
-		public bool IsDefaultTask
-		{
-			get { return isDefaultTask; }
-			set { isDefaultTask = value; }
-		} //IsDefaultTask
-
-		/// <summary>
-		/// DefaultTaskId Accessors
-		/// </summary>
-		public int DefaultTaskId
-		{
-			get { return defaultTaskId; }
-			set { defaultTaskId = value; }
-		} //DefaultTaskId
+		
 	} //end of class
 } //end of namespace

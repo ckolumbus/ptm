@@ -100,29 +100,7 @@ namespace PTM.Test.Business
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowUpdatedCount);
 		}
 		
-		[Test]
-		public void UpdateLogDefaultTaskTest()
-		{
-			PTMDataset.TasksRow taskrow1;
-			taskrow1 = Tasks.NewTasksRow();
-			taskrow1.Description = "TaskTest1";
-			taskrow1.ParentId = Tasks.RootTasksRow.Id;
-			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
-
-			Log logRow;
-			logRow = Logs.AddLog(taskrow1.Id);
-
-			Logs.UpdateLogDefaultTask(logRow.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
-			Assert.AreEqual(true, Tasks.CurrentTaskRow.IsDefaultTask);
-			Assert.AreEqual(DefaultTasks.GetDefaultTask(3).DefaultTaskId,Tasks.CurrentTaskRow.DefaultTaskId);
-			
-			Logs.UpdateLogTaskId(logRow.Id, taskrow1.Id);
-			Assert.AreEqual(false, Tasks.CurrentTaskRow.IsDefaultTask);
-			Logs.UpdateLogDefaultTask(logRow.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
-			Assert.AreEqual(true, Tasks.CurrentTaskRow.IsDefaultTask);
-			Assert.AreEqual(DefaultTasks.GetDefaultTask(4).DefaultTaskId,Tasks.CurrentTaskRow.DefaultTaskId);
-		}
-
+	
 		[Test]
 		public void DeleteTaskLogTest()
 		{
@@ -140,8 +118,7 @@ namespace PTM.Test.Business
 			deletedLog = Logs.FindById(log1.Id);
 			PTMDataset.TasksRow idleTaskRow;
 			idleTaskRow = Tasks.FindById(deletedLog.TaskId);
-			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
-			Assert.AreEqual((int) DefaultTasks.IdleTaskId, idleTaskRow.DefaultTaskId);
+			Assert.AreEqual(Tasks.IdleTasksRow.Id, idleTaskRow.Id);
 
 			Logs.UpdateLogTaskId(log1.Id, taskrow1.Id);
 			Log updatedRow;
@@ -151,22 +128,7 @@ namespace PTM.Test.Business
 			Logs.DeleteLog(log1.Id);
 			deletedLog = Logs.FindById(log1.Id);
 			idleTaskRow = Tasks.FindById(deletedLog.TaskId);
-			Assert.AreEqual(true, idleTaskRow.IsDefaultTask);
-			Assert.AreEqual((int) DefaultTasks.IdleTaskId, idleTaskRow.DefaultTaskId);
-		}
-
-		[Test]
-		public void AddDefaultTaskLogTest()
-		{
-			Log log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
-			PTMDataset.TasksRow task;
-			task = Tasks.FindById(log.TaskId);
-			Assert.AreEqual(true, task.IsDefaultTask);
-			Assert.AreEqual(DefaultTasks.GetDefaultTask(4).DefaultTaskId, task.DefaultTaskId);
-			log = Logs.AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
-			task = Tasks.FindById(log.TaskId);
-			Assert.AreEqual(true, task.IsDefaultTask);
-			Assert.AreEqual(DefaultTasks.GetDefaultTask(4).DefaultTaskId, task.DefaultTaskId);
+			Assert.AreEqual(Tasks.IdleTasksRow.Id, idleTaskRow.Id);
 		}
 
 		[Test]

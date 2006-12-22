@@ -60,7 +60,6 @@ namespace PTM.View.Controls
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogChanged +=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
-			DefaultTasks.DefaultTaskChanged+=new PTM.Framework.DefaultTasks.DefaultTaskChangeEventHandler(DefaultTasks_DefaultTaskChanged);
 			this.taskList.SmallImageList = IconsManager.IconsList;
 			this.Load += new EventHandler(TasksLogControl_Load);
 
@@ -74,7 +73,6 @@ namespace PTM.View.Controls
 			
 			CreateRigthClickMenu();
 			CreateNotifyMenu();
-			CreateNewDefaultTaskComboBox();
 		}
 
 		protected override void OnHandleDestroyed(EventArgs e)
@@ -84,7 +82,6 @@ namespace PTM.View.Controls
 			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogChanged -=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
-			DefaultTasks.DefaultTaskChanged-=new PTM.Framework.DefaultTasks.DefaultTaskChangeEventHandler(DefaultTasks_DefaultTaskChanged);
 			base.OnHandleDestroyed(e);
 		}
 
@@ -277,7 +274,6 @@ namespace PTM.View.Controls
 			this.newDefaultTaskComboBox.Name = "newDefaultTaskComboBox";
 			this.newDefaultTaskComboBox.Size = new System.Drawing.Size(88, 21);
 			this.newDefaultTaskComboBox.TabIndex = 7;
-			this.newDefaultTaskComboBox.SelectedIndexChanged += new System.EventHandler(this.newDefaultTaskComboBox_SelectedIndexChanged);
 			// 
 			// pathCheckBox
 			// 
@@ -328,16 +324,13 @@ namespace PTM.View.Controls
 			}
 			else if (mustAddATask)
 			{
-				if (Tasks.CurrentTaskRow == null)
-					AddDefaultTaskLog(Tasks.RootTasksRow.Id, DefaultTasks.IdleTaskId);
-				else
-					AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTasks.IdleTaskId);
+				AddIdleTaskLog();
 			}
 		}
 
-		private void AddDefaultTaskLog(int taskParentId, int defaultTaskId)
+		private void AddIdleTaskLog()
 		{
-			Logs.AddDefaultTaskLog(taskParentId, defaultTaskId);
+			Logs.AddIdleTaskLog();
 			ResetNotifyTimer((int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 		}
 
@@ -546,37 +539,10 @@ namespace PTM.View.Controls
 			menuItem11.Text = "-";
 			
 			ArrayList a = new ArrayList();
-			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
-			{
-				if(defaultTask.DefaultTaskId == DefaultTasks.IdleTaskId)
-					continue;
-				if(defaultTask.Hidden)
-					continue;
-				DefaultTaskMenuItem menuItem = new DefaultTaskMenuItem(defaultTask.DefaultTaskId);
-				menuItem.Text = "Set to " + defaultTask.Description;
-				menuItem.Click+=new EventHandler(mnuDefaulTaskSetTo_Click);
-				a.Add(menuItem);
-			}
 			ContextMenu defaultTasksMenu = new ContextMenu((MenuItem[]) a.ToArray(typeof(MenuItem)));
 			this.rigthClickMenu.MergeMenu(defaultTasksMenu);
 		}
 		
-		private void CreateNewDefaultTaskComboBox()
-		{		
-			this.newDefaultTaskComboBox.SelectedIndexChanged-=new EventHandler(newDefaultTaskComboBox_SelectedIndexChanged);
-			this.newDefaultTaskComboBox.ValueMember = "DefaultTaskId";
-			this.newDefaultTaskComboBox.DisplayMember = "Description";
-
-			ArrayList list = new ArrayList();
-			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
-			{
-				if(defaultTask.Hidden)
-					continue;
-				list.Add(defaultTask);
-			}
-			this.newDefaultTaskComboBox.DataSource = list;
-			this.newDefaultTaskComboBox.SelectedIndexChanged+=new EventHandler(newDefaultTaskComboBox_SelectedIndexChanged);			
-		}
 		
 		private void taskList_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -590,38 +556,6 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void newDefaultTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if(this.newDefaultTaskComboBox.SelectedIndex==-1)
-				return;
-			
-			if (Tasks.CurrentTaskRow == null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, (int) this.newDefaultTaskComboBox.SelectedValue);
-			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, (int) this.newDefaultTaskComboBox.SelectedValue);
-			
-			//			if(this.newDefaultTaskComboBox.SelectedIndex==0)
-			//				this.menuLunchTime_Click(sender, e);
-			//			if(this.newDefaultTaskComboBox.SelectedIndex==1)
-			//				this.menuOtherPersonal_Click(sender, e);
-			//			if(this.newDefaultTaskComboBox.SelectedIndex==2)
-			//				this.menuJobPhoneCall_Click(sender, e);
-			//			if(this.newDefaultTaskComboBox.SelectedIndex==3)
-			//				this.menuCheckingJobMail_Click(sender, e);
-			//			if(this.newDefaultTaskComboBox.SelectedIndex==4)
-			//				this.menuJobMeeting_Click(sender, e);
-		}
-
-		private void mnuDefaulTaskSetTo_Click(object sender, EventArgs e)
-		{
-			DefaultTaskMenuItem mnu = (DefaultTaskMenuItem) sender;
-			foreach (ListViewItem item in this.taskList.SelectedItems)
-			{
-				Log log = (Log) item.Tag;
-				Logs.UpdateLogDefaultTask(log.Id, mnu.DefaultTaskId);
-			}
-		}	
-		
 		#endregion
 
 		#region Notifications
@@ -672,7 +606,7 @@ namespace PTM.View.Controls
 			}
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Cancel)
 			{
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, DefaultTasks.IdleTaskId);
+				this.AddIdleTaskLog();
 			}
 			else if (notifyForm.Result == NotifyForm.NotifyResult.No)
 			{
@@ -711,15 +645,7 @@ namespace PTM.View.Controls
 			menuItem1.Text = "-";
 			
 			ArrayList a = new ArrayList();
-			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
-			{
-				if(defaultTask.Hidden)
-					continue;
-				DefaultTaskMenuItem menuItem = new DefaultTaskMenuItem(defaultTask.DefaultTaskId);
-				menuItem.Text = defaultTask.Description;
-				menuItem.Click+=new EventHandler(mnuDefaulTaskAdd_Click);
-				a.Add(menuItem);
-			}
+
 			ContextMenu defaultTasksMenu = new ContextMenu((MenuItem[]) a.ToArray(typeof(MenuItem)));
 			this.notifyContextMenu.MergeMenu(defaultTasksMenu);
 		}
@@ -731,14 +657,6 @@ namespace PTM.View.Controls
 			this.Exit(this, e);
 		}
 
-		private void mnuDefaulTaskAdd_Click(object sender, EventArgs e)
-		{
-			DefaultTaskMenuItem mnu = (DefaultTaskMenuItem) sender;
-			if (Tasks.CurrentTaskRow == null)
-				AddDefaultTaskLog(Tasks.RootTasksRow.Id, mnu.DefaultTaskId);
-			else
-				AddDefaultTaskLog(Tasks.CurrentTaskRow.ParentId, mnu.DefaultTaskId);
-		}
 		
 		#endregion
 
@@ -834,19 +752,9 @@ namespace PTM.View.Controls
 			cultureInfo.DateTimeFormat.PMDesignator = "p.m.";
 			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);
 			
-			if (taskRow.IsDefaultTask)
-			{
-				DefaultTask defaultTasks = (DefaultTask) DefaultTasks.Table[taskRow.DefaultTaskId];
-				item.ImageIndex = defaultTasks.IconId;
-				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[defaultTasks.IconId];
-			}
-			else
-			{
-				item.ImageIndex = IconsManager.DefaultTaskIconId;
-				if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-					notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[IconsManager.DefaultTaskIconId];
-			}
+			item.ImageIndex = IconsManager.DefaultTaskIconId;
+			if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
+				notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[IconsManager.DefaultTaskIconId];
 		}
 
 		private void UpdateApplicationsList(ApplicationLog applicationLog)
@@ -888,12 +796,6 @@ namespace PTM.View.Controls
 			this.UpdateApplicationsList(e.ApplicationLog);
 		}
 
-		private void DefaultTasks_DefaultTaskChanged(PTM.Framework.DefaultTasks.DefaultTaskChangeEventArgs e)
-		{
-			CreateRigthClickMenu();
-			CreateNewDefaultTaskComboBox();
-			CreateNotifyMenu();
-		}
 		#endregion
 
 		private void pathCheckBox_CheckedChanged(object sender, System.EventArgs e)

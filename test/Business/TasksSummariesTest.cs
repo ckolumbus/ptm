@@ -34,27 +34,37 @@ namespace PTM.Test.Business
 			row1 = Tasks.NewTasksRow();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
+			row1.IsActive = true;
 			row1.Id = Tasks.AddTasksRow(row1);
-
+			
 			PTMDataset.TasksRow row2;
 			row2 = Tasks.NewTasksRow();
 			row2.Description = "TaskTest2";
 			row2.ParentId = Tasks.RootTasksRow.Id;
+			row2.IsActive = true;
 			row2.Id = Tasks.AddTasksRow(row2);
-
+			
 			PTMDataset.TasksRow row3;
 			row3 = Tasks.NewTasksRow();
 			row3.Description = "TaskTest3";
 			row3.ParentId = row1.Id;
+			row3.IsActive = true;
 			row3.Id = Tasks.AddTasksRow(row3);
-
+			
 			PTMDataset.TasksRow row4;
 			row4 = Tasks.NewTasksRow();
-			row4.IsDefaultTask = true;
-			row4.Description = DefaultTasks.GetDefaultTask(3).Description;
-			row4.DefaultTaskId = DefaultTasks.GetDefaultTask(3).DefaultTaskId;
+			row4.Description = "TaskTest4";
 			row4.ParentId = row1.Id;
+			row4.IsActive = false;
 			row4.Id = Tasks.AddTasksRow(row4);
+
+//			PTMDataset.TasksRow row4;
+//			row4 = Tasks.NewTasksRow();
+//			row4.IsDefaultTask = true;
+//			row4.Description = DefaultTasks.GetDefaultTask(3).Description;
+//			row4.DefaultTaskId = DefaultTasks.GetDefaultTask(3).DefaultTaskId;
+//			row4.ParentId = row1.Id;
+//			row4.Id = Tasks.AddTasksRow(row4);
 
 			Logs.StartLogging();
 			Logs.AddLog(row1.Id);

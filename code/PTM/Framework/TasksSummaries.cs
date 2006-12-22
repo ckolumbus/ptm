@@ -55,18 +55,14 @@ namespace PTM.Framework
 				TaskSummary sumRow = (TaskSummary) summaryList[0];
 				PTMDataset.TasksRow row = Tasks.FindById(sumRow.TaskId);
 				sumRow.Description = row.Description;
-				sumRow.IsDefaultTask = row.IsDefaultTask;
-				if ( sumRow.IsDefaultTask )
-				{
-					sumRow.DefaultTaskId = row.DefaultTaskId;
-					if(!DefaultTasks.GetDefaultTask(sumRow.DefaultTaskId).IsActive)
-					{
+				sumRow.IsActive = row.IsActive;
+				if ( !sumRow.IsActive )
+				{				
 						sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
-						sumRow.TotalActiveTime = 0;
-					}
+						sumRow.TotalActiveTime = 0;					
 				}//if
 				
-				if(sumRow.DefaultTaskId!=DefaultTasks.IdleTaskId)//ignore idle time
+				if(sumRow.TaskId!=Tasks.IdleTasksRow.Id)//ignore idle time
 				{
 					if (row.Id != parentRow.Id)
 					{

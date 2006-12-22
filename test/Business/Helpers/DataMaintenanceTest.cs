@@ -48,35 +48,35 @@ namespace PTM.Test.Business.Helpers
 			task3.ParentId = task1.Id;
 			task3.Id = Tasks.AddTasksRow(task3);
 
-			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
-			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
-			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
-			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.GetDefaultTask(5).DefaultTaskId);
+//			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
+//			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
+//			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
+//			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.GetDefaultTask(5).DefaultTaskId);
 
-			int rootchildidleId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.IdleTaskId);
-			int task1childidleId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.IdleTaskId);
-			int task2childidleId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.IdleTaskId);
-			int task3childidleId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.IdleTaskId);
+//			int rootchildidleId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.IdleTaskId);
+//			int task1childidleId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.IdleTaskId);
+//			int task2childidleId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.IdleTaskId);
+//			int task3childidleId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.IdleTaskId);
 
 			int duration = (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value*60;
 			
-			//Add logs
+			//Add logs (DataMaintenanceDays + one week logeed days)
 			for (int i = 0; i <= (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value + 7; i++)
 			{
 				InsertLog(task1.Id, DateTime.Today.AddDays(-i), duration);
 				InsertLog(task2.Id, DateTime.Today.AddDays(-i).AddSeconds(duration), duration);
 				InsertLog(task3.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*2), duration);
-				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
-				InsertLog(task1childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
-				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
-				InsertLog(task3childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
+//				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
+//				InsertLog(task1childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
+//				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
+//				InsertLog(task3childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
 
-				InsertLog(rootchildidleId, DateTime.Today.AddDays(-i).AddSeconds(duration*7), duration);
-				InsertLog(task1childidleId, DateTime.Today.AddDays(-i).AddSeconds(duration*8), duration);
-				InsertLog(task2childidleId, DateTime.Today.AddDays(-i).AddSeconds(duration*9), duration);
+				InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
+				InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
+				InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
 
-				if (i > (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value)
-					InsertLog(task3childidleId, DateTime.Today.AddDays(-i).AddSeconds(duration*10), duration);
+//				if (i > (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value)
+//					InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
 			}
 
 			DataMaintenanceHelper.DeleteIdleEntries();
@@ -87,18 +87,13 @@ namespace PTM.Test.Business.Helpers
 				ArrayList logs = Logs.GetLogsByDay(DateTime.Today.AddDays(-i));
 				if (i > (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value)
 				{
-					Assert.AreEqual(7, logs.Count, "i=" + i.ToString());
+					Assert.AreEqual(3, logs.Count, "i=" + i.ToString());
 				}
 				else
 				{
-					Assert.AreEqual(10, logs.Count, "i=" + i.ToString());
+					Assert.AreEqual(6, logs.Count, "i=" + i.ToString());
 				}
 			}
-			int idleTasksCount =
-				(int)
-				DbHelper.ExecuteScalar("select count(Id) from Tasks where Tasks.IsDefaultTask = 1 and Tasks.DefaultTaskId = " +
-				                       DefaultTasks.IdleTaskId);
-			Assert.AreEqual(3, idleTasksCount);
 		}
 
 		private void InsertLog(int taskId, DateTime insertTime, int duration)
@@ -131,10 +126,10 @@ namespace PTM.Test.Business.Helpers
 			task3.ParentId = task1.Id;
 			task3.Id = Tasks.AddTasksRow(task3);
 
-			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
-			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
-			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
-			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.GetDefaultTask(5).DefaultTaskId);
+//			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
+//			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
+//			int task2childdefaultId = Tasks.AddDeafultTask(task2.Id, DefaultTasks.GetDefaultTask(4).DefaultTaskId);
+//			int task3childdefaultId = Tasks.AddDeafultTask(task3.Id, DefaultTasks.GetDefaultTask(5).DefaultTaskId);
 
 			int duration = (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value*60;
 			
@@ -151,16 +146,16 @@ namespace PTM.Test.Business.Helpers
 				InsertLog(task3.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
 				InsertLog(task3.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
 
-				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*7), duration);
-				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*8), duration);
-				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*9), duration);
-
-				InsertLog(task1childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*10), duration);
-
-				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*11), duration);
-				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*12), duration);
-
-				InsertLog(task3childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*13), duration);
+//				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*7), duration);
+//				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*8), duration);
+//				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*9), duration);
+//
+//				InsertLog(task1childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*10), duration);
+//
+//				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*11), duration);
+//				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*12), duration);
+//
+//				InsertLog(task3childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*13), duration);
 			}
 
 			DataMaintenanceHelper.GroupLogs();
@@ -171,11 +166,11 @@ namespace PTM.Test.Business.Helpers
 				ArrayList logs = Logs.GetLogsByDay(DateTime.Today.AddDays(-i));
 				if (i > (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value)
 				{
-					Assert.AreEqual(7, logs.Count, "i=" + i.ToString());
+					Assert.AreEqual(3, logs.Count, "i=" + i.ToString());
 				}
 				else
 				{
-					Assert.AreEqual(14, logs.Count, "i=" + i.ToString());
+					Assert.AreEqual(7, logs.Count, "i=" + i.ToString());
 				}
 			}
 		}

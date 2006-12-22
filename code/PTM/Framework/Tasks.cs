@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using PTM.Data;
 using PTM.View;
@@ -16,12 +17,15 @@ namespace PTM.Framework
 		private static PTMDataset.TasksDataTable tasksDataTableInstance;
 		private static PTMDataset.TasksRow currentTaskRow;
 		private static PTMDataset.TasksRow rootTaskRow;
+		private static PTMDataset.TasksRow idleTaskRow;
 		private const string DEFAULT_ROOT_TASK_NAME = "My Job";
+		private const string DEFAULT_IDLE_TASK_NAME = "Idle";
 
 		private Tasks()
 		{
 		}
 
+		
 		#region Properties
 
 		public static PTMDataset.TasksRow CurrentTaskRow
@@ -33,12 +37,18 @@ namespace PTM.Framework
 		{
 			get { return CloneRow(rootTaskRow); }
 		}
+		
+		public static PTMDataset.TasksRow IdleTasksRow
+		{
+			get { return CloneRow(idleTaskRow); }
+		}
 
 		public static int Count
 		{
 			get { return tasksDataTable.Count; }
 		}
 
+		
 		#endregion
 
 		#region Public Methods
@@ -52,7 +62,6 @@ namespace PTM.Framework
 			LoadAllTasks();
 			currentTaskRow = null;
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			DefaultTasks.DefaultTaskChanged+=new PTM.Framework.DefaultTasks.DefaultTaskChangeEventHandler(DefaultTasks_DefaultTaskChanged);
 			tasksDataTable.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowChanged);
 			tasksDataTable.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(tasksDataTable_TasksRowDeleting);
 		}
@@ -86,7 +95,6 @@ namespace PTM.Framework
 
 		public static int AddTasksRow(PTMDataset.TasksRow tasksRow)
 		{
-			SetDefaultTask(tasksRow);
 			ValidateTaskRow(tasksRow, true);
 			tasksRow.TotalTime = 0;
 			tasksRow.IsFinished = false;
@@ -111,7 +119,6 @@ namespace PTM.Framework
 		public static void UpdateTaskRow(PTMDataset.TasksRow tasksRow)
 		{
 			tasksRow.Description = tasksRow.Description.Trim();
-			SetDefaultTask(tasksRow);
 			ValidateTaskRow(tasksRow, false);
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
@@ -224,34 +231,6 @@ namespace PTM.Framework
 			}
 		}
 
-		public static int AddDeafultTask(int taskParentId, int defaultTaskId)
-		{
-			PTMDataset.TasksRow[] childRows;
-			childRows = GetChildTasks(taskParentId);
-
-			int idleTaskId = -1;
-			foreach (PTMDataset.TasksRow childRow in childRows)
-			{
-				if (childRow.IsDefaultTask && childRow.DefaultTaskId == defaultTaskId)
-				{
-					idleTaskId = childRow.Id;
-					break;
-				}
-			}
-
-			if (idleTaskId == -1)
-			{
-				PTMDataset.TasksRow row = NewTasksRow();
-				row.Description = DefaultTasks.GetDefaultTask(defaultTaskId).Description;
-				row.IsDefaultTask = true;
-				row.DefaultTaskId = defaultTaskId;
-				row.ParentId = taskParentId;
-				row.Id = AddTasksRow(row);
-				idleTaskId = row.Id;
-			}
-			return idleTaskId;
-		}
-
 		public static void UpdateParentTask(int taskId, int parentId)
 		{
 			PTMDataset.TasksRow row;
@@ -260,8 +239,9 @@ namespace PTM.Framework
 			UpdateTaskRow(row);
 		}
 
+		
 		#endregion
-
+		
 		#region Private Methods
 
 		private static void LoadAllTasks()
@@ -272,10 +252,12 @@ namespace PTM.Framework
 			if (tasksDataTable.Rows.Count == 0)
 			{
 				AddRootTask();
+				AddIdleTask();
 			}
 			else
 			{
 				SetRootTask();
+				SetIdleTask();
 			}
 			tasksDataTable.EndLoadData();
 		}
@@ -291,6 +273,26 @@ namespace PTM.Framework
 				}
 			}
 		}
+		
+		private static void SetIdleTask()
+		{
+			foreach (DataRelation relation in tasksDataTable.ChildRelations)
+			{
+				if (relation.ChildTable.TableName == tasksDataTable.TableName)
+				{
+					PTMDataset.TasksRow[] rows = (PTMDataset.TasksRow[]) rootTaskRow.GetChildRows(relation);
+					foreach (PTMDataset.TasksRow row in rows)
+					{
+						if(string.Compare(row.Description, Tasks.DEFAULT_IDLE_TASK_NAME)==0)
+						{
+							idleTaskRow = row;
+							return;
+						}
+					}
+				}
+			}
+			throw new ApplicationException("Unexpected error");
+		}
 
 
 		private static void AddRootTask()
@@ -298,7 +300,7 @@ namespace PTM.Framework
 			PTMDataset.TasksRow row = tasksDataTable.NewTasksRow();
 			row.BeginEdit();
 			row.Description = DEFAULT_ROOT_TASK_NAME;
-			row.IsDefaultTask = false;
+			row.IsActive = false;
 			row.IsFinished = false;
 			row.StartDate = DateTime.Now;
 			tasksDataTable.AddTasksRow(row);
@@ -306,6 +308,21 @@ namespace PTM.Framework
 			SaveTasks();
 			row.EndEdit();
 			rootTaskRow = row;
+		}
+		
+		private static void AddIdleTask()
+		{
+			PTMDataset.TasksRow row = tasksDataTable.NewTasksRow();
+			row.BeginEdit();
+			row.Description = DEFAULT_IDLE_TASK_NAME;
+			row.IsActive = false;
+			row.IsFinished = false;
+			row.StartDate = DateTime.Now;
+			row.ParentId = rootTaskRow.Id;
+			tasksDataTable.AddTasksRow(row);
+			SaveTasks();
+			row.EndEdit();
+			idleTaskRow = row;
 		}
 
 		private static void SaveTasks()
@@ -345,30 +362,17 @@ namespace PTM.Framework
 			PTMDataset.TasksRow sameTaskByDescription;
 			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
 			
-			PTMDataset.TasksRow sameTaskByDefaultTask = null;
-			if(tasksRow.IsDefaultTask)
-				 sameTaskByDefaultTask = FindByParentIdAndDefaultTask(tasksRow.ParentId, tasksRow.DefaultTaskId);
 			if (insertRules)
 			{
 				if (sameTaskByDescription != null)
 					throw new ApplicationException("Task already exist");
-				if (tasksRow.IsDefaultTask && sameTaskByDefaultTask != null)
-					throw new ApplicationException("Default task already exist");
 			}
 			else
 			{
 				if (sameTaskByDescription != null && sameTaskByDescription.Id !=tasksRow.Id)
 					throw new ApplicationException("Task already exist");			
-//				if (sameTaskByDescription != null && string.Compare(sameTaskByDescription.Description, tasksRow.Description, false) == 0)//update isnt case sensitive
-//					throw new ApplicationException("Task already exist");
-				if (tasksRow.IsDefaultTask && sameTaskByDefaultTask != null && sameTaskByDefaultTask.Id != tasksRow.Id)
-					throw new ApplicationException("Default task already exist");
 			}
 
-			PTMDataset.TasksRow parent;
-			parent = tasksDataTable.FindById(tasksRow.ParentId);
-			if (parent.IsDefaultTask)
-				throw new ApplicationException("Parent can't be a default task");
 		}
 
 		private static PTMDataset.TasksRow CloneRow(PTMDataset.TasksRow tasksRow)
@@ -393,25 +397,6 @@ namespace PTM.Framework
 			return rowsCopy;
 		}
 
-		private static void SetDefaultTask(PTMDataset.TasksRow tasksRow)
-		{
-			if (tasksRow.IsDescriptionNull())
-				return;
-			tasksRow.IsDefaultTask = false;
-			tasksRow.SetDefaultTaskIdNull();
-			foreach (DefaultTask defaultTask in DefaultTasks.Table.Values)
-			{
-				if (
-					string.Compare(defaultTask.Description.Replace(" ", null), tasksRow.Description.Replace(" ", null), true,
-					               CultureInfo.InvariantCulture) == 0)
-				{
-					tasksRow.IsDefaultTask = true;
-					tasksRow.DefaultTaskId = defaultTask.DefaultTaskId;
-					return;
-				}
-			}
-		}
-
 		private static void ManageTaskLogRowChanged(Logs.LogChangeEventArgs e)
 		{
 			if (e.Log.Id == Logs.CurrentLog.Id)
@@ -433,35 +418,7 @@ namespace PTM.Framework
 			ManageTaskLogRowChanged(e);
 		}
 
-		private static void DefaultTasks_DefaultTaskChanged(PTM.Framework.DefaultTasks.DefaultTaskChangeEventArgs e)
-		{
-			if(e.Action == DataRowAction.Change)
-			{
-				PTMDataset.TasksRow[] rows;
-				rows = (PTMDataset.TasksRow[]) tasksDataTable.Select("DefaultTaskId = " + e.DefaultTask.DefaultTaskId);
-				for (int i = 0;i<rows.Length;i++)
-				{
-					PTMDataset.TasksRow tasksRow = CloneRow(rows[i]);
-					tasksRow.Description = e.DefaultTask.Description;
-					UpdateTaskRow(tasksRow);
-				}
-			}
-		}
-		private static PTMDataset.TasksRow FindByParentIdAndDefaultTask(int parentId, int defaultTaskId)
-		{
-			PTMDataset.TasksRow[] rows;
-			rows = (PTMDataset.TasksRow[]) tasksDataTable.Select(
-			                               	tasksDataTable.DefaultTaskIdColumn.ColumnName +
-			                               	"=" + defaultTaskId + " AND " +
-			                               	tasksDataTable.ParentIdColumn.ColumnName +
-			                               	"=" + parentId);
-
-			if (rows.Length > 0)
-				return CloneRow(rows[0]);
-			else
-				return null;
-		}
-
+		
 		#endregion
 
 		#region Events

@@ -32,7 +32,7 @@ namespace PTM.View.Forms
 		{
 			InitializeComponent();
 
-			tasksTree.Initialize(false);
+			tasksTree.Initialize();
 
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
 			if (Tasks.CurrentTaskRow != null)
@@ -48,7 +48,7 @@ namespace PTM.View.Forms
 		internal TaskLogForm(int editTaskId)
 		{
 			InitializeComponent();
-			tasksTree.Initialize(false);
+			tasksTree.Initialize();
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
 
 			PTMDataset.TasksRow row;
@@ -253,14 +253,12 @@ namespace PTM.View.Forms
 
 		private PTMDataset.TasksDataTable childTasksTable = null;
 
-		private void FillChildTasks(bool showDefaulTasks)
+		private void FillChildTasks()
 		{
 			childTasksTable = new PTMDataset.TasksDataTable();
 			PTMDataset.TasksRow[] childRows;
 			childRows = Tasks.GetChildTasks(selectedParentTaskRow.Id);
 
-			if (showDefaulTasks)
-			{
 				foreach (PTMDataset.TasksRow childRow in childRows)
 				{
 					PTMDataset.TasksRow row;
@@ -268,52 +266,7 @@ namespace PTM.View.Forms
 					row.ItemArray = childRow.ItemArray;
 					childTasksTable.AddTasksRow(row);
 				}
-				foreach (DefaultTask defaultRow in DefaultTasks.Table.Values)
-				{
-					bool exist = false;
-					foreach (PTMDataset.TasksRow childRow in childTasksTable.Rows)
-					{
-						if (childRow.IsDefaultTask && childRow.DefaultTaskId == defaultRow.DefaultTaskId)
-						{
-							exist = true;
-							break;
-						}
-					}
-					if (!exist)
-					{
-						PTMDataset.TasksRow row;
-						row = childTasksTable.NewTasksRow();
-						row.IsDefaultTask = true;
-						row.DefaultTaskId = defaultRow.DefaultTaskId;
-						row.Description = defaultRow.Description;
-						row.ParentId = this.selectedParentTaskRow.Id;
-						row.Id = -defaultRow.DefaultTaskId;
-						childTasksTable.AddTasksRow(row);
-					}
-				}
-			}
-			else
-			{
-				foreach (PTMDataset.TasksRow childRow in childRows)
-				{
-					bool exist = false;
-					foreach (DefaultTask defaultRow in DefaultTasks.Table.Values)
-					{
-						if (childRow.IsDefaultTask && childRow.DefaultTaskId == defaultRow.DefaultTaskId)
-						{
-							exist = true;
-							break;
-						}
-					}
-					if (!exist)
-					{
-						PTMDataset.TasksRow row;
-						row = childTasksTable.NewTasksRow();
-						row.ItemArray = childRow.ItemArray;
-						childTasksTable.AddTasksRow(row);
-					}
-				}
-			}
+			
 			this.taskComboBox.DisplayMember = childTasksTable.DescriptionColumn.ColumnName;
 			this.taskComboBox.ValueMember = childTasksTable.IdColumn.ColumnName;
 			this.taskComboBox.DataSource = childTasksTable.DefaultView;
@@ -335,7 +288,7 @@ namespace PTM.View.Forms
 
 		private void hideDefaultTasksCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
+			FillChildTasks();
 		}
 
 
@@ -398,7 +351,7 @@ namespace PTM.View.Forms
 
 			this.selectedParentTaskRow = Tasks.FindById(tasksTree.SelectedTaskId);
 
-			FillChildTasks(!this.hideDefaultTasksCheckBox.Checked);
+			FillChildTasks();
 		}
 
 		private void newButton_Click(object sender, EventArgs e)

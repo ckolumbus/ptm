@@ -138,7 +138,7 @@ namespace PTM.Addin.WeekView
 					{				
 						PTMDataset.TasksRow task;
 						task = Tasks.FindById(log.MergeLog.TaskId);
-						if(task.IsDefaultTask && task.DefaultTaskId == DefaultTasks.IdleTaskId)
+						if(task.Id == Tasks.IdleTasksRow.Id)
 							continue;
 					
 						Appointment appointment = new Appointment();
@@ -147,7 +147,7 @@ namespace PTM.Addin.WeekView
 						appointment.Title = task.Description;
 						appointment.Color = Color.Green;
 						appointment.Locked = false;
-						if(task.IsDefaultTask && !DefaultTasks.GetDefaultTask(task.DefaultTaskId).IsActive)
+						if(!task.IsActive)
 						{
 							appointment.Color = Color.Yellow;
 						}

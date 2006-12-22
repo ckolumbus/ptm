@@ -86,7 +86,6 @@ namespace PTM.View.Controls
 		private ImageList groupsImageList;
 		private TreeView treeView;
 		private int currentSelectedTask = -1;
-		internal bool includeDefaultTask;
 		internal const string NEW_TASK = "New Task";
 
 		protected override void OnLoad(EventArgs e)
@@ -108,9 +107,8 @@ namespace PTM.View.Controls
 			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
-		internal void Initialize(bool includeDefaultTask)
+		internal void Initialize()
 		{
-			this.includeDefaultTask = includeDefaultTask;
 			LoadTree();
 			Tasks.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
@@ -121,7 +119,7 @@ namespace PTM.View.Controls
 			PTMDataset.TasksRow row = Tasks.NewTasksRow();
 			row.Description = NEW_TASK;
 			row.ParentId = (int) treeView.SelectedNode.Tag;
-			row.IsDefaultTask = false;
+			row.IsActive = true;
 
 			try
 			{
@@ -181,8 +179,6 @@ namespace PTM.View.Controls
 			DataRow[] childsRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (PTMDataset.TasksRow row in childsRows)
 			{
-				if (!this.includeDefaultTask && row.IsDefaultTask)
-					continue;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);
 				AddChildNodes(row, nodeChild);
@@ -362,7 +358,7 @@ namespace PTM.View.Controls
 				gfx.DrawString(this.dragNode.Text,
 				               this.treeView.Font,
 				               new SolidBrush(this.treeView.ForeColor),
-				               (float) this.treeView.Indent, 1.0f);
+				               this.treeView.Indent, 1.0f);
 			}
 
 			// Add bitmap to imagelist

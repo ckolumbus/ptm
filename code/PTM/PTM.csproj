@@ -177,11 +177,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\DefaultTasks.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Framework\Logs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -428,16 +423,6 @@
                 <File
                     RelPath = "View\Forms\AddinForm.resx"
                     DependentUpon = "AddinForm.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "View\Forms\CommonTasksForm.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Forms\CommonTasksForm.resx"
-                    DependentUpon = "CommonTasksForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

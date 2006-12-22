@@ -31,7 +31,7 @@ namespace PTM.View.Forms
 		{
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);
-			this.tasksTreeViewControl.Initialize(true);
+			this.tasksTreeViewControl.Initialize();
 		}
 
 		/// <summary>

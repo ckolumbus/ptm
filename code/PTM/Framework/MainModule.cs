@@ -21,22 +21,25 @@ namespace PTM.Framework
 		{
 			DbHelper.Initialize(userName);
 			Application.DoEvents();
+			
 			DBUpdaterHelper.UpdateDataBase();
 			Application.DoEvents();
-			DataMaintenanceHelper.DeleteIdleEntries();
-			Application.DoEvents();
-			DataMaintenanceHelper.GroupLogs();
-			Application.DoEvents();
+			
 			DbHelper.CompactDB();
 			Application.DoEvents();
+			
 			DataAdapterManager adapterManager = new DataAdapterManager();
 			Application.DoEvents();
 			UnitOfWork.Initialize(ds, adapterManager);
 			Application.DoEvents();
-			DefaultTasks.Initialize();
-			Application.DoEvents();
 			Tasks.Initialize(ds.Tasks, adapterManager.tasksDataAdapter);
 			Application.DoEvents();
+		
+			DataMaintenanceHelper.DeleteIdleEntries();
+			Application.DoEvents();
+			DataMaintenanceHelper.GroupLogs();
+			Application.DoEvents();
+
 			Logs.Initialize();
 			Application.DoEvents();
 			Logs.FillMissingTimeUntilNow();

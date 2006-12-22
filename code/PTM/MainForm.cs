@@ -45,7 +45,6 @@ namespace PTM
 		private bool systemShutdown = false;
 		private MenuItem menuItem5;
 		private System.Windows.Forms.MenuItem menuItem6;
-		private MenuItem menuItem7;
 		private bool AnimationDisabled = false;
 
 		internal MainForm()
@@ -146,7 +145,6 @@ namespace PTM
 			this.statisticsPage = new System.Windows.Forms.TabPage();
 			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
-			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
@@ -189,8 +187,7 @@ namespace PTM
 			this.menuItem4.Index = 1;
 			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																											 this.menuItem5,
-																											 this.menuItem6, 
-																												this.menuItem7});
+																											 this.menuItem6});
 			this.menuItem4.Text = "Tools";
 			// 
 			// menuItem5
@@ -314,12 +311,6 @@ namespace PTM
 			this.menuItem6.Text = "Add-in Manager...";
 			this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
 			// 
-			// menuItem7
-			// 
-			this.menuItem7.Index = 2;
-			this.menuItem7.Text = "Common tasks...";
-			this.menuItem7.Click +=new EventHandler(menuItem7_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -417,7 +408,7 @@ namespace PTM
 
 				if (notifyAreaHandle != IntPtr.Zero)
 				{
-					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo) == true)
+					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo))
 					{
 						ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
 					} //if
@@ -471,11 +462,7 @@ namespace PTM
 			AddinForm addinForm = new AddinForm();
 			addinForm.ShowDialog(this);
 		}
-		private void menuItem7_Click(object sender, EventArgs e)
-		{
-			CommonTasksForm ctf = new CommonTasksForm();
-			ctf.ShowDialog(this);
-		}
+
 		#endregion
 
 		
