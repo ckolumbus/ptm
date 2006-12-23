@@ -739,7 +739,7 @@ namespace PTM.View.Controls
 //			{
 //				item.Text = taskRow.Description;
 //			}
-			if(this.pathCheckBox.Checked)
+			if(this.pathCheckBox.Checked && taskRow.Id!=Tasks.IdleTasksRow.Id)
 				item.Text = Tasks.GetFullPath(taskRow.Id);
 			else
 				item.Text = taskRow.Description;
@@ -807,6 +807,8 @@ namespace PTM.View.Controls
 				for(int i = 0; i<this.taskList.Items.Count;i++)
 				{
 					TreeListViewItem item = this.taskList.Items[i];
+					if(((Log) item.Tag).TaskId == Tasks.IdleTasksRow.Id)
+						continue;
 					if(this.pathCheckBox.Checked)
 					{
 						item.Text = Tasks.GetFullPath(((Log) item.Tag).TaskId);

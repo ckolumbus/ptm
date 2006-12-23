@@ -123,6 +123,8 @@ namespace PTM.Framework
 		public static void UpdateTaskRow(PTMDataset.TasksRow tasksRow)
 		{
 			tasksRow.Description = tasksRow.Description.Trim();
+			if (tasksRow.Id == rootTaskRow.Id || tasksRow.Id == idleTaskRow.Id)
+				throw new ApplicationException("This task can't be updated.");
 			ValidateTaskRow(tasksRow, false);
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
@@ -190,9 +192,9 @@ namespace PTM.Framework
 			PTMDataset.TasksRow curRow = row;
 			while (true)
 			{
-				parents.Insert(0, curRow);
 				if (curRow.IsParentIdNull())
 					break;
+				parents.Insert(0, curRow);
 				curRow = tasksDataTable.FindById(curRow.ParentId);
 			}
 			StringBuilder path = new StringBuilder();
@@ -200,7 +202,10 @@ namespace PTM.Framework
 			{
 				path.Append(tasksRow.Description + @"\");
 			}
-			return path.ToString();
+			if(path.Length>0)
+				return path.ToString(0, path.Length-1);
+			else
+				return String.Empty;
 		}
 
 		public static int IsParent(int parentTaskId, int childTaskId)
@@ -239,6 +244,8 @@ namespace PTM.Framework
 		{
 			PTMDataset.TasksRow row;
 			row = FindById(taskId);
+			if (row.Id == rootTaskRow.Id || row.Id == idleTaskRow.Id)
+				throw new ApplicationException("This task can't be updated.");
 			row.ParentId = parentId;
 			UpdateTaskRow(row);
 		}
@@ -358,6 +365,7 @@ namespace PTM.Framework
 
 		private static void ValidateTaskRow(PTMDataset.TasksRow tasksRow, bool insertRules)
 		{
+
 			if (tasksRow.IsParentIdNull())
 				throw new ApplicationException("Parent can't be null");
 			if (tasksRow.IsDescriptionNull())

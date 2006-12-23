@@ -137,6 +137,22 @@ namespace PTM.Test.Business
 			Assert.AreEqual(eventCount + 1, this.tasksRowChangedEvent_RowUpdatedCount);
 		}
 
+		
+		
+		[Test]
+		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+		public void UpdateRootTaskTest()
+		{
+			Tasks.UpdateTaskRow(Tasks.RootTasksRow);
+		}
+		
+		[Test]
+		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+		public void UpdateIdleTaskTest()
+		{
+			Tasks.UpdateTaskRow(Tasks.IdleTasksRow);
+		}
+		
 		[Test]
 		public void UpdateParentTask()
 		{
@@ -157,6 +173,30 @@ namespace PTM.Test.Business
 			updatedTask = Tasks.FindById(row2.Id);
 
 			Assert.AreEqual(row1.Id, updatedTask.ParentId);
+		}
+		
+		[Test]
+		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+		public void UpdateParentTaskRootTaskTest()
+		{
+			PTMDataset.TasksRow row1;
+			row1 = Tasks.NewTasksRow();
+			row1.Description = "Task1Test";
+			row1.ParentId = Tasks.RootTasksRow.Id;
+			row1.Id = Tasks.AddTasksRow(row1);
+			Tasks.UpdateParentTask(Tasks.RootTasksRow.Id, row1.Id);
+		}
+		
+		[Test]
+		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+		public void UpdateParentTaskIdleTaskTest()
+		{
+			PTMDataset.TasksRow row1;
+			row1 = Tasks.NewTasksRow();
+			row1.Description = "Task1Test";
+			row1.ParentId = Tasks.RootTasksRow.Id;
+			row1.Id = Tasks.AddTasksRow(row1);
+			Tasks.UpdateParentTask(Tasks.IdleTasksRow.Id, row1.Id);
 		}
 
 		[Test]
@@ -291,7 +331,7 @@ namespace PTM.Test.Business
 		{
 			string path;
 			path = Tasks.GetFullPath(Tasks.RootTasksRow.Id);
-			Assert.AreEqual(@"My Job\", path);
+			Assert.AreEqual(String.Empty, path);
 
 			PTMDataset.TasksRow row1;
 			row1 = Tasks.NewTasksRow();
@@ -311,17 +351,14 @@ namespace PTM.Test.Business
 			row3.ParentId = row1.Id;
 			row3.Id = Tasks.AddTasksRow(row3);
 
-			path = Tasks.GetFullPath(Tasks.RootTasksRow.Id);
-			Assert.AreEqual(@"My Job\", path);
-
 			path = Tasks.GetFullPath(row1.Id);
-			Assert.AreEqual(@"My Job\TaskTest1\", path);
+			Assert.AreEqual(@"TaskTest1", path);
 
 			path = Tasks.GetFullPath(row2.Id);
-			Assert.AreEqual(@"My Job\TaskTest2\", path);
+			Assert.AreEqual(@"TaskTest2", path);
 
 			path = Tasks.GetFullPath(row3.Id);
-			Assert.AreEqual(@"My Job\TaskTest1\TaskTest3\", path);
+			Assert.AreEqual(@"TaskTest1\TaskTest3", path);
 		}
 
 		[Test]
