@@ -100,6 +100,10 @@ namespace PTM.Framework
 			tasksRow.IsFinished = false;
 			tasksRow.SetStartDateNull();
 			tasksRow.SetStopDateNull();
+			if(tasksRow.IsIconIdNull())
+				tasksRow.IconId = IconsManager.DefaultTaskIconId;
+			if(tasksRow.IsIsActiveNull())
+				tasksRow.IsActive = true;
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.NewTasksRow();
 			row.ItemArray = tasksRow.ItemArray;
@@ -137,8 +141,8 @@ namespace PTM.Framework
 						"This task can't be deleted now. You are currently working on it or in a part of it.");
 				}
 
-			if (tasksRow.Id == rootTaskRow.Id)
-				throw new ApplicationException("The root task can't be deleted.");
+			if (tasksRow.Id == rootTaskRow.Id || tasksRow.Id == idleTaskRow.Id)
+				throw new ApplicationException("This task can't be deleted.");
 
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
@@ -300,9 +304,10 @@ namespace PTM.Framework
 			PTMDataset.TasksRow row = tasksDataTable.NewTasksRow();
 			row.BeginEdit();
 			row.Description = DEFAULT_ROOT_TASK_NAME;
-			row.IsActive = false;
+			row.IsActive = true;
 			row.IsFinished = false;
 			row.StartDate = DateTime.Now;
+			row.IconId = IconsManager.DefaultTaskIconId;
 			tasksDataTable.AddTasksRow(row);
 			//SaveTaskRow(row);
 			SaveTasks();
@@ -319,6 +324,7 @@ namespace PTM.Framework
 			row.IsFinished = false;
 			row.StartDate = DateTime.Now;
 			row.ParentId = rootTaskRow.Id;
+			row.IconId = IconsManager.IdleTaskIconId;
 			tasksDataTable.AddTasksRow(row);
 			SaveTasks();
 			row.EndEdit();

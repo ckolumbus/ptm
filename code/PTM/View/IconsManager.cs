@@ -14,6 +14,7 @@ namespace PTM.View
 		} //IconsManager
 
 		public const int DefaultTaskIconId = 1;
+		public const int IdleTaskIconId = 0;
 		private static ImageList iconsList = new ImageList();
 		private static Hashtable iconsCommonTasks = new Hashtable();
 		internal static ImageList IconsList

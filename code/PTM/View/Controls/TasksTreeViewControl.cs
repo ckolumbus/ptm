@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PTM.Framework;
 using PTM.Data;
+using PTM.View.Forms;
 
 namespace PTM.View.Controls
 {
@@ -23,6 +24,7 @@ namespace PTM.View.Controls
 			this.treeView.DragEnter += new DragEventHandler(treeView_DragEnter);
 			this.treeView.DragLeave += new EventHandler(treeView_DragLeave);
 			this.treeView.GiveFeedback += new GiveFeedbackEventHandler(treeView_GiveFeedback);
+			this.treeView.DoubleClick+=new EventHandler(treeView_DoubleClick);
 			this.timer.Tick += new EventHandler(timer_Tick);
 			timer.Interval = 200;
 		}
@@ -48,8 +50,13 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TasksTreeViewControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksTreeViewControl));
 			this.treeView = new System.Windows.Forms.TreeView();
+			this.treeMenu = new System.Windows.Forms.ContextMenu();
+			this.mnuProperties = new System.Windows.Forms.MenuItem();
+			this.menuItem5 = new System.Windows.Forms.MenuItem();
+			this.mnuDelete = new System.Windows.Forms.MenuItem();
+			this.mnuRename = new System.Windows.Forms.MenuItem();
 			this.groupsImageList = new System.Windows.Forms.ImageList(this.components);
 			this.SuspendLayout();
 			// 
@@ -57,28 +64,60 @@ namespace PTM.View.Controls
 			// 
 			this.treeView.AllowDrop = true;
 			this.treeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.treeView.ContextMenu = this.treeMenu;
 			this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView.HotTracking = true;
 			this.treeView.ImageIndex = -1;
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
 			this.treeView.SelectedImageIndex = -1;
-			this.treeView.Size = new System.Drawing.Size(120, 104);
+			this.treeView.Size = new System.Drawing.Size(120, 60);
 			this.treeView.TabIndex = 0;
+			// 
+			// treeMenu
+			// 
+			this.treeMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																											this.mnuProperties,
+																											this.menuItem5,
+																											this.mnuDelete,
+																											this.mnuRename});
+			// 
+			// mnuProperties
+			// 
+			this.mnuProperties.Index = 0;
+			this.mnuProperties.Text = "Properties...";
+			this.mnuProperties.Click += new System.EventHandler(this.mnuProperties_Click);
+			// 
+			// menuItem5
+			// 
+			this.menuItem5.Index = 1;
+			this.menuItem5.Text = "-";
+			// 
+			// mnuDelete
+			// 
+			this.mnuDelete.Index = 2;
+			this.mnuDelete.Text = "Delete";
+			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
+			// 
+			// mnuRename
+			// 
+			this.mnuRename.Index = 3;
+			this.mnuRename.Text = "Rename";
+			this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
 			// groupsImageList
 			// 
 			this.groupsImageList.ImageSize = new System.Drawing.Size(16, 16);
-			this.groupsImageList.ImageStream =
-				((System.Windows.Forms.ImageListStreamer) (resources.GetObject("groupsImageList.ImageStream")));
+			this.groupsImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("groupsImageList.ImageStream")));
 			this.groupsImageList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// TasksTreeViewControl
 			// 
 			this.Controls.Add(this.treeView);
 			this.Name = "TasksTreeViewControl";
-			this.Size = new System.Drawing.Size(120, 104);
+			this.Size = new System.Drawing.Size(120, 60);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -86,6 +125,11 @@ namespace PTM.View.Controls
 		private ImageList groupsImageList;
 		private TreeView treeView;
 		private int currentSelectedTask = -1;
+		private System.Windows.Forms.MenuItem menuItem5;
+		private System.Windows.Forms.ContextMenu treeMenu;
+		private System.Windows.Forms.MenuItem mnuDelete;
+		private System.Windows.Forms.MenuItem mnuRename;
+		private System.Windows.Forms.MenuItem mnuProperties;
 		internal const string NEW_TASK = "New Task";
 
 		protected override void OnLoad(EventArgs e)
@@ -179,6 +223,8 @@ namespace PTM.View.Controls
 			DataRow[] childsRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (PTMDataset.TasksRow row in childsRows)
 			{
+				if(row.Id == Tasks.IdleTasksRow.Id)
+					continue;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);
 				AddChildNodes(row, nodeChild);
@@ -521,5 +567,32 @@ namespace PTM.View.Controls
 		}
 
 		#endregion
+
+		private void mnuDelete_Click(object sender, System.EventArgs e)
+		{
+			this.DeleteSelectedTask();
+		}
+
+		private void mnuRename_Click(object sender, System.EventArgs e)
+		{
+			this.EditSelectedTaskDescription();
+		}
+
+		public void ShowPropertiesSelectedTask()
+		{
+			TaskPropertiesForm pf;
+			pf = new TaskPropertiesForm((int) treeView.SelectedNode.Tag);
+			pf.ShowDialog(this);
+		}
+
+		private void mnuProperties_Click(object sender, System.EventArgs e)
+		{
+			ShowPropertiesSelectedTask();
+		}
+
+		private void treeView_DoubleClick(object sender, EventArgs e)
+		{
+			this.OnDoubleClick(e);
+		}
 	}
 }

@@ -190,10 +190,17 @@ namespace PTM.Test.Business
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "The root task can't be deleted.")]
+		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
 		public void DeleteRootTaskTest()
 		{
 			Tasks.DeleteTaskRow(Tasks.RootTasksRow);
+		}
+		
+		[Test]
+		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
+		public void DeleteIdleTaskTest()
+		{
+			Tasks.DeleteTaskRow(Tasks.IdleTasksRow);
 		}
 
 		[Test]

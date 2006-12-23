@@ -671,6 +671,7 @@ namespace PTM.View.Controls
 					if (((Log) item.Tag).TaskId == e.Row.Id)
 					{
 						item.SubItems[TaskDescriptionHeader.Index].Text = e.Row.Description;
+						item.ImageIndex = e.Row.IconId;
 					}
 				}
 			}
@@ -752,7 +753,7 @@ namespace PTM.View.Controls
 			cultureInfo.DateTimeFormat.PMDesignator = "p.m.";
 			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);
 			
-			item.ImageIndex = IconsManager.DefaultTaskIconId;
+			item.ImageIndex = taskRow.IconId;
 			if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
 				notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[IconsManager.DefaultTaskIconId];
 		}

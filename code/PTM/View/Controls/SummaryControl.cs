@@ -473,7 +473,7 @@ namespace PTM.View.Controls
 						                     	});
 					lvi.ImageIndex = 0;
 
-					lvi.ImageIndex = IconsManager.DefaultTaskIconId;
+					lvi.ImageIndex = summary.IconId;
 					
 					lvi.Tag = summary;
 					this.taskList.Items.Add(lvi);

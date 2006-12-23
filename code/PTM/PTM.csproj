@@ -95,7 +95,7 @@
             <Include>
                 <File
                     RelPath = "app.manifest"
-                    BuildAction = "Content"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
@@ -463,6 +463,16 @@
                 <File
                     RelPath = "View\Forms\TaskLogForm.resx"
                     DependentUpon = "TaskLogForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "View\Forms\TaskPropertiesForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "View\Forms\TaskPropertiesForm.resx"
+                    DependentUpon = "TaskPropertiesForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

@@ -18,6 +18,7 @@ namespace PTM.View.Forms
 		private Button deleteButton;
 		private Button editButton;
 		private IContainer components;
+		private System.Windows.Forms.Button propertiesButton;
 
 
 		private PTMDataset.TasksRow selectedTaskRow = null;
@@ -63,6 +64,7 @@ namespace PTM.View.Forms
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.editButton = new System.Windows.Forms.Button();
 			this.tasksTreeViewControl = new PTM.View.Controls.TasksTreeViewControl();
+			this.propertiesButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// newButton
@@ -116,15 +118,26 @@ namespace PTM.View.Forms
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.tasksTreeViewControl.Location = new System.Drawing.Point(8, 8);
 			this.tasksTreeViewControl.Name = "tasksTreeViewControl";
-			this.tasksTreeViewControl.SelectedTaskId = -1;
 			this.tasksTreeViewControl.Size = new System.Drawing.Size(248, 304);
 			this.tasksTreeViewControl.TabIndex = 0;
+			// 
+			// propertiesButton
+			// 
+			this.propertiesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.propertiesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.propertiesButton.Location = new System.Drawing.Point(264, 136);
+			this.propertiesButton.Name = "propertiesButton";
+			this.propertiesButton.Size = new System.Drawing.Size(80, 23);
+			this.propertiesButton.TabIndex = 5;
+			this.propertiesButton.Text = "Properties";
+			this.propertiesButton.Click += new System.EventHandler(this.propertiesButton_Click);
 			// 
 			// TasksHierarchyForm
 			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(352, 318);
+			this.Controls.Add(this.propertiesButton);
 			this.Controls.Add(this.tasksTreeViewControl);
 			this.Controls.Add(this.editButton);
 			this.Controls.Add(this.deleteButton);
@@ -176,6 +189,11 @@ namespace PTM.View.Forms
 			this.selectedTaskRow = Tasks.FindById(
 				(int) tasksTreeViewControl.SelectedTaskId);
 			this.Close();
+		}
+
+		private void propertiesButton_Click(object sender, System.EventArgs e)
+		{
+			this.tasksTreeViewControl.ShowPropertiesSelectedTask();
 		}
 	}
 }

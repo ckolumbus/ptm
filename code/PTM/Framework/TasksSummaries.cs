@@ -56,6 +56,7 @@ namespace PTM.Framework
 				PTMDataset.TasksRow row = Tasks.FindById(sumRow.TaskId);
 				sumRow.Description = row.Description;
 				sumRow.IsActive = row.IsActive;
+				sumRow.IconId = row.IconId;
 				if ( !sumRow.IsActive )
 				{				
 						sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
