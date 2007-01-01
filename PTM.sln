@@ -17,8 +17,6 @@ Global
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
-	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.ActiveCfg = Debug|.NET
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.Build.0 = Debug|.NET
@@ -35,6 +33,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		info.xml = info.xml
+		art\people.ico = art\people.ico
 		database\ptm.mdb = database\ptm.mdb
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

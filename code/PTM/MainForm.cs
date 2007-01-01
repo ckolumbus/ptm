@@ -39,18 +39,20 @@ namespace PTM
 		private StatisticsControl statisticsControl;
 		private MenuItem menuItem2;
 		private MenuItem aboutMenuItem;
-		private MenuItem menuItem3;
 		private MenuItem menuItem4;
 		private IContainer components;
 		private bool systemShutdown = false;
 		private MenuItem menuItem5;
 		private System.Windows.Forms.MenuItem menuItem6;
+		private System.Windows.Forms.MenuItem menuItem3;
+		private System.Windows.Forms.MenuItem menuItem7;
 		private bool AnimationDisabled = false;
 
 		internal MainForm()
 		{
 			InitializeComponent();
 			Application.DoEvents();
+			InitializeTabPages();
 			base.Text += " " + ConfigurationHelper.GetVersionString();
 			this.tasksLogControl.Exit += new EventHandler(Exit);
 			//LoadIconsFromResources();
@@ -60,7 +62,60 @@ namespace PTM
 			
 			LoadAddins();
 			Application.DoEvents();
-		}//MainForm
+		}
+
+		private void InitializeTabPages()
+		{
+			this.tabControl.SuspendLayout();
+			this.tasksPage.SuspendLayout();
+			this.summaryPage.SuspendLayout();
+			this.statisticsPage.SuspendLayout();
+			this.SuspendLayout();
+			this.tasksLogControl = new PTM.View.Controls.TasksLogControl();
+			this.summaryControl = new PTM.View.Controls.SummaryControl();
+			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
+			
+			this.tasksPage.Controls.Add(this.tasksLogControl);
+			// 
+			// tasksLogControl
+			// 
+			this.tasksLogControl.BackColor = System.Drawing.SystemColors.Control;
+			this.tasksLogControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tasksLogControl.Location = new System.Drawing.Point(0, 0);
+			this.tasksLogControl.Name = "tasksLogControl";
+			this.tasksLogControl.Size = new System.Drawing.Size(408, 358);
+			this.tasksLogControl.TabIndex = 0;
+			
+			this.summaryPage.Controls.Add(this.summaryControl);
+			// 
+			// summaryControl
+			// 
+			this.summaryControl.BackColor = System.Drawing.SystemColors.Control;
+			this.summaryControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.summaryControl.Location = new System.Drawing.Point(0, 0);
+			this.summaryControl.Name = "summaryControl";
+			this.summaryControl.Size = new System.Drawing.Size(408, 358);
+			this.summaryControl.TabIndex = 0;
+			
+			this.statisticsPage.Controls.Add(this.statisticsControl);
+			// 
+			// statisticsControl
+			// 
+			this.statisticsControl.BackColor = System.Drawing.SystemColors.Control;
+			this.statisticsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.statisticsControl.Location = new System.Drawing.Point(0, 0);
+			this.statisticsControl.Name = "statisticsControl";
+			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
+			this.statisticsControl.TabIndex = 0;
+			
+			this.tabControl.ResumeLayout(false);
+			this.tasksPage.ResumeLayout(false);
+			this.summaryPage.ResumeLayout(false);
+			this.statisticsPage.ResumeLayout(false);
+			this.ResumeLayout();
+		}
+
+//MainForm
 
 		private void LoadAddins()
 		{
@@ -127,10 +182,10 @@ namespace PTM
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.exitMenuItem = new System.Windows.Forms.MenuItem();
 			this.menuItem4 = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
+			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.MenuItem();
 			this.statusBar = new System.Windows.Forms.StatusBar();
@@ -139,46 +194,33 @@ namespace PTM
 			this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tasksPage = new System.Windows.Forms.TabPage();
-			this.tasksLogControl = new PTM.View.Controls.TasksLogControl();
 			this.summaryPage = new System.Windows.Forms.TabPage();
-			this.summaryControl = new PTM.View.Controls.SummaryControl();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
-			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
-			this.menuItem6 = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
 			this.tabControl.SuspendLayout();
-			this.tasksPage.SuspendLayout();
-			this.summaryPage.SuspendLayout();
-			this.statisticsPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainMenu
 			// 
 			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											this.menuItem1,
-																											this.menuItem4,
-																											this.menuItem2});
+																					 this.menuItem1,
+																					 this.menuItem4,
+																					 this.menuItem2});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.menuItem3,
-																											 this.exitMenuItem});
+																					  this.exitMenuItem});
 			this.menuItem1.Text = "File";
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 0;
-			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F3;
-			this.menuItem3.Text = "Explore &Tasks...";
-			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
 			// 
 			// exitMenuItem
 			// 
-			this.exitMenuItem.Index = 1;
+			this.exitMenuItem.Index = 0;
 			this.exitMenuItem.Text = "&Exit PTM";
 			this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
 			// 
@@ -186,21 +228,29 @@ namespace PTM
 			// 
 			this.menuItem4.Index = 1;
 			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.menuItem5,
-																											 this.menuItem6});
+																					  this.menuItem7,
+																					  this.menuItem3,
+																					  this.menuItem5,
+																					  this.menuItem6});
 			this.menuItem4.Text = "Tools";
 			// 
 			// menuItem5
 			// 
-			this.menuItem5.Index = 0;
+			this.menuItem5.Index = 2;
 			this.menuItem5.Text = "Configuration...";
 			this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
+			// 
+			// menuItem6
+			// 
+			this.menuItem6.Index = 3;
+			this.menuItem6.Text = "Add-in Manager...";
+			this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
 			// 
 			// menuItem2
 			// 
 			this.menuItem2.Index = 2;
 			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.aboutMenuItem});
+																					  this.aboutMenuItem});
 			this.menuItem2.Text = "Help";
 			// 
 			// aboutMenuItem
@@ -214,9 +264,9 @@ namespace PTM
 			this.statusBar.Location = new System.Drawing.Point(0, 405);
 			this.statusBar.Name = "statusBar";
 			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-																												 this.statusBarPanel1,
-																												 this.statusBarPanel2,
-																												 this.statusBarPanel3});
+																						 this.statusBarPanel1,
+																						 this.statusBarPanel2,
+																						 this.statusBarPanel3});
 			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(432, 22);
 			this.statusBar.TabIndex = 1;
@@ -253,63 +303,39 @@ namespace PTM
 			// 
 			// tasksPage
 			// 
-			this.tasksPage.Controls.Add(this.tasksLogControl);
 			this.tasksPage.Location = new System.Drawing.Point(4, 22);
 			this.tasksPage.Name = "tasksPage";
 			this.tasksPage.Size = new System.Drawing.Size(408, 358);
 			this.tasksPage.TabIndex = 1;
 			this.tasksPage.Text = "Tasks Log";
 			// 
-			// tasksLogControl
-			// 
-			this.tasksLogControl.BackColor = System.Drawing.SystemColors.Control;
-			this.tasksLogControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tasksLogControl.Location = new System.Drawing.Point(0, 0);
-			this.tasksLogControl.Name = "tasksLogControl";
-			this.tasksLogControl.Size = new System.Drawing.Size(408, 358);
-			this.tasksLogControl.TabIndex = 0;
-			// 
 			// summaryPage
 			// 
-			this.summaryPage.Controls.Add(this.summaryControl);
 			this.summaryPage.Location = new System.Drawing.Point(4, 22);
 			this.summaryPage.Name = "summaryPage";
 			this.summaryPage.Size = new System.Drawing.Size(408, 358);
 			this.summaryPage.TabIndex = 2;
 			this.summaryPage.Text = "Summary";
 			// 
-			// summaryControl
-			// 
-			this.summaryControl.BackColor = System.Drawing.SystemColors.Control;
-			this.summaryControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.summaryControl.Location = new System.Drawing.Point(0, 0);
-			this.summaryControl.Name = "summaryControl";
-			this.summaryControl.Size = new System.Drawing.Size(408, 358);
-			this.summaryControl.TabIndex = 0;
-			// 
 			// statisticsPage
 			// 
-			this.statisticsPage.Controls.Add(this.statisticsControl);
 			this.statisticsPage.Location = new System.Drawing.Point(4, 22);
 			this.statisticsPage.Name = "statisticsPage";
 			this.statisticsPage.Size = new System.Drawing.Size(408, 358);
 			this.statisticsPage.TabIndex = 3;
 			this.statisticsPage.Text = "Statistics";
 			// 
-			// statisticsControl
+			// menuItem3
 			// 
-			this.statisticsControl.BackColor = System.Drawing.SystemColors.Control;
-			this.statisticsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.statisticsControl.Location = new System.Drawing.Point(0, 0);
-			this.statisticsControl.Name = "statisticsControl";
-			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
-			this.statisticsControl.TabIndex = 0;
+			this.menuItem3.Index = 1;
+			this.menuItem3.Text = "-";
 			// 
-			// menuItem6
+			// menuItem7
 			// 
-			this.menuItem6.Index = 1;
-			this.menuItem6.Text = "Add-in Manager...";
-			this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
+			this.menuItem7.Index = 0;
+			this.menuItem7.Shortcut = System.Windows.Forms.Shortcut.F3;
+			this.menuItem7.Text = "Tasks Explorer...";
+			this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
 			// 
 			// MainForm
 			// 
@@ -329,9 +355,6 @@ namespace PTM
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			this.tabControl.ResumeLayout(false);
-			this.tasksPage.ResumeLayout(false);
-			this.summaryPage.ResumeLayout(false);
-			this.statisticsPage.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -359,6 +382,7 @@ namespace PTM
 		} //tabControl_SelectedIndexChanged
 
 
+		
 		protected override void WndProc(ref Message m)
 		{
 			// Once the program recieves WM_QUERYENDSESSION message, set the boolean systemShutdown.
@@ -446,12 +470,6 @@ namespace PTM
 			about.ShowDialog(this);
 		} //aboutMenuItem_Click
 
-		private void menuItem3_Click(object sender, EventArgs e)
-		{
-			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
-			taskHForm.ShowDialog(this);
-		} //menuItem3_Click
-
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			ConfigurationForm config = new ConfigurationForm();
@@ -462,8 +480,16 @@ namespace PTM
 			AddinForm addinForm = new AddinForm();
 			addinForm.ShowDialog(this);
 		}
+		
+		private void menuItem7_Click(object sender, System.EventArgs e)
+		{
+			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
+			taskHForm.ShowDialog(this);
+		}
 
 		#endregion
+
+
 
 		
 	} //MainForm

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.InteropServices.APIs;
 using System.Windows.Forms;
 
 namespace PTM.View.Forms
@@ -209,10 +210,6 @@ namespace PTM.View.Forms
 
 		private void NotifyForm_Load(object sender, EventArgs e)
 		{
-			int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
-			int screenHeight = Screen.PrimaryScreen.WorkingArea.Height;
-			this.Left = screenWidth - this.Width;
-			this.Top = screenHeight - this.Height;
 			this.timer.Start();
 			//this.status = Status.Init;
 		}
@@ -239,6 +236,20 @@ namespace PTM.View.Forms
 			}
 			this.timer.Stop();
 			base.OnClosed(e);
+		}
+		
+		public new void Show()
+		{
+			int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+			int screenHeight = Screen.PrimaryScreen.WorkingArea.Height;
+			this.Left = screenWidth - this.Width;
+			this.Top = screenHeight - this.Height;
+			
+			// Show the window without activating it.
+			APIsUser32.ShowWindow (this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
+
+			// Equivalent to setting TopMost = true, except don't activate the window.
+			APIsUser32.SetWindowPos (this.Handle, -1, Left, Top, Width, Height, 4);
 		}
 	}
 }

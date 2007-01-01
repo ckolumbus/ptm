@@ -60,5 +60,19 @@ namespace System.Runtime.InteropServices.APIs
 		internal static extern int SetStretchBltMode(IntPtr hDC, APIsEnums.StrechModeFlags StrechMode);
 		[DllImport("gdi32")]
 		internal static extern uint SetPixel(IntPtr hDC, int x, int y, uint color);
+		
+		[StructLayout(LayoutKind.Explicit)]
+			public struct WIN32Rect 
+		{
+			[FieldOffset(0)] public int left;
+			[FieldOffset(4)] public int top;
+			[FieldOffset(8)] public int right;
+			[FieldOffset(12)] public int bottom;
+		}   
+
+
+		[DllImport("gdi32")]
+		internal static extern int GetClipBox(	System.IntPtr hDC,
+			ref WIN32Rect r );
 	}
 }

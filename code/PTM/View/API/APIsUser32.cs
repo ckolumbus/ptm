@@ -31,7 +31,7 @@ namespace System.Runtime.InteropServices.APIs
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 		static internal extern bool SetForegroundWindow(IntPtr hWnd);
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
-		static internal extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int Width, int Height, uint flags);
+		static internal extern bool SetWindowPos(IntPtr hWnd, Int32 hWndInsertAfter, int x, int y, int Width, int Height, uint flags);
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 		static internal extern bool OpenClipboard(IntPtr hWndNewOwner);
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
