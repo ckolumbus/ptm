@@ -95,7 +95,13 @@ namespace PTM.Framework
 
 		public static int AddTasksRow(PTMDataset.TasksRow tasksRow)
 		{
-			ValidateTaskRow(tasksRow, true);
+			ValidateTaskData(tasksRow);
+			PTMDataset.TasksRow sameTaskByDescription;
+			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
+			
+			if (sameTaskByDescription != null)
+					throw new ApplicationException("Task already exist");
+			
 			tasksRow.TotalTime = 0;
 			tasksRow.IsFinished = false;
 			tasksRow.SetStartDateNull();
@@ -125,7 +131,17 @@ namespace PTM.Framework
 			tasksRow.Description = tasksRow.Description.Trim();
 			if (tasksRow.Id == rootTaskRow.Id || tasksRow.Id == idleTaskRow.Id)
 				throw new ApplicationException("This task can't be updated.");
-			ValidateTaskRow(tasksRow, false);
+			ValidateTaskData(tasksRow);
+			PTMDataset.TasksRow sameTaskByDescription;
+			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
+			if (sameTaskByDescription != null && sameTaskByDescription.Id !=tasksRow.Id)
+			{
+				//Task tasksRow needs to be merged with sameTaskByDescription, tasksRow will be deleted
+				Logs.ChangeLogsTaskId(tasksRow.Id, sameTaskByDescription.Id);
+				Tasks.DeleteTaskRow(tasksRow);
+				return;
+			}	
+			
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
 			row.ItemArray = tasksRow.ItemArray;
@@ -149,6 +165,8 @@ namespace PTM.Framework
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
 			DeleteOnCascade(row);
+			if (TasksRowDeleted != null)
+				TasksRowDeleted(null, new PTMDataset.TasksRowChangeEvent(null, DataRowAction.Delete));
 		}
 
 		private static void DeleteOnCascade(PTMDataset.TasksRow row)
@@ -174,14 +192,15 @@ namespace PTM.Framework
 		{
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(taskId);
-			foreach (DataRelation relation in tasksDataTable.ChildRelations)
-			{
-				if (relation.ChildTable.TableName == tasksDataTable.TableName)
-				{
-					return CloneRows((PTMDataset.TasksRow[]) row.GetChildRows(relation));
-				}
-			}
-			return null;
+			return CloneRows(row.GetTasksRows());
+//			foreach (DataRelation relation in tasksDataTable.ChildRelations)
+//			{
+//				if (relation.ChildTable.TableName == tasksDataTable.TableName)
+//				{
+//					return CloneRows((PTMDataset.TasksRow[]) row.GetChildRows(relation));
+//				}
+//			}
+//			return null;
 		}
 
 		public static string GetFullPath(int taskId)
@@ -363,7 +382,7 @@ namespace PTM.Framework
 			tasksDataTable.AcceptChanges();
 		}
 
-		private static void ValidateTaskRow(PTMDataset.TasksRow tasksRow, bool insertRules)
+		private static void ValidateTaskData(PTMDataset.TasksRow tasksRow)
 		{
 
 			if (tasksRow.IsParentIdNull())
@@ -373,20 +392,6 @@ namespace PTM.Framework
 			if (tasksRow.Description.Trim().Length == 0)
 				throw new ApplicationException("Description can't be empty");
 			tasksRow.Description = tasksRow.Description.Trim();
-			PTMDataset.TasksRow sameTaskByDescription;
-			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
-			
-			if (insertRules)
-			{
-				if (sameTaskByDescription != null)
-					throw new ApplicationException("Task already exist");
-			}
-			else
-			{
-				if (sameTaskByDescription != null && sameTaskByDescription.Id !=tasksRow.Id)
-					throw new ApplicationException("Task already exist");			
-			}
-
 		}
 
 		private static PTMDataset.TasksRow CloneRow(PTMDataset.TasksRow tasksRow)
@@ -439,6 +444,7 @@ namespace PTM.Framework
 
 		public static event PTMDataset.TasksRowChangeEventHandler TasksRowChanged;
 		public static event PTMDataset.TasksRowChangeEventHandler TasksRowDeleting;
+		public static event PTMDataset.TasksRowChangeEventHandler TasksRowDeleted;
 
 		private static void tasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
 		{

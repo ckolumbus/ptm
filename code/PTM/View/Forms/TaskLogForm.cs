@@ -51,7 +51,7 @@ namespace PTM.View.Forms
 			InitializeComponent();
 			tasksTree.Initialize();
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
-
+			tasksTree.DoubleClick+=new EventHandler(tasksTree_DoubleClick);
 			PTMDataset.TasksRow row;
 			row = Tasks.FindById(editTaskId);
 

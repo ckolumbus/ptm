@@ -176,11 +176,13 @@ namespace PTM.View.Forms
 			{
 				this.editButton.Enabled = false;
 				this.deleteButton.Enabled = false;
+				this.propertiesButton.Enabled = false;
 			}
 			else
 			{
 				this.editButton.Enabled = true;
 				this.deleteButton.Enabled = true;
+				this.propertiesButton.Enabled = true;
 			}
 		}
 

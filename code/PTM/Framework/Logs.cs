@@ -166,6 +166,28 @@ namespace PTM.Framework
 			return list;
 		}
 		
+		public static ArrayList GetLogsByTask(int taskId)
+		{
+			ArrayList hashList = DbHelper.ExecuteGetRows(
+				"Select Id, TaskId, Duration, InsertTime  from TasksLog where TaskId = ? order by InsertTime", 
+				new string[]{"TaskId"}, new object[]{taskId});
+			
+			if(hashList == null)
+				return null;
+
+			ArrayList list = new ArrayList();
+			foreach (Hashtable hashtable in hashList)
+			{
+				Log log = new Log();
+				log.Id = (int) hashtable["Id"];;
+				log.TaskId = (int) hashtable["TaskId"];
+				log.Duration = (int) hashtable["Duration"];
+				log.InsertTime = (DateTime) hashtable["InsertTime"];
+				list.Add(log);
+			}
+			return list;
+		}
+		
 		public static void UpdateCurrentLogDuration()
 		{
 			if(currentLog==null)
@@ -177,6 +199,23 @@ namespace PTM.Framework
 			{
 				LogChanged(new LogChangeEventArgs(Logs.currentLog, DataRowAction.Change));
 			}
+		}
+		
+		public static void AddIdleTaskLog()
+		{
+			Logs.AddLog(Tasks.IdleTasksRow.Id);
+		}
+
+		public static void ChangeLogsTaskId(int oldTaskId, int newTaskId)
+		{
+			ArrayList logs;
+			logs = GetLogsByTask(oldTaskId);
+			for(int i = 0;i<logs.Count;i++)
+			{
+				Log log = (Log) logs[i];
+				UpdateLogTaskId(log.Id, newTaskId);
+			}
+			//DbHelper.ExecuteNonQuery("Update TasksLog Set TaskId = " + newTaskId + " Where TaskId = oldTaskId");
 		}
 
 		#endregion
@@ -228,9 +267,6 @@ namespace PTM.Framework
 		public static event EventHandler AfterStopLogging;
 		#endregion
 
-		public static void AddIdleTaskLog()
-		{
-			Logs.AddLog(Tasks.IdleTasksRow.Id);
-		}
+		
 	}
 }

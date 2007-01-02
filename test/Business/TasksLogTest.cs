@@ -179,6 +179,55 @@ namespace PTM.Test.Business
 			Assert.AreEqual(5, list.Count);
 		}
 
+		[Test]
+		public void GetLogsByTaskTest()
+		{
+			PTMDataset.TasksRow taskrow1;
+			taskrow1 = Tasks.NewTasksRow();
+			taskrow1.Description = "TaskTest1";
+			taskrow1.ParentId = Tasks.RootTasksRow.Id;
+			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
+
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+
+			ArrayList list = Logs.GetLogsByTask(taskrow1.Id);
+			Assert.AreEqual(5, list.Count);
+		}
+		
+		[Test]
+		public void ChangeLogsTaskIdTest()
+		{
+			PTMDataset.TasksRow taskrow1;
+			taskrow1 = Tasks.NewTasksRow();
+			taskrow1.Description = "TaskTest1";
+			taskrow1.ParentId = Tasks.RootTasksRow.Id;
+			taskrow1.Id = Tasks.AddTasksRow(taskrow1);
+
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			Logs.AddLog(taskrow1.Id);
+			
+			PTMDataset.TasksRow taskrow2;
+			taskrow2 = Tasks.NewTasksRow();
+			taskrow2.Description = "TaskTest2";
+			taskrow2.ParentId = Tasks.RootTasksRow.Id;
+			taskrow2.Id = Tasks.AddTasksRow(taskrow2);
+			
+			Logs.ChangeLogsTaskId(taskrow1.Id, taskrow2.Id);
+			
+			ArrayList list = Logs.GetLogsByTask(taskrow2.Id);
+			Assert.AreEqual(5, list.Count);
+			
+			list = Logs.GetLogsByTask(taskrow1.Id);
+			Assert.AreEqual(0, list.Count);
+		}
+		
 		[TearDown]
 		public void TearDown()
 		{

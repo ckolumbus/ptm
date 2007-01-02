@@ -57,6 +57,7 @@ namespace PTM.View.Controls
 
 			Tasks.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Tasks.TasksRowDeleted +=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogChanged +=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
@@ -79,6 +80,7 @@ namespace PTM.View.Controls
 		{
 			Tasks.TasksRowChanged -= new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Tasks.TasksRowDeleted -=new PTM.Data.PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogChanged -=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
@@ -675,7 +677,7 @@ namespace PTM.View.Controls
 		{
 			MenuItem exitContextMenuItem = new MenuItem();
 			MenuItem menuItem1 = new MenuItem();
-			this.notifyContextMenu.MenuItems.Clear();
+			this.notifyContextMenu = new ContextMenu();
 			this.notifyContextMenu.MenuItems.AddRange(new MenuItem[] {
 																							exitContextMenuItem,
 																							menuItem1});
@@ -702,6 +704,7 @@ namespace PTM.View.Controls
 			
 			ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[]) a.ToArray(typeof(TaskMenuItem)));
 			this.notifyContextMenu.MergeMenu(defaultTasksMenu);
+			this.notifyIcon.ContextMenu = this.notifyContextMenu;
 		}
 
 		private void AddSubTasks(PTMDataset.TasksRow parentTask, TaskMenuItem menuItem, EventHandler handler)
@@ -769,13 +772,17 @@ namespace PTM.View.Controls
 						item.Remove();
 					}
 				}
-				CreateNotifyMenu();
-				CreateRigthClickMenu();
 			}
 		}
-
+		private void Tasks_TasksRowDeleted(object sender, PTM.Data.PTMDataset.TasksRowChangeEvent e)
+		{
+			CreateNotifyMenu();
+			CreateRigthClickMenu();
+		}
 		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
+			if(e.Log.InsertTime < this.currentDay)
+				return;
 			PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
 			if (e.Action == DataRowAction.Change)
 			{
@@ -881,7 +888,7 @@ namespace PTM.View.Controls
 		}
 
 		#endregion
-		
 
+		
 	}
 }

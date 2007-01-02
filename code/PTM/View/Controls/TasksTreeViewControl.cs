@@ -200,11 +200,17 @@ namespace PTM.View.Controls
 				row = Tasks.FindById((int) treeView.SelectedNode.Tag);
 				try
 				{
+					Cursor.Current = Cursors.WaitCursor;
 					Tasks.DeleteTaskRow(row);
 				}
 				catch (ApplicationException aex)
 				{
+					Cursor.Current = Cursors.Default;
 					MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				finally
+				{
+					Cursor.Current = Cursors.Default;
 				}
 			}
 		}
@@ -488,7 +494,20 @@ namespace PTM.View.Controls
 				dropNode.Nodes.Add(this.dragNode);
 				dropNode.ExpandAll();
 
-				Tasks.UpdateParentTask((int) this.dragNode.Tag, (int) dropNode.Tag);
+				try
+				{
+					Cursor.Current = Cursors.WaitCursor;
+					Tasks.UpdateParentTask((int) this.dragNode.Tag, (int) dropNode.Tag);
+				}
+				catch (ApplicationException aex)
+				{
+					Cursor.Current = Cursors.Default;
+					MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				finally
+				{
+					Cursor.Current = Cursors.Default;
+				}
 
 				// Set drag node to null
 				this.dragNode = null;

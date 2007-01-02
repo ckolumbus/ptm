@@ -38,6 +38,9 @@ namespace PTM.View.Controls
 			taskMenuItem.Pick = this.Pick;
 			return taskMenuItem;
 		}
+		
+		
+
 
 
 		

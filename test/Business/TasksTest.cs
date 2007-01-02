@@ -3,6 +3,7 @@ using System.Data;
 using NUnit.Framework;
 using PTM.Framework;
 using PTM.Data;
+using PTM.Framework.Infos;
 
 namespace PTM.Test.Business
 {
@@ -173,6 +174,41 @@ namespace PTM.Test.Business
 			updatedTask = Tasks.FindById(row2.Id);
 
 			Assert.AreEqual(row1.Id, updatedTask.ParentId);
+		}
+		
+		[Test]
+		public void UpdateParentTaskMergeExistingTask()
+		{
+			PTMDataset.TasksRow row1;
+			row1 = Tasks.NewTasksRow();
+			row1.Description = "Parent Task";
+			row1.ParentId = Tasks.RootTasksRow.Id;
+			row1.Id = Tasks.AddTasksRow(row1);
+			
+			PTMDataset.TasksRow row2;
+			row2 = Tasks.NewTasksRow();
+			row2.Description = "To Be Merged Task";
+			row2.ParentId = Tasks.RootTasksRow.Id;
+			row2.Id = Tasks.AddTasksRow(row2);
+			
+			PTMDataset.TasksRow row3;
+			row3 = Tasks.NewTasksRow();
+			row3.Description = row2.Description;
+			row3.ParentId = row1.Id;
+			row3.Id = Tasks.AddTasksRow(row3);
+
+			Log log2 = Logs.AddLog(row2.Id);
+			Log log3 = Logs.AddLog(row3.Id);
+			
+			
+			
+			Tasks.UpdateParentTask(row3.Id, Tasks.RootTasksRow.Id);
+			
+			Assert.IsNull(Tasks.FindById(row3.Id));//row3 is deleted
+			
+			Assert.AreEqual(row2.Id, Logs.FindById(log2.Id).TaskId);
+			Assert.AreEqual(row2.Id, Logs.FindById(log3.Id).TaskId);//log3 changes task
+			
 		}
 		
 		[Test]
