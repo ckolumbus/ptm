@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using PTM.Addin;
 using PTM.Data;
+using PTM.View;
 
 namespace PTM.Framework.Helpers
 {
@@ -30,19 +31,29 @@ namespace PTM.Framework.Helpers
 		public static string GetAddinDescription(string path)
 		{
 			StringBuilder sb = new StringBuilder();
-			Assembly addinAssembly = System.Reflection.Assembly.LoadFile(path);
-			Type[] addinTypes;
-			addinTypes = addinAssembly.GetTypes();
-		
-			foreach (Type addinType in addinTypes)
+			try
 			{
-				if(addinType.IsSubclassOf(typeof(TabPageAddin)))
+				Assembly addinAssembly = System.Reflection.Assembly.LoadFile(path);
+				
+				Type[] addinTypes;
+				addinTypes = addinAssembly.GetTypes();
+		
+				foreach (Type addinType in addinTypes)
 				{
-					TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
-					if(sb.Length!=0)
-						sb.Append(" , ");
-					sb.Append(tabPageAddin.Text);
+					if(addinType.IsSubclassOf(typeof(TabPageAddin)))
+					{
+						TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
+						if(sb.Length!=0)
+							sb.Append(" , ");
+						sb.Append(tabPageAddin.Text);
+					}
 				}
+			}
+			catch(Exception ex)
+			{
+				Logger.Write("Error loading the addin from " + path);
+				Logger.Write(ex.Message);
+				return "Loading Error!";
 			}
 			return sb.ToString();
 		}
@@ -75,23 +86,24 @@ namespace PTM.Framework.Helpers
 				try
 				{
 					addinAssembly = System.Reflection.Assembly.LoadFile(path);
-				}
-				catch
-				{
-					MessageBox.Show("Error loading the addin from " + path, "PTM " + ConfigurationHelper.GetVersionString(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-					continue;
-				}
+					Type[] addinTypes;
+					addinTypes = addinAssembly.GetTypes();
 				
-				Type[] addinTypes;
-				addinTypes = addinAssembly.GetTypes();
-				
-				foreach (Type addinType in addinTypes)
-				{
-					if(addinType.IsSubclassOf(typeof(TabPageAddin)))
+					foreach (Type addinType in addinTypes)
 					{
-						TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
-						tabPageAddins.Add(tabPageAddin);
+						if(addinType.IsSubclassOf(typeof(TabPageAddin)))
+						{
+							TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
+							tabPageAddins.Add(tabPageAddin);
+						}
 					}
+				}
+				catch(Exception ex)
+				{
+					Logger.Write("Error loading the addin from " + path);
+					Logger.Write(ex.Message);
+					//MessageBox.Show("Error loading the addin from " + path, "PTM " + ConfigurationHelper.GetVersionString(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					continue;
 				}
 			}
 			return tabPageAddins;

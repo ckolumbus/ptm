@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace PTM.View
@@ -11,6 +12,7 @@ namespace PTM.View
 		internal static void Write(string message)
 		{
 			Debug.WriteLine(message);
+			Console.WriteLine(message);
 		} //Write
 	} // end of class Logger
 } //end of namespace
