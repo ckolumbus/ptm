@@ -358,5 +358,10 @@ namespace PTM.Data
 		{
 			ExecuteNonQuery("CREATE TABLE " + tableName);
 		}
+
+		public static void DeleteTable(string tableName)
+		{
+			ExecuteNonQuery("DROP TABLE " + tableName);
+		}
 	}
 }

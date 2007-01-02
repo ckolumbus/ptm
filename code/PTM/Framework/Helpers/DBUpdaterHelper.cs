@@ -30,10 +30,39 @@ namespace PTM.Framework.Helpers
 					continue;
 				if(UpdateFromV093ToV094(oldVersion)) 
 					continue;
-				//if(UpdateFromV093ToVXX(oldVersion)) //Next check
+				if(UpdateFromV094ToV95(oldVersion)) 
+					continue;
+				//if(UpdateFromV095ToVXX(oldVersion)) //Next check
 				//	continue;
 				findNextUpdate = false;
 			}
+		}
+
+		private static bool UpdateFromV094ToV95(Configuration oldVersion)
+		{
+			if(string.Compare(oldVersion.Value.ToString().Trim(), "0.9.4")==0)
+			{
+				try
+				{
+					DbHelper.AddColumn("Tasks", "IsActive", "Bit");
+					DbHelper.AddColumn("Tasks", "IconId", "Integer");
+					DbHelper.ExecuteNonQuery("Update Tasks Set IsActive = 1, IconId = " + IconsManager.DefaultTaskIconId);
+					DbHelper.ExecuteNonQuery("UPDATE Tasks INNER JOIN DefaultTasks ON Tasks.DefaultTaskId = DefaultTasks.Id SET Tasks.IsActive = DefaultTasks.IsActive, Tasks.IconId = DefaultTasks.Icon, Tasks.Description = DefaultTasks.Description");
+					DbHelper.DeleteTable("DefaultTasks");
+					DbHelper.DeleteConstraint("Tasks", "IsDefaultTask");
+					DbHelper.DeleteConstraint("Tasks", "DefaultTaskId");
+					DbHelper.DeleteColumn("Tasks", "IsDefaultTask");
+					DbHelper.DeleteColumn("Tasks", "DefaultTaskId");
+					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.5"));
+					return true;					
+				}
+				catch(OleDbException ex)
+				{
+					Logger.Write(ex.Message);
+					return false;
+				}
+			}
+			return false;
 		}
 
 		private static bool UpdateFromV093ToV094(Configuration oldVersion)

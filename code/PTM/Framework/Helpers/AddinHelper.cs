@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using PTM.Addin;
 using PTM.Data;
 
@@ -70,7 +71,17 @@ namespace PTM.Framework.Helpers
 			ArrayList addins = GetAddins();
 			foreach (string path in addins)
 			{
-				Assembly addinAssembly = System.Reflection.Assembly.LoadFile(path);
+				Assembly addinAssembly;
+				try
+				{
+					addinAssembly = System.Reflection.Assembly.LoadFile(path);
+				}
+				catch
+				{
+					MessageBox.Show("Error loading the addin from " + path, "PTM " + ConfigurationHelper.GetVersionString(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					continue;
+				}
+				
 				Type[] addinTypes;
 				addinTypes = addinAssembly.GetTypes();
 				
