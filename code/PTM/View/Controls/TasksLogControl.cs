@@ -806,10 +806,6 @@ namespace PTM.View.Controls
 				}
 			}
 
-			if (Logs.CurrentLog != null && Logs.CurrentLog.Id == e.Log.Id)
-			{
-				this.notifyIcon.Text = taskRow.Description;
-			}
 		}
 
 		private void CheckCurrentDayChanged()
@@ -845,7 +841,10 @@ namespace PTM.View.Controls
 			
 			item.ImageIndex = taskRow.IconId;
 			if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-				notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[IconsManager.DefaultTaskIconId];
+			{
+				notifyIcon.Text = taskRow.Description;
+				notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[taskRow.IconId];				
+			}
 		}
 
 		private void UpdateApplicationsList(ApplicationLog applicationLog)
