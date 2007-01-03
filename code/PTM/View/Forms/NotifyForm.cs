@@ -44,7 +44,7 @@ namespace PTM.View.Forms
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			this.Load += new EventHandler(NotifyForm_Load);
+			//this.Load += new EventHandler(NotifyForm_Load);
 			this.currentTaskLabel.Text = currentTask;
 		}
 
@@ -208,11 +208,11 @@ namespace PTM.View.Forms
 			}
 		}
 
-		private void NotifyForm_Load(object sender, EventArgs e)
-		{
-			this.timer.Start();
-			//this.status = Status.Init;
-		}
+//		private void NotifyForm_Load(object sender, EventArgs e)
+//		{
+//			this.timer.Start();
+//			//this.status = Status.Init;
+//		}
 
 		private void noButton_Click(object sender, EventArgs e)
 		{
@@ -250,6 +250,8 @@ namespace PTM.View.Forms
 
 			// Equivalent to setting TopMost = true, except don't activate the window.
 			APIsUser32.SetWindowPos (this.Handle, -1, Left, Top, Width, Height, 4);
+			
+			this.timer.Start();
 		}
 	}
 }
