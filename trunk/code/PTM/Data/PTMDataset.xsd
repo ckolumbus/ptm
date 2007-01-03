@@ -1,0 +1,35 @@
+<?xml version="1.0" standalone="yes" ?>
+<xs:schema id="PTMDataset" targetNamespace="http://www.tempuri.org/PTMDataset.xsd" xmlns:mstns="http://www.tempuri.org/PTMDataset.xsd"
+	xmlns="http://www.tempuri.org/PTMDataset.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop"
+	attributeFormDefault="qualified" elementFormDefault="qualified">
+	<xs:element name="PTMDataset" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="Tasks">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Id" msdata:AutoIncrement="true" type="xs:int" />
+							<xs:element name="ParentId" type="xs:int" minOccurs="0" />
+							<xs:element name="Description" type="xs:string" minOccurs="0" />
+							<xs:element name="StartDate" type="xs:dateTime" minOccurs="0" />
+							<xs:element name="StopDate" type="xs:dateTime" minOccurs="0" />
+							<xs:element name="IsFinished" type="xs:boolean" minOccurs="0" />
+							<xs:element name="TotalTime" type="xs:int" minOccurs="0" />
+							<xs:element name="IconId" type="xs:int" minOccurs="0" />
+							<xs:element name="IsActive" type="xs:boolean" minOccurs="0" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:complexType>
+		<xs:unique name="PTMDatasetKey1" msdata:PrimaryKey="true">
+			<xs:selector xpath=".//mstns:Tasks" />
+			<xs:field xpath="mstns:Id" />
+		</xs:unique>
+		<xs:keyref name="TasksTasks" refer="mstns:PTMDatasetKey1" msdata:DeleteRule="Cascade">
+			<xs:selector xpath=".//mstns:Tasks" />
+			<xs:field xpath="mstns:ParentId" />
+		</xs:keyref>
+	</xs:element>
+</xs:schema>
