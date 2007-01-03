@@ -492,7 +492,7 @@ namespace PTM.View.Controls
 
 				// Add drag node to drop node
 				dropNode.Nodes.Add(this.dragNode);
-				dropNode.ExpandAll();
+				dropNode.Expand();
 
 				try
 				{
