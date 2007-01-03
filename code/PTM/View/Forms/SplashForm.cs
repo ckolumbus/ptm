@@ -14,6 +14,7 @@ namespace PTM.View.Forms
 		private Label lblVersion;
 		private Panel panel1;
 		private ProgressBar progressBar;
+		private System.Windows.Forms.Label label2;
 		private IContainer components;
 
 		internal SplashForm()
@@ -53,18 +54,19 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (SplashForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SplashForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblVersion = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.label2 = new System.Windows.Forms.Label();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
 			this.pictureBox1.Location = new System.Drawing.Point(8, 11);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(62, 58);
@@ -75,9 +77,7 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.BackColor = System.Drawing.Color.White;
-			this.label1.Font =
-				new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold,
-				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.label1.ForeColor = System.Drawing.Color.Brown;
 			this.label1.Location = new System.Drawing.Point(80, 16);
 			this.label1.Name = "label1";
@@ -97,26 +97,36 @@ namespace PTM.View.Forms
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.Controls.Add(this.label2);
 			this.panel1.Controls.Add(this.progressBar);
 			this.panel1.Cursor = System.Windows.Forms.Cursors.WaitCursor;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(272, 112);
+			this.panel1.Size = new System.Drawing.Size(272, 136);
 			this.panel1.TabIndex = 4;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(8, 80);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(240, 23);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Please wait, this may take several minutes...";
 			// 
 			// progressBar
 			// 
-			this.progressBar.Location = new System.Drawing.Point(8, 80);
+			this.progressBar.Location = new System.Drawing.Point(8, 104);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(256, 23);
+			this.progressBar.Step = 5;
 			this.progressBar.TabIndex = 0;
 			// 
 			// SplashForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(272, 112);
+			this.ClientSize = new System.Drawing.Size(272, 136);
 			this.Controls.Add(this.lblVersion);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
@@ -128,6 +138,7 @@ namespace PTM.View.Forms
 			this.TransparencyKey = System.Drawing.Color.Lime;
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion

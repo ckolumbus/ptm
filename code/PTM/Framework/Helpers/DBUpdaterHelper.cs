@@ -1,5 +1,6 @@
 using System;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using PTM.Data;
 using PTM.View;
 
@@ -47,12 +48,18 @@ namespace PTM.Framework.Helpers
 					DbHelper.AddColumn("Tasks", "IsActive", "Bit");
 					DbHelper.AddColumn("Tasks", "IconId", "Integer");
 					DbHelper.ExecuteNonQuery("Update Tasks Set IsActive = 1, IconId = " + IconsManager.DefaultTaskIconId);
+					Application.DoEvents();
 					DbHelper.ExecuteNonQuery("UPDATE Tasks INNER JOIN DefaultTasks ON Tasks.DefaultTaskId = DefaultTasks.Id SET Tasks.IsActive = DefaultTasks.IsActive, Tasks.IconId = DefaultTasks.Icon, Tasks.Description = DefaultTasks.Description");
+					Application.DoEvents();
 					DbHelper.DeleteTable("DefaultTasks");
+					Application.DoEvents();
 					DbHelper.DeleteConstraint("Tasks", "IsDefaultTask");
 					DbHelper.DeleteConstraint("Tasks", "DefaultTaskId");
 					DbHelper.DeleteColumn("Tasks", "IsDefaultTask");
 					DbHelper.DeleteColumn("Tasks", "DefaultTaskId");
+					Application.DoEvents();
+					DbHelper.ExecuteNonQuery("Delete from Tasks where Description = 'Idle'");
+					Application.DoEvents();
 					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.5"));
 					return true;					
 				}

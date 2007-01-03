@@ -190,7 +190,7 @@ namespace PTM
 
 		private static void timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			splash.AddProgress(10);
+			splash.AddProgress(5);
 			splash.Refresh();
 			Application.DoEvents();
 		} //timer_Elapsed

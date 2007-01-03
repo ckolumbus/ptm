@@ -321,7 +321,9 @@ namespace PTM.Framework
 					}
 				}
 			}
-			throw new ApplicationException("Unexpected error");
+			AddIdleTask();
+			SetIdleTask();
+			
 		}
 
 
