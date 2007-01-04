@@ -756,9 +756,9 @@ namespace PTM.View.Controls
 						item.ImageIndex = e.Row.IconId;
 					}
 				}
-				CreateNotifyMenu();
-				CreateRigthClickMenu();
 			}
+			CreateNotifyMenu();
+			CreateRigthClickMenu();
 		}
 
 		private void TasksDataTable_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
