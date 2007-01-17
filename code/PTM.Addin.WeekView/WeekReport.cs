@@ -157,6 +157,10 @@ namespace PTM.Addin.WeekView
 					day = day.AddDays(1);
 				} while (day <= args.EndDate);
 			}
+			catch
+			{
+				throw;
+			}
 			finally
 			{
 				Cursor.Current = Cursors.Default;
@@ -189,6 +193,10 @@ namespace PTM.Addin.WeekView
 				this.dayView.StartDate = DateTime.Today.AddDays(- Convert.ToInt32(DateTime.Today.DayOfWeek) + week*7);
 				this.weekLabel.Text = this.dayView.StartDate.ToShortDateString() + " - " +
 					this.dayView.StartDate.AddDays(6).ToShortDateString();
+			}
+			catch
+			{
+				throw;
 			}
 			finally
 			{

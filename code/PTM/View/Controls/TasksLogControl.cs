@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Data;
@@ -42,11 +43,16 @@ namespace PTM.View.Controls
 		private ToolTip shortcutToolTip;
 		private System.Windows.Forms.CheckBox pathCheckBox;
 		private DateTime currentDay;
+		private AsyncWorker worker;
 
 		internal TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+
+			worker = new AsyncWorker();
+			worker.OnBeforeDoWork+=new PTM.View.AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
+			worker.OnWorkDone+=new PTM.View.AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 			notifyIcon.MouseDown+=new HansBlomme.Windows.Forms.NotifyIcon.MouseDownEventHandler(notifyIcon_MouseDown);
 			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
@@ -88,24 +94,7 @@ namespace PTM.View.Controls
 		}
 
 
-		private void SetLogDay(DateTime date)
-		{
-			taskList.Items.Clear();
-			ArrayList list = Logs.GetLogsByDay(date);
-			foreach (Log log in list)
-			{
-				PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
-				TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-				SetListItemValues(itemA, log, taskRow);
-				taskList.Items.Insert(0, itemA);
-				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
-				foreach (ApplicationLog applicationLog in applicationLogs)
-				{
-					UpdateApplicationsList(applicationLog);
-				}
-			}
-		}
-
+		
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing)
@@ -299,8 +288,9 @@ namespace PTM.View.Controls
 
 		private void TasksLogControl_Load(object sender, EventArgs e)
 		{
-			currentDay = DateTime.Today;
-			SetLogDay(currentDay);
+			this.currentDay = DateTime.Today;
+			ArrayList logs = (ArrayList) this.GetLogs(this.currentDay);
+			SetLogDay(logs);
 		}
 
 		internal void NewTaskLog(bool mustAddATask)
@@ -479,8 +469,26 @@ namespace PTM.View.Controls
 				this.addTaskButton.Enabled = true;
 				this.switchToButton.Enabled = true;
 			}
-			SetLogDay(logDate.Value.Date);
+			this.currentDay = logDate.Value.Date;
+			worker.DoWork((int)TasksLogCotrolWorks.GetLogs, new AsyncWorker.AsyncWorkerDelegate(GetLogs), new object[]{null});
+//			Thread fillThread = new Thread(new ThreadStart(FillLogs));
+//			fillThread.Priority = ThreadPriority.Lowest;
+//			fillThread.Start();
+			
+//			FillLogs();
+			//this.Invoke(d);
+			//SetLogDay();
 		}
+
+//		private void FillLogs()
+//		{
+//			//this.Refresh();
+//			//Thread.Sleep(500);
+//			del d = new del(SetLogDay);
+//			this.BeginInvoke(d);			
+//		}
+
+		//delegate void del();
 
 		private void mnuEdit_Click(object sender, EventArgs e)
 		{
@@ -594,13 +602,64 @@ namespace PTM.View.Controls
 					config.Value = "0";
 				ConfigurationHelper.SaveConfiguration(config);
 			}
+			catch
+			{
+				throw;
+			}
 			finally
 			{
 				Cursor.Current = Cursors.Default;
 			}
 		}
 
+		private void SetLogDay(ArrayList logs)
+		{
+			try
+			{
+				this.Enabled = true;
+				this.Refresh();
+				//Cursor.Current = Cursors.WaitCursor;
+				this.Cursor = Cursors.WaitCursor;
+				taskList.Items.Clear();
+				taskList.Refresh();
+				//ArrayList list = Logs.GetLogsByDay(this.currentDay.Date);
+				taskList.BeginUpdate();
+				foreach (Log log in logs)
+				{
+					PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
+					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+					SetListItemValues(itemA, log, taskRow);
+					taskList.Items.Insert(0, itemA);
+					//ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
+					foreach (ApplicationLog applicationLog in log.ApplicationsLog)
+					{
+						UpdateApplicationsList(applicationLog);
+					}
+				}
+				taskList.EndUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex = ex;
+				throw;
+			}
+			finally
+			{
+				//Cursor.Current = Cursors.Default;
+				this.Cursor = Cursors.Default;
+				foreach (Control control in this.Controls)
+				{
+					control.Cursor = Cursors.Default;						
+				}
+				this.logDate.Enabled = true;
+			}
+		}
+
 		#endregion
+
+	
+
+
 
 		#region Notifications
 
@@ -742,7 +801,7 @@ namespace PTM.View.Controls
 		}
 		#endregion
 
-		#region Business events
+		#region Framework events
 
 		private void TasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
 		{
@@ -781,11 +840,13 @@ namespace PTM.View.Controls
 		}
 		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
-			if(e.Log.InsertTime < this.currentDay)
-				return;
-			PTMDataset.TasksRow taskRow = Tasks.FindById(e.Log.TaskId);
+			PTMDataset.TasksRow taskRow;
 			if (e.Action == DataRowAction.Change)
 			{
+				if(e.Log.InsertTime.Date != this.currentDay)
+					return;
+				
+				taskRow = Tasks.FindById(e.Log.TaskId);
 				foreach (TreeListViewItem item in this.taskList.Items)
 				{
 					if (((Log) item.Tag).Id == e.Log.Id)
@@ -800,6 +861,7 @@ namespace PTM.View.Controls
 				CheckCurrentDayChanged();
 				if (this.logDate.Value.Date == currentDay)
 				{
+					taskRow = Tasks.FindById(e.Log.TaskId);
 					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
 					SetListItemValues(itemA, e.Log, taskRow);
 					taskList.Items.Insert(0, itemA);
@@ -854,6 +916,7 @@ namespace PTM.View.Controls
 				return;
 			}
 
+
 			TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
 			string activeTime = ViewHelper.TimeSpanToTimeString(active);
 			string caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;
@@ -888,6 +951,62 @@ namespace PTM.View.Controls
 
 		#endregion
 
+
+		#region AsyncWork
+		private enum TasksLogCotrolWorks : int
+		{
+			GetLogs
+		}
+
+		public object GetLogs(object p)
+		{
+			ArrayList list = Logs.GetLogsByDay(this.currentDay.Date);
+			foreach (Log log in list)
+			{
+				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
+				log.ApplicationsLog = applicationLogs;
+			}
+			return list;
+		}
+		
+		private void worker_OnBeforeDoWork(PTM.View.AsyncWorker.OnBeforeDoWorkEventArgs e)
+		{
+			switch(e.WorkId)
+			{
+				case (int)TasksLogCotrolWorks.GetLogs:
+					SetWaitState();
+					break;
+			}
+		}
+
+		private void SetWaitState()
+		{
+			this.logDate.Enabled = false;
+			taskList.Items.Clear();
+			this.Refresh();
+			this.Cursor = Cursors.WaitCursor;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.WaitCursor;						
+			}
+		}
+
+		private void worker_OnWorkDone(PTM.View.AsyncWorker.OnWorkDoneEventArgs e)
+		{
+			switch(e.WorkId)
+			{
+				case (int)TasksLogCotrolWorks.GetLogs:
+					SetLogDayDelegate del = new SetLogDayDelegate(SetLogDay);
+
+					this.Invoke(del, new object[]{e.Result});
+					//this.SetLogDay((ArrayList) e.Result);
+					break;
+			}
+		}
+
+		private delegate void SetLogDayDelegate(ArrayList logs);
+
+		#endregion
 		
 	}
 }

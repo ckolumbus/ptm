@@ -481,6 +481,10 @@ namespace PTM.View.Controls
 				CalculateTasksPercents();
 				SetIndicatorsValues();
 			}
+			catch
+			{
+				throw;
+			}
 			finally
 			{
 				Cursor.Current = Cursors.Default;

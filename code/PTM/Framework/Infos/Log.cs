@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace PTM.Framework.Infos
 {
@@ -30,6 +31,18 @@ namespace PTM.Framework.Infos
 		/// Insertion TimeStamp
 		/// </summary>
 		private DateTime insertTime;
+
+
+		private ArrayList applicationsLog = new ArrayList();
+
+		/// <summary>
+		/// Applications log list for this log
+		/// </summary>
+		public ArrayList ApplicationsLog
+		{
+			get { return applicationsLog; }
+			set { applicationsLog = value; }
+		}
 
 		/// <summary>
 		/// Id Accessors
