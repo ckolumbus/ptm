@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using PTM.Addin;
 using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Helpers;
@@ -480,16 +481,6 @@ namespace PTM.View.Controls
 			//SetLogDay();
 		}
 
-//		private void FillLogs()
-//		{
-//			//this.Refresh();
-//			//Thread.Sleep(500);
-//			del d = new del(SetLogDay);
-//			this.BeginInvoke(d);			
-//		}
-
-		//delegate void del();
-
 		private void mnuEdit_Click(object sender, EventArgs e)
 		{
 			EditSelectedTaskLog();
@@ -616,13 +607,6 @@ namespace PTM.View.Controls
 		{
 			try
 			{
-				this.Enabled = true;
-				this.Refresh();
-				//Cursor.Current = Cursors.WaitCursor;
-				this.Cursor = Cursors.WaitCursor;
-				taskList.Items.Clear();
-				taskList.Refresh();
-				//ArrayList list = Logs.GetLogsByDay(this.currentDay.Date);
 				taskList.BeginUpdate();
 				foreach (Log log in logs)
 				{
@@ -630,36 +614,37 @@ namespace PTM.View.Controls
 					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
 					SetListItemValues(itemA, log, taskRow);
 					taskList.Items.Insert(0, itemA);
-					//ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
 					foreach (ApplicationLog applicationLog in log.ApplicationsLog)
 					{
 						UpdateApplicationsList(applicationLog);
 					}
 				}
-				taskList.EndUpdate();
 			}
 			catch(Exception ex)
 			{
-				ex = ex;
+				Logger.Write(ex.Message);
+				Logger.Write(ex.StackTrace);
 				throw;
 			}
 			finally
 			{
-				//Cursor.Current = Cursors.Default;
-				this.Cursor = Cursors.Default;
-				foreach (Control control in this.Controls)
-				{
-					control.Cursor = Cursors.Default;						
-				}
-				this.logDate.Enabled = true;
+				taskList.EndUpdate();
+				SetReadyState();
 			}
 		}
 
+		private void SetReadyState()
+		{
+			this.Cursor = Cursors.Default;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.Default;						
+			}
+			this.logDate.Enabled = true;
+		}
+
+
 		#endregion
-
-	
-
-
 
 		#region Notifications
 

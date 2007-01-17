@@ -841,12 +841,17 @@ namespace PTM.View.Controls.TreeListViewComponents
 						if(doExpColl)
 						{
 							_dblclicktime = DateTime.Now;
-							Cursor = Cursors.WaitCursor;
+							bool switchCursor = true;
+							if(this.Cursor == Cursors.WaitCursor)
+								switchCursor = false;
+							else
+								Cursor = Cursors.WaitCursor;
 							BeginUpdate();
 							if(item.IsExpanded) item.Collapse();
 							else item.Expand();
 							EndUpdate();
-							Cursor = Cursors.Default;
+							if(switchCursor)
+								Cursor = Cursors.Default;
 						}
 					}
 					OnDoubleClick(new EventArgs());
@@ -1347,7 +1352,11 @@ namespace PTM.View.Controls.TreeListViewComponents
 			protected override void OnColumnClick(ColumnClickEventArgs e) 
 			{ 
 				base.OnColumnClick(e);
-				Cursor = Cursors.WaitCursor;
+				bool switchCursor = true;
+				if(this.Cursor == Cursors.WaitCursor)
+					switchCursor = false;
+				else
+					Cursor = Cursors.WaitCursor;
 				ListViewItem[] selItems = new ListViewItem[base.SelectedItems.Count];
 				base.SelectedItems.CopyTo(selItems, 0);
 
@@ -1372,7 +1381,8 @@ namespace PTM.View.Controls.TreeListViewComponents
 				EndUpdate();
 				// Reset ListView.checkDirection
 				_checkDirection = oldDirection;
-				Cursor = Cursors.Default;
+				if(switchCursor)
+					Cursor = Cursors.Default;
 			}
 			#endregion
 			#region OnVisibleChanged
@@ -1592,7 +1602,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 					dy);
 				Thread.Sleep(100);
 			}
-			Cursor = Cursors.Default;
+			//Cursor = Cursors.Default;
 		}
 		
 		/// <summary>
