@@ -23,7 +23,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for TasksLog.
 	/// </summary>
-	internal class TasksLogControl : UserControl
+	internal class TasksLogControl : TabPageAddin
 	{
 		private Button editButton;
 		private Button addTaskButton;
@@ -471,14 +471,8 @@ namespace PTM.View.Controls
 				this.switchToButton.Enabled = true;
 			}
 			this.currentDay = logDate.Value.Date;
+			this.Status = "Retrieving data...";
 			worker.DoWork((int)TasksLogCotrolWorks.GetLogs, new AsyncWorker.AsyncWorkerDelegate(GetLogs), new object[]{null});
-//			Thread fillThread = new Thread(new ThreadStart(FillLogs));
-//			fillThread.Priority = ThreadPriority.Lowest;
-//			fillThread.Start();
-			
-//			FillLogs();
-			//this.Invoke(d);
-			//SetLogDay();
 		}
 
 		private void mnuEdit_Click(object sender, EventArgs e)

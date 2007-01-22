@@ -55,6 +55,44 @@ namespace PTM.Addin
 			this.Size = new System.Drawing.Size(296, 280);
 		}
 		#endregion
+
+
+		private string status = "Ready";
+
+		public string Status
+		{
+			get { return status; }
+			set
+			{			
+				if(value != status)
+					OnStatusChanged();
+				status = value;
+			}
+		}
+
+		public class StatusChangedEventAtgs :EventArgs
+		{
+			private string status;
+			public StatusChangedEventAtgs(string status)
+			{
+				this.status = status;
+			}
+			public string Status
+			{
+				get { return status; }
+				set { status = value; }
+			}
+		}
+
+		
+		public delegate void StatusChangedDelegate(StatusChangedEventAtgs e);
+		public event StatusChangedDelegate StatusChanged;
+		
+		protected void OnStatusChanged()
+		{
+			if(this.StatusChanged!=null)
+				StatusChanged(new StatusChangedEventAtgs(status));
+		}
 		
 	}
 }
