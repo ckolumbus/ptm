@@ -30,9 +30,6 @@ namespace PTM
 		private MenuItem exitMenuItem;
 		private TabPage summaryPage;
 		private StatusBar statusBar;
-		private StatusBarPanel statusBarPanel1;
-		private StatusBarPanel statusBarPanel2;
-		private StatusBarPanel statusBarPanel3;
 		private TabPage statisticsPage;
 		private TasksLogControl tasksLogControl;
 		private SummaryControl summaryControl;
@@ -85,6 +82,7 @@ namespace PTM
 			this.tasksLogControl.Name = "tasksLogControl";
 			this.tasksLogControl.Size = new System.Drawing.Size(408, 358);
 			this.tasksLogControl.TabIndex = 0;
+			this.tasksLogControl.StatusChanged+=new PTM.Addin.TabPageAddin.StatusChangedDelegate(tabPage_StatusChanged);
 			
 			this.summaryPage.Controls.Add(this.summaryControl);
 			// 
@@ -96,6 +94,7 @@ namespace PTM
 			this.summaryControl.Name = "summaryControl";
 			this.summaryControl.Size = new System.Drawing.Size(408, 358);
 			this.summaryControl.TabIndex = 0;
+			this.summaryControl.StatusChanged+=new PTM.Addin.TabPageAddin.StatusChangedDelegate(tabPage_StatusChanged);
 			
 			this.statisticsPage.Controls.Add(this.statisticsControl);
 			// 
@@ -107,6 +106,7 @@ namespace PTM
 			this.statisticsControl.Name = "statisticsControl";
 			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
+			this.statisticsControl.StatusChanged+=new PTM.Addin.TabPageAddin.StatusChangedDelegate(tabPage_StatusChanged);
 			
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
@@ -184,38 +184,32 @@ namespace PTM
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.exitMenuItem = new System.Windows.Forms.MenuItem();
 			this.menuItem4 = new System.Windows.Forms.MenuItem();
+			this.menuItem7 = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.MenuItem();
 			this.statusBar = new System.Windows.Forms.StatusBar();
-			this.statusBarPanel1 = new System.Windows.Forms.StatusBarPanel();
-			this.statusBarPanel2 = new System.Windows.Forms.StatusBarPanel();
-			this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tasksPage = new System.Windows.Forms.TabPage();
 			this.summaryPage = new System.Windows.Forms.TabPage();
 			this.statisticsPage = new System.Windows.Forms.TabPage();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.menuItem7 = new System.Windows.Forms.MenuItem();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
 			this.tabControl.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainMenu
 			// 
 			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuItem1,
-																					 this.menuItem4,
-																					 this.menuItem2});
+																											this.menuItem1,
+																											this.menuItem4,
+																											this.menuItem2});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.exitMenuItem});
+																											 this.exitMenuItem});
 			this.menuItem1.Text = "File";
 			// 
 			// exitMenuItem
@@ -228,11 +222,23 @@ namespace PTM
 			// 
 			this.menuItem4.Index = 1;
 			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem7,
-																					  this.menuItem3,
-																					  this.menuItem5,
-																					  this.menuItem6});
+																											 this.menuItem7,
+																											 this.menuItem3,
+																											 this.menuItem5,
+																											 this.menuItem6});
 			this.menuItem4.Text = "Tools";
+			// 
+			// menuItem7
+			// 
+			this.menuItem7.Index = 0;
+			this.menuItem7.Shortcut = System.Windows.Forms.Shortcut.F3;
+			this.menuItem7.Text = "Tasks Explorer...";
+			this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 1;
+			this.menuItem3.Text = "-";
 			// 
 			// menuItem5
 			// 
@@ -250,7 +256,7 @@ namespace PTM
 			// 
 			this.menuItem2.Index = 2;
 			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.aboutMenuItem});
+																											 this.aboutMenuItem});
 			this.menuItem2.Text = "Help";
 			// 
 			// aboutMenuItem
@@ -263,27 +269,9 @@ namespace PTM
 			// 
 			this.statusBar.Location = new System.Drawing.Point(0, 405);
 			this.statusBar.Name = "statusBar";
-			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-																						 this.statusBarPanel1,
-																						 this.statusBarPanel2,
-																						 this.statusBarPanel3});
-			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(432, 22);
 			this.statusBar.TabIndex = 1;
 			this.statusBar.Text = "Ready";
-			// 
-			// statusBarPanel1
-			// 
-			this.statusBarPanel1.Text = "Ready";
-			this.statusBarPanel1.Width = 140;
-			// 
-			// statusBarPanel2
-			// 
-			this.statusBarPanel2.Width = 140;
-			// 
-			// statusBarPanel3
-			// 
-			this.statusBarPanel3.Width = 136;
 			// 
 			// tabControl
 			// 
@@ -325,18 +313,6 @@ namespace PTM
 			this.statisticsPage.TabIndex = 3;
 			this.statisticsPage.Text = "Statistics";
 			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 1;
-			this.menuItem3.Text = "-";
-			// 
-			// menuItem7
-			// 
-			this.menuItem7.Index = 0;
-			this.menuItem7.Shortcut = System.Windows.Forms.Shortcut.F3;
-			this.menuItem7.Text = "Tasks Explorer...";
-			this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -351,9 +327,6 @@ namespace PTM
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "PTM ";
 			this.Load += new System.EventHandler(this.MainForm_Load);
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -371,6 +344,8 @@ namespace PTM
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			this.statusBar.Text = ((TabPageAddin) tabControl.SelectedTab.Controls[0]).Status;
+
 			if (tabControl.SelectedTab == this.summaryPage)
 			{
 				summaryControl.UpdateSummary();
@@ -489,8 +464,9 @@ namespace PTM
 
 		#endregion
 
-
-
-		
+		private void tabPage_StatusChanged(PTM.Addin.TabPageAddin.StatusChangedEventAtgs e)
+		{
+			this.statusBar.Text = e.Status;
+		}
 	} //MainForm
 } //end of namespace

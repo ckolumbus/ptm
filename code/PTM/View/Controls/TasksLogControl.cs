@@ -78,6 +78,8 @@ namespace PTM.View.Controls
 				this.pathCheckBox.Checked = true;
 			else
 				this.pathCheckBox.Checked = false;
+
+			this.Status = String.Empty;
 			
 			CreateRigthClickMenu();
 			CreateNotifyMenu();
@@ -471,7 +473,6 @@ namespace PTM.View.Controls
 				this.switchToButton.Enabled = true;
 			}
 			this.currentDay = logDate.Value.Date;
-			this.Status = "Retrieving data...";
 			worker.DoWork((int)TasksLogCotrolWorks.GetLogs, new AsyncWorker.AsyncWorkerDelegate(GetLogs), new object[]{null});
 		}
 
@@ -629,6 +630,7 @@ namespace PTM.View.Controls
 
 		private void SetReadyState()
 		{
+			this.Status = "";
 			this.Cursor = Cursors.Default;
 			foreach (Control control in this.Controls)
 			{
@@ -960,6 +962,7 @@ namespace PTM.View.Controls
 
 		private void SetWaitState()
 		{
+			this.Status = "Retrieving data...";
 			this.logDate.Enabled = false;
 			taskList.Items.Clear();
 			this.Refresh();

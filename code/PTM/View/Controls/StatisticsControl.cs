@@ -68,6 +68,8 @@ namespace PTM.View.Controls
 				parentTaskComboBox.SelectedIndex = 0;
 			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.toDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
+
+			this.Status = String.Empty;
 			//this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 		}
 

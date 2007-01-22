@@ -21,7 +21,6 @@ namespace PTM.Addin
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
-
 			// TODO: Add any initialization after the InitializeComponent call
 
 		}
@@ -65,8 +64,10 @@ namespace PTM.Addin
 			set
 			{			
 				if(value != status)
+				{
+					status = value;
 					OnStatusChanged();
-				status = value;
+				}
 			}
 		}
 
@@ -92,6 +93,7 @@ namespace PTM.Addin
 		{
 			if(this.StatusChanged!=null)
 				StatusChanged(new StatusChangedEventAtgs(status));
+			Application.DoEvents();
 		}
 		
 	}

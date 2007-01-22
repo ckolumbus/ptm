@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Resources;
 using System.Timers;
 using System.Windows.Forms;
+using PTM.Addin;
 using PTM.Framework;
 using PTM.Data;
 using PTM.Framework.Infos;
@@ -17,7 +18,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for Summary.
 	/// </summary>
-	internal class SummaryControl : UserControl
+	internal class SummaryControl : TabPageAddin
 	{
 		private TreeListView taskList;
 		private GroupBox groupBox1;
@@ -75,6 +76,8 @@ namespace PTM.View.Controls
 
 			Logs.TasksLogDurationCountElapsed += new ElapsedEventHandler(TaskLogTimer_Elapsed);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
+
+			this.Status = String.Empty;
 			
 		}
 
