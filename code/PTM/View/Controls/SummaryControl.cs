@@ -418,18 +418,10 @@ namespace PTM.View.Controls
 		}
 
 
-		internal void UpdateSummary()
+		public override void OnTabPageSelected()
 		{
-//			if (this.fromDateTimePicker.Value != DateTime.Today || this.toDateTimePicker.Value != DateTime.Today)
-//			{
-//				this.fromRadioButton.Checked = true;
-//				this.fromDateTimePicker.Value = DateTime.Today;
-//				this.toDateTimePicker.Value = DateTime.Today;
-//			}
-//			else
-//			{
-				UpdateTasksSummary();
-//			}
+			base.OnTabPageSelected ();
+			UpdateTasksSummary();
 		}
 
 		private void UpdateTasksSummary()

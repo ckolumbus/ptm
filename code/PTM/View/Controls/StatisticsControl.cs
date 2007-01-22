@@ -310,11 +310,6 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.Focus();
 		}
 
-
-		internal void UpdateStatistics()
-		{
-		}
-
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
 		{
 			if(this.fromRadioButton.Checked)

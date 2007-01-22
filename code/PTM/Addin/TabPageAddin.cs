@@ -56,7 +56,7 @@ namespace PTM.Addin
 		#endregion
 
 
-		private string status = "Ready";
+		private string status = String.Empty;
 
 		public string Status
 		{
@@ -96,5 +96,10 @@ namespace PTM.Addin
 			Application.DoEvents();
 		}
 		
+
+		public virtual void OnTabPageSelected()
+		{			
+		}
+
 	}
 }

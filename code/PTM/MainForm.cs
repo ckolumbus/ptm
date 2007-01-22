@@ -344,16 +344,9 @@ namespace PTM
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.statusBar.Text = ((TabPageAddin) tabControl.SelectedTab.Controls[0]).Status;
-
-			if (tabControl.SelectedTab == this.summaryPage)
-			{
-				summaryControl.UpdateSummary();
-			} //if
-			if (tabControl.SelectedTab == this.statisticsPage)
-			{
-				statisticsControl.UpdateStatistics();
-			} //if
+			TabPageAddin tabPageAddin = ((TabPageAddin) tabControl.SelectedTab.Controls[0]);
+			this.statusBar.Text = tabPageAddin.Status;
+			tabPageAddin.OnTabPageSelected();
 		} //tabControl_SelectedIndexChanged
 
 
