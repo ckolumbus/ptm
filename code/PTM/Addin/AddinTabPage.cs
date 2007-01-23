@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Windows.Forms;
 
 namespace PTM.Addin
@@ -15,32 +12,32 @@ namespace PTM.Addin
 		/// <summary> AddinTabPage
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public AddinTabPage()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 			// TODO: Add any initialization after the InitializeComponent call
-
 		}
 
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Component Designer generated code
+
 		/// <summary> 
 		/// Required method for Designer support - do not modify 
 		/// the contents of this method with the code editor.
@@ -53,8 +50,8 @@ namespace PTM.Addin
 			this.Name = "AddinTabPage";
 			this.Size = new System.Drawing.Size(296, 280);
 		}
-		#endregion
 
+		#endregion
 
 		private string status = String.Empty;
 
@@ -62,8 +59,8 @@ namespace PTM.Addin
 		{
 			get { return status; }
 			set
-			{			
-				if(value != status)
+			{
+				if (value != status)
 				{
 					status = value;
 					OnStatusChanged();
@@ -71,13 +68,15 @@ namespace PTM.Addin
 			}
 		}
 
-		public class StatusChangedEventAtgs :EventArgs
+		public class StatusChangedEventAtgs : EventArgs
 		{
 			private string status;
+
 			public StatusChangedEventAtgs(string status)
 			{
 				this.status = status;
 			}
+
 			public string Status
 			{
 				get { return status; }
@@ -85,21 +84,21 @@ namespace PTM.Addin
 			}
 		}
 
-		
+
 		public delegate void StatusChangedDelegate(StatusChangedEventAtgs e);
+
 		public event StatusChangedDelegate StatusChanged;
-		
+
 		protected void OnStatusChanged()
 		{
-			if(this.StatusChanged!=null)
+			if (this.StatusChanged != null)
 				StatusChanged(new StatusChangedEventAtgs(status));
 			Application.DoEvents();
 		}
-		
+
 
 		public virtual void OnTabPageSelected()
-		{			
+		{
 		}
-
 	}
 }

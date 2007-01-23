@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using PTM.Framework;
 using PTM.Data;
+using PTM.Framework;
 using PTM.View.Controls;
 
 namespace PTM.View.Forms
@@ -21,7 +21,7 @@ namespace PTM.View.Forms
 		private Button deleteButton;
 		private Button newButton;
 		private GroupBox groupBox1;
-		private System.Windows.Forms.Button propertiesButton;
+		private Button propertiesButton;
 
 		/// <summary>
 		/// Required designer variable.
@@ -43,7 +43,7 @@ namespace PTM.View.Forms
 			{
 				tasksTree.SelectedTaskId = Tasks.RootTasksRow.Id;
 			}
-			tasksTree.DoubleClick+=new EventHandler(tasksTree_DoubleClick);
+			tasksTree.DoubleClick += new EventHandler(tasksTree_DoubleClick);
 		}
 
 		internal TaskLogForm(int editTaskId)
@@ -51,7 +51,7 @@ namespace PTM.View.Forms
 			InitializeComponent();
 			tasksTree.Initialize();
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
-			tasksTree.DoubleClick+=new EventHandler(tasksTree_DoubleClick);
+			tasksTree.DoubleClick += new EventHandler(tasksTree_DoubleClick);
 			PTMDataset.TasksRow row;
 			row = Tasks.FindById(editTaskId);
 
@@ -89,7 +89,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TaskLogForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TaskLogForm));
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
@@ -105,7 +105,9 @@ namespace PTM.View.Forms
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(256, 252);
@@ -116,7 +118,9 @@ namespace PTM.View.Forms
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(344, 252);
@@ -136,8 +140,10 @@ namespace PTM.View.Forms
 			// 
 			// taskComboBox
 			// 
-			this.taskComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.taskComboBox.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.taskComboBox.Enabled = false;
 			this.taskComboBox.Location = new System.Drawing.Point(72, 8);
 			this.taskComboBox.MaxLength = 80;
@@ -147,9 +153,11 @@ namespace PTM.View.Forms
 			// 
 			// tasksTree
 			// 
-			this.tasksTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.tasksTree.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.tasksTree.Location = new System.Drawing.Point(6, 18);
 			this.tasksTree.Name = "tasksTree";
 			this.tasksTree.Size = new System.Drawing.Size(318, 192);
@@ -157,7 +165,9 @@ namespace PTM.View.Forms
 			// 
 			// editButton
 			// 
-			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.editButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(344, 108);
 			this.editButton.Name = "editButton";
@@ -167,7 +177,9 @@ namespace PTM.View.Forms
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(344, 150);
 			this.deleteButton.Name = "deleteButton";
@@ -177,7 +189,9 @@ namespace PTM.View.Forms
 			// 
 			// newButton
 			// 
-			this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.newButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.newButton.Location = new System.Drawing.Point(344, 66);
 			this.newButton.Name = "newButton";
@@ -187,9 +201,11 @@ namespace PTM.View.Forms
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.tasksTree);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(6, 30);
@@ -201,7 +217,9 @@ namespace PTM.View.Forms
 			// 
 			// propertiesButton
 			// 
-			this.propertiesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.propertiesButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.propertiesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.propertiesButton.Location = new System.Drawing.Point(344, 186);
 			this.propertiesButton.Name = "propertiesButton";
@@ -224,7 +242,7 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.groupBox1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(440, 318);
@@ -236,7 +254,6 @@ namespace PTM.View.Forms
 			this.Load += new System.EventHandler(this.TaskLogForm_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -257,14 +274,14 @@ namespace PTM.View.Forms
 			PTMDataset.TasksRow[] childRows;
 			childRows = Tasks.GetChildTasks(selectedParentTaskRow.Id);
 
-				foreach (PTMDataset.TasksRow childRow in childRows)
-				{
-					PTMDataset.TasksRow row;
-					row = childTasksTable.NewTasksRow();
-					row.ItemArray = childRow.ItemArray;
-					childTasksTable.AddTasksRow(row);
-				}
-			
+			foreach (PTMDataset.TasksRow childRow in childRows)
+			{
+				PTMDataset.TasksRow row;
+				row = childTasksTable.NewTasksRow();
+				row.ItemArray = childRow.ItemArray;
+				childTasksTable.AddTasksRow(row);
+			}
+
 			this.taskComboBox.DisplayMember = childTasksTable.DescriptionColumn.ColumnName;
 			this.taskComboBox.ValueMember = childTasksTable.IdColumn.ColumnName;
 			this.taskComboBox.DataSource = childTasksTable.DefaultView;
@@ -363,14 +380,14 @@ namespace PTM.View.Forms
 			tasksTree.DeleteSelectedTask();
 		}
 
-		private void propertiesButton_Click(object sender, System.EventArgs e)
+		private void propertiesButton_Click(object sender, EventArgs e)
 		{
 			tasksTree.ShowPropertiesSelectedTask();
 		}
 
 		private void tasksTree_DoubleClick(object sender, EventArgs e)
 		{
-			if(this.tasksTree.SelectedTaskId == Tasks.RootTasksRow.Id)
+			if (this.tasksTree.SelectedTaskId == Tasks.RootTasksRow.Id)
 				return;
 			this.selectedTaskRow = Tasks.FindById(this.tasksTree.SelectedTaskId);
 			this.DialogResult = DialogResult.OK;

@@ -27,6 +27,7 @@ namespace PTM.Addin.WeekView
 			// TODO: Add any initialization after the InitializeComponent call
 			this.dayView.ResolveAppointments+=new ResolveAppointmentsEventHandler(dayView_ResolveAppointments);
 			currentWeek = 0;
+			this.Status = String.Empty;
 		}
 
 		/// <summary>

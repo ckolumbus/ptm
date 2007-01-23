@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using PTM.Data;
 using PTM.Framework.Infos;
 
@@ -16,41 +13,41 @@ namespace PTM.Framework.Helpers
 		private DataMaintenanceHelper()
 		{
 		}
-		
+
 		public static void CompactDB()
 		{
 			DbHelper.CompactDB();
 		}
+
 		public static void DeleteIdleEntries()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
-			DateTime limitDate = DateTime.Today.AddDays(-(int)config.Value);
-			
+			DateTime limitDate = DateTime.Today.AddDays(-(int) config.Value);
+
 			//Delete Idle logs
 			DbHelper.ExecuteNonQuery("DELETE FROM TasksLog " +
-				" WHERE TasksLog.TaskId =  " + Tasks.IdleTasksRow.Id +
-				" AND TasksLog.InsertTime < ?", new string[] {"InsertTime"},
-				new object[] {limitDate});
-
+			                         " WHERE TasksLog.TaskId =  " + Tasks.IdleTasksRow.Id +
+			                         " AND TasksLog.InsertTime < ?", new string[] {"InsertTime"},
+			                         new object[] {limitDate});
 		}
-		
+
 		public static void GroupLogs()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
-			DateTime date = DateTime.Today.AddDays(-(int)config.Value);
-			while(true)
+			DateTime date = DateTime.Today.AddDays(-(int) config.Value);
+			while (true)
 			{
 				object value = DbHelper.ExecuteScalar("SELECT Max(InsertTime) FROM TasksLog WHERE InsertTime<?",
-				                       new string[] {"InsertTime"}, new object[] {date});
-				
-				if(value == DBNull.Value)
+				                                      new string[] {"InsertTime"}, new object[] {date});
+
+				if (value == DBNull.Value)
 					break;
-			
+
 				date = ((DateTime) value).Date;
-				
+
 				//ArrayList list = Logs.GetLogsByDay(date);
 				bool mergeNeeded = GroupLogsList(date);
-				if(!mergeNeeded)
+				if (!mergeNeeded)
 					break;
 			}
 		}
@@ -60,7 +57,7 @@ namespace PTM.Framework.Helpers
 			MergedLogs mergeList;
 			mergeList = MergedLogs.GetMergedLogsByDay(date);
 			bool mergeNeeded = false;
-			
+
 			OleDbConnection con;
 			con = DbHelper.GetConnection();
 			con.Open();
@@ -69,23 +66,28 @@ namespace PTM.Framework.Helpers
 			{
 				foreach (MergedLog mergedLog in mergeList)
 				{
-					if(mergedLog.DeletedLogs.Count==0)
+					if (mergedLog.DeletedLogs.Count == 0)
 						continue;
 					OleDbCommand command;
 					foreach (Log log in mergedLog.DeletedLogs)
 					{
-						command = new OleDbCommand("Update ApplicationsLog Set TaskLogId = " +  mergedLog.MergeLog.Id + " Where TaskLogId = " + log.Id, con, trans);
+						command =
+							new OleDbCommand(
+								"Update ApplicationsLog Set TaskLogId = " + mergedLog.MergeLog.Id + " Where TaskLogId = " + log.Id, con, trans);
 						command.ExecuteNonQuery();
-						
+
 						command = new OleDbCommand("Delete from TasksLog Where Id = " + log.Id, con, trans);
 						command.ExecuteNonQuery();
 					}
-					
-					command = new OleDbCommand("Update TasksLog Set Duration = " + mergedLog.MergeLog.Duration+ " Where Id = " + mergedLog.MergeLog.Id, con, trans);
+
+					command =
+						new OleDbCommand(
+							"Update TasksLog Set Duration = " + mergedLog.MergeLog.Duration + " Where Id = " + mergedLog.MergeLog.Id, con,
+							trans);
 					command.ExecuteNonQuery();
 					mergeNeeded = true;
 				}
-				
+
 //				foreach (Log log in needsDelete)
 //				{
 //					OleDbCommand command = new OleDbCommand("Delete from TasksLog Where Id = " + log.Id, con, trans);
@@ -96,7 +98,7 @@ namespace PTM.Framework.Helpers
 //					OleDbCommand command = new OleDbCommand("Update TasksLog Set Duration = " + log.Duration+ " Where Id = " + log.Id, con, trans);
 //					command.ExecuteNonQuery();
 //				}
-				
+
 				trans.Commit();
 				return mergeNeeded;
 			}

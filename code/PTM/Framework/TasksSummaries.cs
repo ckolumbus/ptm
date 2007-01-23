@@ -10,40 +10,40 @@ namespace PTM.Framework
 	/// </summary>
 	public sealed class TasksSummaries
 	{
-		
 		private TasksSummaries()
 		{
-		}//Summary
+		} //Summary
 
-		
 		#region Private Methods
+
 		private const string NOT_DETAILED = "Not Detailed";
+
 		private static ArrayList ExecuteTaskSummary(DateTime initialDate, DateTime finalDate)
 		{
 			ArrayList summaryList = new ArrayList();
 			ArrayList list = DbHelper.ExecuteGetRows(
-				"SELECT TasksLog.TaskId, Sum( TasksLog.Duration ) AS TotalTime FROM TasksLog " + 
-				"WHERE ( ( (TasksLog.InsertTime)>=? And (TasksLog.InsertTime)<=? ) )" + 
-				"GROUP BY TasksLog.TaskId;", 
-				new string[]{ "InsertTimeFrom", "InsertTimeTo" },
-				new object[]{ initialDate, finalDate } );
-	
+				"SELECT TasksLog.TaskId, Sum( TasksLog.Duration ) AS TotalTime FROM TasksLog " +
+				"WHERE ( ( (TasksLog.InsertTime)>=? And (TasksLog.InsertTime)<=? ) )" +
+				"GROUP BY TasksLog.TaskId;",
+				new string[] {"InsertTimeFrom", "InsertTimeTo"},
+				new object[] {initialDate, finalDate});
+
 			foreach (Hashtable hashtable in list)
 			{
 				TaskSummary taskSum = new TaskSummary();
 				taskSum.TaskId = (int) hashtable["TaskId"];
 				taskSum.TotalActiveTime = (double) hashtable["TotalTime"];
-				summaryList.Add( taskSum );
-			}//foreach
+				summaryList.Add(taskSum);
+			} //foreach
 			return summaryList;
-		}//ExecuteTaskSummary
-	
-		#endregion
-		
-		#region Public Methods
-		public static ArrayList GetTaskSummary( PTMDataset.TasksRow parentRow, DateTime initialDate, DateTime finalDate )
-		{
+		} //ExecuteTaskSummary
 
+		#endregion
+
+		#region Public Methods
+
+		public static ArrayList GetTaskSummary(PTMDataset.TasksRow parentRow, DateTime initialDate, DateTime finalDate)
+		{
 			Logs.UpdateCurrentLogDuration();
 			ArrayList summaryList;
 			ArrayList returnList = new ArrayList();
@@ -57,21 +57,21 @@ namespace PTM.Framework
 				sumRow.Description = row.Description;
 				sumRow.IsActive = row.IsActive;
 				sumRow.IconId = row.IconId;
-				if ( !sumRow.IsActive )
-				{				
-						sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
-						sumRow.TotalActiveTime = 0;					
-				}//if
-				
-				if(sumRow.TaskId!=Tasks.IdleTasksRow.Id)//ignore idle time
+				if (!sumRow.IsActive)
+				{
+					sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
+					sumRow.TotalActiveTime = 0;
+				} //if
+
+				if (sumRow.TaskId != Tasks.IdleTasksRow.Id) //ignore idle time
 				{
 					if (row.Id != parentRow.Id)
 					{
-						if(row.IsParentIdNull())
+						if (row.IsParentIdNull())
 						{
 							summaryList.Remove(sumRow);
 							continue;
-						}//if
+						} //if
 
 						if (row.ParentId == parentRow.Id)
 						{
@@ -82,9 +82,9 @@ namespace PTM.Framework
 							}
 							else
 							{
-									retrow.TotalInactiveTime += sumRow.TotalInactiveTime;
-									retrow.TotalActiveTime += sumRow.TotalActiveTime;
-							}//if-else
+								retrow.TotalInactiveTime += sumRow.TotalInactiveTime;
+								retrow.TotalActiveTime += sumRow.TotalActiveTime;
+							} //if-else
 						}
 						else
 						{
@@ -95,32 +95,32 @@ namespace PTM.Framework
 								psumRow = sumRow;
 								psumRow.TaskId = prow.Id;
 								continue;
-							}//if
-								psumRow.TotalInactiveTime += sumRow.TotalInactiveTime;
-								psumRow.TotalActiveTime += sumRow.TotalActiveTime;
-						}//if-else
+							} //if
+							psumRow.TotalInactiveTime += sumRow.TotalInactiveTime;
+							psumRow.TotalActiveTime += sumRow.TotalActiveTime;
+						} //if-else
 					}
 					else
 					{
 						sumRow.Description = NOT_DETAILED;
 						returnList.Add(sumRow);
-					}//if-else
-				}//if
+					} //if-else
+				} //if
 				summaryList.Remove(sumRow);
-			}//while
+			} //while
 			return returnList;
-		}//GetTaskSummary
+		} //GetTaskSummary
 
 		public static TaskSummary FindTaskSummaryByTaskId(ArrayList taskSummaryList, int taskId)
 		{
 			foreach (TaskSummary taskSummary in taskSummaryList)
 			{
-				if(taskSummary.TaskId == taskId)
+				if (taskSummary.TaskId == taskId)
 					return taskSummary;
-			}//foreach
+			} //foreach
 			return null;
-		}//FindTaskSummaryByTaskId
-		#endregion
+		} //FindTaskSummaryByTaskId
 
-	}//Summary
-}//namespace
+		#endregion
+	} //Summary
+} //namespace

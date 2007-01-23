@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 
 namespace PTM.Framework.Infos
 {
@@ -10,17 +9,16 @@ namespace PTM.Framework.Infos
 	{
 		public ApplicationLog()
 		{
-		}//ApplicationLog
+		} //ApplicationLog
 
 		/// <summary>
 		/// Application Active Time 
 		/// </summary>
-
 		public int ActiveTime
 		{
 			get { return activeTime; }
 			set { activeTime = value; }
-		}//ActiveTime
+		} //ActiveTime
 
 		/// <summary>
 		/// Application Caption
@@ -29,7 +27,7 @@ namespace PTM.Framework.Infos
 		{
 			get { return caption; }
 			set { caption = value; }
-		}//Caption
+		} //Caption
 
 		/// <summary>
 		/// Application Name
@@ -38,7 +36,7 @@ namespace PTM.Framework.Infos
 		{
 			get { return name; }
 			set { name = value; }
-		}//Name
+		} //Name
 
 		/// <summary>
 		/// Application Id
@@ -47,7 +45,7 @@ namespace PTM.Framework.Infos
 		{
 			get { return id; }
 			set { id = value; }
-		}//Id
+		} //Id
 
 		/// <summary>
 		/// Application Full Path
@@ -56,13 +54,13 @@ namespace PTM.Framework.Infos
 		{
 			get { return applicationFullPath; }
 			set { applicationFullPath = value; }
-		}//ApplicationFullPath
+		} //ApplicationFullPath
 
-		int activeTime;
-		string caption;
-		string name;
-		int id;
-		string applicationFullPath;
+		private int activeTime;
+		private string caption;
+		private string name;
+		private int id;
+		private string applicationFullPath;
 
 		/// <summary>
 		/// Application Task log Id
@@ -71,7 +69,7 @@ namespace PTM.Framework.Infos
 		{
 			get { return taskLogId; }
 			set { taskLogId = value; }
-		}//TaskLogId
+		} //TaskLogId
 
 		/// <summary>
 		/// ProcessId of the Application
@@ -79,8 +77,8 @@ namespace PTM.Framework.Infos
 		public int ProcessId
 		{
 			get { return processId; }
-			set {processId = value; }
-		}//ProcessId
+			set { processId = value; }
+		} //ProcessId
 
 		/// <summary>
 		/// Last time this Application Log was updated
@@ -88,12 +86,11 @@ namespace PTM.Framework.Infos
 		public DateTime LastUpdateTime
 		{
 			get { return lastUpdateTime; }
-			set { lastUpdateTime= value; }
-		}//LastUpdateTime
+			set { lastUpdateTime = value; }
+		} //LastUpdateTime
 
-		int taskLogId;
-		int processId;
-		DateTime lastUpdateTime;
-	
-	}//end of class ApplicationLog
-}//end of namespace PTM.Framework.Infos
+		private int taskLogId;
+		private int processId;
+		private DateTime lastUpdateTime;
+	} //end of class ApplicationLog
+} //end of namespace PTM.Framework.Infos

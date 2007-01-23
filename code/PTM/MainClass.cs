@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Helpers;
-using PTM.Data;
 using PTM.View;
 using PTM.View.Forms;
 using Timer=System.Timers.Timer;
@@ -41,7 +41,7 @@ namespace PTM
 		/// <summary>
 			/// Main Method, Application access point
 			/// </summary>
-		private static void Main()
+			private static void Main()
 		{
 			if (runSingleInstance)
 			{
@@ -157,18 +157,18 @@ namespace PTM
 			splash.SetLoadProgress(50);
 			splash.Refresh();
 			Application.DoEvents();
-			
+
 			UpdaterHelper.UpdateInfo info;
 			info = UpdaterHelper.CheckFromUpdates();
 			Application.DoEvents();
-			if(info.UpdateAvailable)
+			if (info.UpdateAvailable)
 			{
 				UpdateForm updateForm;
 				updateForm = new UpdateForm(info);
 				updateForm.ShowDialog();
 				Application.DoEvents();
 			}
-			
+
 			splash.SetLoadProgress(60);
 			splash.Refresh();
 			Application.DoEvents();

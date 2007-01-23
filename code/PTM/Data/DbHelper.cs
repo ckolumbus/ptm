@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace PTM.Data
 {
@@ -15,25 +17,27 @@ namespace PTM.Data
 		private DbHelper()
 		{
 		}
-		
+
 		private static string userNameData;
 		private static string connectionString;
+
 		public static void Initialize(string userName)
 		{
 			userNameData = userName;
 			string dataSource = GetDataSource();
-			connectionString = @"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
+			connectionString =
+				@"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
 			connectionString = connectionString.Replace("@DATA_SOURCE", dataSource);
 		}
-		
-		
+
+
 		public static string GetDataSource()
 		{
 			//string appdir = Directory.GetCurrentDirectory();
 			//string appdir = Application.StartupPath;
 			//string appdir = Path.GetDirectoryName(Application.ExecutablePath);
-			string appdir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			
+			string appdir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
 			string dbdir = appdir + @"\" + userNameData;
 			if (!Directory.Exists(dbdir))
 				Directory.CreateDirectory(dbdir);
@@ -44,7 +48,7 @@ namespace PTM.Data
 
 			return dataSource;
 		}
-		
+
 		public static bool DeleteDataSource()
 		{
 			string appdir = Directory.GetCurrentDirectory();
@@ -62,7 +66,7 @@ namespace PTM.Data
 			}
 		}
 
-		
+
 		public static int ExecuteNonQuery(string cmdText)
 		{
 			OleDbCommand cmd;
@@ -70,19 +74,19 @@ namespace PTM.Data
 			try
 			{
 				cmd.Connection.Open();
-				return cmd.ExecuteNonQuery();	
+				return cmd.ExecuteNonQuery();
 			}
 			finally
 			{
-				cmd.Connection.Close();				
+				cmd.Connection.Close();
 			}
 		}
 
-		public static int ExecuteNonQuery(string cmdText, string[] paramNames,  object[] paramValues)
+		public static int ExecuteNonQuery(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
+			for (int i = 0; i < paramValues.Length; i++)
 			{
 				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
 				param.Value = paramValues[i];
@@ -92,15 +96,15 @@ namespace PTM.Data
 			try
 			{
 				cmd.Connection.Open();
-				return cmd.ExecuteNonQuery();	
+				return cmd.ExecuteNonQuery();
 			}
 			finally
 			{
-				cmd.Connection.Close();				
+				cmd.Connection.Close();
 			}
 		}
-		
-		
+
+
 		public static Hashtable ExecuteGetFirstRow(string cmdText)
 		{
 			OleDbCommand cmd;
@@ -109,42 +113,43 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
+				if (!reader.HasRows)
 					return null;
 				Hashtable hash = new Hashtable();
 				reader.Read();
-				for(int i=0;i<reader.FieldCount;i++)
+				for (int i = 0; i < reader.FieldCount; i++)
 					hash.Add(reader.GetName(i), reader[i]);
-				reader.Close();				
-				return hash;				
+				reader.Close();
+				return hash;
 			}
 			finally
 			{
 				cmd.Connection.Close();
 			}
 		}
+
 		public static ArrayList ExecuteGetRows(string cmdText)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
 			try
-			{			
+			{
 				cmd.Connection.Open();
 				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
+				if (!reader.HasRows)
 					return new ArrayList();
 				ArrayList list = new ArrayList();
-				while(reader.Read())
+				while (reader.Read())
 				{
 					Hashtable hash = new Hashtable();
-					for(int i=0;i<reader.FieldCount;i++)
+					for (int i = 0; i < reader.FieldCount; i++)
 						hash.Add(reader.GetName(i), reader[i]);
 					list.Add(hash);
 				}
 				reader.Close();
 				return list;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				ex = ex;
 				throw;
@@ -154,11 +159,12 @@ namespace PTM.Data
 				cmd.Connection.Close();
 			}
 		}
-		public static ArrayList ExecuteGetRows(string cmdText, string[] paramNames,  object[] paramValues)
+
+		public static ArrayList ExecuteGetRows(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
+			for (int i = 0; i < paramValues.Length; i++)
 			{
 				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
 				param.Value = paramValues[i];
@@ -166,16 +172,16 @@ namespace PTM.Data
 				cmd.Parameters.Add(param);
 			}
 			try
-			{			
+			{
 				cmd.Connection.Open();
 				OleDbDataReader reader = cmd.ExecuteReader();
-				if(!reader.HasRows)
+				if (!reader.HasRows)
 					return new ArrayList();
 				ArrayList list = new ArrayList();
-				while(reader.Read())
+				while (reader.Read())
 				{
 					Hashtable hash = new Hashtable();
-					for(int i=0;i<reader.FieldCount;i++)
+					for (int i = 0; i < reader.FieldCount; i++)
 						hash.Add(reader.GetName(i), reader[i]);
 					list.Add(hash);
 				}
@@ -187,12 +193,12 @@ namespace PTM.Data
 				cmd.Connection.Close();
 			}
 		}
-		
+
 		public static int ExecuteInsert(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
+			for (int i = 0; i < paramValues.Length; i++)
 			{
 				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
 				param.Value = paramValues[i];
@@ -203,19 +209,18 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				int r = cmd.ExecuteNonQuery();
-				if(r==0)
+				if (r == 0)
 					throw new DataException("Database is not responding.");
 				cmd = new OleDbCommand("SELECT @@IDENTITY", cmd.Connection);
 				return (int) cmd.ExecuteScalar();
 			}
 			finally
 			{
-				cmd.Connection.Close();				
+				cmd.Connection.Close();
 			}
-			
 		}
-		
-		
+
+
 		public static object ExecuteScalar(string cmdText)
 		{
 			OleDbCommand cmd;
@@ -223,18 +228,19 @@ namespace PTM.Data
 			try
 			{
 				cmd.Connection.Open();
-				return cmd.ExecuteScalar();	
+				return cmd.ExecuteScalar();
 			}
 			finally
 			{
-				cmd.Connection.Close();				
+				cmd.Connection.Close();
 			}
 		}
-		public static object ExecuteScalar(string cmdText, string[] paramNames,  object[] paramValues)
+
+		public static object ExecuteScalar(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
-			for(int i = 0; i<paramValues.Length;i++)
+			for (int i = 0; i < paramValues.Length; i++)
 			{
 				OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
 				param.Value = paramValues[i];
@@ -244,16 +250,16 @@ namespace PTM.Data
 			try
 			{
 				cmd.Connection.Open();
-				return cmd.ExecuteScalar();	
+				return cmd.ExecuteScalar();
 			}
 			finally
 			{
-				cmd.Connection.Close();				
+				cmd.Connection.Close();
 			}
 		}
-		
-		
-		public static  OleDbCommand GetNewCommand(string cmdText)
+
+
+		public static OleDbCommand GetNewCommand(string cmdText)
 		{
 			OleDbConnection connection = GetConnection();
 			OleDbCommand command = new OleDbCommand(cmdText, connection);
@@ -267,17 +273,17 @@ namespace PTM.Data
 
 		private static OleDbType GetOleDbType(object paramValue)
 		{
-			if(paramValue== null || paramValue == DBNull.Value)
+			if (paramValue == null || paramValue == DBNull.Value)
 				return OleDbType.Variant;
-			if(paramValue.GetType() == typeof(int))
+			if (paramValue.GetType() == typeof (int))
 				return OleDbType.Integer;
-			if(paramValue.GetType() == typeof(DateTime))
+			if (paramValue.GetType() == typeof (DateTime))
 				return OleDbType.Date;
-			if(paramValue.GetType() == typeof(string))
+			if (paramValue.GetType() == typeof (string))
 				return OleDbType.VarWChar;
-			if(paramValue.GetType() == typeof(bool))
+			if (paramValue.GetType() == typeof (bool))
 				return OleDbType.Boolean;
-			
+
 			throw new DataException("Type Db type not found:" + paramValue.ToString());
 		}
 
@@ -285,70 +291,73 @@ namespace PTM.Data
 		{
 			object[] oParams;
 
-			Type typJRO=Type.GetTypeFromProgID("JRO.JetEngine");
-			if (typJRO==null)
+			Type typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
+			if (typJRO == null)
 			{
 				//phps. msjro is not registered
-				string strMsjrodll=Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),@"Common Files\System\ado\msjro.dll");
+				string strMsjrodll =
+					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), @"Common Files\System\ado\msjro.dll");
 				if (File.Exists(strMsjrodll))
 				{
 					//start a process to register the dll
-					Process procRegisterMsjro=Process.Start("regsvr32.exe",string.Concat("/s \"",strMsjrodll,"\""));
+					Process procRegisterMsjro = Process.Start("regsvr32.exe", string.Concat("/s \"", strMsjrodll, "\""));
 					procRegisterMsjro.WaitForExit();
-					typJRO=Type.GetTypeFromProgID("JRO.JetEngine");
+					typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
 				}
 			}
 
-			if (typJRO==null)
+			if (typJRO == null)
 			{
 				throw new InvalidOperationException("JRO.JetEngine can not be created... please check if it is installed");
 			}
 
 			//create an inctance of a Jet Replication Object
-			object objJRO = 
-				Activator.CreateInstance(typJRO); 
-			
+			object objJRO =
+				Activator.CreateInstance(typJRO);
+
 			string dataSource = GetDataSource();
 			string tempFile = Path.GetDirectoryName(dataSource) + "\\temp.mdb";
-			oParams = new object[] {
-											  connectionString,
-											  "Provider=Microsoft.Jet.OLEDB.4.0;Data" + 
-											  " Source="+ tempFile + ";Jet OLEDB:Engine Type=5"};
+			oParams = new object[]
+				{
+					connectionString,
+					"Provider=Microsoft.Jet.OLEDB.4.0;Data" +
+					" Source=" + tempFile + ";Jet OLEDB:Engine Type=5"
+				};
 
 			objJRO.GetType().InvokeMember("CompactDatabase",
-				System.Reflection.BindingFlags.InvokeMethod,
-				null,
-				objJRO,
-				oParams);
+			                              BindingFlags.InvokeMethod,
+			                              null,
+			                              objJRO,
+			                              oParams);
 
-			System.IO.File.Delete(dataSource);
-			System.IO.File.Move(tempFile, dataSource);
+			File.Delete(dataSource);
+			File.Move(tempFile, dataSource);
 
-			System.Runtime.InteropServices.Marshal.ReleaseComObject(objJRO);
-			objJRO=null;
+			Marshal.ReleaseComObject(objJRO);
+			objJRO = null;
 		}
-		
-		
+
+
 		public static void DeleteColumn(string tableName, string columnName)
 		{
 			ExecuteNonQuery("ALTER TABLE " + tableName + " DROP COLUMN " + columnName);
 		}
-		
+
 		public static void AddColumn(string tableName, string columnName, string dbType)
 		{
 			ExecuteNonQuery("ALTER TABLE " + tableName + " ADD " + columnName + " " + dbType);
 		}
-		
+
 		public static void ModifyColumnType(string tableName, string columnName, string dbType)
 		{
 			ExecuteNonQuery("ALTER TABLE " + tableName + " ALTER COLUMN " + columnName + " " + dbType);
 		}
-		
+
 		public static void DeleteConstraint(string tableName, string constraintName)
 		{
 			ExecuteNonQuery("ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName);
 		}
-		
+
 		public static void AddPrimaryKey(string tableName, string columnName)
 		{
 			ExecuteNonQuery("ALTER TABLE " + tableName + " ADD PRIMARY KEY (" + columnName + ")");

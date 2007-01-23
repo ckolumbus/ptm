@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 
 namespace PTM.Framework.Infos
@@ -11,7 +10,7 @@ namespace PTM.Framework.Infos
 		public MergedLog()
 		{
 		}
-		
+
 		private Log mergeLog;
 		private ArrayList deletedLogs = new ArrayList();
 

@@ -14,7 +14,7 @@ namespace PTM.View.Forms
 		private Label lblVersion;
 		private Panel panel1;
 		private ProgressBar progressBar;
-		private System.Windows.Forms.Label label2;
+		private Label label2;
 		private IContainer components;
 
 		internal SplashForm()
@@ -54,7 +54,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SplashForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (SplashForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblVersion = new System.Windows.Forms.Label();
@@ -66,7 +66,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
 			this.pictureBox1.Location = new System.Drawing.Point(8, 11);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(62, 58);
@@ -77,7 +77,9 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.BackColor = System.Drawing.Color.White;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Font =
+				new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold,
+				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.label1.ForeColor = System.Drawing.Color.Brown;
 			this.label1.Location = new System.Drawing.Point(80, 16);
 			this.label1.Name = "label1";
@@ -138,7 +140,6 @@ namespace PTM.View.Forms
 			this.TransparencyKey = System.Drawing.Color.Lime;
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion

@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using PTM.Addin;
-using PTM.Framework;
 using PTM.Data;
+using PTM.Framework;
 using PTM.Framework.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
@@ -35,11 +35,12 @@ namespace PTM.View.Controls
 		/// Required designer variable.
 		/// </summary>
 		private Container components = null;
-		private System.Windows.Forms.DateTimePicker toDateTimePicker;
-		private System.Windows.Forms.RadioButton toRadioButton;
-		private System.Windows.Forms.RadioButton fromRadioButton;
-		private System.Windows.Forms.DateTimePicker fromDateTimePicker;
-		private System.Windows.Forms.Button searchButton;
+
+		private DateTimePicker toDateTimePicker;
+		private RadioButton toRadioButton;
+		private RadioButton fromRadioButton;
+		private DateTimePicker fromDateTimePicker;
+		private Button searchButton;
 
 		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
 
@@ -49,8 +50,8 @@ namespace PTM.View.Controls
 			InitializeComponent();
 
 			worker = new AsyncWorker();
-			worker.OnBeforeDoWork+=new PTM.View.AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
-			worker.OnWorkDone+=new PTM.View.AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
+			worker.OnBeforeDoWork += new AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
+			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 
 			PTMDataset.TasksRow parentTaskRow;
@@ -118,13 +119,17 @@ namespace PTM.View.Controls
 			// 
 			// applicationsList
 			// 
-			this.applicationsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																														 this.colName,
-																														 this.colActiveTime,
-																														 this.colAppPercent});
+			this.applicationsList.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                                       	{
+			                                       		this.colName,
+			                                       		this.colActiveTime,
+			                                       		this.colAppPercent
+			                                       	});
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
@@ -149,9 +154,11 @@ namespace PTM.View.Controls
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.applicationsList);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
@@ -164,8 +171,10 @@ namespace PTM.View.Controls
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.AppsActiveTimeValue);
 			this.groupBox4.Controls.Add(this.label8);
 			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -293,7 +302,6 @@ namespace PTM.View.Controls
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -312,11 +320,11 @@ namespace PTM.View.Controls
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
 		{
-			if(this.fromRadioButton.Checked)
+			if (this.fromRadioButton.Checked)
 			{
-				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
+				this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
 				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
-				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
+				this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
 			}
 		}
 
@@ -373,26 +381,27 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskRow.Id;
 		}
 
-		private void toRadioButton_CheckedChanged(object sender, System.EventArgs e)
+		private void toRadioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			this.toDateTimePicker.Enabled = true;
 			this.fromRadioButton.Text = "From:";
 		}
 
-		private void fromRadioButton_CheckedChanged(object sender, System.EventArgs e)
+		private void fromRadioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			this.toDateTimePicker.Enabled = false;
 			this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
-			this.fromRadioButton.Text = "Date:";	
+			this.fromRadioButton.Text = "Date:";
 		}
 
-		private void searchButton_Click(object sender, System.EventArgs e)
+		private void searchButton_Click(object sender, EventArgs e)
 		{
-			worker.DoWork((int)StatisticsControlWorks.GetTaskStatistics, new AsyncWorker.AsyncWorkerDelegate(GetTaskStatistics), new object[]{null});
+			worker.DoWork((int) StatisticsControlWorks.GetTaskStatistics, new AsyncWorker.AsyncWorkerDelegate(GetTaskStatistics),
+			              new object[] {null});
 		}
-
 
 		#region AsyncWork
+
 		private enum StatisticsControlWorks : int
 		{
 			GetTaskStatistics
@@ -403,41 +412,41 @@ namespace PTM.View.Controls
 			DateTime fromDate;
 			DateTime toDate;
 			fromDate = fromDateTimePicker.Value.Date;
-			if(this.toRadioButton.Checked)
+			if (this.toRadioButton.Checked)
 			{
 				toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
 			}
 			else
 			{
-				toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);						
+				toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
 			}
-			
+
 			ArrayList appsSummaryList = ApplicationSummaries.GetApplicationsSummary(
 				Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
 				fromDate, toDate);
 
 			return appsSummaryList;
 		}
-		
-		private void worker_OnBeforeDoWork(PTM.View.AsyncWorker.OnBeforeDoWorkEventArgs e)
+
+		private void worker_OnBeforeDoWork(AsyncWorker.OnBeforeDoWorkEventArgs e)
 		{
-			switch(e.WorkId)
+			switch (e.WorkId)
 			{
-				case (int)StatisticsControlWorks.GetTaskStatistics:
+				case (int) StatisticsControlWorks.GetTaskStatistics:
 					SetWaitState();
 					break;
 			}
 		}
 
-		private void worker_OnWorkDone(PTM.View.AsyncWorker.OnWorkDoneEventArgs e)
+		private void worker_OnWorkDone(AsyncWorker.OnWorkDoneEventArgs e)
 		{
-			switch(e.WorkId)
+			switch (e.WorkId)
 			{
-				case (int)StatisticsControlWorks.GetTaskStatistics:
+				case (int) StatisticsControlWorks.GetTaskStatistics:
 
-					GetTaskDetailsDelegate del = new GetTaskDetailsDelegate( GetTaskDetails);
+					GetTaskDetailsDelegate del = new GetTaskDetailsDelegate(GetTaskDetails);
 
-					this.Invoke(del, new object[]{e.Result});
+					this.Invoke(del, new object[] {e.Result});
 					break;
 			}
 		}
@@ -456,7 +465,7 @@ namespace PTM.View.Controls
 			this.Cursor = Cursors.WaitCursor;
 			foreach (Control control in this.Controls)
 			{
-				control.Cursor = Cursors.WaitCursor;						
+				control.Cursor = Cursors.WaitCursor;
 			}
 		}
 
@@ -466,10 +475,10 @@ namespace PTM.View.Controls
 			this.Cursor = Cursors.Default;
 			foreach (Control control in this.Controls)
 			{
-				control.Cursor = Cursors.Default;						
+				control.Cursor = Cursors.Default;
 			}
 			this.parentTaskComboBox.Enabled = true;
-			if(this.toRadioButton.Checked)
+			if (this.toRadioButton.Checked)
 				toDateTimePicker.Enabled = true;
 
 			fromDateTimePicker.Enabled = true;

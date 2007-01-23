@@ -2,16 +2,13 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Reflection;
-using System.Resources;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using PTM.Addin;
+using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Helpers;
-using PTM.Data;
 using PTM.View;
 using PTM.View.Controls;
 using PTM.View.Forms;
@@ -40,9 +37,9 @@ namespace PTM
 		private IContainer components;
 		private bool systemShutdown = false;
 		private MenuItem menuItem5;
-		private System.Windows.Forms.MenuItem menuItem6;
-		private System.Windows.Forms.MenuItem menuItem3;
-		private System.Windows.Forms.MenuItem menuItem7;
+		private MenuItem menuItem6;
+		private MenuItem menuItem3;
+		private MenuItem menuItem7;
 		private bool AnimationDisabled = false;
 
 		internal MainForm()
@@ -56,7 +53,7 @@ namespace PTM
 			Application.DoEvents();
 			UpdateStartUpPath();
 			Application.DoEvents();
-			
+
 			LoadAddins();
 			Application.DoEvents();
 		}
@@ -68,46 +65,46 @@ namespace PTM
 			this.summaryPage.SuspendLayout();
 			this.statisticsPage.SuspendLayout();
 			this.SuspendLayout();
-			this.tasksLogControl = new PTM.View.Controls.TasksLogControl();
-			this.summaryControl = new PTM.View.Controls.SummaryControl();
-			this.statisticsControl = new PTM.View.Controls.StatisticsControl();
-			
+			this.tasksLogControl = new TasksLogControl();
+			this.summaryControl = new SummaryControl();
+			this.statisticsControl = new StatisticsControl();
+
 			this.tasksPage.Controls.Add(this.tasksLogControl);
 			// 
 			// tasksLogControl
 			// 
-			this.tasksLogControl.BackColor = System.Drawing.SystemColors.Control;
-			this.tasksLogControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tasksLogControl.Location = new System.Drawing.Point(0, 0);
+			this.tasksLogControl.BackColor = SystemColors.Control;
+			this.tasksLogControl.Dock = DockStyle.Fill;
+			this.tasksLogControl.Location = new Point(0, 0);
 			this.tasksLogControl.Name = "tasksLogControl";
-			this.tasksLogControl.Size = new System.Drawing.Size(408, 358);
+			this.tasksLogControl.Size = new Size(408, 358);
 			this.tasksLogControl.TabIndex = 0;
-			this.tasksLogControl.StatusChanged+=new PTM.Addin.AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
-			
+			this.tasksLogControl.StatusChanged += new AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
+
 			this.summaryPage.Controls.Add(this.summaryControl);
 			// 
 			// summaryControl
 			// 
-			this.summaryControl.BackColor = System.Drawing.SystemColors.Control;
-			this.summaryControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.summaryControl.Location = new System.Drawing.Point(0, 0);
+			this.summaryControl.BackColor = SystemColors.Control;
+			this.summaryControl.Dock = DockStyle.Fill;
+			this.summaryControl.Location = new Point(0, 0);
 			this.summaryControl.Name = "summaryControl";
-			this.summaryControl.Size = new System.Drawing.Size(408, 358);
+			this.summaryControl.Size = new Size(408, 358);
 			this.summaryControl.TabIndex = 0;
-			this.summaryControl.StatusChanged+=new PTM.Addin.AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
-			
+			this.summaryControl.StatusChanged += new AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
+
 			this.statisticsPage.Controls.Add(this.statisticsControl);
 			// 
 			// statisticsControl
 			// 
-			this.statisticsControl.BackColor = System.Drawing.SystemColors.Control;
-			this.statisticsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.statisticsControl.Location = new System.Drawing.Point(0, 0);
+			this.statisticsControl.BackColor = SystemColors.Control;
+			this.statisticsControl.Dock = DockStyle.Fill;
+			this.statisticsControl.Location = new Point(0, 0);
 			this.statisticsControl.Name = "statisticsControl";
-			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
+			this.statisticsControl.Size = new Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
-			this.statisticsControl.StatusChanged+=new PTM.Addin.AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
-			
+			this.statisticsControl.StatusChanged += new AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
+
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
 			this.summaryPage.ResumeLayout(false);
@@ -144,7 +141,7 @@ namespace PTM
 			reg.Close();
 		} //UpdateStartUpPath
 
-		
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -177,7 +174,7 @@ namespace PTM
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.exitMenuItem = new System.Windows.Forms.MenuItem();
@@ -198,16 +195,20 @@ namespace PTM
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											this.menuItem1,
-																											this.menuItem4,
-																											this.menuItem2});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.menuItem1,
+			                                 		this.menuItem4,
+			                                 		this.menuItem2
+			                                 	});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.exitMenuItem});
+			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                  	{
+			                                  		this.exitMenuItem
+			                                  	});
 			this.menuItem1.Text = "File";
 			// 
 			// exitMenuItem
@@ -219,11 +220,13 @@ namespace PTM
 			// menuItem4
 			// 
 			this.menuItem4.Index = 1;
-			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.menuItem7,
-																											 this.menuItem3,
-																											 this.menuItem5,
-																											 this.menuItem6});
+			this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                  	{
+			                                  		this.menuItem7,
+			                                  		this.menuItem3,
+			                                  		this.menuItem5,
+			                                  		this.menuItem6
+			                                  	});
 			this.menuItem4.Text = "Tools";
 			// 
 			// menuItem7
@@ -253,8 +256,10 @@ namespace PTM
 			// menuItem2
 			// 
 			this.menuItem2.Index = 2;
-			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											 this.aboutMenuItem});
+			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                  	{
+			                                  		this.aboutMenuItem
+			                                  	});
 			this.menuItem2.Text = "Help";
 			// 
 			// aboutMenuItem
@@ -273,9 +278,11 @@ namespace PTM
 			// 
 			// tabControl
 			// 
-			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				    | System.Windows.Forms.AnchorStyles.Left)
+				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.tasksPage);
 			this.tabControl.Controls.Add(this.summaryPage);
 			this.tabControl.Controls.Add(this.statisticsPage);
@@ -318,7 +325,7 @@ namespace PTM
 			this.ClientSize = new System.Drawing.Size(432, 427);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.statusBar);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu;
 			this.MinimumSize = new System.Drawing.Size(440, 456);
 			this.Name = "MainForm";
@@ -327,7 +334,6 @@ namespace PTM
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.tabControl.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -336,8 +342,8 @@ namespace PTM
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			this.statusBar.Text = ((AddinTabPage)this.tabControl.SelectedTab.Controls[0]).Status;
-			this.tasksLogControl.NewTaskLog(true);
+			this.statusBar.Text = ((AddinTabPage) this.tabControl.SelectedTab.Controls[0]).Status;
+			//this.tasksLogControl.NewTaskLog(true);
 			Logs.StartLogging();
 		} //MainForm_Load
 
@@ -349,7 +355,6 @@ namespace PTM
 		} //tabControl_SelectedIndexChanged
 
 
-		
 		protected override void WndProc(ref Message m)
 		{
 			// Once the program recieves WM_QUERYENDSESSION message, set the boolean systemShutdown.
@@ -442,13 +447,14 @@ namespace PTM
 			ConfigurationForm config = new ConfigurationForm();
 			config.ShowDialog(this);
 		}
-		private void menuItem6_Click(object sender, System.EventArgs e)
+
+		private void menuItem6_Click(object sender, EventArgs e)
 		{
 			AddinForm addinForm = new AddinForm();
 			addinForm.ShowDialog(this);
 		}
-		
-		private void menuItem7_Click(object sender, System.EventArgs e)
+
+		private void menuItem7_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
 			taskHForm.ShowDialog(this);
@@ -456,7 +462,7 @@ namespace PTM
 
 		#endregion
 
-		private void tabPage_StatusChanged(PTM.Addin.AddinTabPage.StatusChangedEventAtgs e)
+		private void tabPage_StatusChanged(AddinTabPage.StatusChangedEventAtgs e)
 		{
 			this.statusBar.Text = e.Status;
 		}

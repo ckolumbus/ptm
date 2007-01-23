@@ -1,33 +1,31 @@
 using System;
-using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using PTM.Framework.Helpers;
-using PTM.View.Controls.TreeListViewComponents;
 
 namespace PTM.View.Forms
 {
 	/// <summary>
 	/// Summary description for AddinForm.
 	/// </summary>
-	internal class AddinForm : System.Windows.Forms.Form
+	internal class AddinForm : Form
 	{
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.ListView addinList;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ColumnHeader columnHeader4;
-		private System.Windows.Forms.Button addButton;
-		private System.Windows.Forms.Button removeButton;
-		private System.Windows.Forms.Button closeButton;
-		private System.Windows.Forms.OpenFileDialog openAddinDialog;
-		private System.Windows.Forms.Label label1;
-		
+		private ColumnHeader columnHeader1;
+		private ColumnHeader columnHeader2;
+		private ListView addinList;
+		private ColumnHeader columnHeader3;
+		private ColumnHeader columnHeader4;
+		private Button addButton;
+		private Button removeButton;
+		private Button closeButton;
+		private OpenFileDialog openAddinDialog;
+		private Label label1;
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		internal AddinForm()
 		{
@@ -44,19 +42,20 @@ namespace PTM.View.Forms
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -87,9 +86,11 @@ namespace PTM.View.Forms
 			// 
 			// addinList
 			// 
-			this.addinList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																												this.columnHeader3,
-																												this.columnHeader4});
+			this.addinList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                                	{
+			                                		this.columnHeader3,
+			                                		this.columnHeader4
+			                                	});
 			this.addinList.FullRowSelect = true;
 			this.addinList.GridLines = true;
 			this.addinList.HideSelection = false;
@@ -169,11 +170,11 @@ namespace PTM.View.Forms
 			this.Text = "Add-in Manager";
 			this.Load += new System.EventHandler(this.AddinForm_Load);
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
-		private void AddinForm_Load(object sender, System.EventArgs e)
+		private void AddinForm_Load(object sender, EventArgs e)
 		{
 			ArrayList addins = AddinHelper.GetAddins();
 			foreach (string path in addins)
@@ -187,38 +188,34 @@ namespace PTM.View.Forms
 			this.addinList.Items.Add(new ListViewItem(new string[] {AddinHelper.GetAddinDescription(path), path}));
 		}
 
-		private void addButton_Click(object sender, System.EventArgs e)
+		private void addButton_Click(object sender, EventArgs e)
 		{
-			if(this.openAddinDialog.ShowDialog(this) == DialogResult.OK)
+			if (this.openAddinDialog.ShowDialog(this) == DialogResult.OK)
 			{
 				try
 				{
 					AddinHelper.AddAddinAssembly(this.openAddinDialog.FileName);
 					AddAddinToList(this.openAddinDialog.FileName);
 				}
-				catch(ApplicationException aex)
+				catch (ApplicationException aex)
 				{
 					MessageBox.Show(aex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				}
 			}
-			
 		}
 
-		private void closeButton_Click(object sender, System.EventArgs e)
+		private void closeButton_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}
 
-		private void removeButton_Click(object sender, System.EventArgs e)
+		private void removeButton_Click(object sender, EventArgs e)
 		{
-			if(this.addinList.SelectedItems.Count == 0)
+			if (this.addinList.SelectedItems.Count == 0)
 				return;
-			
+
 			AddinHelper.DeleteAddinAssembly(this.addinList.SelectedItems[0].SubItems[1].Text);
 			this.addinList.Items.Remove(this.addinList.SelectedItems[0]);
 		}
-		
-		
-
 	}
 }

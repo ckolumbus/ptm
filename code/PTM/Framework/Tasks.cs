@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
-using System.Globalization;
-using System.Reflection;
 using System.Text;
 using PTM.Data;
 using PTM.View;
@@ -25,7 +23,6 @@ namespace PTM.Framework
 		{
 		}
 
-		
 		#region Properties
 
 		public static PTMDataset.TasksRow CurrentTaskRow
@@ -37,7 +34,7 @@ namespace PTM.Framework
 		{
 			get { return CloneRow(rootTaskRow); }
 		}
-		
+
 		public static PTMDataset.TasksRow IdleTasksRow
 		{
 			get { return CloneRow(idleTaskRow); }
@@ -48,7 +45,6 @@ namespace PTM.Framework
 			get { return tasksDataTable.Count; }
 		}
 
-		
 		#endregion
 
 		#region Public Methods
@@ -98,17 +94,17 @@ namespace PTM.Framework
 			ValidateTaskData(tasksRow);
 			PTMDataset.TasksRow sameTaskByDescription;
 			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
-			
+
 			if (sameTaskByDescription != null)
-					throw new ApplicationException("Task already exist");
-			
+				throw new ApplicationException("Task already exist");
+
 			tasksRow.TotalTime = 0;
 			tasksRow.IsFinished = false;
 			tasksRow.SetStartDateNull();
 			tasksRow.SetStopDateNull();
-			if(tasksRow.IsIconIdNull())
+			if (tasksRow.IsIconIdNull())
 				tasksRow.IconId = IconsManager.DefaultTaskIconId;
-			if(tasksRow.IsIsActiveNull())
+			if (tasksRow.IsIsActiveNull())
 				tasksRow.IsActive = true;
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.NewTasksRow();
@@ -134,14 +130,14 @@ namespace PTM.Framework
 			ValidateTaskData(tasksRow);
 			PTMDataset.TasksRow sameTaskByDescription;
 			sameTaskByDescription = FindByParentIdAndDescription(tasksRow.ParentId, tasksRow.Description);
-			if (sameTaskByDescription != null && sameTaskByDescription.Id !=tasksRow.Id)
+			if (sameTaskByDescription != null && sameTaskByDescription.Id != tasksRow.Id)
 			{
 				//Task tasksRow needs to be merged with sameTaskByDescription, tasksRow will be deleted
 				Logs.ChangeLogsTaskId(tasksRow.Id, sameTaskByDescription.Id);
-				Tasks.DeleteTaskRow(tasksRow);
+				DeleteTaskRow(tasksRow);
 				return;
-			}	
-			
+			}
+
 			PTMDataset.TasksRow row;
 			row = tasksDataTable.FindById(tasksRow.Id);
 			row.ItemArray = tasksRow.ItemArray;
@@ -206,7 +202,7 @@ namespace PTM.Framework
 		public static string GetFullPath(int taskId)
 		{
 			PTMDataset.TasksRow row;
-			row = Tasks.FindById(taskId);
+			row = FindById(taskId);
 			ArrayList parents = new ArrayList();
 			PTMDataset.TasksRow curRow = row;
 			while (true)
@@ -221,8 +217,8 @@ namespace PTM.Framework
 			{
 				path.Append(tasksRow.Description + @"\");
 			}
-			if(path.Length>0)
-				return path.ToString(0, path.Length-1);
+			if (path.Length > 0)
+				return path.ToString(0, path.Length - 1);
 			else
 				return String.Empty;
 		}
@@ -269,9 +265,8 @@ namespace PTM.Framework
 			UpdateTaskRow(row);
 		}
 
-		
 		#endregion
-		
+
 		#region Private Methods
 
 		private static void LoadAllTasks()
@@ -303,7 +298,7 @@ namespace PTM.Framework
 				}
 			}
 		}
-		
+
 		private static void SetIdleTask()
 		{
 			foreach (DataRelation relation in tasksDataTable.ChildRelations)
@@ -313,7 +308,7 @@ namespace PTM.Framework
 					PTMDataset.TasksRow[] rows = (PTMDataset.TasksRow[]) rootTaskRow.GetChildRows(relation);
 					foreach (PTMDataset.TasksRow row in rows)
 					{
-						if(string.Compare(row.Description, Tasks.DEFAULT_IDLE_TASK_NAME)==0)
+						if (string.Compare(row.Description, DEFAULT_IDLE_TASK_NAME) == 0)
 						{
 							idleTaskRow = row;
 							return;
@@ -323,7 +318,6 @@ namespace PTM.Framework
 			}
 			AddIdleTask();
 			SetIdleTask();
-			
 		}
 
 
@@ -342,7 +336,7 @@ namespace PTM.Framework
 			row.EndEdit();
 			rootTaskRow = row;
 		}
-		
+
 		private static void AddIdleTask()
 		{
 			PTMDataset.TasksRow row = tasksDataTable.NewTasksRow();
@@ -386,7 +380,6 @@ namespace PTM.Framework
 
 		private static void ValidateTaskData(PTMDataset.TasksRow tasksRow)
 		{
-
 			if (tasksRow.IsParentIdNull())
 				throw new ApplicationException("Parent can't be null");
 			if (tasksRow.IsDescriptionNull())
@@ -439,7 +432,6 @@ namespace PTM.Framework
 			ManageTaskLogRowChanged(e);
 		}
 
-		
 		#endregion
 
 		#region Events
@@ -478,7 +470,5 @@ namespace PTM.Framework
 		}
 
 		#endregion
-
-		
 	}
 }

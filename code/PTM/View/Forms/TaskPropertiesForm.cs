@@ -1,7 +1,6 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using PTM.Data;
 using PTM.Framework;
@@ -11,23 +10,25 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for TaskPropertiesForm.
 	/// </summary>
-	public class TaskPropertiesForm : System.Windows.Forms.Form
+	public class TaskPropertiesForm : Form
 	{
-		private System.Windows.Forms.CheckBox chkIsActive;
-		private System.Windows.Forms.Button btnRigth;
-		private System.Windows.Forms.Button btnLeft;
-		private System.Windows.Forms.PictureBox picture;
-		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.Button okButton;
+		private CheckBox chkIsActive;
+		private Button btnRigth;
+		private Button btnLeft;
+		private PictureBox picture;
+		private Button cancelButton;
+		private Button okButton;
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.Container components = null;
-		private System.Windows.Forms.TextBox txtDescription;
-		
-		
+		private Container components = null;
+
+		private TextBox txtDescription;
+
+
 		private PTMDataset.TasksRow task;
-		
+
 		public TaskPropertiesForm(int taskId)
 		{
 			//
@@ -35,9 +36,8 @@ namespace PTM.View.Forms
 			//
 			InitializeComponent();
 
-			
+
 			task = Tasks.FindById(taskId);
-			
 		}
 
 		public bool IsActive
@@ -49,7 +49,7 @@ namespace PTM.View.Forms
 		{
 			get { return (int) this.picture.Tag; }
 		}
-		
+
 		private string Description
 		{
 			get { return this.txtDescription.Text; }
@@ -58,26 +58,27 @@ namespace PTM.View.Forms
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TaskPropertiesForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TaskPropertiesForm));
 			this.chkIsActive = new System.Windows.Forms.CheckBox();
 			this.btnRigth = new System.Windows.Forms.Button();
 			this.btnLeft = new System.Windows.Forms.Button();
@@ -98,7 +99,7 @@ namespace PTM.View.Forms
 			// 
 			// btnRigth
 			// 
-			this.btnRigth.Image = ((System.Drawing.Image)(resources.GetObject("btnRigth.Image")));
+			this.btnRigth.Image = ((System.Drawing.Image) (resources.GetObject("btnRigth.Image")));
 			this.btnRigth.Location = new System.Drawing.Point(40, 56);
 			this.btnRigth.Name = "btnRigth";
 			this.btnRigth.Size = new System.Drawing.Size(18, 18);
@@ -107,7 +108,7 @@ namespace PTM.View.Forms
 			// 
 			// btnLeft
 			// 
-			this.btnLeft.Image = ((System.Drawing.Image)(resources.GetObject("btnLeft.Image")));
+			this.btnLeft.Image = ((System.Drawing.Image) (resources.GetObject("btnLeft.Image")));
 			this.btnLeft.Location = new System.Drawing.Point(16, 56);
 			this.btnLeft.Name = "btnLeft";
 			this.btnLeft.Size = new System.Drawing.Size(18, 18);
@@ -134,7 +135,9 @@ namespace PTM.View.Forms
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(240, 88);
@@ -145,7 +148,9 @@ namespace PTM.View.Forms
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.Anchor =
+				((System.Windows.Forms.AnchorStyles)
+				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(152, 88);
@@ -176,43 +181,40 @@ namespace PTM.View.Forms
 			this.Text = "Task Properties";
 			this.Load += new System.EventHandler(this.TaskPropertiesForm_Load);
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
-		private void TaskPropertiesForm_Load(object sender, System.EventArgs e)
+		private void TaskPropertiesForm_Load(object sender, EventArgs e)
 		{
-			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[task.IconId]).ToBitmap();
+			this.picture.Image = ((Icon) IconsManager.CommonTaskIconsTable[task.IconId]).ToBitmap();
 			this.picture.Tag = task.IconId;
 			this.txtDescription.Text = task.Description;
 			this.chkIsActive.Checked = task.IsActive;
-
 		}
 
-		private void btnLeft_Click(object sender, System.EventArgs e)
+		private void btnLeft_Click(object sender, EventArgs e)
 		{
-			this.picture.Tag = (int)this.picture.Tag - 1;
-			if((int)this.picture.Tag < 1)
+			this.picture.Tag = (int) this.picture.Tag - 1;
+			if ((int) this.picture.Tag < 1)
 				this.picture.Tag = IconsManager.CommonTaskIconsTable.Count - 1;
-			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[this.picture.Tag]).ToBitmap();
-	
+			this.picture.Image = ((Icon) IconsManager.CommonTaskIconsTable[this.picture.Tag]).ToBitmap();
 		}
 
-		private void btnRigth_Click(object sender, System.EventArgs e)
+		private void btnRigth_Click(object sender, EventArgs e)
 		{
-			this.picture.Tag = (int)this.picture.Tag + 1;
-			if((int)this.picture.Tag > IconsManager.CommonTaskIconsTable.Count-1)
+			this.picture.Tag = (int) this.picture.Tag + 1;
+			if ((int) this.picture.Tag > IconsManager.CommonTaskIconsTable.Count - 1)
 				this.picture.Tag = 1;
-			this.picture.Image = ((Icon)IconsManager.CommonTaskIconsTable[this.picture.Tag]).ToBitmap();
-
+			this.picture.Image = ((Icon) IconsManager.CommonTaskIconsTable[this.picture.Tag]).ToBitmap();
 		}
 
-		private void cancelButton_Click(object sender, System.EventArgs e)
+		private void cancelButton_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}
 
-		private void okButton_Click(object sender, System.EventArgs e)
+		private void okButton_Click(object sender, EventArgs e)
 		{
 			PTMDataset.TasksRow row;
 			row = Tasks.FindById(task.Id);
@@ -229,7 +231,5 @@ namespace PTM.View.Forms
 			}
 			this.Close();
 		}
-
-
 	}
 }

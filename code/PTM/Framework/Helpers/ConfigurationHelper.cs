@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using System.Data.Common;
-using System.Globalization;
-using System.Windows.Forms;
+using System.Reflection;
 using PTM.Data;
 
 namespace PTM.Framework.Helpers
@@ -18,7 +16,7 @@ namespace PTM.Framework.Helpers
 		DataMaintenanceDays = 2,
 		CheckForUpdates = 3,
 		ShowTasksFullPath = 4
-	}//ConfigurationKey enum
+	} //ConfigurationKey enum
 
 	/// <summary>
 	/// ConfigurationHelper class 
@@ -32,77 +30,76 @@ namespace PTM.Framework.Helpers
 		/// </summary>
 		private ConfigurationHelper()
 		{
-		}//ConfigurationHelper
+		} //ConfigurationHelper
 
-		
+
 		/// <summary>
 		/// GetConfiguration  receives a configuration key
 		/// @return  the configuration first item asociated with this item.
 		/// </summary>
-		public static Configuration GetConfiguration( ConfigurationKey key )
+		public static Configuration GetConfiguration(ConfigurationKey key)
 		{
 			Hashtable ht;
 			ht = DbHelper.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
-			                                      ((int) key).ToString());
-			if(ht==null)
+			                                 ((int) key).ToString());
+			if (ht == null)
 				return null;
 			object configValue;
-			switch(key)
+			switch (key)
 			{
 				case ConfigurationKey.TasksLogDuration:
 				case ConfigurationKey.DataMaintenanceDays:
 					configValue = Convert.ToInt32(ht["ConfigValue"]);
-					break;				
+					break;
 				default:
 					configValue = ht["ConfigValue"].ToString().Trim();
 					break;
 			}
-			
+
 			return new Configuration(key, configValue);
-			
-		}//GetConfiguration
-		
+		} //GetConfiguration
+
 		public static void SaveConfiguration(Configuration configuration)
 		{
-			switch(configuration.Key)
+			switch (configuration.Key)
 			{
 				case ConfigurationKey.TasksLogDuration:
-					if(Convert.ToInt32(configuration.Value)<1 || 
-					   Convert.ToInt32(configuration.Value) > 60)
+					if (Convert.ToInt32(configuration.Value) < 1 ||
+					    Convert.ToInt32(configuration.Value) > 60)
 						throw new ApplicationException("The log duration can't be less than 1 min. and more than 60 min.");
 					break;
 				case ConfigurationKey.DataMaintenanceDays:
-					if(Convert.ToInt32(configuration.Value)<0)
+					if (Convert.ToInt32(configuration.Value) < 0)
 						throw new ApplicationException("Data maintenance days can't be less than 0.");
 					break;
 			}
-			if(GetConfiguration(configuration.Key)!=null)
+			if (GetConfiguration(configuration.Key) != null)
 			{
 				DbHelper.ExecuteNonQuery("UPDATE Configuration SET ConfigValue = ? WHERE KeyValue = " +
-					((int) configuration.Key).ToString(), new string[]{"ConfigValue"}, new object[]{configuration.Value});				
+				                         ((int) configuration.Key).ToString(), new string[] {"ConfigValue"},
+				                         new object[] {configuration.Value});
 			}
 			else
 			{
-				DbHelper.ExecuteNonQuery("INSERT INTO Configuration (KeyValue, Description, ConfigValue) VALUES (?, ?, ?)", 
-				                         new string[]{"KeyValue", "Description", "ConfigValue"}, 
-				                         new object[]{(int)configuration.Key,configuration.Key.ToString(), configuration.Value});	
+				DbHelper.ExecuteNonQuery("INSERT INTO Configuration (KeyValue, Description, ConfigValue) VALUES (?, ?, ?)",
+				                         new string[] {"KeyValue", "Description", "ConfigValue"},
+				                         new object[] {(int) configuration.Key, configuration.Key.ToString(), configuration.Value});
 			}
 		}
 
-		
+
 		public static string GetVersionString()
 		{
 			return "beta v. 1.7";
 		} //GetVersionString
-		
+
 		public static string GetInternalVersionString()
 		{
-			return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			return Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		} //GetInternalVersionString
-		
-	}//ConfigurationHelper
-	
-		
+	} //ConfigurationHelper
+
+
 	public class Configuration
 	{
 		public Configuration(ConfigurationKey key, object value)
@@ -110,18 +107,20 @@ namespace PTM.Framework.Helpers
 			this.key = key;
 			this.value = value;
 		}
+
 		private ConfigurationKey key;
 		private object value;
+
 		public ConfigurationKey Key
 		{
 			get { return key; }
 			set { key = value; }
 		}
+
 		public object Value
 		{
 			get { return value; }
 			set { this.value = value; }
 		}
 	}
-	
-}//namespace
+} //namespace

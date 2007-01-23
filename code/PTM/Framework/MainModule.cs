@@ -1,18 +1,14 @@
-using System.Collections;
 using System.Windows.Forms;
-using PTM.Framework.Helpers;
 using PTM.Data;
+using PTM.Framework.Helpers;
 
 namespace PTM.Framework
 {
-	
-	
 	public class MainModule
-	{	
-
+	{
 		protected MainModule()
 		{
-		}//MainModule
+		} //MainModule
 
 		/// <summary>
 		/// Initializes the engine components, 
@@ -21,20 +17,20 @@ namespace PTM.Framework
 		{
 			DbHelper.Initialize(userName);
 			Application.DoEvents();
-			
+
 			DBUpdaterHelper.UpdateDataBase();
 			Application.DoEvents();
-			
+
 			DbHelper.CompactDB();
 			Application.DoEvents();
-			
+
 			DataAdapterManager adapterManager = new DataAdapterManager();
 			Application.DoEvents();
 			UnitOfWork.Initialize(ds, adapterManager);
 			Application.DoEvents();
 			Tasks.Initialize(ds.Tasks, adapterManager.tasksDataAdapter);
 			Application.DoEvents();
-		
+
 			DataMaintenanceHelper.DeleteIdleEntries();
 			Application.DoEvents();
 			DataMaintenanceHelper.GroupLogs();
@@ -47,6 +43,5 @@ namespace PTM.Framework
 			ApplicationsLog.Initialize();
 			Application.DoEvents();
 		}
-
-	}//MainModule
-}//namespace
+	} //MainModule
+} //namespace

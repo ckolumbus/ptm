@@ -1,5 +1,3 @@
-using System;
-
 namespace PTM.Framework.Infos
 {
 	/// <summary>
@@ -38,7 +36,7 @@ namespace PTM.Framework.Infos
 		/// Stores if this task is active
 		/// </summary>
 		private bool isActive;
-		
+
 		private int iconId;
 
 		public bool IsActive
@@ -85,12 +83,10 @@ namespace PTM.Framework.Infos
 
 		public int IconId
 		{
-			get{return iconId;}
+			get { return iconId; }
 			set { iconId = value; }
 		}
 
 //Description
-
-		
 	} //end of class
 } //end of namespace

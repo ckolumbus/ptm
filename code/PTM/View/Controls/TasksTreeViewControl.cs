@@ -4,8 +4,8 @@ using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PTM.Framework;
 using PTM.Data;
+using PTM.Framework;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -24,7 +24,7 @@ namespace PTM.View.Controls
 			this.treeView.DragEnter += new DragEventHandler(treeView_DragEnter);
 			this.treeView.DragLeave += new EventHandler(treeView_DragLeave);
 			this.treeView.GiveFeedback += new GiveFeedbackEventHandler(treeView_GiveFeedback);
-			this.treeView.DoubleClick+=new EventHandler(treeView_DoubleClick);
+			this.treeView.DoubleClick += new EventHandler(treeView_DoubleClick);
 			this.timer.Tick += new EventHandler(timer_Tick);
 			timer.Interval = 200;
 		}
@@ -50,7 +50,7 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksTreeViewControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TasksTreeViewControl));
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.treeMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuProperties = new System.Windows.Forms.MenuItem();
@@ -76,11 +76,13 @@ namespace PTM.View.Controls
 			// 
 			// treeMenu
 			// 
-			this.treeMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																											this.mnuProperties,
-																											this.menuItem5,
-																											this.mnuDelete,
-																											this.mnuRename});
+			this.treeMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.mnuProperties,
+			                                 		this.menuItem5,
+			                                 		this.mnuDelete,
+			                                 		this.mnuRename
+			                                 	});
 			// 
 			// mnuProperties
 			// 
@@ -108,7 +110,8 @@ namespace PTM.View.Controls
 			// groupsImageList
 			// 
 			this.groupsImageList.ImageSize = new System.Drawing.Size(16, 16);
-			this.groupsImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("groupsImageList.ImageStream")));
+			this.groupsImageList.ImageStream =
+				((System.Windows.Forms.ImageListStreamer) (resources.GetObject("groupsImageList.ImageStream")));
 			this.groupsImageList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// TasksTreeViewControl
@@ -117,7 +120,6 @@ namespace PTM.View.Controls
 			this.Name = "TasksTreeViewControl";
 			this.Size = new System.Drawing.Size(120, 60);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -125,11 +127,11 @@ namespace PTM.View.Controls
 		private ImageList groupsImageList;
 		private TreeView treeView;
 		private int currentSelectedTask = -1;
-		private System.Windows.Forms.MenuItem menuItem5;
-		private System.Windows.Forms.ContextMenu treeMenu;
-		private System.Windows.Forms.MenuItem mnuDelete;
-		private System.Windows.Forms.MenuItem mnuRename;
-		private System.Windows.Forms.MenuItem mnuProperties;
+		private MenuItem menuItem5;
+		private ContextMenu treeMenu;
+		private MenuItem mnuDelete;
+		private MenuItem mnuRename;
+		private MenuItem mnuProperties;
 		internal const string NEW_TASK = "New Task";
 
 		protected override void OnLoad(EventArgs e)
@@ -229,7 +231,7 @@ namespace PTM.View.Controls
 			DataRow[] childsRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (PTMDataset.TasksRow row in childsRows)
 			{
-				if(row.Id == Tasks.IdleTasksRow.Id)
+				if (row.Id == Tasks.IdleTasksRow.Id)
 					continue;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);
@@ -277,12 +279,12 @@ namespace PTM.View.Controls
 			PTMDataset.TasksRow row = Tasks.FindById(Convert.ToInt32(e.Node.Tag));
 			if (row != null)
 			{
-				if(e.Label == null || e.Label == String.Empty)
+				if (e.Label == null || e.Label == String.Empty)
 				{
 					e.CancelEdit = true;
 					return;
 				}
-				
+
 				row.Description = e.Label;
 				try
 				{
@@ -292,11 +294,12 @@ namespace PTM.View.Controls
 				{
 					e.CancelEdit = true;
 					MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}				
+				}
 			}
 			else
 			{
-				MessageBox.Show("This task has been deleted.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("This task has been deleted.", this.ParentForm.Text, MessageBoxButtons.OK,
+				                MessageBoxIcon.Information);
 			}
 		}
 
@@ -368,7 +371,7 @@ namespace PTM.View.Controls
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
 		internal static extern bool ImageList_BeginDrag(IntPtr himlTrack, int
-		                                                                	iTrack, int dxHotspot, int dyHotspot);
+		                                                                  	iTrack, int dxHotspot, int dyHotspot);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
 		internal static extern bool ImageList_DragMove(int x, int y);
@@ -587,12 +590,12 @@ namespace PTM.View.Controls
 
 		#endregion
 
-		private void mnuDelete_Click(object sender, System.EventArgs e)
+		private void mnuDelete_Click(object sender, EventArgs e)
 		{
 			this.DeleteSelectedTask();
 		}
 
-		private void mnuRename_Click(object sender, System.EventArgs e)
+		private void mnuRename_Click(object sender, EventArgs e)
 		{
 			this.EditSelectedTaskDescription();
 		}
@@ -604,7 +607,7 @@ namespace PTM.View.Controls
 			pf.ShowDialog(this);
 		}
 
-		private void mnuProperties_Click(object sender, System.EventArgs e)
+		private void mnuProperties_Click(object sender, EventArgs e)
 		{
 			ShowPropertiesSelectedTask();
 		}

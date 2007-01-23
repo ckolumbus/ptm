@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 using PTM.Framework.Helpers;
 
@@ -17,7 +18,7 @@ namespace PTM.View.Forms
 		private PictureBox pictureBox2;
 		private Label lblVersion;
 		private Label label4;
-		private System.Windows.Forms.LinkLabel linkLabel;
+		private LinkLabel linkLabel;
 
 		/// <summary>
 		/// Required designer variable.
@@ -59,7 +60,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AboutForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (AboutForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
@@ -72,7 +73,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
 			this.pictureBox1.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(72, 64);
@@ -82,7 +83,9 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Font =
+				new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold,
+				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.label1.Location = new System.Drawing.Point(80, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(168, 23);
@@ -118,7 +121,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox2
 			// 
-			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+			this.pictureBox2.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox2.Image")));
 			this.pictureBox2.Location = new System.Drawing.Point(176, 56);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(24, 16);
@@ -159,7 +162,7 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
@@ -168,7 +171,6 @@ namespace PTM.View.Forms
 			this.Text = "About PTM";
 			this.TopMost = true;
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -178,9 +180,9 @@ namespace PTM.View.Forms
 			this.Close();
 		}
 
-		private void linkLabel_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			System.Diagnostics.Process.Start(linkLabel.Text);
+			Process.Start(linkLabel.Text);
 		}
 	}
 }

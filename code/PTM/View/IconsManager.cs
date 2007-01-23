@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Drawing;
 using System.Globalization;
+using System.Reflection;
 using System.Resources;
 using System.Windows.Forms;
 
@@ -17,32 +17,29 @@ namespace PTM.View
 		public const int IdleTaskIconId = 0;
 		private static ImageList iconsList = new ImageList();
 		private static Hashtable iconsCommonTasks = new Hashtable();
+
 		internal static ImageList IconsList
 		{
 			get { return iconsList; }
 		} //IconsList
-		
+
 		internal static Hashtable CommonTaskIconsTable
 		{
-			get
-			{
-				return (Hashtable) iconsCommonTasks.Clone();
-			}
+			get { return (Hashtable) iconsCommonTasks.Clone(); }
 		}
 
 		private static void LoadIconsFromResources()
 		{
-			
-			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", System.Reflection.Assembly.GetExecutingAssembly());
+			ResourceManager resourceManager = new ResourceManager("PTM.View.Controls.Icons", Assembly.GetExecutingAssembly());
 
 			Icon resIcon;
 			int i = 0;
 			do
 			{
 				resIcon = (Icon) resourceManager.GetObject(
-					"Icon" + i.ToString(CultureInfo.InvariantCulture));
+				                 	"Icon" + i.ToString(CultureInfo.InvariantCulture));
 				if (resIcon != null)
-				{				
+				{
 					iconsList.Images.Add(resIcon);
 					iconsCommonTasks.Add(i, resIcon);
 				} //if
@@ -54,13 +51,13 @@ namespace PTM.View
 			LoadIconsFromResources();
 		}
 
-		
+
 //		internal static Icon GetCommonTaskIcon(int iconId)
 //		{
 //			return (Icon) iconsCommonTasks[iconId];
 //		}
-		
-		
+
+
 		internal static int GetIconFromFile(string fileName)
 		{
 			if (iconsCommonTasks.Contains(fileName))
@@ -94,7 +91,5 @@ namespace PTM.View
 //			if(ri!= null) return ri;
 //			return null;
 		} //GetFileIcon
-		
-		
 	} //end of class IconsManager
 } //end of namespace

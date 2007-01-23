@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Forms;
 
 namespace Microsoft.Win32
@@ -36,7 +35,7 @@ namespace Microsoft.Win32
 
 		private bool isNonClientArea = false;
 
-		public MouseHookEventArgs( MouseButtons button, int x, int y, Control control, HitTestCode hitTestCode )
+		public MouseHookEventArgs(MouseButtons button, int x, int y, Control control, HitTestCode hitTestCode)
 		{
 			Button = button;
 			X = x;
@@ -50,9 +49,12 @@ namespace Microsoft.Win32
 		/// </summary>
 		public bool IsNonClientArea
 		{
-			get{ return isNonClientArea; }
+			get { return isNonClientArea; }
 		}
 
-		internal void SetNonClient(){ isNonClientArea = true; }
+		internal void SetNonClient()
+		{
+			isNonClientArea = true;
+		}
 	}
 }
