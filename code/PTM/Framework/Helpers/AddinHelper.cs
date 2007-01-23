@@ -40,12 +40,12 @@ namespace PTM.Framework.Helpers
 		
 				foreach (Type addinType in addinTypes)
 				{
-					if(addinType.IsSubclassOf(typeof(TabPageAddin)))
+					if(addinType.IsSubclassOf(typeof(AddinTabPage)))
 					{
-						TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
+						AddinTabPage pageAddinTabPage = (AddinTabPage) addinAssembly.CreateInstance(addinType.ToString());
 						if(sb.Length!=0)
 							sb.Append(" , ");
-						sb.Append(tabPageAddin.Text);
+						sb.Append(pageAddinTabPage.Text);
 					}
 				}
 			}
@@ -91,10 +91,10 @@ namespace PTM.Framework.Helpers
 				
 					foreach (Type addinType in addinTypes)
 					{
-						if(addinType.IsSubclassOf(typeof(TabPageAddin)))
+						if(addinType.IsSubclassOf(typeof(AddinTabPage)))
 						{
-							TabPageAddin tabPageAddin = (TabPageAddin) addinAssembly.CreateInstance(addinType.ToString());
-							tabPageAddins.Add(tabPageAddin);
+							AddinTabPage pageAddinTabPage = (AddinTabPage) addinAssembly.CreateInstance(addinType.ToString());
+							tabPageAddins.Add(pageAddinTabPage);
 						}
 					}
 				}

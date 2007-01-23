@@ -18,7 +18,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for Summary.
 	/// </summary>
-	internal class SummaryControl : TabPageAddin
+	internal class SummaryControl : AddinTabPage
 	{
 		private TreeListView taskList;
 		private GroupBox groupBox1;
@@ -47,11 +47,16 @@ namespace PTM.View.Controls
 		private System.Windows.Forms.RadioButton toRadioButton;
 		private System.Windows.Forms.ToolTip toolTip;
 		private PTMDataset.TasksRow parentRow;
+		private AsyncWorker worker;
 
 		internal SummaryControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+
+			worker = new AsyncWorker();
+			worker.OnBeforeDoWork+=new PTM.View.AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
+			worker.OnWorkDone+=new PTM.View.AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
 			PTMDataset.TasksRow parentTaskRow;
@@ -189,7 +194,7 @@ namespace PTM.View.Controls
 			// 
 			this.fromDateTimePicker.CustomFormat = "";
 			this.fromDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.fromDateTimePicker.Location = new System.Drawing.Point(80, 8);
+			this.fromDateTimePicker.Location = new System.Drawing.Point(80, 32);
 			this.fromDateTimePicker.Name = "fromDateTimePicker";
 			this.fromDateTimePicker.Size = new System.Drawing.Size(88, 20);
 			this.fromDateTimePicker.TabIndex = 0;
@@ -234,7 +239,7 @@ namespace PTM.View.Controls
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(8, 32);
+			this.label2.Location = new System.Drawing.Point(8, 4);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(72, 23);
 			this.label2.TabIndex = 6;
@@ -244,7 +249,7 @@ namespace PTM.View.Controls
 			// parentTaskComboBox
 			// 
 			this.parentTaskComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.parentTaskComboBox.Location = new System.Drawing.Point(80, 32);
+			this.parentTaskComboBox.Location = new System.Drawing.Point(80, 5);
 			this.parentTaskComboBox.MaxLength = 50;
 			this.parentTaskComboBox.Name = "parentTaskComboBox";
 			this.parentTaskComboBox.Size = new System.Drawing.Size(232, 21);
@@ -253,7 +258,7 @@ namespace PTM.View.Controls
 			// browseButton
 			// 
 			this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.browseButton.Location = new System.Drawing.Point(320, 32);
+			this.browseButton.Location = new System.Drawing.Point(320, 4);
 			this.browseButton.Name = "browseButton";
 			this.browseButton.TabIndex = 2;
 			this.browseButton.Text = "Browse...";
@@ -326,7 +331,7 @@ namespace PTM.View.Controls
 			// 
 			this.fromRadioButton.Checked = true;
 			this.fromRadioButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.fromRadioButton.Location = new System.Drawing.Point(32, 8);
+			this.fromRadioButton.Location = new System.Drawing.Point(32, 32);
 			this.fromRadioButton.Name = "fromRadioButton";
 			this.fromRadioButton.Size = new System.Drawing.Size(48, 24);
 			this.fromRadioButton.TabIndex = 15;
@@ -337,7 +342,7 @@ namespace PTM.View.Controls
 			// toRadioButton
 			// 
 			this.toRadioButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.toRadioButton.Location = new System.Drawing.Point(184, 8);
+			this.toRadioButton.Location = new System.Drawing.Point(184, 32);
 			this.toRadioButton.Name = "toRadioButton";
 			this.toRadioButton.Size = new System.Drawing.Size(40, 24);
 			this.toRadioButton.TabIndex = 16;
@@ -349,7 +354,7 @@ namespace PTM.View.Controls
 			this.toDateTimePicker.CustomFormat = "";
 			this.toDateTimePicker.Enabled = false;
 			this.toDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.toDateTimePicker.Location = new System.Drawing.Point(224, 8);
+			this.toDateTimePicker.Location = new System.Drawing.Point(224, 32);
 			this.toDateTimePicker.Name = "toDateTimePicker";
 			this.toDateTimePicker.Size = new System.Drawing.Size(88, 20);
 			this.toDateTimePicker.TabIndex = 17;
@@ -362,17 +367,17 @@ namespace PTM.View.Controls
 			// 
 			// SummaryControl
 			// 
-			this.Controls.Add(this.toDateTimePicker);
-			this.Controls.Add(this.toRadioButton);
-			this.Controls.Add(this.fromRadioButton);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.browseButton);
-			this.Controls.Add(this.parentTaskComboBox);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.fromDateTimePicker);
 			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.toDateTimePicker);
+			this.Controls.Add(this.toRadioButton);
+			this.Controls.Add(this.fromRadioButton);
+			this.Controls.Add(this.parentTaskComboBox);
 			this.Name = "SummaryControl";
 			this.Size = new System.Drawing.Size(408, 360);
 			this.groupBox1.ResumeLayout(false);
@@ -385,69 +390,56 @@ namespace PTM.View.Controls
 
 		#endregion
 
-		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
-		{
-			if(this.fromRadioButton.Checked)
-			{
-				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
-				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
-				this.toDateTimePicker.ValueChanged+=new EventHandler(dateTimePicker_ValueChanged);
-			}
-				
-			UpdateTasksSummary();
-		}
-
-
 		private double totalTime = 0;
 		private double totalActiveTime = 0;
 
-		private void Clear()
-		{
-			this.taskList.Items.Clear();
-			indicator1.Maximum = 30600; //8.5 hrs.
-			indicator1.Value = 0;
-			indicator1.TextValue = "00.00 hrs.";
-			indicator1.ForeColor = Color.Lime;
-
-			indicator2.Maximum = 100;
-			indicator2.Value = 0;
-			indicator2.TextValue = "0%";
-
-			totalTime = 0;
-			totalActiveTime = 0;
-		}
+//		private void Clear()
+//		{
+//			this.taskList.Items.Clear();
+//			indicator1.Maximum = 30600; //8.5 hrs.
+//			indicator1.Value = 0;
+//			indicator1.TextValue = "00.00 hrs.";
+//			indicator1.ForeColor = Color.Lime;
+//
+//			indicator2.Maximum = 100;
+//			indicator2.Value = 0;
+//			indicator2.TextValue = "0%";
+//
+//			totalTime = 0;
+//			totalActiveTime = 0;
+//		}
 
 
 		public override void OnTabPageSelected()
 		{
 			base.OnTabPageSelected ();
-			UpdateTasksSummary();
+			worker.DoWork((int)StatisticsControlWorks.GetTaskSummary, new AsyncWorker.AsyncWorkerDelegate(GetTasksSummary), new object[]{null});
 		}
 
-		private void UpdateTasksSummary()
+		private void UpdateTasksSummary(ArrayList summaryList)
 		{
 			try
 			{
-				DateTime fromDate;
-				DateTime toDate;
-				fromDate = fromDateTimePicker.Value.Date;
-				if(this.toRadioButton.Checked)
-				{
-					toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
-				}
-				else
-				{
-					toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);						
-				}
-				Clear();
-				this.Refresh();
-				Cursor.Current = Cursors.WaitCursor;
-				ArrayList summaryList = TasksSummaries.GetTaskSummary(
-					Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
-					fromDate, toDate);
+//				DateTime fromDate;
+//				DateTime toDate;
+//				fromDate = fromDateTimePicker.Value.Date;
+//				if(this.toRadioButton.Checked)
+//				{
+//					toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+//				}
+//				else
+//				{
+//					toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);						
+//				}
+//				Clear();
+//				this.Refresh();
+//				Cursor.Current = Cursors.WaitCursor;
+//				ArrayList summaryList = TasksSummaries.GetTaskSummary(
+//					Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
+//					fromDate, toDate);
 
 				totalTime = 0;
-
+				this.taskList.BeginUpdate();
 				foreach (TaskSummary summary in summaryList)
 				{
 					totalTime += summary.TotalActiveTime;
@@ -482,7 +474,8 @@ namespace PTM.View.Controls
 			}
 			finally
 			{
-				Cursor.Current = Cursors.Default;
+				this.taskList.EndUpdate();
+				SetReadyState();
 			}
 		}
 
@@ -532,15 +525,25 @@ namespace PTM.View.Controls
 			SetParent(tgForm.SelectedTaskRow);
 		}
 
+		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
+		{
+			if(this.fromRadioButton.Checked)
+			{
+				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
+				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+				this.toDateTimePicker.ValueChanged+=new EventHandler(dateTimePicker_ValueChanged);
+			}
+
+			worker.DoWork((int)StatisticsControlWorks.GetTaskSummary, new AsyncWorker.AsyncWorkerDelegate(GetTasksSummary), new object[]{null});
+		}
 		private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
 			parentRow = parentTasksTable.FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
-			UpdateTasksSummary();
+			this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
 		}
-
 
 		private void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
@@ -649,6 +652,104 @@ namespace PTM.View.Controls
 		}
 
 
+
+		#region AsyncWork
+		private enum StatisticsControlWorks : int
+		{
+			GetTaskSummary
+		}
+
+		private object GetTasksSummary(object p)
+		{
+			DateTime fromDate;
+			DateTime toDate;
+			fromDate = fromDateTimePicker.Value.Date;
+			if(this.toRadioButton.Checked)
+			{
+				toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+			}
+			else
+			{
+				toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);						
+			}
+			ArrayList summaryList = TasksSummaries.GetTaskSummary(
+				Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
+				fromDate, toDate);
+			return summaryList;
+		}
+		
+		private void worker_OnBeforeDoWork(PTM.View.AsyncWorker.OnBeforeDoWorkEventArgs e)
+		{
+			switch(e.WorkId)
+			{
+				case (int)StatisticsControlWorks.GetTaskSummary:
+					SetWaitState();
+					break;
+			}
+		}
+
+		private void worker_OnWorkDone(PTM.View.AsyncWorker.OnWorkDoneEventArgs e)
+		{
+			switch(e.WorkId)
+			{
+				case (int)StatisticsControlWorks.GetTaskSummary:
+
+					UpdateTasksSummaryDelegate del = new UpdateTasksSummaryDelegate( UpdateTasksSummary);
+
+					this.Invoke(del, new object[]{e.Result});
+					break;
+			}
+		}
+
+		private void SetWaitState()
+		{
+			this.Status = "Retrieving data...";
+			this.parentTaskComboBox.Enabled = false;
+			toDateTimePicker.Enabled = false;
+			fromDateTimePicker.Enabled = false;
+			this.browseButton.Enabled = false;
+			this.taskList.Items.Clear();
+			
+			this.taskList.Items.Clear();
+			indicator1.Maximum = 30600; //8.5 hrs.
+			indicator1.Value = 0;
+			indicator1.TextValue = "00.00 hrs.";
+			indicator1.ForeColor = Color.Lime;
+
+			indicator2.Maximum = 100;
+			indicator2.Value = 0;
+			indicator2.TextValue = "0%";
+
+			totalTime = 0;
+			totalActiveTime = 0;
+
+			this.Refresh();
+			this.Cursor = Cursors.WaitCursor;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.WaitCursor;						
+			}
+		}
+
+		private void SetReadyState()
+		{
+			this.Status = "";
+			this.Cursor = Cursors.Default;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.Default;						
+			}
+			this.parentTaskComboBox.Enabled = true;
+			if(this.toRadioButton.Checked)
+				toDateTimePicker.Enabled = true;
+
+			fromDateTimePicker.Enabled = true;
+			this.browseButton.Enabled = true;
+		}
+
+		private delegate void UpdateTasksSummaryDelegate(ArrayList list);
+
+		#endregion
 
 	}
 }

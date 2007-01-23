@@ -118,13 +118,13 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Addin\TabPageAddin.cs"
+                    RelPath = "Addin\AddinTabPage.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Addin\TabPageAddin.resx"
-                    DependentUpon = "TabPageAddin.cs"
+                    RelPath = "Addin\AddinTabPage.resx"
+                    DependentUpon = "AddinTabPage.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

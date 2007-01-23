@@ -9,7 +9,7 @@ using PTM.Framework.Infos;
 
 namespace PTM.Addin.WeekView
 {
-	public class WeekReport : TabPageAddin
+	public class WeekReport : AddinTabPage
 	{
 		private Calendar.DayView dayView;
 		private Button backButton;

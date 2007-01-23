@@ -82,7 +82,7 @@ namespace PTM
 			this.tasksLogControl.Name = "tasksLogControl";
 			this.tasksLogControl.Size = new System.Drawing.Size(408, 358);
 			this.tasksLogControl.TabIndex = 0;
-			this.tasksLogControl.StatusChanged+=new PTM.Addin.TabPageAddin.StatusChangedDelegate(tabPage_StatusChanged);
+			this.tasksLogControl.StatusChanged+=new PTM.Addin.AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
 			
 			this.summaryPage.Controls.Add(this.summaryControl);
 			// 
@@ -94,7 +94,7 @@ namespace PTM
 			this.summaryControl.Name = "summaryControl";
 			this.summaryControl.Size = new System.Drawing.Size(408, 358);
 			this.summaryControl.TabIndex = 0;
-			this.summaryControl.StatusChanged+=new PTM.Addin.TabPageAddin.StatusChangedDelegate(tabPage_StatusChanged);
+			this.summaryControl.StatusChanged+=new PTM.Addin.AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
 			
 			this.statisticsPage.Controls.Add(this.statisticsControl);
 			// 
@@ -106,7 +106,7 @@ namespace PTM
 			this.statisticsControl.Name = "statisticsControl";
 			this.statisticsControl.Size = new System.Drawing.Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
-			this.statisticsControl.StatusChanged+=new PTM.Addin.TabPageAddin.StatusChangedDelegate(tabPage_StatusChanged);
+			this.statisticsControl.StatusChanged+=new PTM.Addin.AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
 			
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
@@ -121,7 +121,7 @@ namespace PTM
 		{
 			ArrayList list;
 			list = AddinHelper.GetTabPageAddins();
-			foreach (TabPageAddin addin in list)
+			foreach (AddinTabPage addin in list)
 			{
 				TabPage tabPage = new TabPage(addin.Text);
 				addin.Dock = DockStyle.Fill;
@@ -129,8 +129,6 @@ namespace PTM
 				this.tabControl.Controls.Add(tabPage);
 			}
 		}
-
-
 
 
 		private void UpdateStartUpPath()
@@ -338,15 +336,16 @@ namespace PTM
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
+			this.statusBar.Text = ((AddinTabPage)this.tabControl.SelectedTab.Controls[0]).Status;
 			this.tasksLogControl.NewTaskLog(true);
 			Logs.StartLogging();
 		} //MainForm_Load
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			TabPageAddin tabPageAddin = ((TabPageAddin) tabControl.SelectedTab.Controls[0]);
-			this.statusBar.Text = tabPageAddin.Status;
-			tabPageAddin.OnTabPageSelected();
+			AddinTabPage pageAddinTabPage = ((AddinTabPage) tabControl.SelectedTab.Controls[0]);
+			this.statusBar.Text = pageAddinTabPage.Status;
+			pageAddinTabPage.OnTabPageSelected();
 		} //tabControl_SelectedIndexChanged
 
 
@@ -457,7 +456,7 @@ namespace PTM
 
 		#endregion
 
-		private void tabPage_StatusChanged(PTM.Addin.TabPageAddin.StatusChangedEventAtgs e)
+		private void tabPage_StatusChanged(PTM.Addin.AddinTabPage.StatusChangedEventAtgs e)
 		{
 			this.statusBar.Text = e.Status;
 		}

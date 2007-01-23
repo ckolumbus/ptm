@@ -8,16 +8,16 @@ using System.Windows.Forms;
 namespace PTM.Addin
 {
 	/// <summary>
-	/// Summary description for TabPageAddin.
+	/// Summary description for AddinTabPage.
 	/// </summary>
-	public class TabPageAddin : UserControl
+	public class AddinTabPage : UserControl
 	{
-		/// <summary> TabPageAddin
+		/// <summary> AddinTabPage
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public TabPageAddin()
+		public AddinTabPage()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
@@ -48,9 +48,9 @@ namespace PTM.Addin
 		private void InitializeComponent()
 		{
 			// 
-			// TabPageAddin
+			// AddinTabPage
 			// 
-			this.Name = "TabPageAddin";
+			this.Name = "AddinTabPage";
 			this.Size = new System.Drawing.Size(296, 280);
 		}
 		#endregion

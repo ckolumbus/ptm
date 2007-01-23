@@ -23,7 +23,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for TasksLog.
 	/// </summary>
-	internal class TasksLogControl : TabPageAddin
+	internal class TasksLogControl : AddinTabPage
 	{
 		private Button editButton;
 		private Button addTaskButton;
@@ -628,18 +628,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SetReadyState()
-		{
-			this.Status = "";
-			this.Cursor = Cursors.Default;
-			foreach (Control control in this.Controls)
-			{
-				control.Cursor = Cursors.Default;						
-			}
-			this.logDate.Enabled = true;
-		}
-
-
+		
 		#endregion
 
 		#region Notifications
@@ -939,7 +928,7 @@ namespace PTM.View.Controls
 			GetLogs
 		}
 
-		public object GetLogs(object p)
+		private object GetLogs(object p)
 		{
 			ArrayList list = Logs.GetLogsByDay(this.currentDay.Date);
 			foreach (Log log in list)
@@ -960,19 +949,6 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SetWaitState()
-		{
-			this.Status = "Retrieving data...";
-			this.logDate.Enabled = false;
-			taskList.Items.Clear();
-			this.Refresh();
-			this.Cursor = Cursors.WaitCursor;
-			foreach (Control control in this.Controls)
-			{
-				control.Cursor = Cursors.WaitCursor;						
-			}
-		}
-
 		private void worker_OnWorkDone(PTM.View.AsyncWorker.OnWorkDoneEventArgs e)
 		{
 			switch(e.WorkId)
@@ -987,6 +963,29 @@ namespace PTM.View.Controls
 		}
 
 		private delegate void SetLogDayDelegate(ArrayList logs);
+		private void SetWaitState()
+		{
+			this.Status = "Retrieving data...";
+			this.logDate.Enabled = false;
+			taskList.Items.Clear();
+			this.Refresh();
+			this.Cursor = Cursors.WaitCursor;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.WaitCursor;						
+			}
+		}
+
+		private void SetReadyState()
+		{
+			this.Status = "";
+			this.Cursor = Cursors.Default;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.Default;						
+			}
+			this.logDate.Enabled = true;
+		}
 
 		#endregion
 		

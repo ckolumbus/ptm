@@ -15,7 +15,7 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for Statistics.
 	/// </summary>
-	internal class StatisticsControl : TabPageAddin
+	internal class StatisticsControl : AddinTabPage
 	{
 		private TreeListView applicationsList;
 		private ColumnHeader colName;
@@ -314,7 +314,9 @@ namespace PTM.View.Controls
 		{
 			if(this.fromRadioButton.Checked)
 			{
+				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
 				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+				this.toDateTimePicker.ValueChanged-=new EventHandler(dateTimePicker_ValueChanged);
 			}
 		}
 
@@ -354,23 +356,6 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SetReadyState()
-		{
-			this.Status = "";
-			this.Cursor = Cursors.Default;
-			foreach (Control control in this.Controls)
-			{
-				control.Cursor = Cursors.Default;						
-			}
-			this.parentTaskComboBox.Enabled = true;
-			if(this.toRadioButton.Checked)
-            toDateTimePicker.Enabled = true;
-
-			fromDateTimePicker.Enabled = true;
-			this.browseButton.Enabled = true;
-			this.searchButton.Enabled = true;
-		}
-
 		private void browseButton_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm tgForm = new TasksHierarchyForm();
@@ -403,7 +388,6 @@ namespace PTM.View.Controls
 
 		private void searchButton_Click(object sender, System.EventArgs e)
 		{
-			this.Status = "Retrieving data...";
 			worker.DoWork((int)StatisticsControlWorks.GetTaskStatistics, new AsyncWorker.AsyncWorkerDelegate(GetTaskStatistics), new object[]{null});
 		}
 
@@ -414,7 +398,7 @@ namespace PTM.View.Controls
 			GetTaskStatistics
 		}
 
-		public object GetTaskStatistics(object p)
+		private object GetTaskStatistics(object p)
 		{
 			DateTime fromDate;
 			DateTime toDate;
@@ -445,23 +429,6 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SetWaitState()
-		{
-			this.parentTaskComboBox.Enabled = false;
-			toDateTimePicker.Enabled = false;
-			fromDateTimePicker.Enabled = false;
-			this.browseButton.Enabled = false;
-			this.searchButton.Enabled = false;
-			this.applicationsList.Items.Clear();
-			this.AppsActiveTimeValue.Text = String.Empty;
-         this.Refresh();
-			this.Cursor = Cursors.WaitCursor;
-			foreach (Control control in this.Controls)
-			{
-				control.Cursor = Cursors.WaitCursor;						
-			}
-		}
-
 		private void worker_OnWorkDone(PTM.View.AsyncWorker.OnWorkDoneEventArgs e)
 		{
 			switch(e.WorkId)
@@ -473,6 +440,41 @@ namespace PTM.View.Controls
 					this.Invoke(del, new object[]{e.Result});
 					break;
 			}
+		}
+
+		private void SetWaitState()
+		{
+			this.Status = "Retrieving data...";
+			this.parentTaskComboBox.Enabled = false;
+			toDateTimePicker.Enabled = false;
+			fromDateTimePicker.Enabled = false;
+			this.browseButton.Enabled = false;
+			this.searchButton.Enabled = false;
+			this.applicationsList.Items.Clear();
+			this.AppsActiveTimeValue.Text = String.Empty;
+			this.Refresh();
+			this.Cursor = Cursors.WaitCursor;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.WaitCursor;						
+			}
+		}
+
+		private void SetReadyState()
+		{
+			this.Status = "";
+			this.Cursor = Cursors.Default;
+			foreach (Control control in this.Controls)
+			{
+				control.Cursor = Cursors.Default;						
+			}
+			this.parentTaskComboBox.Enabled = true;
+			if(this.toRadioButton.Checked)
+				toDateTimePicker.Enabled = true;
+
+			fromDateTimePicker.Enabled = true;
+			this.browseButton.Enabled = true;
+			this.searchButton.Enabled = true;
 		}
 
 		private delegate void GetTaskDetailsDelegate(ArrayList logs);
