@@ -397,11 +397,12 @@ namespace PTM.View.Controls
 			// Reset image list used for drag image
 			this.imageListDrag.Images.Clear();
 			this.imageListDrag.ImageSize =
-				new Size(this.dragNode.Bounds.Size.Width + this.treeView.Indent, this.dragNode.Bounds.Height);
+  			new Size(Math.Min(this.dragNode.Bounds.Size.Width + this.treeView.Indent, 256), this.dragNode.Bounds.Height);
+
 
 			// Create new bitmap
 			// This bitmap will contain the tree node image to be dragged
-			Bitmap bmp = new Bitmap(this.dragNode.Bounds.Width + this.treeView.Indent, this.dragNode.Bounds.Height);
+			Bitmap bmp = new Bitmap(Math.Min(this.dragNode.Bounds.Width + this.treeView.Indent, 256), this.dragNode.Bounds.Height);
 
 			// Get graphics from bitmap
 			using (Graphics gfx = Graphics.FromImage(bmp))
@@ -553,8 +554,7 @@ namespace PTM.View.Controls
 			// get node at mouse position
 			Point pt = treeView.PointToClient(MousePosition);
 			TreeNode node = this.treeView.GetNodeAt(pt);
-
-			if (node == null) return;
+			if(node == null) return;
 
 			// if mouse is near to the top, scroll up
 			if (pt.Y < 30)
