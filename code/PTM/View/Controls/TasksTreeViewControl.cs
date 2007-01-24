@@ -175,7 +175,7 @@ namespace PTM.View.Controls
 			{
 				MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
-
+			Application.DoEvents();//first insert the new node (event fired)
 			treeView.LabelEdit = true;
 			TreeNode node = FindTaskNode(row.Id);
 			node.EnsureVisible();
