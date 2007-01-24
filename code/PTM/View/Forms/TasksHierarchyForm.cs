@@ -32,6 +32,7 @@ namespace PTM.View.Forms
 		{
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);
+			tasksTreeViewControl.DoubleClick+=new EventHandler(tasksTreeViewControl_DoubleClick);
 			this.tasksTreeViewControl.Initialize();
 		}
 
@@ -200,13 +201,23 @@ namespace PTM.View.Forms
 		private void okButton_Click(object sender, EventArgs e)
 		{
 			this.selectedTaskRow = Tasks.FindById(
-				(int) tasksTreeViewControl.SelectedTaskId);
+				tasksTreeViewControl.SelectedTaskId);
 			this.Close();
 		}
 
 		private void propertiesButton_Click(object sender, EventArgs e)
 		{
 			this.tasksTreeViewControl.ShowPropertiesSelectedTask();
+		}
+
+		private void tasksTreeViewControl_DoubleClick(object sender, EventArgs e)
+		{
+			this.selectedTaskRow = Tasks.FindById(this.tasksTreeViewControl.SelectedTaskId);
+			if(this.Modal)
+			{
+				this.DialogResult = DialogResult.OK;
+				this.Close();				
+			}
 		}
 	}
 }
