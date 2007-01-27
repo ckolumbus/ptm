@@ -78,9 +78,11 @@ namespace PTM.View.Controls.TreeListViewComponents
 					try
 					{
 						if(IsNumeric(a.SubItems[Column].Text))
-							res =Convert.ToInt32(double.Parse(a.SubItems[Column].Text.Replace("%", null)) - double.Parse(b.SubItems[Column].Text.Replace("%", null)));
+							res =Convert.ToInt32((double.Parse(a.SubItems[Column].Text.Replace("%", null)) - double.Parse(b.SubItems[Column].Text.Replace("%", null)))*100);
 						else if(IsDateTime(a.SubItems[Column].Text))
 							res =DateTime.Compare(DateTime.Parse(a.SubItems[Column].Text.Replace(".", null)) , DateTime.Parse(b.SubItems[Column].Text.Replace(".", null)));
+						else if(IsTimeSpan(a.SubItems[Column].Text))
+							res = TimeSpan.Compare(TimeSpan.Parse(a.SubItems[Column].Text), TimeSpan.Parse(b.SubItems[Column].Text));
 						else
 							res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
 					}
@@ -99,6 +101,68 @@ namespace PTM.View.Controls.TreeListViewComponents
 					default:
 						return(1);
 				}
+			}
+
+			private bool IsTimeSpan(string text)
+			{
+				byte state = 1;
+				for(int i = 0; i<text.Length;i++)
+				{
+					char c = text[i];
+					switch(state)
+					{
+						case 1:
+							if(char.IsDigit(c))
+								continue;
+							else if(c=='.')
+								state=2;
+							else if(c==':')
+								state = 5;
+							else
+								return false;
+						break;
+						case 2:
+							if(char.IsDigit(c))
+								state = 3;
+							else return false;
+							break;
+						case 3:
+							if(char.IsDigit(c))
+								state = 4;
+							else return false;
+							break;
+						case 4:
+							if(c==':')
+								state = 5;
+							else return false;
+						break;
+						case 5:
+							if(char.IsDigit(c))
+								state = 6;
+							else return false;
+							break;
+						case 6:
+							if(char.IsDigit(c))
+								state = 7;
+							else return false;
+							break;
+						case 7:
+							if(c==':')
+								state = 8;
+							else return false;
+							break;
+						case 8:
+							if(char.IsDigit(c))
+								state = 9;
+							else return false;
+							break;
+						case 9:
+							if(char.IsDigit(c))
+								return true;
+							else return false;
+					}
+				}
+				return false;
 			}
 
 			private bool IsDateTime(string text)

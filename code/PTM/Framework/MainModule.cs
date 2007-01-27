@@ -33,6 +33,8 @@ namespace PTM.Framework
 
 			DataMaintenanceHelper.DeleteIdleEntries();
 			Application.DoEvents();
+			DataMaintenanceHelper.DeleteZeroActiveTimeApplicationsEntries();
+			Application.DoEvents();
 			DataMaintenanceHelper.GroupLogs(false);
 			Application.DoEvents();
 

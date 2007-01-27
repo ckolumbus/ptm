@@ -32,6 +32,10 @@ namespace PTM.Framework.Helpers
 			                         new object[] {limitDate});
 		}
 
+		public static void DeleteZeroActiveTimeApplicationsEntries()
+		{
+			DbHelper.ExecuteNonQuery("Delete from ApplicationsLog where ActiveTime = 0");
+		}
 		public static void GroupLogs(bool fullCheck)
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);

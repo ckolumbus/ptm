@@ -459,6 +459,8 @@ namespace PTM.View.Controls
 			fromDateTimePicker.Enabled = false;
 			this.browseButton.Enabled = false;
 			this.searchButton.Enabled = false;
+			this.toRadioButton.Enabled = false;
+			this.fromRadioButton.Enabled = false;
 			this.applicationsList.Items.Clear();
 			this.AppsActiveTimeValue.Text = String.Empty;
 			this.Refresh();
@@ -482,8 +484,11 @@ namespace PTM.View.Controls
 				toDateTimePicker.Enabled = true;
 
 			fromDateTimePicker.Enabled = true;
+			this.toRadioButton.Enabled = true;
+			this.fromRadioButton.Enabled = true;
 			this.browseButton.Enabled = true;
 			this.searchButton.Enabled = true;
+
 		}
 
 		private delegate void GetTaskDetailsDelegate(ArrayList logs);
