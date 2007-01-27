@@ -33,7 +33,7 @@ namespace PTM.Framework
 
 			DataMaintenanceHelper.DeleteIdleEntries();
 			Application.DoEvents();
-			DataMaintenanceHelper.GroupLogs();
+			DataMaintenanceHelper.GroupLogs(false);
 			Application.DoEvents();
 
 			Logs.Initialize();

@@ -53,7 +53,7 @@ namespace PTM.Framework
 				ApplicationSummary sum = null;
 				for (int i = 0; i < appSumaryList1.Count; i++)
 				{
-					if (string.Compare(row.ApplicationFullPath, ((ApplicationSummary) appSumaryList1[i]).ApplicationFullPath, true) ==
+					if (string.Compare(row.Name, ((ApplicationSummary) appSumaryList1[i]).Name, true) ==
 					    0)
 					{
 						sum = (ApplicationSummary) appSumaryList1[i];

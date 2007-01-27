@@ -158,7 +158,7 @@ namespace PTM.Test.Business.Helpers
 //				InsertLog(task3childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*13), duration);
 			}
 
-			DataMaintenanceHelper.GroupLogs();
+			DataMaintenanceHelper.GroupLogs(false);
 
 			//validate
 			for (int i = 0; i <= (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value + 7; i++)
