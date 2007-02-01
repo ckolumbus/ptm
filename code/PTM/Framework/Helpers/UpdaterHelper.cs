@@ -52,6 +52,7 @@ namespace PTM.Framework.Helpers
 				XmlDocument doc = new XmlDocument();
 				try
 				{
+
 					doc.Load(@"http://ptm.svn.sourceforge.net/viewvc/*checkout*/ptm/trunk/info.xml");
 					info.CurrentVersion = doc.SelectSingleNode(@"/root/CurrentVersion").InnerText;
 					info.CurrentInternalVersion = doc.SelectSingleNode(@"/root/CurrentInternalVersion").InnerText;
