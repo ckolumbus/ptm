@@ -128,41 +128,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Data\DataAdapterManager.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Data\DataAdapterManager.resx"
-                    DependentUpon = "DataAdapterManager.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Data\DbHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Data\PTMDataset.xsd"
-                    BuildAction = "Content"
-                    Generator = "MSDataSetGenerator"
-                    LastGenOutput = "PTMDataset.cs"
-                />
-                <File
-                    RelPath = "Data\PTMDataset.cs"
-                    DependentUpon = "PTMDataset.xsd"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                    DesignTime = "True"
-                    AutoGen = "True"
-                />
-                <File
-                    RelPath = "Data\PTMDataset.xsx"
-                    DependentUpon = "PTMDataset.xsd"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Data\UnitOfWork.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -243,6 +209,11 @@
                 />
                 <File
                     RelPath = "Framework\Infos\MergedLog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Infos\Task.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -137,7 +137,7 @@ namespace PTM.Addin.WeekView
 					logs = MergedLogs.GetMergedLogsByDay(day);
 					foreach (MergedLog log in logs)
 					{				
-						PTMDataset.TasksRow task;
+						Task task;
 						task = Tasks.FindById(log.MergeLog.TaskId);
 						if(task.Id == Tasks.IdleTasksRow.Id)
 							continue;

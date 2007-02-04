@@ -6,7 +6,7 @@ using PTM.Framework;
 using PTM.Data;
 using PTM.Framework.Infos;
 
-namespace PTM.Test.Business
+namespace PTM.Test.Framework
 {
 	/// <summary>
 	/// Summary description for ApplicationSummariesTest.
@@ -23,30 +23,29 @@ namespace PTM.Test.Business
 		{
 			DbHelper.Initialize("test");
 			DbHelper.DeleteDataSource();
-			PTMDataset ds = new PTMDataset();
-			MainModule.Initialize(ds, "test");
+			MainModule.Initialize("test");
 		}
 
 		[Test]
 		public void GetApplicationSummaryTest()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "TaskTest2";
 			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
-			PTMDataset.TasksRow row3;
-			row3 = Tasks.NewTasksRow();
+			Task row3;
+			row3 = new Task();
 			row3.Description = "TaskTest3";
 			row3.ParentId = row1.Id;
-			row3.Id = Tasks.AddTasksRow(row3);
+			row3.Id = Tasks.AddTask(row3);
 
 			Logs.StartLogging();
 			Logs.AddLog(row1.Id);

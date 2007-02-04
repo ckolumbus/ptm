@@ -60,9 +60,9 @@ namespace PTM.View.Controls
 			addTaskButton.Click += new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
 
-			Tasks.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
-			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Tasks.TasksRowDeleted += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleted);
+			Tasks.TaskChanged += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
+			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Tasks.TaskDeleted += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogChanged +=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
@@ -85,9 +85,9 @@ namespace PTM.View.Controls
 
 		protected override void OnHandleDestroyed(EventArgs e)
 		{
-			Tasks.TasksRowChanged -= new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowChanged);
-			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Tasks.TasksRowDeleted -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleted);
+			Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
+			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
+			Tasks.TaskDeleted -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			ApplicationsLog.ApplicationsLogChanged -=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
@@ -535,9 +535,9 @@ namespace PTM.View.Controls
 			menuItem11.Text = "-";
 
 			ArrayList a = new ArrayList();
-			PTMDataset.TasksRow[] tasks;
+			Task[] tasks;
 			tasks = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
-			foreach (PTMDataset.TasksRow task in tasks)
+			foreach (Task task in tasks)
 			{
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
@@ -617,7 +617,7 @@ namespace PTM.View.Controls
 				taskList.BeginUpdate();
 				foreach (Log log in logs)
 				{
-					PTMDataset.TasksRow taskRow = Tasks.FindById(log.TaskId);
+					Task taskRow = Tasks.FindById(log.TaskId);
 					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
 					SetListItemValues(itemA, log, taskRow);
 					taskList.Items.Insert(0, itemA);
@@ -698,7 +698,7 @@ namespace PTM.View.Controls
 			}
 			else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
 			{
-				AddTaskLog(Tasks.CurrentTaskRow.Id,
+				AddTaskLog(Tasks.CurrentTask.Id,
 				           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 			}
 			else
@@ -733,9 +733,9 @@ namespace PTM.View.Controls
 
 
 			ArrayList a = new ArrayList();
-			PTMDataset.TasksRow[] tasks;
+			Task[] tasks;
 			tasks = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
-			foreach (PTMDataset.TasksRow task in tasks)
+			foreach (Task task in tasks)
 			{
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
@@ -749,14 +749,14 @@ namespace PTM.View.Controls
 			this.notifyIcon.ContextMenu = this.notifyContextMenu;
 		}
 
-		private void AddSubTasks(PTMDataset.TasksRow parentTask, TaskMenuItem menuItem, EventHandler handler)
+		private void AddSubTasks(Task parentTask, TaskMenuItem menuItem, EventHandler handler)
 		{
 			//ArrayList a = new ArrayList();
-			PTMDataset.TasksRow[] tasks;
+			Task[] tasks;
 			tasks = Tasks.GetChildTasks(parentTask.Id);
 			if (tasks.Length == 0)
 				return;
-			foreach (PTMDataset.TasksRow task in tasks)
+			foreach (Task task in tasks)
 			{
 				TaskMenuItem subMenu = new TaskMenuItem(task.Id);
 				subMenu.Text = task.Description;
@@ -787,16 +787,16 @@ namespace PTM.View.Controls
 
 		#region Framework events
 
-		private void TasksDataTable_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void TasksDataTable_TasksRowChanged(Tasks.TaskChangeEventArgs e)
 		{
 			if (e.Action == DataRowAction.Change)
 			{
 				foreach (ListViewItem item in this.taskList.Items)
 				{
-					if (((Log) item.Tag).TaskId == e.Row.Id)
+					if (((Log) item.Tag).TaskId == e.Task.Id)
 					{
-						item.SubItems[TaskDescriptionHeader.Index].Text = e.Row.Description;
-						item.ImageIndex = e.Row.IconId;
+						item.SubItems[TaskDescriptionHeader.Index].Text = e.Task.Description;
+						item.ImageIndex = e.Task.IconId;
 					}
 				}
 			}
@@ -804,13 +804,13 @@ namespace PTM.View.Controls
 			CreateRigthClickMenu();
 		}
 
-		private void TasksDataTable_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void TasksDataTable_TasksRowDeleting(Tasks.TaskChangeEventArgs e)
 		{
 			if (e.Action == DataRowAction.Delete)
 			{
 				foreach (ListViewItem item in this.taskList.Items)
 				{
-					if (((Log) item.Tag).TaskId == e.Row.Id)
+					if (((Log) item.Tag).TaskId == e.Task.Id)
 					{
 						item.Remove();
 					}
@@ -818,7 +818,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void Tasks_TasksRowDeleted(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void Tasks_TasksRowDeleted(Tasks.TaskChangeEventArgs e)
 		{
 			CreateNotifyMenu();
 			CreateRigthClickMenu();
@@ -826,7 +826,7 @@ namespace PTM.View.Controls
 
 		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
-			PTMDataset.TasksRow taskRow;
+			Task taskRow;
 			if (e.Action == DataRowAction.Change)
 			{
 				if (e.Log.InsertTime.Date != this.currentDay)
@@ -865,7 +865,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SetListItemValues(ListViewItem item, Log log, PTMDataset.TasksRow taskRow)
+		private void SetListItemValues(ListViewItem item, Log log, Task taskRow)
 		{
 			item.Tag = log;
 //			if (item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)

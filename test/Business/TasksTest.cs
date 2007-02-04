@@ -5,11 +5,9 @@ using PTM.Framework;
 using PTM.Data;
 using PTM.Framework.Infos;
 
-namespace PTM.Test.Business
+namespace PTM.Test.Framework
 {
-	/// <summary>
-	/// Descripción breve de Tasks.
-	/// </summary>
+
 	[TestFixture]
 	public class TasksTest
 	{
@@ -26,113 +24,109 @@ namespace PTM.Test.Business
 		{
 			DbHelper.Initialize("test");
 			DbHelper.DeleteDataSource();
-			PTMDataset ds = new PTMDataset();
-			MainModule.Initialize(ds, "test");
+			MainModule.Initialize("test");
 
 			tasksRowChangedEvent_RowAddedCount = 0;
 			tasksRowChangedEvent_RowUpdatedCount = 0;
 			tasksRowDeletingEventCount = 0;
-			Tasks.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
-			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
+			Tasks.TaskChanged += new Tasks.TaskChangeEventHandler(Tasks_TasksRowChanged);
+			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.AreEqual(2, UnitOfWork.PtmDataset.Tasks.Count);
 			Assert.IsNotNull(Tasks.RootTasksRow);
+			Assert.IsNotNull(Tasks.IdleTasksRow);
+
+			Assert.AreEqual(-1, Tasks.RootTasksRow.ParentId);
 		}
 
 		[Test]
 		public void InitializeExistingDBTest()
 		{
-			PTMDataset ds = new PTMDataset();
-			MainModule.Initialize(ds, "test");
+			MainModule.Initialize("test");
 			Assert.IsNotNull(Tasks.RootTasksRow);
 		}
 
 		[Test]
 		public void AddTaskTest()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.Description = "AddTaskTest";
 			row.ParentId = Tasks.RootTasksRow.Id;
 			row.IsActive = true;
 			int count = Tasks.Count;
 			int eventCount = tasksRowChangedEvent_RowAddedCount;
-			int id = Tasks.AddTasksRow(row);
+			int id = Tasks.AddTask(row);
 			Assert.AreEqual(count + 1, Tasks.Count);
 			Assert.AreEqual(eventCount + 1, tasksRowChangedEvent_RowAddedCount);
-			PTMDataset.TasksRow addedTaskRow;
+			Task addedTaskRow;
 			addedTaskRow = Tasks.FindById(id);
 			Assert.AreEqual(row.ParentId, addedTaskRow.ParentId);
 			Assert.AreEqual("AddTaskTest", addedTaskRow.Description);
-			Assert.AreEqual(0, addedTaskRow.TotalTime);
-			Assert.AreEqual(false, addedTaskRow.IsFinished);
 			Assert.AreEqual(true, addedTaskRow.IsActive);
-			Assert.AreEqual(true, addedTaskRow.IsStartDateNull());
-			Assert.AreEqual(true, addedTaskRow.IsStopDateNull());
 		}
 
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "Task already exist")]
 		public void AddTaskAlreadyExists()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.Description = "AddTaskAlreadyExists";
 			row.ParentId = Tasks.RootTasksRow.Id;
-			Tasks.AddTasksRow(row);
-			Tasks.AddTasksRow(row);
+			Tasks.AddTask(row);
+			Tasks.AddTask(row);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "Description can't be null")]
 		public void AddTaskDescripcionNull()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.ParentId = Tasks.RootTasksRow.Id;
-			Tasks.AddTasksRow(row);
+			Tasks.AddTask(row);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "Description can't be empty")]
 		public void AddTaskDescripcionEmpty()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.ParentId = Tasks.RootTasksRow.Id;
 			row.Description = String.Empty;
-			Tasks.AddTasksRow(row);
+			Tasks.AddTask(row);
 		}
 
-		[Test]
-		[ExpectedException(typeof (ApplicationException), "Parent can't be null")]
-		public void AddTaskParentNull()
-		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
-			row.Description = "Test";
-			Tasks.AddTasksRow(row);
-		}
+//		[Test]
+//		[ExpectedException(typeof (ApplicationException), "Parent can't be null")]
+//		public void AddTaskParentNull()
+//		{
+//			Task row;
+//			row = new Task();
+//			row.Description = "Test";
+//			Tasks.AddTask(row);
+//		}
 
 
 		[Test]
 		public void UpdateTask()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.Description = "TaskTest";
 			row.ParentId = Tasks.RootTasksRow.Id;
-			row.Id = Tasks.AddTasksRow(row);
+			row.Id = Tasks.AddTask(row);
 			int count = Tasks.Count;
 			int eventCount = tasksRowChangedEvent_RowUpdatedCount;
 			row.Description = "UpdatedTaskTest";
-			Tasks.UpdateTaskRow(row);
+			Tasks.UpdateTask(row);
 			Assert.AreEqual(count, Tasks.Count);
-			PTMDataset.TasksRow updatedRow;
+			Task updatedRow;
 			updatedRow = Tasks.FindById(row.Id);
 			Assert.AreEqual("UpdatedTaskTest", updatedRow.Description);
 			Assert.AreEqual(eventCount + 1, this.tasksRowChangedEvent_RowUpdatedCount);
@@ -144,33 +138,33 @@ namespace PTM.Test.Business
 		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
 		public void UpdateRootTaskTest()
 		{
-			Tasks.UpdateTaskRow(Tasks.RootTasksRow);
+			Tasks.UpdateTask(Tasks.RootTasksRow);
 		}
 		
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
 		public void UpdateIdleTaskTest()
 		{
-			Tasks.UpdateTaskRow(Tasks.IdleTasksRow);
+			Tasks.UpdateTask(Tasks.IdleTasksRow);
 		}
 		
 		[Test]
 		public void UpdateParentTask()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "Task1Test";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "Task2Test";
 			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
 			Tasks.UpdateParentTask(row2.Id, row1.Id);
-			PTMDataset.TasksRow updatedTask;
+			Task updatedTask;
 			updatedTask = Tasks.FindById(row2.Id);
 
 			Assert.AreEqual(row1.Id, updatedTask.ParentId);
@@ -179,28 +173,26 @@ namespace PTM.Test.Business
 		[Test]
 		public void UpdateParentTaskMergeExistingTask()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "Parent Task";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 			
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "To Be Merged Task";
 			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 			
-			PTMDataset.TasksRow row3;
-			row3 = Tasks.NewTasksRow();
+			Task row3;
+			row3 = new Task();
 			row3.Description = row2.Description;
 			row3.ParentId = row1.Id;
-			row3.Id = Tasks.AddTasksRow(row3);
+			row3.Id = Tasks.AddTask(row3);
 
 			Log log2 = Logs.AddLog(row2.Id);
 			Log log3 = Logs.AddLog(row3.Id);
-			
-			
 			
 			Tasks.UpdateParentTask(row3.Id, Tasks.RootTasksRow.Id);
 			
@@ -215,11 +207,11 @@ namespace PTM.Test.Business
 		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
 		public void UpdateParentTaskRootTaskTest()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "Task1Test";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 			Tasks.UpdateParentTask(Tasks.RootTasksRow.Id, row1.Id);
 		}
 		
@@ -227,25 +219,25 @@ namespace PTM.Test.Business
 		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
 		public void UpdateParentTaskIdleTaskTest()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "Task1Test";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 			Tasks.UpdateParentTask(Tasks.IdleTasksRow.Id, row1.Id);
 		}
 
 		[Test]
 		public void DeleteTaskTest()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.Description = "TaskTest";
 			row.ParentId = Tasks.RootTasksRow.Id;
-			row.Id = Tasks.AddTasksRow(row);
+			row.Id = Tasks.AddTask(row);
 			int count = Tasks.Count;
 			int eventCount = tasksRowDeletingEventCount;
-			Tasks.DeleteTaskRow(row);
+			Tasks.DeleteTask(row);
 			Assert.AreEqual(count - 1, Tasks.Count);
 			Assert.AreEqual(eventCount + 1, this.tasksRowDeletingEventCount);
 		}
@@ -256,27 +248,27 @@ namespace PTM.Test.Business
 				"This task can't be deleted now. You are currently working on it or in a part of it.")]
 		public void DeleteCurrentTaskTest()
 		{
-			PTMDataset.TasksRow row;
-			row = Tasks.NewTasksRow();
+			Task row;
+			row = new Task();
 			row.Description = "TaskTest";
 			row.ParentId = Tasks.RootTasksRow.Id;
-			row.Id = Tasks.AddTasksRow(row);
+			row.Id = Tasks.AddTask(row);
 			Logs.AddLog(row.Id);
-			Tasks.DeleteTaskRow(row);
+			Tasks.DeleteTask(row);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
 		public void DeleteRootTaskTest()
 		{
-			Tasks.DeleteTaskRow(Tasks.RootTasksRow);
+			Tasks.DeleteTask(Tasks.RootTasksRow);
 		}
 		
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
 		public void DeleteIdleTaskTest()
 		{
-			Tasks.DeleteTaskRow(Tasks.IdleTasksRow);
+			Tasks.DeleteTask(Tasks.IdleTasksRow);
 		}
 
 		[Test]
@@ -285,39 +277,39 @@ namespace PTM.Test.Business
 				"This task can't be deleted now. You are currently working on it or in a part of it.")]
 		public void DeleteChildOfCurrentTaskTest()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "TaskTest2";
 			row2.ParentId = row1.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
 			Logs.AddLog(row2.Id);
-			Tasks.DeleteTaskRow(row1);
+			Tasks.DeleteTask(row1);
 		}
 
 		[Test]
 		public void DeleteOnCascadeTaskTest()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "TaskTest2";
 			row2.ParentId = row1.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
 			int count = Tasks.Count;
-			Tasks.DeleteTaskRow(row1);
+			Tasks.DeleteTask(row1);
 			Assert.AreEqual(count - 2, Tasks.Count);
 			Assert.AreEqual(2, tasksRowDeletingEventCount);
 		}
@@ -326,27 +318,27 @@ namespace PTM.Test.Business
 		[Test]
 		public void GetChildTasksTest()
 		{
-			PTMDataset.TasksRow[] childs;
+			Task[] childs;
 			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(1, childs.Length, "Just get the default idle row");
 
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "TaskTest2";
 			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
-			PTMDataset.TasksRow row3;
-			row3 = Tasks.NewTasksRow();
+			Task row3;
+			row3 = new Task();
 			row3.Description = "TaskTest3";
 			row3.ParentId = row1.Id;
-			row3.Id = Tasks.AddTasksRow(row3);
+			row3.Id = Tasks.AddTask(row3);
 
 			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(2 + 1, childs.Length, "2 plus default idle row");
@@ -369,23 +361,23 @@ namespace PTM.Test.Business
 			path = Tasks.GetFullPath(Tasks.RootTasksRow.Id);
 			Assert.AreEqual(String.Empty, path);
 
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "TaskTest2";
 			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
-			PTMDataset.TasksRow row3;
-			row3 = Tasks.NewTasksRow();
+			Task row3;
+			row3 = new Task();
 			row3.Description = "TaskTest3";
 			row3.ParentId = row1.Id;
-			row3.Id = Tasks.AddTasksRow(row3);
+			row3.Id = Tasks.AddTask(row3);
 
 			path = Tasks.GetFullPath(row1.Id);
 			Assert.AreEqual(@"TaskTest1", path);
@@ -400,23 +392,23 @@ namespace PTM.Test.Business
 		[Test]
 		public void IsParentTest()
 		{
-			PTMDataset.TasksRow row1;
-			row1 = Tasks.NewTasksRow();
+			Task row1;
+			row1 = new Task();
 			row1.Description = "TaskTest1";
 			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTasksRow(row1);
+			row1.Id = Tasks.AddTask(row1);
 
-			PTMDataset.TasksRow row2;
-			row2 = Tasks.NewTasksRow();
+			Task row2;
+			row2 = new Task();
 			row2.Description = "TaskTest2";
 			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTasksRow(row2);
+			row2.Id = Tasks.AddTask(row2);
 
-			PTMDataset.TasksRow row3;
-			row3 = Tasks.NewTasksRow();
+			Task row3;
+			row3 = new Task();
 			row3.Description = "TaskTest3";
 			row3.ParentId = row1.Id;
-			row3.Id = Tasks.AddTasksRow(row3);
+			row3.Id = Tasks.AddTask(row3);
 
 			int result;
 			result = Tasks.IsParent(Tasks.RootTasksRow.Id, -1);
@@ -460,12 +452,12 @@ namespace PTM.Test.Business
 		public void TearDown()
 		{
 			Logs.StopLogging();
-			Tasks.TasksRowChanged -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
-			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
+			Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowChanged);
+			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleting);
 			DbHelper.DeleteDataSource();
 		}
 
-		private void Tasks_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void Tasks_TasksRowChanged(Tasks.TaskChangeEventArgs e)
 		{
 			if (e.Action == DataRowAction.Add)
 				tasksRowChangedEvent_RowAddedCount++;
@@ -473,7 +465,7 @@ namespace PTM.Test.Business
 				this.tasksRowChangedEvent_RowUpdatedCount++;
 		}
 
-		private void Tasks_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void Tasks_TasksRowDeleting(Tasks.TaskChangeEventArgs e)
 		{
 			tasksRowDeletingEventCount++;
 		}

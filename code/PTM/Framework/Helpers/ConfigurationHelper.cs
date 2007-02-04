@@ -39,20 +39,20 @@ namespace PTM.Framework.Helpers
 		/// </summary>
 		public static Configuration GetConfiguration(ConfigurationKey key)
 		{
-			Hashtable ht;
-			ht = DbHelper.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
+			IDictionary dictionary;
+			dictionary = DbHelper.ExecuteGetFirstRow("SELECT ConfigValue from Configuration where KeyValue = " +
 			                                 ((int) key).ToString());
-			if (ht == null)
+			if (dictionary == null)
 				return null;
 			object configValue;
 			switch (key)
 			{
 				case ConfigurationKey.TasksLogDuration:
 				case ConfigurationKey.DataMaintenanceDays:
-					configValue = Convert.ToInt32(ht["ConfigValue"]);
+					configValue = Convert.ToInt32(dictionary["ConfigValue"]);
 					break;
 				default:
-					configValue = ht["ConfigValue"].ToString().Trim();
+					configValue = dictionary["ConfigValue"].ToString().Trim();
 					break;
 			}
 

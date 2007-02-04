@@ -4,7 +4,7 @@ using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.Data;
 
-namespace PTM.Test.Business.Helpers
+namespace PTM.Test.Framework.Helpers
 {
 	/// <summary>
 	/// Summary description for ConfigurationTest.
@@ -21,8 +21,7 @@ namespace PTM.Test.Business.Helpers
 		{
 			DbHelper.Initialize("test");
 			DbHelper.DeleteDataSource();
-			PTMDataset ds = new PTMDataset();
-			MainModule.Initialize(ds, "test");
+			MainModule.Initialize("test");
 		}
 
 		[Test]

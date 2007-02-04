@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Addin;
-using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Infos;
 using PTM.View.Controls.TreeListViewComponents;
@@ -37,7 +36,7 @@ namespace PTM.View.Controls
 		private ToolBarButton toolBarButton2;
 		private ImageList toolBarImages;
 
-		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
+		private ArrayList parentTasksTable = new ArrayList();
 		private ColumnHeader InactiveTimeHeader;
 		private ColumnHeader ActiveTimeHeader;
 		private DateTimePicker fromDateTimePicker;
@@ -45,7 +44,7 @@ namespace PTM.View.Controls
 		private RadioButton fromRadioButton;
 		private RadioButton toRadioButton;
 		private ToolTip toolTip;
-		private PTMDataset.TasksRow parentRow;
+		private Task parentRow;
 		private AsyncWorker worker;
 
 		internal SummaryControl()
@@ -58,20 +57,19 @@ namespace PTM.View.Controls
 			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
-			PTMDataset.TasksRow parentTaskRow;
-			parentTaskRow = parentTasksTable.NewTasksRow();
-			parentTaskRow.ItemArray = Tasks.RootTasksRow.ItemArray;
-			parentTasksTable.AddTasksRow(parentTaskRow);
+			Task parentTaskRow;
+			parentTaskRow = Tasks.RootTasksRow;
+			parentTasksTable.Add(parentTaskRow);
 			this.parentTaskComboBox.DataSource = parentTasksTable;
-			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
-			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
+			this.parentTaskComboBox.DisplayMember = "Description";
+			this.parentTaskComboBox.ValueMember = "Id";
 
 			this.fromDateTimePicker.Value = DateTime.Today;
 			this.toDateTimePicker.Value = DateTime.Today;
 
 			if (parentTasksTable.Count > 0)
 			{
-				parentRow = (PTMDataset.TasksRow) parentTasksTable.Rows[0];
+				parentRow = (Task) parentTasksTable[0];
 				this.parentTaskComboBox.SelectedValue = parentRow.Id;
 			}
 			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
@@ -553,8 +551,19 @@ namespace PTM.View.Controls
 			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
-			parentRow = parentTasksTable.FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
+			parentRow = FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
 			this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+		}
+
+		private Task FindById(int taskId)
+		{
+			for(int i = 0;i<parentTasksTable.Count;i++)
+			{
+				Task task = (Task)parentTasksTable[i];
+				if(task.Id == taskId)
+					return task.Clone();
+			}
+			return null;
 		}
 
 		private void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -610,14 +619,13 @@ namespace PTM.View.Controls
 				GoToParentDetail();
 		}
 
-		private void SetParent(PTMDataset.TasksRow parent)
+		private void SetParent(Task parent)
 		{
-			if (parentTasksTable.FindById(parent.Id) == null)
+			if (FindById(parent.Id) == null)
 			{
-				parentRow = this.parentTasksTable.NewTasksRow();
-				parentRow.ItemArray = parent.ItemArray;
+				parentRow = parent.Clone();
 				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow.Id), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
+				this.parentTasksTable.Insert(0, parentRow);
 			}
 			this.parentTaskComboBox.SelectedValue = parent.Id;
 		}

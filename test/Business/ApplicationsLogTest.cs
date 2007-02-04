@@ -4,7 +4,7 @@ using NUnit.Framework;
 using PTM.Framework;
 using PTM.Data;
 
-namespace PTM.Test.Business
+namespace PTM.Test.Framework
 {
 	/// <summary>
 	/// Summary description for ApplicationsLogTest.
@@ -21,8 +21,7 @@ namespace PTM.Test.Business
 		{
 			DbHelper.Initialize("test");
 			DbHelper.DeleteDataSource();
-			PTMDataset ds = new PTMDataset();
-			MainModule.Initialize(ds, "test");
+			MainModule.Initialize("test");
 		}
 
 		[Test]

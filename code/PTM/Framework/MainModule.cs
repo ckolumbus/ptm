@@ -13,7 +13,7 @@ namespace PTM.Framework
 		/// <summary>
 		/// Initializes the engine components, 
 		/// </summary>
-		public static void Initialize(PTMDataset ds, string userName)
+		public static void Initialize(string userName)
 		{
 			DbHelper.Initialize(userName);
 			Application.DoEvents();
@@ -24,11 +24,7 @@ namespace PTM.Framework
 			DbHelper.CompactDB();
 			Application.DoEvents();
 
-			DataAdapterManager adapterManager = new DataAdapterManager();
-			Application.DoEvents();
-			UnitOfWork.Initialize(ds, adapterManager);
-			Application.DoEvents();
-			Tasks.Initialize(ds.Tasks, adapterManager.tasksDataAdapter);
+			Tasks.Initialize();
 			Application.DoEvents();
 
 			DataMaintenanceHelper.DeleteIdleEntries();

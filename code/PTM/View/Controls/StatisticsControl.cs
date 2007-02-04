@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using PTM.Addin;
-using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Infos;
 using PTM.View.Controls.TreeListViewComponents;
@@ -42,7 +41,7 @@ namespace PTM.View.Controls
 		private DateTimePicker fromDateTimePicker;
 		private Button searchButton;
 
-		private PTMDataset.TasksDataTable parentTasksTable = new PTMDataset.TasksDataTable();
+		private ArrayList parentTasksTable = new ArrayList();
 
 		internal StatisticsControl()
 		{
@@ -54,13 +53,12 @@ namespace PTM.View.Controls
 			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 
-			PTMDataset.TasksRow parentTaskRow;
-			parentTaskRow = parentTasksTable.NewTasksRow();
-			parentTaskRow.ItemArray = Tasks.RootTasksRow.ItemArray;
-			parentTasksTable.AddTasksRow(parentTaskRow);
+			Task parentTaskRow;
+			parentTaskRow = Tasks.RootTasksRow;
+			parentTasksTable.Add(parentTaskRow);
 			this.parentTaskComboBox.DataSource = parentTasksTable;
-			this.parentTaskComboBox.DisplayMember = parentTasksTable.DescriptionColumn.ColumnName;
-			this.parentTaskComboBox.ValueMember = parentTasksTable.IdColumn.ColumnName;
+			this.parentTaskComboBox.DisplayMember = "Description";
+			this.parentTaskComboBox.ValueMember = "Id";
 
 			this.fromDateTimePicker.Value = DateTime.Today;
 			this.toDateTimePicker.Value = DateTime.Today;
@@ -371,14 +369,24 @@ namespace PTM.View.Controls
 			if (tgForm.SelectedTaskRow == null)
 				return;
 
-			if (parentTasksTable.FindById(tgForm.SelectedTaskRow.Id) == null)
+			if (FindById(tgForm.SelectedTaskRow.Id) == null)
 			{
-				PTMDataset.TasksRow parentRow = this.parentTasksTable.NewTasksRow();
-				parentRow.ItemArray = tgForm.SelectedTaskRow.ItemArray;
+				Task parentRow = tgForm.SelectedTaskRow.Clone();
 				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow.Id), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Rows.InsertAt(parentRow, 0);
+				this.parentTasksTable.Insert(0, parentRow);
 			}
 			this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskRow.Id;
+		}
+
+		private Task FindById(int taskId)
+		{
+			for(int i = 0;i<parentTasksTable.Count;i++)
+			{
+				Task task = (Task)parentTasksTable[i];
+				if(task.Id == taskId)
+					return task.Clone();
+			}
+			return null;
 		}
 
 		private void toRadioButton_CheckedChanged(object sender, EventArgs e)

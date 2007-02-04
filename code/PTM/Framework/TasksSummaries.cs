@@ -28,11 +28,11 @@ namespace PTM.Framework
 				new string[] {"InsertTimeFrom", "InsertTimeTo"},
 				new object[] {initialDate, finalDate});
 
-			foreach (Hashtable hashtable in list)
+			foreach (IDictionary dictionary in list)
 			{
 				TaskSummary taskSum = new TaskSummary();
-				taskSum.TaskId = (int) hashtable["TaskId"];
-				taskSum.TotalActiveTime = (double) hashtable["TotalTime"];
+				taskSum.TaskId = (int) dictionary["TaskId"];
+				taskSum.TotalActiveTime = (double) dictionary["TotalTime"];
 				summaryList.Add(taskSum);
 			} //foreach
 			return summaryList;
@@ -42,7 +42,7 @@ namespace PTM.Framework
 
 		#region Public Methods
 
-		public static ArrayList GetTaskSummary(PTMDataset.TasksRow parentRow, DateTime initialDate, DateTime finalDate)
+		public static ArrayList GetTaskSummary(Task parentRow, DateTime initialDate, DateTime finalDate)
 		{
 			Logs.UpdateCurrentLogDuration();
 			ArrayList summaryList;
@@ -53,7 +53,7 @@ namespace PTM.Framework
 			while (summaryList.Count > 0)
 			{
 				TaskSummary sumRow = (TaskSummary) summaryList[0];
-				PTMDataset.TasksRow row = Tasks.FindById(sumRow.TaskId);
+				Task row = Tasks.FindById(sumRow.TaskId);
 				sumRow.Description = row.Description;
 				sumRow.IsActive = row.IsActive;
 				sumRow.IconId = row.IconId;
@@ -67,7 +67,7 @@ namespace PTM.Framework
 				{
 					if (row.Id != parentRow.Id)
 					{
-						if (row.IsParentIdNull())
+						if (row.ParentId ==-1)
 						{
 							summaryList.Remove(sumRow);
 							continue;
@@ -91,7 +91,7 @@ namespace PTM.Framework
 							TaskSummary psumRow = FindTaskSummaryByTaskId(summaryList, row.ParentId);
 							if (psumRow == null)
 							{
-								PTMDataset.TasksRow prow = Tasks.FindById(row.ParentId);
+								Task prow = Tasks.FindById(row.ParentId);
 								psumRow = sumRow;
 								psumRow.TaskId = prow.Id;
 								continue;

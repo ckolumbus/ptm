@@ -4,8 +4,9 @@ using NUnit.Framework;
 using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.Data;
+using PTM.Framework.Infos;
 
-namespace PTM.Test.Business.Helpers
+namespace PTM.Test.Framework.Helpers
 {
 	/// <summary>
 	/// Summary description for DataMaintenanceTest.
@@ -22,31 +23,30 @@ namespace PTM.Test.Business.Helpers
 		{
 			DbHelper.Initialize("test");
 			DbHelper.DeleteDataSource();
-			PTMDataset ds = new PTMDataset();
-			MainModule.Initialize(ds, "test");
+			MainModule.Initialize("test");
 		}
 
 		[Test]
 		public void DeleteIdleEntriesTest()
 		{
 			//Make task tree
-			PTMDataset.TasksRow task1;
-			task1 = Tasks.NewTasksRow();
+			Task task1;
+			task1 = new Task();
 			task1.Description = "TaskTest1";
 			task1.ParentId = Tasks.RootTasksRow.Id;
-			task1.Id = Tasks.AddTasksRow(task1);
+			task1.Id = Tasks.AddTask(task1);
 
-			PTMDataset.TasksRow task2;
-			task2 = Tasks.NewTasksRow();
+			Task task2;
+			task2 = new Task();
 			task2.Description = "TaskTest2";
 			task2.ParentId = Tasks.RootTasksRow.Id;
-			task2.Id = Tasks.AddTasksRow(task2);
+			task2.Id = Tasks.AddTask(task2);
 
-			PTMDataset.TasksRow task3;
-			task3 = Tasks.NewTasksRow();
+			Task task3;
+			task3 = new Task();
 			task3.Description = "TaskTest3";
 			task3.ParentId = task1.Id;
-			task3.Id = Tasks.AddTasksRow(task3);
+			task3.Id = Tasks.AddTask(task3);
 
 //			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
 //			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
@@ -108,23 +108,23 @@ namespace PTM.Test.Business.Helpers
 		public void GroupLogsTest()
 		{
 			//Make task tree
-			PTMDataset.TasksRow task1;
-			task1 = Tasks.NewTasksRow();
+			Task task1;
+			task1 = new Task();
 			task1.Description = "TaskTest1";
 			task1.ParentId = Tasks.RootTasksRow.Id;
-			task1.Id = Tasks.AddTasksRow(task1);
+			task1.Id = Tasks.AddTask(task1);
 
-			PTMDataset.TasksRow task2;
-			task2 = Tasks.NewTasksRow();
+			Task task2;
+			task2 = new Task();
 			task2.Description = "TaskTest2";
 			task2.ParentId = Tasks.RootTasksRow.Id;
-			task2.Id = Tasks.AddTasksRow(task2);
+			task2.Id = Tasks.AddTask(task2);
 
-			PTMDataset.TasksRow task3;
-			task3 = Tasks.NewTasksRow();
+			Task task3;
+			task3 = new Task();
 			task3.Description = "TaskTest3";
 			task3.ParentId = task1.Id;
-			task3.Id = Tasks.AddTasksRow(task3);
+			task3.Id = Tasks.AddTask(task3);
 
 //			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
 //			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);

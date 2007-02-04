@@ -67,7 +67,7 @@ namespace PTM.Framework.Helpers
 		{
 			ArrayList addinsList = new ArrayList();
 			ArrayList addins = DbHelper.ExecuteGetRows("Select Path from Addins");
-			foreach (Hashtable addin in addins)
+			foreach (IDictionary addin in addins)
 			{
 				string path = addin["Path"].ToString();
 				addinsList.Add(path);

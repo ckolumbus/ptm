@@ -16,7 +16,7 @@ namespace PTM.Framework
 
 		#region Private Methods
 
-		private static ArrayList GetApplicationsRecursiveSummary(PTMDataset.TasksRow parentRow, DateTime ini, DateTime end)
+		private static ArrayList GetApplicationsRecursiveSummary(Task parentRow, DateTime ini, DateTime end)
 		{
 			ArrayList arrayHT = DbHelper.ExecuteGetRows(
 				"SELECT TasksLog.TaskId, Sum(ApplicationsLog.ActiveTime) AS TotalActiveTime, ApplicationsLog.Name, ApplicationsLog.ApplicationFullPath " +
@@ -26,20 +26,20 @@ namespace PTM.Framework
 				new string[] {"TaskId", "InsertTime1", "InsertTime2"}, new object[] {parentRow.Id, ini, end});
 
 			ArrayList tempDataset = new ArrayList();
-			foreach (Hashtable hashtable in arrayHT)
+			foreach (IDictionary dictionary in arrayHT)
 			{
 				ApplicationSummary appSum = new ApplicationSummary();
-				appSum.TaskId = (int) hashtable["TaskId"];
-				appSum.TotalActiveTime = (double) hashtable["TotalActiveTime"];
-				appSum.Name = (string) hashtable["Name"];
-				appSum.ApplicationFullPath = (string) hashtable["ApplicationFullPath"];
+				appSum.TaskId = (int) dictionary["TaskId"];
+				appSum.TotalActiveTime = (double) dictionary["TotalActiveTime"];
+				appSum.Name = (string) dictionary["Name"];
+				appSum.ApplicationFullPath = (string) dictionary["ApplicationFullPath"];
 				tempDataset.Add(appSum);
 			} //foreach
 
 			ArrayList appSumaryList = MergeApplicationSummaryLists(new ArrayList(), tempDataset);
-			PTMDataset.TasksRow[] childRows;
+			Task[] childRows;
 			childRows = Tasks.GetChildTasks(parentRow.Id);
-			foreach (PTMDataset.TasksRow childRow in childRows)
+			foreach (Task childRow in childRows)
 			{
 				appSumaryList = MergeApplicationSummaryLists(appSumaryList, GetApplicationsRecursiveSummary(childRow, ini, end));
 			} //foreach
@@ -77,7 +77,7 @@ namespace PTM.Framework
 
 		#region Public Methods
 
-		public static ArrayList GetApplicationsSummary(PTMDataset.TasksRow parentRow, DateTime ini, DateTime end)
+		public static ArrayList GetApplicationsSummary(Task parentRow, DateTime ini, DateTime end)
 		{
 			ApplicationsLog.UpdateCurrentApplicationsLog();
 			return GetApplicationsRecursiveSummary(parentRow, ini, end);

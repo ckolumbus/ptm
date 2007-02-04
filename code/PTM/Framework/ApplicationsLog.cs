@@ -419,15 +419,15 @@ namespace PTM.Framework
 					"SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
 					taskLogId.ToString());
 			ArrayList results = new ArrayList();
-			foreach (Hashtable hashtable in resultsHT)
+			foreach (IDictionary dictionary in resultsHT)
 			{
 				ApplicationLog applicationLog = new ApplicationLog();
-				applicationLog.Id = (int) hashtable["Id"];
-				applicationLog.ProcessId = (int) hashtable["ProcessId"];
-				applicationLog.Name = (string) hashtable["Name"];
-				applicationLog.Caption = (string) hashtable["Caption"];
-				applicationLog.ApplicationFullPath = (string) hashtable["ApplicationFullPath"];
-				applicationLog.ActiveTime = (int) hashtable["ActiveTime"];
+				applicationLog.Id = (int) dictionary["Id"];
+				applicationLog.ProcessId = (int) dictionary["ProcessId"];
+				applicationLog.Name = (string) dictionary["Name"];
+				applicationLog.Caption = (string) dictionary["Caption"];
+				applicationLog.ApplicationFullPath = (string) dictionary["ApplicationFullPath"];
+				applicationLog.ActiveTime = (int) dictionary["ActiveTime"];
 				applicationLog.TaskLogId = taskLogId;
 				results.Add(applicationLog);
 			} //foreach

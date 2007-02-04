@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using PTM.Data;
 using PTM.Framework;
+using PTM.Framework.Infos;
 
 namespace PTM.View.Forms
 {
@@ -27,7 +28,7 @@ namespace PTM.View.Forms
 		private TextBox txtDescription;
 
 
-		private PTMDataset.TasksRow task;
+		private Task task;
 
 		public TaskPropertiesForm(int taskId)
 		{
@@ -216,14 +217,14 @@ namespace PTM.View.Forms
 
 		private void okButton_Click(object sender, EventArgs e)
 		{
-			PTMDataset.TasksRow row;
+			Task row;
 			row = Tasks.FindById(task.Id);
 			try
 			{
 				row.IsActive = this.IsActive;
 				row.IconId = this.IconId;
 				row.Description = this.Description;
-				Tasks.UpdateTaskRow(row);
+				Tasks.UpdateTask(row);
 			}
 			catch (ApplicationException aex)
 			{

@@ -428,7 +428,7 @@ namespace PTM
 
 		private static void Save()
 		{
-			UnitOfWork.Update();
+			Logs.UpdateCurrentLogDuration();
 		} //Save
 
 		private void exitMenuItem_Click(object sender, EventArgs e)

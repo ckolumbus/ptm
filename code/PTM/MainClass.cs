@@ -153,7 +153,7 @@ namespace PTM
 			//Application.EnableVisualStyles();
 			//Application.DoEvents();
 			Application.DoEvents();
-			MainModule.Initialize(new PTMDataset(), "data");
+			MainModule.Initialize("data");
 			splash.SetLoadProgress(50);
 			splash.Refresh();
 			Application.DoEvents();

@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using PTM.Data;
 using PTM.Framework;
+using PTM.Framework.Infos;
 using PTM.View.Controls;
 
 namespace PTM.View.Forms
@@ -35,9 +37,9 @@ namespace PTM.View.Forms
 			tasksTree.Initialize();
 
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
-			if (Tasks.CurrentTaskRow != null)
+			if (Tasks.CurrentTask != null)
 			{
-				tasksTree.SelectedTaskId = Tasks.CurrentTaskRow.ParentId;
+				tasksTree.SelectedTaskId = Tasks.CurrentTask.ParentId;
 			}
 			else
 			{
@@ -52,7 +54,7 @@ namespace PTM.View.Forms
 			tasksTree.Initialize();
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
 			tasksTree.DoubleClick += new EventHandler(tasksTree_DoubleClick);
-			PTMDataset.TasksRow row;
+			Task row;
 			row = Tasks.FindById(editTaskId);
 
 			this.tasksTree.SelectedTaskId = row.ParentId;
@@ -258,47 +260,58 @@ namespace PTM.View.Forms
 
 		#endregion
 
-		private PTMDataset.TasksRow selectedTaskRow = null;
-		private PTMDataset.TasksRow selectedParentTaskRow = null;
+		private Task selectedTaskRow = null;
+		private Task selectedParentTaskRow = null;
 
-		internal PTMDataset.TasksRow SelectedTaskRow
+		internal Task SelectedTaskRow
 		{
 			get { return selectedTaskRow; }
 		}
 
-		private PTMDataset.TasksDataTable childTasksTable = null;
+		private ArrayList childTasksTable = null;
 
 		private void FillChildTasks()
 		{
-			childTasksTable = new PTMDataset.TasksDataTable();
-			PTMDataset.TasksRow[] childRows;
+			childTasksTable = new ArrayList();
+			Task[] childRows;
 			childRows = Tasks.GetChildTasks(selectedParentTaskRow.Id);
 
-			foreach (PTMDataset.TasksRow childRow in childRows)
+			foreach (Task childRow in childRows)
 			{
-				PTMDataset.TasksRow row;
-				row = childTasksTable.NewTasksRow();
-				row.ItemArray = childRow.ItemArray;
-				childTasksTable.AddTasksRow(row);
+				Task row;
+				row = new Task();
+				row = childRow.Clone();
+				childTasksTable.Add(row);
 			}
 
-			this.taskComboBox.DisplayMember = childTasksTable.DescriptionColumn.ColumnName;
-			this.taskComboBox.ValueMember = childTasksTable.IdColumn.ColumnName;
-			this.taskComboBox.DataSource = childTasksTable.DefaultView;
+			this.taskComboBox.DisplayMember = "Description";
+			this.taskComboBox.ValueMember = "Id";
+			this.taskComboBox.DataSource = childTasksTable;
 			this.taskComboBox.Enabled = true;
 			this.taskComboBox.Focus();
 		}
 
-		private void SetChildTask(PTMDataset.TasksRow childTaskRow)
+		private void SetChildTask(Task childTaskRow)
 		{
-			if (childTasksTable.FindById(childTaskRow.Id) == null)
+			if (FindById(childTaskRow.Id) == null)
 			{
-				PTMDataset.TasksRow row = this.childTasksTable.NewTasksRow();
-				row.ItemArray = childTaskRow.ItemArray;
-				this.childTasksTable.Rows.InsertAt(row, 0);
+				Task row = childTaskRow.Clone();
+				this.childTasksTable.Insert(0, row);
 			}
 			this.taskComboBox.SelectedValue = childTaskRow.Id;
 		}
+
+		private Task FindById(int taskId)
+		{
+			for(int i = 0;i<childTasksTable.Count;i++)
+			{
+				Task task = (Task)childTasksTable[i];
+				if(task.Id == taskId)
+					return task.Clone();
+			}
+			return null;
+		}
+
 
 
 		private bool cancelClose = false;
@@ -309,15 +322,15 @@ namespace PTM.View.Forms
 			{
 				string description = this.taskComboBox.Text.Trim();
 
-				PTMDataset.TasksRow row;
+				Task row;
 				row = Tasks.FindByParentIdAndDescription(this.tasksTree.SelectedTaskId, description);
 
 				if (row == null)
 				{
-					this.selectedTaskRow = Tasks.NewTasksRow();
+					this.selectedTaskRow = new Task();
 					this.selectedTaskRow.Description = description;
 					this.selectedTaskRow.ParentId = this.tasksTree.SelectedTaskId;
-					this.selectedTaskRow.Id = Tasks.AddTasksRow(this.selectedTaskRow);
+					this.selectedTaskRow.Id = Tasks.AddTask(this.selectedTaskRow);
 				}
 				else
 				{

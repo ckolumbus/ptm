@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PTM.Data;
 using PTM.Framework;
+using PTM.Framework.Infos;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -149,27 +150,27 @@ namespace PTM.View.Controls
 		protected override void OnHandleDestroyed(EventArgs e)
 		{
 			base.OnHandleDestroyed(e);
-			Tasks.TasksRowChanged -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
-			Tasks.TasksRowDeleting -= new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
+			Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowChanged);
+			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
 		internal void Initialize()
 		{
 			LoadTree();
-			Tasks.TasksRowChanged += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowChanged);
-			Tasks.TasksRowDeleting += new PTMDataset.TasksRowChangeEventHandler(Tasks_TasksRowDeleting);
+			Tasks.TaskChanged += new Tasks.TaskChangeEventHandler(Tasks_TasksRowChanged);
+			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
 		internal void AddNewTask()
 		{
-			PTMDataset.TasksRow row = Tasks.NewTasksRow();
+			Task row = new Task();
 			row.Description = NEW_TASK;
 			row.ParentId = (int) treeView.SelectedNode.Tag;
 			row.IsActive = true;
 
 			try
 			{
-				row.Id = Tasks.AddTasksRow(row);
+				row.Id = Tasks.AddTask(row);
 			}
 			catch (ApplicationException aex)
 			{
@@ -198,12 +199,12 @@ namespace PTM.View.Controls
 			    	MessageBoxOptions.DefaultDesktopOnly)
 			    == DialogResult.OK)
 			{
-				PTMDataset.TasksRow row;
+				Task row;
 				row = Tasks.FindById((int) treeView.SelectedNode.Tag);
 				try
 				{
 					Cursor.Current = Cursors.WaitCursor;
-					Tasks.DeleteTaskRow(row);
+					Tasks.DeleteTask(row);
 				}
 				catch (ApplicationException aex)
 				{
@@ -226,10 +227,10 @@ namespace PTM.View.Controls
 			AddChildNodes(Tasks.RootTasksRow, nodeParent);
 		}
 
-		private void AddChildNodes(PTMDataset.TasksRow parentRow, TreeNode nodeParent)
+		private void AddChildNodes(Task parentRow, TreeNode nodeParent)
 		{
-			DataRow[] childsRows = Tasks.GetChildTasks(parentRow.Id);
-			foreach (PTMDataset.TasksRow row in childsRows)
+			Task[] childsRows = Tasks.GetChildTasks(parentRow.Id);
+			foreach (Task row in childsRows)
 			{
 				if (row.Id == Tasks.IdleTasksRow.Id)
 					continue;
@@ -239,7 +240,7 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private TreeNode CreateNode(PTMDataset.TasksRow row)
+		private TreeNode CreateNode(Task row)
 		{
 			TreeNode node = new TreeNode(row.Description, this.treeView.ImageIndex, this.treeView.SelectedImageIndex);
 			node.Tag = row.Id;
@@ -276,7 +277,7 @@ namespace PTM.View.Controls
 		private void treeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
 		{
 			treeView.LabelEdit = false;
-			PTMDataset.TasksRow row = Tasks.FindById(Convert.ToInt32(e.Node.Tag));
+			Task row = Tasks.FindById(Convert.ToInt32(e.Node.Tag));
 			if (row != null)
 			{
 				if (e.Label == null || e.Label == String.Empty)
@@ -288,7 +289,7 @@ namespace PTM.View.Controls
 				row.Description = e.Label;
 				try
 				{
-					Tasks.UpdateTaskRow(row);
+					Tasks.UpdateTask(row);
 				}
 				catch (ApplicationException aex)
 				{
@@ -303,25 +304,25 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void Tasks_TasksRowChanged(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void Tasks_TasksRowChanged(Tasks.TaskChangeEventArgs e)
 		{
 			if (e.Action == DataRowAction.Add)
 			{
-				TreeNode nodeParent = FindTaskNode(e.Row.ParentId);
-				TreeNode nodeChild = CreateNode(e.Row);
+				TreeNode nodeParent = FindTaskNode(e.Task.ParentId);
+				TreeNode nodeChild = CreateNode(e.Task);
 				nodeParent.Nodes.Add(nodeChild);
 				return;
 			}
 			else if (e.Action == DataRowAction.Change)
 			{
-				TreeNode node = FindTaskNode(e.Row.Id);
-				node.Text = e.Row.Description;
+				TreeNode node = FindTaskNode(e.Task.Id);
+				node.Text = e.Task.Description;
 			}
 		}
 
-		private void Tasks_TasksRowDeleting(object sender, PTMDataset.TasksRowChangeEvent e)
+		private void Tasks_TasksRowDeleting(Tasks.TaskChangeEventArgs e)
 		{
-			TreeNode node = FindTaskNode(e.Row.Id);
+			TreeNode node = FindTaskNode(e.Task.Id);
 			if (node != null && node.TreeView != null)
 				node.Remove();
 		}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
@@ -105,7 +106,7 @@ namespace PTM.Data
 		}
 
 
-		public static Hashtable ExecuteGetFirstRow(string cmdText)
+		public static IDictionary ExecuteGetFirstRow(string cmdText)
 		{
 			OleDbCommand cmd;
 			cmd = GetNewCommand(cmdText);
@@ -115,12 +116,12 @@ namespace PTM.Data
 				OleDbDataReader reader = cmd.ExecuteReader();
 				if (!reader.HasRows)
 					return null;
-				Hashtable hash = new Hashtable();
+				ListDictionary listDictionary = new ListDictionary();
 				reader.Read();
 				for (int i = 0; i < reader.FieldCount; i++)
-					hash.Add(reader.GetName(i), reader[i]);
+					listDictionary.Add(reader.GetName(i), reader[i]);
 				reader.Close();
-				return hash;
+				return listDictionary;
 			}
 			finally
 			{
@@ -141,10 +142,10 @@ namespace PTM.Data
 				ArrayList list = new ArrayList();
 				while (reader.Read())
 				{
-					Hashtable hash = new Hashtable();
+					ListDictionary dictionary = new ListDictionary();
 					for (int i = 0; i < reader.FieldCount; i++)
-						hash.Add(reader.GetName(i), reader[i]);
-					list.Add(hash);
+						dictionary.Add(reader.GetName(i), reader[i]);
+					list.Add(dictionary);
 				}
 				reader.Close();
 				return list;
@@ -180,10 +181,10 @@ namespace PTM.Data
 				ArrayList list = new ArrayList();
 				while (reader.Read())
 				{
-					Hashtable hash = new Hashtable();
+					ListDictionary dictionary = new ListDictionary();
 					for (int i = 0; i < reader.FieldCount; i++)
-						hash.Add(reader.GetName(i), reader[i]);
-					list.Add(hash);
+						dictionary.Add(reader.GetName(i), reader[i]);
+					list.Add(dictionary);
 				}
 				reader.Close();
 				return list;

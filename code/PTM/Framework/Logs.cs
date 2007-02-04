@@ -81,15 +81,15 @@ namespace PTM.Framework
 		{
 			if (currentLog != null && currentLog.Id == id)
 				return currentLog;
-			Hashtable hash;
-			hash = DbHelper.ExecuteGetFirstRow("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + id);
-			if (hash == null)
+			IDictionary dictionary;
+			dictionary = DbHelper.ExecuteGetFirstRow("Select TaskId, Duration, InsertTime  from TasksLog where Id = " + id);
+			if (dictionary == null)
 				return null;
 			Log log = new Log();
 			log.Id = id;
-			log.TaskId = (int) hash["TaskId"];
-			log.Duration = (int) hash["Duration"];
-			log.InsertTime = (DateTime) hash["InsertTime"];
+			log.TaskId = (int) dictionary["TaskId"];
+			log.Duration = (int) dictionary["Duration"];
+			log.InsertTime = (DateTime) dictionary["InsertTime"];
 			return log;
 		}
 
@@ -154,22 +154,22 @@ namespace PTM.Framework
 		public static ArrayList GetLogsByDay(DateTime day)
 		{
 			DateTime date = day.Date;
-			ArrayList hashList = DbHelper.ExecuteGetRows(
+			ArrayList arrayList = DbHelper.ExecuteGetRows(
 				"Select Id, TaskId, Duration, InsertTime  from TasksLog where InsertTime >= ? and InsertTime <= ? order by InsertTime",
 				new string[] {"InsertTimeFrom", "InsertTimeTo"}, new object[] {date, date.AddDays(1).AddSeconds(-1)});
 
-			if (hashList == null)
+			if (arrayList == null)
 				return null;
 
 			ArrayList list = new ArrayList();
-			foreach (Hashtable hashtable in hashList)
+			foreach (IDictionary dictionary in arrayList)
 			{
 				Log log = new Log();
-				log.Id = (int) hashtable["Id"];
+				log.Id = (int) dictionary["Id"];
 				;
-				log.TaskId = (int) hashtable["TaskId"];
-				log.Duration = (int) hashtable["Duration"];
-				log.InsertTime = (DateTime) hashtable["InsertTime"];
+				log.TaskId = (int) dictionary["TaskId"];
+				log.Duration = (int) dictionary["Duration"];
+				log.InsertTime = (DateTime) dictionary["InsertTime"];
 				list.Add(log);
 			}
 			return list;
@@ -177,22 +177,22 @@ namespace PTM.Framework
 
 		public static ArrayList GetLogsByTask(int taskId)
 		{
-			ArrayList hashList = DbHelper.ExecuteGetRows(
+			ArrayList arrayList = DbHelper.ExecuteGetRows(
 				"Select Id, TaskId, Duration, InsertTime  from TasksLog where TaskId = ? order by InsertTime",
 				new string[] {"TaskId"}, new object[] {taskId});
 
-			if (hashList == null)
+			if (arrayList == null)
 				return null;
 
 			ArrayList list = new ArrayList();
-			foreach (Hashtable hashtable in hashList)
+			foreach (IDictionary dictionary in arrayList)
 			{
 				Log log = new Log();
-				log.Id = (int) hashtable["Id"];
+				log.Id = (int) dictionary["Id"];
 				;
-				log.TaskId = (int) hashtable["TaskId"];
-				log.Duration = (int) hashtable["Duration"];
-				log.InsertTime = (DateTime) hashtable["InsertTime"];
+				log.TaskId = (int) dictionary["TaskId"];
+				log.Duration = (int) dictionary["Duration"];
+				log.InsertTime = (DateTime) dictionary["InsertTime"];
 				list.Add(log);
 			}
 			return list;

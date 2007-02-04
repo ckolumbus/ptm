@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using PTM.Data;
 using PTM.Framework;
+using PTM.Framework.Infos;
 using PTM.View.Controls;
 
 namespace PTM.View.Forms
@@ -21,9 +22,9 @@ namespace PTM.View.Forms
 		private Button propertiesButton;
 
 
-		private PTMDataset.TasksRow selectedTaskRow = null;
+		private Task selectedTaskRow = null;
 
-		internal PTMDataset.TasksRow SelectedTaskRow
+		internal Task SelectedTaskRow
 		{
 			get { return selectedTaskRow; }
 		}
