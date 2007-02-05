@@ -30,23 +30,11 @@ namespace PTM.Test.Framework.Helpers
 		public void DeleteIdleEntriesTest()
 		{
 			//Make task tree
-			Task task1;
-			task1 = new Task();
-			task1.Description = "TaskTest1";
-			task1.ParentId = Tasks.RootTasksRow.Id;
-			task1.Id = Tasks.AddTask(task1);
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
 
-			Task task2;
-			task2 = new Task();
-			task2.Description = "TaskTest2";
-			task2.ParentId = Tasks.RootTasksRow.Id;
-			task2.Id = Tasks.AddTask(task2);
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
 
-			Task task3;
-			task3 = new Task();
-			task3.Description = "TaskTest3";
-			task3.ParentId = task1.Id;
-			task3.Id = Tasks.AddTask(task3);
+			int taskId3 = Tasks.AddTask("TaskTest3", taskId1).Id;
 
 //			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
 //			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
@@ -63,9 +51,9 @@ namespace PTM.Test.Framework.Helpers
 			//Add logs (DataMaintenanceDays + one week logeed days)
 			for (int i = 0; i <= (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value + 7; i++)
 			{
-				InsertLog(task1.Id, DateTime.Today.AddDays(-i), duration);
-				InsertLog(task2.Id, DateTime.Today.AddDays(-i).AddSeconds(duration), duration);
-				InsertLog(task3.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*2), duration);
+				InsertLog(taskId1, DateTime.Today.AddDays(-i), duration);
+				InsertLog(taskId2, DateTime.Today.AddDays(-i).AddSeconds(duration), duration);
+				InsertLog(taskId3, DateTime.Today.AddDays(-i).AddSeconds(duration*2), duration);
 //				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
 //				InsertLog(task1childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
 //				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
@@ -108,23 +96,11 @@ namespace PTM.Test.Framework.Helpers
 		public void GroupLogsTest()
 		{
 			//Make task tree
-			Task task1;
-			task1 = new Task();
-			task1.Description = "TaskTest1";
-			task1.ParentId = Tasks.RootTasksRow.Id;
-			task1.Id = Tasks.AddTask(task1);
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
 
-			Task task2;
-			task2 = new Task();
-			task2.Description = "TaskTest2";
-			task2.ParentId = Tasks.RootTasksRow.Id;
-			task2.Id = Tasks.AddTask(task2);
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
 
-			Task task3;
-			task3 = new Task();
-			task3.Description = "TaskTest3";
-			task3.ParentId = task1.Id;
-			task3.Id = Tasks.AddTask(task3);
+			int taskId3 = Tasks.AddTask("TaskTest3", taskId1).Id;
 
 //			int rootchilddefaultId = Tasks.AddDeafultTask(Tasks.RootTasksRow.Id, DefaultTasks.GetDefaultTask(2).DefaultTaskId);
 //			int task1childdefaultId = Tasks.AddDeafultTask(task1.Id, DefaultTasks.GetDefaultTask(3).DefaultTaskId);
@@ -136,15 +112,15 @@ namespace PTM.Test.Framework.Helpers
 			//Add logs
 			for (int i = 0; i <= (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value + 7; i++)
 			{
-				InsertLog(task1.Id, DateTime.Today.AddDays(-i), duration);
-				InsertLog(task1.Id, DateTime.Today.AddDays(-i).AddSeconds(duration), duration);
-				InsertLog(task1.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*2), duration);
-				InsertLog(task1.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
+				InsertLog(taskId1, DateTime.Today.AddDays(-i), duration);
+				InsertLog(taskId1, DateTime.Today.AddDays(-i).AddSeconds(duration), duration);
+				InsertLog(taskId1, DateTime.Today.AddDays(-i).AddSeconds(duration*2), duration);
+				InsertLog(taskId1, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
 
-				InsertLog(task2.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
+				InsertLog(taskId2, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
 
-				InsertLog(task3.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
-				InsertLog(task3.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
+				InsertLog(taskId3, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
+				InsertLog(taskId3, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
 
 //				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*7), duration);
 //				InsertLog(rootchilddefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*8), duration);

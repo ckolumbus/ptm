@@ -219,16 +219,16 @@ namespace HansBlomme.Windows.Forms
 		}
 
 		[DllImport("Shell32", CharSet=CharSet.Auto)]
-		private static extern bool Shell_NotifyIcon(int dwMessage, ref NOTIFYICONDATA lpData);
+		private static extern bool Shell_NotifyIcon(uint dwMessage, ref NOTIFYICONDATA lpData);
 
-		public void ShowBalloon(EBalloonIcon Icon, string Text, string Title, [Optional] int Timeout /* = 0x3a98 */)
+		public void ShowBalloon(EBalloonIcon icon, string text, string title, [Optional] int timeout /* = 0x3a98 */)
 		{
 			this.m_VisibleBeforeBalloon = this.m_Visible;
 			this.NID.uFlags |= 0x10;
-			this.NID.uVersion = Timeout;
-			this.NID.szInfo = Text;
-			this.NID.szInfoTitle = Title;
-			this.NID.dwInfoFlags = Convert.ToInt32((int) Icon);
+			this.NID.uVersion = timeout;
+			this.NID.szInfo = text;
+			this.NID.szInfoTitle = title;
+			this.NID.dwInfoFlags = Convert.ToInt32((int) icon);
 			if (!this.Visible)
 			{
 				this.Visible = true;
@@ -414,7 +414,7 @@ namespace HansBlomme.Windows.Forms
 			}
 
 			[DllImport("User32", CharSet=CharSet.Auto)]
-			private static extern int RegisterWindowMessage(string lpString);
+			private static extern uint RegisterWindowMessage(string lpString);
 
 			protected override void WndProc(ref Message m)
 			{
@@ -550,7 +550,7 @@ namespace HansBlomme.Windows.Forms
 			private const int WM_RBUTTONDBLCLK = 0x206;
 			private const int WM_RBUTTONDOWN = 0x204;
 			private const int WM_RBUTTONUP = 0x205;
-			private int WM_TASKBARCREATED;
+			private uint WM_TASKBARCREATED;
 			private const int WM_USER = 0x400;
 			private const int WM_USER_TRAY = 0x401;
 

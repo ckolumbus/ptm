@@ -48,8 +48,6 @@ namespace PTM
 			Application.DoEvents();
 			InitializeTabPages();
 			base.Text += " " + ConfigurationHelper.GetVersionString();
-			this.tasksLogControl.Exit += new EventHandler(Exit);
-			//LoadIconsFromResources();
 			Application.DoEvents();
 			UpdateStartUpPath();
 			Application.DoEvents();
@@ -80,6 +78,7 @@ namespace PTM
 			this.tasksLogControl.Size = new Size(408, 358);
 			this.tasksLogControl.TabIndex = 0;
 			this.tasksLogControl.StatusChanged += new AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
+			this.tasksLogControl.Exit += new EventHandler(Exit);
 
 			this.summaryPage.Controls.Add(this.summaryControl);
 			// 
@@ -342,7 +341,8 @@ namespace PTM
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			this.statusBar.Text = ((AddinTabPage) this.tabControl.SelectedTab.Controls[0]).Status;
+			if(this.tabControl.SelectedTab!=null && this.tabControl.SelectedTab.Controls.Count>0)
+				this.statusBar.Text = ((AddinTabPage) this.tabControl.SelectedTab.Controls[0]).Status;
 			//this.tasksLogControl.NewTaskLog(true);
 			Logs.StartLogging();
 		} //MainForm_Load

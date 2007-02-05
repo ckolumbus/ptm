@@ -807,11 +807,12 @@ namespace PTM.View.Controls
 		{
 			if (e.Action == DataRowAction.Delete)
 			{
-				foreach (ListViewItem item in this.taskList.Items)
+				for (int i =0; i<this.taskList.Items.Count;i++)
 				{
-					if (((Log) item.Tag).TaskId == e.Task.Id)
+					if (((Log) this.taskList.Items[i].Tag).TaskId == e.Task.Id)
 					{
-						item.Remove();
+						this.taskList.Items.RemoveAt(i);
+						return;
 					}
 				}
 			}

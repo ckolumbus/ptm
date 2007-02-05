@@ -94,8 +94,21 @@ namespace PTM.Framework
 			return null;
 		}
 
-		public static int AddTask(Task task)
+		public static Task AddTask(string description, int parentId)
 		{
+			return AddTask(description, parentId, true, IconsManager.DefaultTaskIconId);
+		}
+		public static Task AddTask(string description, int parentId, bool isActive)
+		{
+			return AddTask(description, parentId, true);
+		}
+		public static Task AddTask(string description, int parentId, bool isActive, int iconId)
+		{
+			Task task = new Task();
+			task.Description = description;
+			task.ParentId = parentId;
+			task.IsActive = isActive;
+			task.IconId = iconId;
 			ValidateTaskData(ref task);
 			Task sameTaskByDescription;
 			sameTaskByDescription = FindByParentIdAndDescription(task.ParentId, task.Description);
@@ -111,7 +124,7 @@ namespace PTM.Framework
 				TaskChanged(new TaskChangeEventArgs(task.Clone(), DataRowAction.Add));
 			}
 
-			return task.Id;
+			return task.Clone();
 		}
 
 		public static void UpdateTask(Task task)
@@ -126,7 +139,7 @@ namespace PTM.Framework
 			{
 				//Task needs to be merged with sameTaskByDescription, task will be deleted
 				Logs.ChangeLogsTaskId(task.Id, sameTaskByDescription.Id);
-				DeleteTask(task);
+				DeleteTask(task.Id);
 				return;
 			}
 
@@ -148,41 +161,41 @@ namespace PTM.Framework
 				TaskChanged(new TaskChangeEventArgs(task, DataRowAction.Change));
 		}
 
-		public static void DeleteTask(Task task)
+		public static void DeleteTask(int taskId)
 		{
 			if (CurrentTask != null)
-				if (CurrentTask.Id == task.Id || IsParent(task.Id, CurrentTask.Id) > 0)
+				if (CurrentTask.Id == taskId || IsParent(taskId, CurrentTask.Id) > 0)
 				{
 					throw new ApplicationException(
 						"This task can't be deleted now. You are currently working on it or in a part of it.");
 				}
 
-			if (task.Id == rootTask.Id || task.Id == idleTask.Id)
+			if (taskId == rootTask.Id || taskId == idleTask.Id)
 				throw new ApplicationException("This task can't be deleted.");
 
-			DeleteOnCascade(task);
+			DeleteOnCascade(taskId);
 
 			if (TaskDeleted != null)
 				TaskDeleted(new TaskChangeEventArgs(null, DataRowAction.Delete));
 		}
 
-		private static void DeleteOnCascade(Task task)
+		private static void DeleteOnCascade(int taskId)
 		{
 			Task[] childTasks;
 			while (true)
 			{
-				childTasks = GetChildTasks(task.Id);
+				childTasks = GetChildTasks(taskId);
 				if (childTasks.Length == 0)
 				{
 					if (TaskDeleting != null)
-						TaskDeleting(new TaskChangeEventArgs(task, DataRowAction.Delete));
+						TaskDeleting(new TaskChangeEventArgs(FindById(taskId), DataRowAction.Delete));
 					DbHelper.ExecuteNonQuery("DELETE FROM Tasks WHERE (Id = ?)",
 						new string[] {"Id"},
-						new object[] {task.Id});
+						new object[] {taskId});
 
 					for(int i = 0;i <tasks.Count;i++)
 					{
-						if(((Task)tasks[i]).Id == task.Id)
+						if(((Task)tasks[i]).Id == taskId)
 						{
 							tasks.RemoveAt(i);
 							break;
@@ -191,7 +204,7 @@ namespace PTM.Framework
 					return;
 				}
 				Task child = childTasks[0];
-				DeleteOnCascade(child);
+				DeleteOnCascade(child.Id);
 			}
 		}
 
@@ -298,6 +311,7 @@ namespace PTM.Framework
 					task.ParentId = (int) row["ParentId"];
 				task.IconId = (int) row["IconId"];
 				task.IsActive = (bool) row["IsActive"];
+				tasks.Add(task);
 			}
 			if (tasks.Count == 0)
 			{

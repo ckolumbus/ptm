@@ -16,14 +16,14 @@ namespace PTM.Framework
 
 		#region Private Methods
 
-		private static ArrayList GetApplicationsRecursiveSummary(Task parentRow, DateTime ini, DateTime end)
+		private static ArrayList GetApplicationsRecursiveSummary(int parentTaskId, DateTime ini, DateTime end)
 		{
 			ArrayList arrayHT = DbHelper.ExecuteGetRows(
 				"SELECT TasksLog.TaskId, Sum(ApplicationsLog.ActiveTime) AS TotalActiveTime, ApplicationsLog.Name, ApplicationsLog.ApplicationFullPath " +
 				"FROM TasksLog INNER JOIN ApplicationsLog ON TasksLog.Id = ApplicationsLog.TaskLogId " +
 				"WHERE TasksLog.Id IN (select TasksLog.Id from TasksLog where TasksLog.TaskId=? and TasksLog.InsertTime>=? and TasksLog.InsertTime<=?) " +
 				"GROUP BY TasksLog.TaskId, ApplicationsLog.Name, ApplicationsLog.ApplicationFullPath",
-				new string[] {"TaskId", "InsertTime1", "InsertTime2"}, new object[] {parentRow.Id, ini, end});
+				new string[] {"TaskId", "InsertTime1", "InsertTime2"}, new object[] {parentTaskId, ini, end});
 
 			ArrayList tempDataset = new ArrayList();
 			foreach (IDictionary dictionary in arrayHT)
@@ -38,10 +38,10 @@ namespace PTM.Framework
 
 			ArrayList appSumaryList = MergeApplicationSummaryLists(new ArrayList(), tempDataset);
 			Task[] childRows;
-			childRows = Tasks.GetChildTasks(parentRow.Id);
+			childRows = Tasks.GetChildTasks(parentTaskId);
 			foreach (Task childRow in childRows)
 			{
-				appSumaryList = MergeApplicationSummaryLists(appSumaryList, GetApplicationsRecursiveSummary(childRow, ini, end));
+				appSumaryList = MergeApplicationSummaryLists(appSumaryList, GetApplicationsRecursiveSummary(childRow.Id, ini, end));
 			} //foreach
 			return appSumaryList;
 		} //GetApplicationsRecursiveSummary
@@ -77,10 +77,10 @@ namespace PTM.Framework
 
 		#region Public Methods
 
-		public static ArrayList GetApplicationsSummary(Task parentRow, DateTime ini, DateTime end)
+		public static ArrayList GetApplicationsSummary(int parentTaskId, DateTime ini, DateTime end)
 		{
 			ApplicationsLog.UpdateCurrentApplicationsLog();
-			return GetApplicationsRecursiveSummary(parentRow, ini, end);
+			return GetApplicationsRecursiveSummary(parentTaskId, ini, end);
 		} //GetApplicationsSummary
 
 		#endregion

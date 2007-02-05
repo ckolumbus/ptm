@@ -8,7 +8,7 @@ namespace System.Runtime.InteropServices.APIs
 //		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 //		internal static extern uint SendInput(uint nInputs, APIsStructs.INPUT[] inputs, int cbSize);
 //
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
+		[DllImport("user32.dll", CharSet=CharSet.Auto, SetLastError=true)]
 		internal static extern bool ScreenToClient(IntPtr hWnd, ref APIsStructs.POINTAPI point);
 //
 //		[DllImport("user32.dll", CharSet=CharSet.Auto)]

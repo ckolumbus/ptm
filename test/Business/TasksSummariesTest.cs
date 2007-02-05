@@ -29,33 +29,17 @@ namespace PTM.Test.Framework
 		[Test]
 		public void GetTaskSummaryTest()
 		{
-			Task row1;
-			row1 = new Task();
-			row1.Description = "TaskTest1";
-			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.IsActive = true;
-			row1.Id = Tasks.AddTask(row1);
+			Task task1;
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id, true);
 			
-			Task row2;
-			row2 = new Task();
-			row2.Description = "TaskTest2";
-			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.IsActive = true;
-			row2.Id = Tasks.AddTask(row2);
+			Task task2;
+			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id, true);
 			
-			Task row3;
-			row3 = new Task();
-			row3.Description = "TaskTest3";
-			row3.ParentId = row1.Id;
-			row3.IsActive = true;
-			row3.Id = Tasks.AddTask(row3);
+			Task task3;
+			task3 = Tasks.AddTask("TaskTest3", task1.Id, true);
 			
-			Task row4;
-			row4 = new Task();
-			row4.Description = "TaskTest4";
-			row4.ParentId = row1.Id;
-			row4.IsActive = false;
-			row4.Id = Tasks.AddTask(row4);
+			Task task4;
+			task4 = Tasks.AddTask("TaskTest4", task1.Id, false);
 
 //			Task row4;
 //			row4 = new Task();
@@ -66,24 +50,24 @@ namespace PTM.Test.Framework
 //			row4.Id = Tasks.AddTasksRow(row4);
 
 			Logs.StartLogging();
-			Logs.AddLog(row1.Id);
+			Logs.AddLog(task1.Id);
 			Thread.Sleep(3000);
-			Logs.AddLog(row1.Id);
+			Logs.AddLog(task1.Id);
 			Thread.Sleep(2000);
 
-			Logs.AddLog(row2.Id);
+			Logs.AddLog(task2.Id);
 			Thread.Sleep(1000);
-			Logs.AddLog(row2.Id);
+			Logs.AddLog(task2.Id);
 			Thread.Sleep(1000);
 
-			Logs.AddLog(row3.Id);
+			Logs.AddLog(task3.Id);
 			Thread.Sleep(1000);
-			Logs.AddLog(row3.Id);
+			Logs.AddLog(task3.Id);
 			Thread.Sleep(2000);
 
-			Logs.AddLog(row4.Id);
+			Logs.AddLog(task4.Id);
 			Thread.Sleep(1000);
-			Logs.AddLog(row4.Id);
+			Logs.AddLog(task4.Id);
 			Thread.Sleep(2000);
 
 			Logs.StopLogging();
@@ -96,40 +80,40 @@ namespace PTM.Test.Framework
 			ArrayList result;
 			result = TasksSummaries.GetTaskSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
-			TaskSummary sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row1.Id);
+			TaskSummary sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task1.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 8);
 			Assert.IsTrue(sum1.TotalInactiveTime >= 3);
-			TaskSummary sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, row2.Id);
+			TaskSummary sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, task2.Id);
 			Assert.IsTrue(sum2.TotalActiveTime >= 2);
 			Assert.IsTrue(sum2.TotalInactiveTime == 0);
 
-			result = TasksSummaries.GetTaskSummary(row1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(task1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(3, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row1.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task1.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 5);
 			Assert.IsTrue(sum1.TotalInactiveTime == 0);
-			sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, row3.Id);
+			sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, task3.Id);
 			Assert.IsTrue(sum2.TotalActiveTime >= 3);
 			Assert.IsTrue(sum2.TotalInactiveTime == 0);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row4.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task4.Id);
 			Assert.IsTrue(sum1.TotalActiveTime == 0);
 			Assert.IsTrue(sum1.TotalInactiveTime >= 3);
 
-			result = TasksSummaries.GetTaskSummary(row3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(task3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row3.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task3.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 3);
 			Assert.IsTrue(sum1.TotalInactiveTime == 0);
 
-			result = TasksSummaries.GetTaskSummary(row4, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(task4, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row4.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task4.Id);
 			Assert.IsTrue(sum1.TotalActiveTime == 0);
 			Assert.IsTrue(sum1.TotalInactiveTime >= 3);
 
-			result = TasksSummaries.GetTaskSummary(row2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(task2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, row2.Id);
+			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task2.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 2);
 		}
 

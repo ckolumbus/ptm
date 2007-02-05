@@ -56,11 +56,7 @@ namespace PTM.Test.Framework
 		[Test]
 		public void AddTasksLogRowTest()
 		{
-			Task taskrow;
-			taskrow = new Task();
-			taskrow.Description = "AddTaskTest";
-			taskrow.ParentId = Tasks.RootTasksRow.Id;
-			int id = Tasks.AddTask(taskrow);
+			int id = Tasks.AddTask("AddTaskTest", Tasks.RootTasksRow.Id).Id;
 
 			Log log;
 			log = Logs.AddLog(id);
@@ -77,25 +73,18 @@ namespace PTM.Test.Framework
 		[Test]
 		public void UpdateTaskLogTest()
 		{
-			Task taskrow1;
-			taskrow1 = new Task();
-			taskrow1.Description = "TaskTest1";
-			taskrow1.ParentId = Tasks.RootTasksRow.Id;
-			taskrow1.Id = Tasks.AddTask(taskrow1);
 
-			Task taskrow2;
-			taskrow2 = new Task();
-			taskrow2.Description = "TaskTest2";
-			taskrow2.ParentId = Tasks.RootTasksRow.Id;
-			taskrow2.Id = Tasks.AddTask(taskrow2);
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
+
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
 
 			Log logRow;
-			logRow = Logs.AddLog(taskrow1.Id);
+			logRow = Logs.AddLog(taskId1);
 
-			logRow.TaskId = taskrow2.Id;
+			logRow.TaskId = taskId2;
 			Logs.UpdateLogTaskId(logRow.Id, logRow.TaskId);
 
-			Assert.AreEqual(taskrow2.Id, Tasks.CurrentTask.Id);
+			Assert.AreEqual(taskId2, Tasks.CurrentTask.Id);
 			Assert.AreEqual(1, this.tasksLogRowChangedEvent_RowUpdatedCount);
 		}
 		
@@ -104,10 +93,7 @@ namespace PTM.Test.Framework
 		public void DeleteTaskLogTest()
 		{
 			Task taskrow1;
-			taskrow1 = new Task();
-			taskrow1.Description = "TaskTest1";
-			taskrow1.ParentId = Tasks.RootTasksRow.Id;
-			taskrow1.Id = Tasks.AddTask(taskrow1);
+			taskrow1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
 
 			Log log1;
 			log1 = Logs.AddLog(taskrow1.Id);
@@ -163,10 +149,7 @@ namespace PTM.Test.Framework
 		public void GetLogsByDayTest()
 		{
 			Task taskrow1;
-			taskrow1 = new Task();
-			taskrow1.Description = "TaskTest1";
-			taskrow1.ParentId = Tasks.RootTasksRow.Id;
-			taskrow1.Id = Tasks.AddTask(taskrow1);
+			taskrow1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
 
 			Logs.AddLog(taskrow1.Id);
 			Logs.AddLog(taskrow1.Id);
@@ -182,10 +165,7 @@ namespace PTM.Test.Framework
 		public void GetLogsByTaskTest()
 		{
 			Task taskrow1;
-			taskrow1 = new Task();
-			taskrow1.Description = "TaskTest1";
-			taskrow1.ParentId = Tasks.RootTasksRow.Id;
-			taskrow1.Id = Tasks.AddTask(taskrow1);
+			taskrow1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
 
 			Logs.AddLog(taskrow1.Id);
 			Logs.AddLog(taskrow1.Id);
@@ -201,10 +181,7 @@ namespace PTM.Test.Framework
 		public void ChangeLogsTaskIdTest()
 		{
 			Task taskrow1;
-			taskrow1 = new Task();
-			taskrow1.Description = "TaskTest1";
-			taskrow1.ParentId = Tasks.RootTasksRow.Id;
-			taskrow1.Id = Tasks.AddTask(taskrow1);
+			taskrow1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
 
 			Logs.AddLog(taskrow1.Id);
 			Logs.AddLog(taskrow1.Id);
@@ -213,10 +190,7 @@ namespace PTM.Test.Framework
 			Logs.AddLog(taskrow1.Id);
 			
 			Task taskrow2;
-			taskrow2 = new Task();
-			taskrow2.Description = "TaskTest2";
-			taskrow2.ParentId = Tasks.RootTasksRow.Id;
-			taskrow2.Id = Tasks.AddTask(taskrow2);
+			taskrow2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id);
 			
 			Logs.ChangeLogsTaskId(taskrow1.Id, taskrow2.Id);
 			

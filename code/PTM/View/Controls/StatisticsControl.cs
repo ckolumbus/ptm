@@ -430,7 +430,7 @@ namespace PTM.View.Controls
 			}
 
 			ArrayList appsSummaryList = ApplicationSummaries.GetApplicationsSummary(
-				Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
+				(int) this.parentTaskComboBox.SelectedValue,
 				fromDate, toDate);
 
 			return appsSummaryList;

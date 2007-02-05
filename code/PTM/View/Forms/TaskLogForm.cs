@@ -327,10 +327,7 @@ namespace PTM.View.Forms
 
 				if (row == null)
 				{
-					this.selectedTaskRow = new Task();
-					this.selectedTaskRow.Description = description;
-					this.selectedTaskRow.ParentId = this.tasksTree.SelectedTaskId;
-					this.selectedTaskRow.Id = Tasks.AddTask(this.selectedTaskRow);
+					this.selectedTaskRow = Tasks.AddTask(description, this.tasksTree.SelectedTaskId);
 				}
 				else
 				{

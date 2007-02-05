@@ -29,45 +29,33 @@ namespace PTM.Test.Framework
 		[Test]
 		public void GetApplicationSummaryTest()
 		{
-			Task row1;
-			row1 = new Task();
-			row1.Description = "TaskTest1";
-			row1.ParentId = Tasks.RootTasksRow.Id;
-			row1.Id = Tasks.AddTask(row1);
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
 
-			Task row2;
-			row2 = new Task();
-			row2.Description = "TaskTest2";
-			row2.ParentId = Tasks.RootTasksRow.Id;
-			row2.Id = Tasks.AddTask(row2);
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
 
-			Task row3;
-			row3 = new Task();
-			row3.Description = "TaskTest3";
-			row3.ParentId = row1.Id;
-			row3.Id = Tasks.AddTask(row3);
+			int taskId3 = Tasks.AddTask("TaskTest3", taskId1).Id;
 
 			Logs.StartLogging();
-			Logs.AddLog(row1.Id);
+			Logs.AddLog(taskId1);
 			Thread.Sleep(9000);
-			Logs.AddLog(row1.Id);
+			Logs.AddLog(taskId1);
 			Thread.Sleep(5000);
 
-			Logs.AddLog(row2.Id);
+			Logs.AddLog(taskId2);
 			Thread.Sleep(8000);
-			Logs.AddLog(row2.Id);
+			Logs.AddLog(taskId2);
 			Thread.Sleep(9000);
 
-			Logs.AddLog(row3.Id);
+			Logs.AddLog(taskId3);
 			Thread.Sleep(9000);
-			Logs.AddLog(row3.Id);
+			Logs.AddLog(taskId3);
 			Thread.Sleep(7000);
 
 			Logs.StopLogging();
 
 			ArrayList result;
 			result =
-				ApplicationSummaries.GetApplicationsSummary(Tasks.RootTasksRow, DateTime.Today,
+				ApplicationSummaries.GetApplicationsSummary(Tasks.RootTasksRow.Id, DateTime.Today,
 				                                            DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.IsTrue(result.Count > 0);
 			double total = 0;
@@ -77,7 +65,7 @@ namespace PTM.Test.Framework
 			}
 			Assert.IsTrue(total > 0);
 
-			result = ApplicationSummaries.GetApplicationsSummary(row1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = ApplicationSummaries.GetApplicationsSummary(taskId1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			double totalTask1 = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{
@@ -86,7 +74,7 @@ namespace PTM.Test.Framework
 			Assert.IsTrue(totalTask1 > 0);
 			Assert.IsTrue(totalTask1 < total);
 
-			result = ApplicationSummaries.GetApplicationsSummary(row2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = ApplicationSummaries.GetApplicationsSummary(taskId2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			double totalTask2 = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{
@@ -95,7 +83,7 @@ namespace PTM.Test.Framework
 			Assert.IsTrue(totalTask2 > 0);
 			Assert.IsTrue(totalTask2 < total);
 
-			result = ApplicationSummaries.GetApplicationsSummary(row3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = ApplicationSummaries.GetApplicationsSummary(taskId3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			double totalTask3 = 0;
 			foreach (ApplicationSummary applicationSummary in result)
 			{

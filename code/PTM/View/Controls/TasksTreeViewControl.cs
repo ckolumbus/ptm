@@ -163,14 +163,10 @@ namespace PTM.View.Controls
 
 		internal void AddNewTask()
 		{
-			Task row = new Task();
-			row.Description = NEW_TASK;
-			row.ParentId = (int) treeView.SelectedNode.Tag;
-			row.IsActive = true;
-
+			int newId=0;
 			try
 			{
-				row.Id = Tasks.AddTask(row);
+				newId = Tasks.AddTask(NEW_TASK, (int) treeView.SelectedNode.Tag).Id;
 			}
 			catch (ApplicationException aex)
 			{
@@ -178,7 +174,7 @@ namespace PTM.View.Controls
 			}
 			Application.DoEvents();//first insert the new node (event fired)
 			treeView.LabelEdit = true;
-			TreeNode node = FindTaskNode(row.Id);
+			TreeNode node = FindTaskNode(newId);
 			node.EnsureVisible();
 			treeView.SelectedNode = node;
 			node.BeginEdit();
@@ -199,12 +195,10 @@ namespace PTM.View.Controls
 			    	MessageBoxOptions.DefaultDesktopOnly)
 			    == DialogResult.OK)
 			{
-				Task row;
-				row = Tasks.FindById((int) treeView.SelectedNode.Tag);
 				try
 				{
 					Cursor.Current = Cursors.WaitCursor;
-					Tasks.DeleteTask(row);
+					Tasks.DeleteTask((int) treeView.SelectedNode.Tag);
 				}
 				catch (ApplicationException aex)
 				{
@@ -370,24 +364,28 @@ namespace PTM.View.Controls
 		[DllImport("comctl32.dll")]
 		internal static extern bool InitCommonControls();
 
-		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		internal static extern bool ImageList_BeginDrag(IntPtr himlTrack, int
-		                                                                  	iTrack, int dxHotspot, int dyHotspot);
+		[DllImport("comctl32.dll", CharSet = CharSet.Auto)]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		internal static extern bool ImageList_BeginDrag(IntPtr himlTrack, int iTrack, int dxHotspot, int dyHotspot);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ImageList_DragMove(int x, int y);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
 		internal static extern void ImageList_EndDrag();
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ImageList_DragEnter(IntPtr hwndLock, int x, int y);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ImageList_DragLeave(IntPtr hwndLock);
 
 		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		internal static extern bool ImageList_DragShowNolock(bool fShow);
+		[return: MarshalAs(UnmanagedType.Bool)]
+		internal static extern bool ImageList_DragShowNolock([MarshalAs(UnmanagedType.Bool)]bool fShow);
 
 		private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
 		{
