@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
-using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.View;
@@ -179,6 +178,7 @@ namespace PTM
 			{
 				main.HandleCreated += new EventHandler(main_HandleCreated);
 			}
+			GC.Collect();
 			splash.SetLoadProgress(100);
 			splash.Refresh();
 			Application.DoEvents();

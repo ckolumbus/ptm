@@ -74,23 +74,19 @@ namespace PTM.Framework
 
 		public static Task FindById(int taskId)
 		{
-			for(int i = 0;i<tasks.Count;i++)
-			{
-				Task task = (Task)tasks[i];
-				if(task.Id == taskId)
-					return task.Clone();
-			}
+			Task task;
+			task = InternalFindById(taskId);
+			if(task!=null)
+				return task.Clone();
 			return null;
 		}
 
 		public static Task FindByParentIdAndDescription(int parentId, string description)
 		{
-			for(int i = 0;i<tasks.Count;i++)
-			{
-				Task task = (Task) tasks[i];
-				if(task.ParentId == parentId && string.Compare(task.Description, description) ==0)
-					return task.Clone();
-			}
+			Task task;
+			task = InternalFindByParentIdAndDescription(parentId, description);
+			if(task!=null)
+				return task.Clone();
 			return null;
 		}
 
@@ -111,7 +107,7 @@ namespace PTM.Framework
 			task.IconId = iconId;
 			ValidateTaskData(ref task);
 			Task sameTaskByDescription;
-			sameTaskByDescription = FindByParentIdAndDescription(task.ParentId, task.Description);
+			sameTaskByDescription = InternalFindByParentIdAndDescription(task.ParentId, task.Description);
 
 			if (sameTaskByDescription != null)
 				throw new ApplicationException("Task already exist");
@@ -134,7 +130,7 @@ namespace PTM.Framework
 				throw new ApplicationException("This task can't be updated.");
 			ValidateTaskData(ref task);
 			Task sameTaskByDescription;
-			sameTaskByDescription = FindByParentIdAndDescription(task.ParentId, task.Description);
+			sameTaskByDescription = InternalFindByParentIdAndDescription(task.ParentId, task.Description);
 			if (sameTaskByDescription != null && sameTaskByDescription.Id != task.Id)
 			{
 				//Task needs to be merged with sameTaskByDescription, task will be deleted
@@ -188,7 +184,7 @@ namespace PTM.Framework
 				if (childTasks.Length == 0)
 				{
 					if (TaskDeleting != null)
-						TaskDeleting(new TaskChangeEventArgs(FindById(taskId), DataRowAction.Delete));
+						TaskDeleting(new TaskChangeEventArgs(InternalFindById(taskId).Clone(), DataRowAction.Delete));
 					DbHelper.ExecuteNonQuery("DELETE FROM Tasks WHERE (Id = ?)",
 						new string[] {"Id"},
 						new object[] {taskId});
@@ -211,7 +207,7 @@ namespace PTM.Framework
 		public static Task[] GetChildTasks(int taskId)
 		{
 			Task task;
-			task = FindById(taskId);
+			task = InternalFindById(taskId);
 			if(task==null)
 				return new Task[]{};
 
@@ -220,7 +216,7 @@ namespace PTM.Framework
 			{
 				if(((Task)tasks[i]).ParentId == task.Id)
 				{
-					childs.Add((tasks[i]));
+					childs.Add(((Task)tasks[i]).Clone());
 				}
 			}
 
@@ -230,7 +226,7 @@ namespace PTM.Framework
 		public static string GetFullPath(int taskId)
 		{
 			Task task;
-			task = FindById(taskId);
+			task = InternalFindById(taskId);
 			ArrayList parents = new ArrayList();
 			Task cur = task;
 			while (true)
@@ -238,7 +234,7 @@ namespace PTM.Framework
 				if (cur.ParentId==-1)
 					break;
 				parents.Insert(0, cur);
-				cur = FindById(cur.ParentId);
+				cur = InternalFindById(cur.ParentId);
 			}
 			StringBuilder path = new StringBuilder();
 			foreach (Task tasksRow in parents)
@@ -254,10 +250,10 @@ namespace PTM.Framework
 		public static int IsParent(int parentTaskId, int childTaskId)
 		{
 			Task parent;
-			parent = FindById(parentTaskId);
+			parent = InternalFindById(parentTaskId);
 
 			Task child;
-			child = FindById(childTaskId);
+			child = InternalFindById(childTaskId);
 
 			if (parent == null || child == null)
 				return -1;
@@ -275,7 +271,7 @@ namespace PTM.Framework
 			while (true)
 			{
 				Task cur;
-				cur = FindById(parentId);
+				cur = InternalFindById(parentId);
 				if (cur.Id == parent.Id) return generation;
 				if (cur.ParentId==-1) return -1;
 				parentId = cur.ParentId;
@@ -286,7 +282,7 @@ namespace PTM.Framework
 		public static void UpdateParentTask(int taskId, int parentId)
 		{
 			Task task;
-			task = FindById(taskId);
+			task = InternalFindById(taskId);
 			if (task.Id == rootTask.Id || task.Id == idleTask.Id)
 				throw new ApplicationException("This task can't be updated.");
 			task.ParentId = parentId;
@@ -399,34 +395,27 @@ namespace PTM.Framework
 			
 		}
 
-		
-//		private static Task[] CloneRows(Task[] tasksRows)
-//		{
-//			Task[] rowsCopy = new Task[tasksRows.Length];
-//			int i = 0;
-//			foreach (Task row in tasksRows)
-//			{
-//				rowsCopy[i] = CloneRow(row);
-//				i++;
-//			}
-//			return rowsCopy;
-//		}
+		private static Task InternalFindById(int taskId)
+		{
+			for(int i = 0;i<tasks.Count;i++)
+			{
+				Task task = (Task)tasks[i];
+				if(task.Id == taskId)
+					return task;
+			}
+			return null;
+		}
 
-//		private static void ManageTaskLogRowChanged(Logs.LogChangeEventArgs e)
-//		{
-//			if (e.Log.Id == Logs.CurrentLog.Id)
-//			{
-//				if (currentTask == null || e.Log.TaskId != currentTask.Id)
-//				{
-//					currentTask = tasks.FindById(e.Log.TaskId);
-//					if (currentTask.IsStartDateNull())
-//					{
-//						currentTask.StartDate = DateTime.Now;
-//						SaveTasks();
-//					}
-//				}
-//			}
-//		}
+		private static Task InternalFindByParentIdAndDescription(int parentId, string description)
+		{
+			for(int i = 0;i<tasks.Count;i++)
+			{
+				Task task = (Task) tasks[i];
+				if(task.ParentId == parentId && string.Compare(task.Description, description) ==0)
+					return task;
+			}
+			return null;
+		}
 
 		private static void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
