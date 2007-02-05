@@ -531,10 +531,11 @@ namespace PTM.View.Controls.TreeListViewComponents
 			_items = new TreeListViewItemCollection(this);
 			_items.SortOrder = _sorting;
 			_comctl32Version = APIsComctl32.GetMajorVersion();
-
-			int style = APIsUser32.SendMessage(Handle, (int) APIsEnums.ListViewMessages.GETEXTENDEDLISTVIEWSTYLE, 0, 0);
-			style |= (int) (APIsEnums.ListViewExtendedStyles.INFOTIP | APIsEnums.ListViewExtendedStyles.LABELTIP);
-			APIsUser32.SendMessage(Handle, (int) APIsEnums.ListViewMessages.SETEXTENDEDLISTVIEWSTYLE, 0, style);
+			IntPtr stylePtr = APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.GETEXTENDEDLISTVIEWSTYLE, IntPtr.Zero, IntPtr.Zero);
+			int style = stylePtr.ToInt32();
+            style |= (int) (APIsEnums.ListViewExtendedStyles.INFOTIP | APIsEnums.ListViewExtendedStyles.LABELTIP);
+			stylePtr = (IntPtr) style;
+			APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.SETEXTENDEDLISTVIEWSTYLE, IntPtr.Zero, stylePtr);
 		}
 		#endregion
 		#region WndProc
@@ -733,12 +734,14 @@ namespace PTM.View.Controls.TreeListViewComponents
 						case (APIsEnums.ListViewNotifications) APIsEnums.HeaderControlNotifications.ENDDRAG:
 							nmheader =(APIsStructs.NMHEADER) m.GetLParam(typeof(APIsStructs.NMHEADER));
 							// Get mouse position in header coordinates
-							IntPtr headerHandle = (IntPtr) APIsUser32.SendMessage(Handle, (int) APIsEnums.ListViewMessages.GETHEADER, IntPtr.Zero, IntPtr.Zero);
+							IntPtr headerHandle = (IntPtr) APIsUser32.SendMessage(new HandleRef(this,  Handle), (int) APIsEnums.ListViewMessages.GETHEADER, IntPtr.Zero, IntPtr.Zero);
 							APIsStructs.POINTAPI pointapi = new APIsStructs.POINTAPI(MousePosition);
 							APIsUser32.ScreenToClient(headerHandle, ref pointapi);
 							// HeaderItem Rect
 							APIsStructs.RECT headerItemRect = new APIsStructs.RECT();
-							APIsUser32.SendMessage(headerHandle, (int)APIsEnums.HeaderControlMessages.GETITEMRECT, 0, ref headerItemRect);
+							
+							//APIsUser32.SendMessage(headerHandle, (int)APIsEnums.HeaderControlMessages.GETITEMRECT, IntPtr.Zero, ref headerItemRect);
+							APIsUser32.SendMessage(new HandleRef(this, headerHandle), (int)APIsEnums.HeaderControlMessages.GETITEMRECT, IntPtr.Zero, ref headerItemRect);
 							int headerItemWidth = headerItemRect.right - headerItemRect.left;
 							// Cancel the drag operation if the first column is moved
 							// or destination is the first column
@@ -770,6 +773,10 @@ namespace PTM.View.Controls.TreeListViewComponents
 						item = GetItemAtFullRow(PointToClient(MousePosition));
 						_lastitemclicked = new EditItemInformations(item, colclicked, "");
 						if(_selectionMark == null || !_selectionMark.Visible) _selectionMark = item;
+						if (item == null)
+						{
+							break;
+						}
 						if(((APIsEnums.KeyStatesMasks)(int)m.WParam & APIsEnums.KeyStatesMasks.SHIFT) != APIsEnums.KeyStatesMasks.SHIFT &&
 							!(((APIsEnums.KeyStatesMasks)(int)m.WParam & APIsEnums.KeyStatesMasks.CONTROL) == APIsEnums.KeyStatesMasks.CONTROL &&
 							item.Parent != _selectionMark.Parent))
@@ -777,7 +784,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 						// Get where the mouse has clicked
 					APIsStructs.LVHITTESTINFO lvhittest = new APIsStructs.LVHITTESTINFO();
 						lvhittest.pt = new APIsStructs.POINTAPI(PointToClient(MousePosition));
-						APIsUser32.SendMessage(Handle, (Int32) APIsEnums.ListViewMessages.HITTEST, 0, ref lvhittest);
+						APIsUser32.SendMessage(new HandleRef(this, Handle), (Int32) APIsEnums.ListViewMessages.HITTEST, IntPtr.Zero, ref lvhittest);
 						if(item == null) break;
 						// Plus / Minus click
 						if(item.GetBounds(TreeListViewItemBoundsPortion.PlusMinus).Contains(PointToClient(MousePosition)) &&
@@ -1263,7 +1270,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			public void KillFocus()
 			{
 				APIsUser32.SendMessage(
-					Handle,
+					new HandleRef(this, Handle),
 					(int) APIsEnums.WindowMessages.KILLFOCUS,
 					IntPtr.Zero,
 					IntPtr.Zero);
@@ -1538,7 +1545,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 		public int GetColumnIndex(int columnorder)
 		{
 			if(columnorder < 0 || columnorder > Columns.Count - 1) return(-1);
-			return APIsUser32.SendMessage(Handle, (int)APIsEnums.HeaderControlMessages.ORDERTOINDEX, columnorder, 0);
+			return APIsUser32.SendMessage(new HandleRef(this, Handle), (int)APIsEnums.HeaderControlMessages.ORDERTOINDEX, (IntPtr)columnorder, IntPtr.Zero).ToInt32();
 		}
 		/// <summary>
 		/// Gets the order of a specified column
@@ -1550,7 +1557,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			if(this.Columns.Count == 0) return(-1);
 			if(columnindex < 0 || columnindex > this.Columns.Count - 1) return(-1);
 			IntPtr[] colorderarray = new IntPtr[this.Columns.Count];
-			APIsUser32.SendMessage(this.Handle, (int) APIsEnums.ListViewMessages.GETCOLUMNORDERARRAY, (IntPtr) this.Columns.Count, ref colorderarray[0]);
+			APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.GETCOLUMNORDERARRAY, (IntPtr) this.Columns.Count, ref colorderarray[0]);
 			return((int) colorderarray[columnindex]);
 		}
 		/// <summary>
@@ -1563,7 +1570,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			IntPtr[] colorderarray = new IntPtr[this.Columns.Count];
 			try
 			{
-				APIsUser32.SendMessage(this.Handle, (int) APIsEnums.ListViewMessages.GETCOLUMNORDERARRAY, (IntPtr) this.Columns.Count, ref colorderarray[0]);
+				APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.GETCOLUMNORDERARRAY, (IntPtr) this.Columns.Count, ref colorderarray[0]);
 			}
 			catch{}
 			int[] colorderarrayint = new int[this.Columns.Count];
@@ -1585,7 +1592,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 				colorderarrayintptr[i] = (IntPtr) colorderarray[i];
 			try
 			{
-				APIsUser32.SendMessage(this.Handle, (int) APIsEnums.ListViewMessages.SETCOLUMNORDERARRAY, (IntPtr) this.Columns.Count, ref colorderarrayintptr[0]);
+				APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.SETCOLUMNORDERARRAY, (IntPtr) this.Columns.Count, ref colorderarrayintptr[0]);
 			}
 			catch{}
 			Refresh();
@@ -1612,7 +1619,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 		/// <param name="y"></param>
 		public void Scroll(int x, int y)
 		{
-			APIsUser32.SendMessage(Handle, (int) APIsEnums.ListViewMessages.SCROLL, x, y);
+			APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.SCROLL, (IntPtr)x, (IntPtr)y);
 		}
 		/// <summary>
 		/// Indicates the column order (for example : "3142")
@@ -1637,9 +1644,10 @@ namespace PTM.View.Controls.TreeListViewComponents
 		{
 			TreeListViewItemCollection visibleItems = new TreeListViewItemCollection();
 			if(base.Items.Count == 0) return visibleItems;
+			if (TopItem == null) return visibleItems;
 			int firstItemIndex = TopItem.Index;
 			int itemsPerPageCount =
-				APIsUser32.SendMessage(Handle, (int) APIsEnums.ListViewMessages.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero);
+				APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero).ToInt32();
 			int lastVisibleItemIndex = firstItemIndex + itemsPerPageCount > base.Items.Count ?
 				base.Items.Count : firstItemIndex + itemsPerPageCount;
 			for(int i = firstItemIndex; i < lastVisibleItemIndex; i++)
@@ -1656,9 +1664,9 @@ namespace PTM.View.Controls.TreeListViewComponents
 			APIsStructs.LVHITTESTINFO hittest = new APIsStructs.LVHITTESTINFO();
 			hittest.pt = new APIsStructs.POINTAPI(PointToClient(MousePosition));
 			APIsUser32.SendMessage(
-				Handle,
+				new HandleRef(this, Handle),
 				(Int32) APIsEnums.ListViewMessages.SUBITEMHITTEST,
-				0,
+				IntPtr.Zero,
 				ref hittest);
 			return(hittest.iSubItem);
 		}
@@ -1684,7 +1692,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			APIsStructs.RECT rc = new APIsStructs.RECT();
 			rc.top = col;
 			rc.left = (int)APIsEnums.ListViewSubItemPortion.BOUNDS;
-			APIsUser32.SendMessage(Handle, (int)APIsEnums.ListViewMessages.GETSUBITEMRECT,  row, ref rc);
+			APIsUser32.SendMessage(new HandleRef(this, Handle), (int)APIsEnums.ListViewMessages.GETSUBITEMRECT,  (IntPtr)row, ref rc);
 			
 			if ( col == 0 )
 			{
@@ -1708,7 +1716,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			hdi.mask = APIsEnums.HeaderItemFlags.TEXT;
 			hdi.cchTextMax =  255;
 			hdi.pszText = Marshal.AllocHGlobal(255);
-			APIsUser32.SendMessage(Handle, APIsEnums.HeaderControlMessages.GETITEMW, index, ref hdi);
+			APIsUser32.SendMessage(new HandleRef(this, Handle), APIsEnums.HeaderControlMessages.GETITEMW, (IntPtr)index, ref hdi);
 			string text = Marshal.PtrToStringAuto(hdi.pszText);
 			return text;
 		}
@@ -1721,7 +1729,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 		{
 			APIsStructs.RECT rc = new APIsStructs.RECT();
 			IntPtr header = APIsUser32.GetDlgItem(Handle, 0);
-			APIsUser32.SendMessage(header, (int)APIsEnums.HeaderControlMessages.GETITEMRECT, index, ref rc);
+			APIsUser32.SendMessage(new HandleRef(this, header), (int)APIsEnums.HeaderControlMessages.GETITEMRECT, (IntPtr)index, ref rc);
 			return new Rectangle((int)rc.left, (int)rc.top, (int)(rc.right-rc.left), (int)(rc.bottom-rc.top));
 		}
 		/// <summary>
@@ -1734,7 +1742,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			APIsStructs.RECT rc = new APIsStructs.RECT();
 			rc.top = 0;
 			rc.left = (int)APIsEnums.ListViewSubItemPortion.BOUNDS;
-			APIsUser32.SendMessage(Handle, (int)APIsEnums.ListViewMessages.GETSUBITEMRECT,  row, ref rc);
+			APIsUser32.SendMessage(new HandleRef(this, Handle), (int)APIsEnums.ListViewMessages.GETSUBITEMRECT,  (IntPtr)row, ref rc);
 			return new Rectangle((int)rc.left, (int)rc.top, (int)(rc.right-rc.left), (int)(rc.bottom-rc.top));
 		}
 		#endregion

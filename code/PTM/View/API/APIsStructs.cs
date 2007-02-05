@@ -772,18 +772,25 @@ namespace System.Runtime.InteropServices.APIs
 
 		#endregion
 
-		#region PCOMBOBOXINFO
+		#region COMBOBOXINFO
 
-		[StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-		internal struct PCOMBOBOXINFO
+		[StructLayout(LayoutKind.Sequential)]
+			public struct COMBOBOXINFO 
 		{
-			internal uint cbSize;
-			internal RECT rcItem;
-			internal RECT rcButton;
-			internal int stateButton;
-			internal IntPtr hwndCombo;
-			internal IntPtr hwndItem;
-			internal IntPtr hwndList;
+			public Int32 cbSize;
+			public RECT rcItem;
+			public RECT rcButton;
+			public ComboBoxButtonState buttonState;
+			public IntPtr hwndCombo;
+			public IntPtr hwndItem;
+			public IntPtr hwndList;
+		}
+
+		public enum ComboBoxButtonState 
+		{
+			STATE_SYSTEM_NONE = 0,
+			STATE_SYSTEM_INVISIBLE = 0x00008000,
+			STATE_SYSTEM_PRESSED = 0x00000008
 		}
 
 		#endregion

@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Addin;
-using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.Framework.Infos;

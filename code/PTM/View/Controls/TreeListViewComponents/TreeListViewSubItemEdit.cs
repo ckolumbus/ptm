@@ -113,8 +113,8 @@ namespace PTM.View.Controls.TreeListViewComponents
 			// If the control is a combobox don't end edit if the handle is a handle
 			// of one of the sub controls of the combobox
 			if(!(_control is ComboBox)) return true;
-			APIsStructs.PCOMBOBOXINFO info = new APIsStructs.PCOMBOBOXINFO();
-			info.cbSize = (uint)Marshal.SizeOf(typeof(APIsStructs.PCOMBOBOXINFO));
+			APIsStructs.COMBOBOXINFO info = new APIsStructs.COMBOBOXINFO();
+			info.cbSize = (int)Marshal.SizeOf(typeof(APIsStructs.COMBOBOXINFO));
 			if(!APIsUser32.GetComboBoxInfo(_control.Handle, ref info)) return true;
 			if(m.WParam == info.hwndCombo || m.WParam == info.hwndItem || m.WParam == info.hwndList)
 			{

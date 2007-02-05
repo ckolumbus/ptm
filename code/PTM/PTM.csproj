@@ -263,11 +263,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "View\API\APIsGdi.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "View\API\APIsStructs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

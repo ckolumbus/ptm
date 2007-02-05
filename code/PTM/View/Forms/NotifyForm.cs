@@ -238,6 +238,8 @@ namespace PTM.View.Forms
 			base.OnClosed(e);
 		}
 
+		static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+
 		public new void Show()
 		{
 			int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
@@ -249,7 +251,7 @@ namespace PTM.View.Forms
 			APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
 
 			// Equivalent to setting TopMost = true, except don't activate the window.
-			APIsUser32.SetWindowPos(this.Handle, -1, Left, Top, Width, Height, 4);
+			APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 4);
 
 			this.timer.Start();
 		}

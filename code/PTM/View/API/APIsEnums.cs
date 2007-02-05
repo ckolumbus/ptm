@@ -2,6 +2,7 @@ namespace System.Runtime.InteropServices.APIs
 {
 	internal class APIsEnums
 	{
+		
 		#region Window messages / WM
 
 		/// <summary>
@@ -538,7 +539,7 @@ namespace System.Runtime.InteropServices.APIs
 			BOTTOMALIGN = 0x0020,
 			HORIZONTAL = 0x0000,
 			VERTICAL = 0x0040,
-			NONOTIFY = 0x0080, /* Don't send any notification msgs */
+			NONOTIFY = 0x0080, // Don't send any notification msgs
 			RETURNCMD = 0x0100,
 			RECURSE = 0x0001,
 			HORPOSANIMATION = 0x0400,
@@ -1439,7 +1440,7 @@ namespace System.Runtime.InteropServices.APIs
 		/// <summary>
 		/// ShowWindow Styles / SW
 		/// </summary>
-		internal enum ShowWindowStyles : short
+		internal enum ShowWindowStyles : uint
 		{
 			HIDE = 0,
 			SHOWNORMAL = 1,
@@ -1893,5 +1894,6 @@ namespace System.Runtime.InteropServices.APIs
 			VIRTUALDESK = 0x4000,
 			ABSOLUTE = 0x8000,
 		}
+	
 	}
 }

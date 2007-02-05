@@ -472,9 +472,9 @@ namespace PTM.View.Controls.TreeListViewComponents
 			try
 			{
 				APIsUser32.SendMessage(
-					ListView.Handle,
+					new HandleRef(this, ListView.Handle),
 					(int)APIsEnums.ListViewMessages.REDRAWITEMS,
-					Index, Index);}
+					(IntPtr)Index, (IntPtr)Index);}
 			catch{}
 		}
 		/// <summary>
@@ -571,9 +571,9 @@ namespace PTM.View.Controls.TreeListViewComponents
 			try
 			{
 				APIsUser32.SendMessage(
-					ListView.Handle,
+					new HandleRef(this, ListView.Handle),
 					APIsEnums.ListViewMessages.SETITEM,
-					0,
+					IntPtr.Zero,
 					ref lvi);
 			}
 			catch

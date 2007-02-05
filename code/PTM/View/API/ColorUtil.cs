@@ -407,17 +407,17 @@ namespace System.Runtime.InteropServices.APIs
 
 		#region General functions
 
-		internal static Color ColorFromPoint(Graphics g, int x, int y)
-		{
-			IntPtr hDC = g.GetHdc();
-			// Get the color of the pixel first
-			uint colorref = APIsGdi.GetPixel(hDC, x, y);
-			byte Red = GetRValue(colorref);
-			byte Green = GetGValue(colorref);
-			byte Blue = GetBValue(colorref);
-			g.ReleaseHdc(hDC);
-			return Color.FromArgb(Red, Green, Blue);
-		}
+//		internal static Color ColorFromPoint(Graphics g, int x, int y)
+//		{
+//			IntPtr hDC = g.GetHdc();
+//			// Get the color of the pixel first
+//			uint colorref = APIsGdi.GetPixel(hDC, x, y);
+//			byte Red = GetRValue(colorref);
+//			byte Green = GetGValue(colorref);
+//			byte Blue = GetBValue(colorref);
+//			g.ReleaseHdc(hDC);
+//			return Color.FromArgb(Red, Green, Blue);
+//		}
 
 		internal static bool IsKnownColor(Color color, ref Color knownColor, bool useTransparent)
 		{

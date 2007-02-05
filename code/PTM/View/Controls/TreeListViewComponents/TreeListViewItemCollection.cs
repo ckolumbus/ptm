@@ -501,11 +501,12 @@ namespace PTM.View.Controls.TreeListViewComponents
 //				throw(new Exception("Invoke required"));
 			ListView listview = (ListView) TreeListView;
 			ListViewItem listviewitem = (ListViewItem) item;
-			try{
-				foreach(ListViewItem temp in listview.Items)
-					if(temp == listviewitem) return(true);}
-			catch{}
-			return(false);
+//			try{
+//				foreach(ListViewItem temp in listview.Items)
+//					if(temp == listviewitem) return(true);}
+//			catch{}
+//			return(false);
+			return listview.Items.Contains(listviewitem);
 		}
 		/// <summary>
 		/// Adds an item in the collection and in the TreeListView
@@ -606,7 +607,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 		{
 			if(TreeListView != null) TreeListView.BeginUpdate();
 			AddRangeInternal(collection);
-			if(TreeListView != null) TreeListView.BeginUpdate();
+			if(TreeListView != null) TreeListView.EndUpdate();
 		}
 		internal void AddRangeInternal(TreeListViewItemCollection collection)
 		{
