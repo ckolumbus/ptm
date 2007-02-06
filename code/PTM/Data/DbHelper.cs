@@ -77,6 +77,10 @@ namespace PTM.Data
 				cmd.Connection.Open();
 				return cmd.ExecuteNonQuery();
 			}
+			catch
+			{
+				throw;
+			}
 			finally
 			{
 				cmd.Connection.Close();
@@ -98,6 +102,10 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				return cmd.ExecuteNonQuery();
+			}
+			catch
+			{
+				throw;
 			}
 			finally
 			{
@@ -122,6 +130,10 @@ namespace PTM.Data
 					listDictionary.Add(reader.GetName(i), reader[i]);
 				reader.Close();
 				return listDictionary;
+			}
+			catch
+			{
+				throw;
 			}
 			finally
 			{
@@ -215,6 +227,10 @@ namespace PTM.Data
 				cmd = new OleDbCommand("SELECT @@IDENTITY", cmd.Connection);
 				return (int) cmd.ExecuteScalar();
 			}
+			catch
+			{
+				throw;
+			}
 			finally
 			{
 				cmd.Connection.Close();
@@ -230,6 +246,10 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				return cmd.ExecuteScalar();
+			}
+			catch
+			{
+				throw;
 			}
 			finally
 			{
@@ -252,6 +272,10 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				return cmd.ExecuteScalar();
+			}
+			catch
+			{
+				throw;
 			}
 			finally
 			{

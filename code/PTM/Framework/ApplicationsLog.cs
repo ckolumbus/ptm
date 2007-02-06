@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using PTM.Data;
@@ -21,49 +21,38 @@ namespace PTM.Framework
 		{
 		}
 
-		#region Attributes
-
+		
 		/// <summary>
 		/// Inner list of currently managed applications log.
 		/// </summary>
 		private static ArrayList currentApplicationsLog;
-
 		/// <summary>
 		/// Reference to the last evaluated process .
 		/// </summary>
-		private static Process lastProcess;
-
+		private static IntPtr lastProcess;
 		/// <summary>
 		/// Internal application timmer.
 		/// </summary>
 		private static Timer applicationsTimer;
-
 		/// <summary>
 		/// TimeStamp of the last logged time .
 		/// </summary>
 		private static DateTime lastCallTime;
-
 		/// <summary>
 		/// Internal Thread that controls the log.
 		/// </summary>
 		private static Thread loggingThread;
 
-		#endregion
-
-		#region Properties
-
-		#endregion
-
 		#region Public Methods
-
 		/// <summary>
 		/// Initializes static class attributes.
 		/// </summary>
 		public static void Initialize()
 		{
 			loggingThread = null;
-			lastProcess = null;
+			lastProcess = IntPtr.Zero;
 			applicationsTimer = new Timer(1000);
+			currentApplicationsLog = new ArrayList();
 
 			//Event Handling Initialization
 			applicationsTimer.Elapsed += new ElapsedEventHandler(ApplicationsTimer_Elapsed);
@@ -95,6 +84,31 @@ namespace PTM.Framework
 			} //foreach
 		} //UpdateCurrentApplicationsLog
 
+		/// <summary>
+		/// GetApplicationsLog retrieves each Application log related 
+		/// to a Task selected by its TaskLogId
+		/// </summary>
+		public static ArrayList GetApplicationsLog(int taskLogId)
+		{
+			ArrayList resultsHT =
+				DbHelper.ExecuteGetRows(
+				"SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
+				taskLogId.ToString());
+			ArrayList results = new ArrayList();
+			foreach (IDictionary dictionary in resultsHT)
+			{
+				ApplicationLog applicationLog = new ApplicationLog();
+				applicationLog.Id = (int) dictionary["Id"];
+				applicationLog.ProcessId = (int) dictionary["ProcessId"];
+				applicationLog.Name = (string) dictionary["Name"];
+				applicationLog.Caption = (string) dictionary["Caption"];
+				applicationLog.ApplicationFullPath = (string) dictionary["ApplicationFullPath"];
+				applicationLog.ActiveTime = (int) dictionary["ActiveTime"];
+				applicationLog.TaskLogId = taskLogId;
+				results.Add(applicationLog);
+			} //foreach
+			return results;
+		} //GetApplicationsLog
 		#endregion
 
 		#region Private Methods
@@ -105,38 +119,34 @@ namespace PTM.Framework
 		/// </summary>
 		private static void UpdateActiveProcess()
 		{
-			Process currentProcess = null;
+			//Process currentProcess = null;
+			IntPtr currentProcessId = IntPtr.Zero;
 			try
 			{
 				DateTime initCallTime = DateTime.Now;
 				applicationsTimer.Stop();
 
-				currentProcess = GetCurrentProcess();
-
-				if (currentProcess == null)
+				//currentProcess = GetCurrentProcess();
+				currentProcessId = GetCurrentProcess();
+				if (currentProcessId == IntPtr.Zero)
 				{
 					return;
 				}
 				else
 				{
 					// This is a PTM.Framework.Infos.ApplicationLog
-					ApplicationLog applicationLog = FindCurrentApplication(currentProcess.Id);
+					ApplicationLog applicationLog = FindCurrentApplication(currentProcessId.ToInt32());
 					if (applicationLog == null)
 					{
 						// First time this application is detected
 						ApplicationLog appLogRow = new ApplicationLog();
 						appLogRow.TaskLogId = Logs.CurrentLog.Id;
-						appLogRow.ProcessId = currentProcess.Id;
-						try
-						{
-							appLogRow.Name = currentProcess.MainModule.ModuleName;
-							appLogRow.ApplicationFullPath = currentProcess.MainModule.FileName;
-						}
-						catch (Win32Exception)
-						{
-							return;
-						} //try-catch
-						appLogRow.Caption = currentProcess.MainWindowTitle;
+						appLogRow.ProcessId = currentProcessId.ToInt32();
+						IntPtr processId;
+						IntPtr result = GetWindowThreadProcessId(currentProcessId, out processId);
+						appLogRow.ApplicationFullPath = GetFullPath(processId);
+						appLogRow.Name = GetFileName(processId);
+						appLogRow.Caption = GetText(currentProcessId);
 						appLogRow.ActiveTime = Convert.ToInt32((DateTime.Now - initCallTime).TotalSeconds);
 						appLogRow.LastUpdateTime = DateTime.Now;
 						InsertApplicationLog(appLogRow);
@@ -150,8 +160,8 @@ namespace PTM.Framework
 					}
 					else
 					{
-						applicationLog.Caption = currentProcess.MainWindowTitle;
-						if (currentProcess == lastProcess)
+						applicationLog.Caption = GetText(currentProcessId);
+						if (currentProcessId == lastProcess)
 						{
 							applicationLog.ActiveTime = Convert.ToInt32(
 								new TimeSpan(0, 0, applicationLog.ActiveTime).Add(DateTime.Now - applicationLog.LastUpdateTime).TotalSeconds);
@@ -174,7 +184,7 @@ namespace PTM.Framework
 			}
 			finally
 			{
-				lastProcess = currentProcess;
+				lastProcess = currentProcessId;
 				lastCallTime = DateTime.Now;
 				applicationsTimer.Start();
 			} //try-catch-finally
@@ -223,79 +233,62 @@ namespace PTM.Framework
 			return result;
 		} //FindCurrentApplication
 
+		[DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+		static extern int GetWindowText(IntPtr hWnd, [Out] StringBuilder lpString, int nMaxCount);
+		[DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+		static extern int GetWindowTextLength(IntPtr hWnd);
+		[DllImport("user32.dll")] 
+		private static extern IntPtr GetWindowThreadProcessId(IntPtr hwnd, out IntPtr lpdwProcessId);
+		[DllImport("psapi.dll")]
+		static extern int GetModuleFileNameEx(IntPtr hProcess, IntPtr hModule,  [Out] StringBuilder lpString, uint nSize);
+		[DllImport("psapi.dll")]
+		static extern uint GetModuleBaseName(IntPtr hProcess, IntPtr hModule, [Out] StringBuilder lpString, uint nSize);
+
+		public static string GetText(IntPtr hWnd)
+		{
+			// Allocate correct string length first
+			int length       = GetWindowTextLength(hWnd);
+			StringBuilder sb = new StringBuilder(length + 1);
+			GetWindowText(hWnd, sb, sb.Capacity);
+			return sb.ToString();
+		}
+		public static string GetFullPath(IntPtr hWnd)
+		{
+			StringBuilder fileName = new StringBuilder(255);
+			//string fileName;
+			uint result = GetModuleBaseName(hWnd, IntPtr.Zero, fileName, 256);
+			return fileName.ToString();
+		}
+
+		public static string GetFileName(IntPtr hWnd)
+		{
+			StringBuilder fileName = new StringBuilder(255);
+			//string fileName;
+			GetModuleFileNameEx(hWnd, IntPtr.Zero, fileName, 256);
+			return fileName.ToString();
+		}
+
 		/// <summary>
 		/// Retrieves current Process Information
 		/// </summary>
-		private static Process GetCurrentProcess()
+		private static IntPtr GetCurrentProcess()
 		{
-			//Process currentProcess=null;
-			////Solution with Process.GetCurrentProcess()
-			//			currentProcess = Process.GetCurrentProcess();
-			//			IntPtr phnd = ViewHelper.GetParent(currentProcess.Handle);
-			//			if (!ViewHelper.IsWindow(phnd))
-			//				return null;
-			//			return currentProcess;
-			Process result = null;
-
 			IntPtr hwnd = ViewHelper.GetForegroundWindow();
 
-			if (hwnd.ToInt32() != 0)
+			if (hwnd != IntPtr.Zero)
 			{
-				IntPtr pwnd = ViewHelper.GetParent(hwnd);
-				if (pwnd.ToInt32() == 0)
+				IntPtr pwnd;
+				do
 				{
-					pwnd = hwnd;
-				} //if
+					pwnd = ViewHelper.GetParent(hwnd);
+					if(pwnd != IntPtr.Zero)
+						hwnd = pwnd;
+				} while (pwnd != IntPtr.Zero);
 
-				if (ViewHelper.IsWindow(pwnd))
-				{
-					//IntPtr processId = ViewHelper.GetWindowThreadProcessId(pwnd, IntPtr.Zero);
-					IntPtr pid;
-					ViewHelper.GetWindowThreadProcessId(pwnd, out pid);
-
-					result = Process.GetProcessById(pid.ToInt32());
-					/*
-					foreach (Process process in processes)
-					{
-						if(!process.HasExited)
-						if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
-						{
-							currentProcess = process;
-							currentProcess.Refresh();
-							break;
-						}
-					}
-					
-					if(currentProcess == null)
-					{
-						processes = Process.GetProcesses();
-						foreach (Process process in processes)
-						{
-							if(!process.HasExited)
-							if (process.MainWindowHandle == pwnd || HasThreadId(process, processId))
-							{
-								currentProcess = process;
-								currentProcess.Refresh();
-								break;
-							}
-						}
-					}
-					return currentProcess;
-					*/
-				} //if isWnd
+				return hwnd;
 			} //if
-			return result;
+			return IntPtr.Zero;
 		} //GetCurrentProcess()
-
-		//		private static bool HasThreadId(Process process, IntPtr processId)
-		//		{
-		//			foreach (ProcessThread  pt in process.Threads)
-		//			{
-		//				if (pt.Id == processId.ToInt32())
-		//					return true;
-		//			}
-		//			return false;
-		//		}
 
 		/// <summary>
 		/// Change log Event for Tasks
@@ -306,11 +299,7 @@ namespace PTM.Framework
 			{
 				applicationsTimer.Stop();
 				JoinLoggingThread();
-				if (currentApplicationsLog == null)
-				{
-					currentApplicationsLog = new ArrayList();
-				}
-				else if (currentApplicationsLog.Count > 0)
+				if (currentApplicationsLog.Count > 0)
 				{
 					UpdateCurrentApplicationsLog();
 					currentApplicationsLog = new ArrayList();
@@ -330,7 +319,6 @@ namespace PTM.Framework
 				loggingThread.Join(5000);
 			} //if-else
 		} //JoinLoggingThread
-
 
 		/// <summary>
 		/// Application Timer Elapsed Event
@@ -356,6 +344,7 @@ namespace PTM.Framework
 			loggingThread.Start();
 		} //InvokeLoggingThread
 
+
 		/// <summary>
 		/// Task log after Stop logging Eveng
 		/// </summary>
@@ -369,12 +358,10 @@ namespace PTM.Framework
 		#endregion
 
 		#region Events
-
 		/// <summary>
 		/// Application Log Change Event Handler static attribute
 		/// </summary>
 		public static event ApplicationLogChangeEventHandler ApplicationsLogChanged;
-
 
 		/// <summary>
 		/// Application Log Change Event Handler delegate
@@ -408,30 +395,5 @@ namespace PTM.Framework
 
 		#endregion
 
-		/// <summary>
-		/// GetApplicationsLog retrieves each Application log related 
-		/// to a Task selected by its TaskLogId
-		/// </summary>
-		public static ArrayList GetApplicationsLog(int taskLogId)
-		{
-			ArrayList resultsHT =
-				DbHelper.ExecuteGetRows(
-					"SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
-					taskLogId.ToString());
-			ArrayList results = new ArrayList();
-			foreach (IDictionary dictionary in resultsHT)
-			{
-				ApplicationLog applicationLog = new ApplicationLog();
-				applicationLog.Id = (int) dictionary["Id"];
-				applicationLog.ProcessId = (int) dictionary["ProcessId"];
-				applicationLog.Name = (string) dictionary["Name"];
-				applicationLog.Caption = (string) dictionary["Caption"];
-				applicationLog.ApplicationFullPath = (string) dictionary["ApplicationFullPath"];
-				applicationLog.ActiveTime = (int) dictionary["ActiveTime"];
-				applicationLog.TaskLogId = taskLogId;
-				results.Add(applicationLog);
-			} //foreach
-			return results;
-		} //GetApplicationsLog
 	} //ApplicationsLog
 } //namespace

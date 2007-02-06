@@ -19,10 +19,10 @@ namespace PTM.View
 		[DllImport("User32")]
 		internal static extern IntPtr GetForegroundWindow();
 
-		[DllImport("User32")]
+		[DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
 		internal static extern IntPtr GetParent(IntPtr hwnd);
 
-		[DllImport("User32")]
+		[DllImport("user32.dll", SetLastError=true)]
 		internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out IntPtr ProcessId);
 
 		[DllImport("User32")]
