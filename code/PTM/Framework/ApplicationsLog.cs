@@ -91,16 +91,15 @@ namespace PTM.Framework
 		{
 			ArrayList resultsHT =
 				DbHelper.ExecuteGetRows(
-				"SELECT Id, ProcessId, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
+				"SELECT Id, Name, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
 				taskLogId.ToString());
 			ArrayList results = new ArrayList();
 			foreach (IDictionary dictionary in resultsHT)
 			{
 				ApplicationLog applicationLog = new ApplicationLog();
 				applicationLog.Id = (int) dictionary["Id"];
-				applicationLog.ProcessId = (int) dictionary["ProcessId"];
 				applicationLog.Name = (string) dictionary["Name"];
-				applicationLog.Caption = (string) dictionary["Caption"];
+				applicationLog.Caption = String.Empty;
 				applicationLog.ApplicationFullPath = (string) dictionary["ApplicationFullPath"];
 				applicationLog.ActiveTime = (int) dictionary["ActiveTime"];
 				applicationLog.TaskLogId = taskLogId;
