@@ -92,11 +92,11 @@ namespace PTM.Framework
 
 		public static Task AddTask(string description, int parentId)
 		{
-			return AddTask(description, parentId, true, IconsManager.DefaultTaskIconId);
+			return AddTask(description, parentId, true);
 		}
 		public static Task AddTask(string description, int parentId, bool isActive)
 		{
-			return AddTask(description, parentId, true);
+			return AddTask(description, parentId, isActive, IconsManager.DefaultTaskIconId);
 		}
 		public static Task AddTask(string description, int parentId, bool isActive, int iconId)
 		{
