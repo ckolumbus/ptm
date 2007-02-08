@@ -116,7 +116,7 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TasksLogControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksLogControl));
 			this.editButton = new System.Windows.Forms.Button();
 			this.addTaskButton = new System.Windows.Forms.Button();
 			this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
@@ -125,7 +125,7 @@ namespace PTM.View.Controls
 			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.notifyAnswerTimer = new System.Timers.Timer();
 			this.notifyTimer = new System.Timers.Timer();
-			this.notifyIcon = new NotifyIcon(this.components);
+			this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
 			this.switchToButton = new System.Windows.Forms.Button();
@@ -134,15 +134,13 @@ namespace PTM.View.Controls
 			this.label1 = new System.Windows.Forms.Label();
 			this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.pathCheckBox = new System.Windows.Forms.CheckBox();
-			((System.ComponentModel.ISupportInitialize) (this.notifyAnswerTimer)).BeginInit();
-			((System.ComponentModel.ISupportInitialize) (this.notifyTimer)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// editButton
 			// 
-			this.editButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(152, 280);
 			this.editButton.Name = "editButton";
@@ -154,15 +152,13 @@ namespace PTM.View.Controls
 			// 
 			// addTaskButton
 			// 
-			this.addTaskButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.addTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.addTaskButton.Location = new System.Drawing.Point(312, 280);
 			this.addTaskButton.Name = "addTaskButton";
 			this.addTaskButton.Size = new System.Drawing.Size(72, 23);
 			this.addTaskButton.TabIndex = 5;
-			this.addTaskButton.Text = "New Log...";
+			this.addTaskButton.Text = "New...";
 			this.shortcutToolTip.SetToolTip(this.addTaskButton, "Ins");
 			// 
 			// TaskDescriptionHeader
@@ -192,24 +188,20 @@ namespace PTM.View.Controls
 			// notifyIcon
 			// 
 			this.notifyIcon.ContextMenu = this.notifyContextMenu;
-			this.notifyIcon.Icon = ((System.Drawing.Icon) (resources.GetObject("notifyIcon.Icon")));
+			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
 			this.notifyIcon.Text = "Current task";
 			this.notifyIcon.Visible = true;
 			// 
 			// taskList
 			// 
-			this.taskList.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.taskList.AutoArrange = false;
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-			                               	{
-			                               		this.TaskDescriptionHeader,
-			                               		this.DurationTaskHeader,
-			                               		this.StartTimeHeader
-			                               	});
+			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																					   this.TaskDescriptionHeader,
+																					   this.DurationTaskHeader,
+																					   this.StartTimeHeader});
 			this.taskList.ContextMenu = this.rigthClickMenu;
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 32);
@@ -222,9 +214,7 @@ namespace PTM.View.Controls
 			// 
 			// switchToButton
 			// 
-			this.switchToButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.switchToButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.switchToButton.Location = new System.Drawing.Point(232, 280);
 			this.switchToButton.Name = "switchToButton";
@@ -236,9 +226,7 @@ namespace PTM.View.Controls
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(72, 280);
 			this.deleteButton.Name = "deleteButton";
@@ -287,9 +275,10 @@ namespace PTM.View.Controls
 			this.Controls.Add(this.addTaskButton);
 			this.Name = "TasksLogControl";
 			this.Size = new System.Drawing.Size(392, 312);
-			((System.ComponentModel.ISupportInitialize) (this.notifyAnswerTimer)).EndInit();
-			((System.ComponentModel.ISupportInitialize) (this.notifyTimer)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -310,7 +299,7 @@ namespace PTM.View.Controls
 			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
-				AddTaskLog(tasklog.SelectedTaskRow.Id,
+				AddTaskLog(tasklog.SelectedTaskId,
 				           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 			}
 			else if (mustAddATask)
@@ -350,7 +339,7 @@ namespace PTM.View.Controls
 				for (int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskRow.Id);
+					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskId);
 				}
 			}
 		}

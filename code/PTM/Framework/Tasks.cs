@@ -227,7 +227,7 @@ namespace PTM.Framework
 		{
 			Task task;
 			task = InternalFindById(taskId);
-			ArrayList parents = new ArrayList();
+            ArrayList parents = new ArrayList();
 			Task cur = task;
 			while (true)
 			{

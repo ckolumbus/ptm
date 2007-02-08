@@ -41,7 +41,7 @@ namespace PTM.View.Controls
 		private DateTimePicker fromDateTimePicker;
 		private Button searchButton;
 
-		private ArrayList parentTasksTable = new ArrayList();
+		private ArrayList parentTasksList = new ArrayList();
 
 		internal StatisticsControl()
 		{
@@ -55,10 +55,10 @@ namespace PTM.View.Controls
 
 			Task parentTaskRow;
 			parentTaskRow = Tasks.RootTasksRow;
-			parentTasksTable.Add(parentTaskRow);
-			this.parentTaskComboBox.DataSource = parentTasksTable;
+			parentTasksList.Add(parentTaskRow);
 			this.parentTaskComboBox.DisplayMember = "Description";
 			this.parentTaskComboBox.ValueMember = "Id";
+			this.parentTaskComboBox.DataSource = parentTasksList;
 
 			this.fromDateTimePicker.Value = DateTime.Today;
 			this.toDateTimePicker.Value = DateTime.Today;
@@ -365,24 +365,30 @@ namespace PTM.View.Controls
 		private void browseButton_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm tgForm = new TasksHierarchyForm();
-			tgForm.ShowDialog(this);
-			if (tgForm.SelectedTaskRow == null)
-				return;
-
-			if (FindById(tgForm.SelectedTaskRow.Id) == null)
+			if(tgForm.ShowDialog(this)==DialogResult.OK)
 			{
-				Task parentRow = tgForm.SelectedTaskRow.Clone();
-				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow.Id), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Insert(0, parentRow);
+				if (FindById(tgForm.SelectedTaskId) == null)
+				{
+					Task parentTask = new Task();
+					parentTask.Id =  tgForm.SelectedTaskId;
+					parentTask.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentTask.Id), this.parentTaskComboBox.MaxLength);
+					this.parentTasksList.Insert(0, parentTask);
+					this.parentTaskComboBox.BeginUpdate();
+					this.parentTaskComboBox.DataSource = null;
+					this.parentTaskComboBox.DisplayMember = "Description";
+					this.parentTaskComboBox.ValueMember = "Id";
+					this.parentTaskComboBox.DataSource = parentTasksList;
+					this.parentTaskComboBox.EndUpdate();
+				}
+				this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskId;
 			}
-			this.parentTaskComboBox.SelectedValue = tgForm.SelectedTaskRow.Id;
 		}
 
 		private Task FindById(int taskId)
 		{
-			for(int i = 0;i<parentTasksTable.Count;i++)
+			for(int i = 0;i<parentTasksList.Count;i++)
 			{
-				Task task = (Task)parentTasksTable[i];
+				Task task = (Task)parentTasksList[i];
 				if(task.Id == taskId)
 					return task.Clone();
 			}

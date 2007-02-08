@@ -1,9 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using PTM.Data;
 using PTM.Framework;
-using PTM.Framework.Infos;
 using PTM.View.Controls;
 
 namespace PTM.View.Forms
@@ -22,11 +20,11 @@ namespace PTM.View.Forms
 		private Button propertiesButton;
 
 
-		private Task selectedTaskRow = null;
+		private int selectedTaskId;
 
-		internal Task SelectedTaskRow
+		internal int SelectedTaskId
 		{
-			get { return selectedTaskRow; }
+			get { return selectedTaskId; }
 		}
 
 		internal TasksHierarchyForm()
@@ -197,12 +195,12 @@ namespace PTM.View.Forms
 				this.deleteButton.Enabled = true;
 				this.propertiesButton.Enabled = true;
 			}
+			this.selectedTaskId = tasksTreeViewControl.SelectedTaskId;
 		}
 
 		private void okButton_Click(object sender, EventArgs e)
 		{
-			this.selectedTaskRow = Tasks.FindById(
-				tasksTreeViewControl.SelectedTaskId);
+			this.DialogResult = DialogResult.OK;
 			this.Close();
 		}
 
@@ -213,7 +211,7 @@ namespace PTM.View.Forms
 
 		private void tasksTreeViewControl_DoubleClick(object sender, EventArgs e)
 		{
-			this.selectedTaskRow = Tasks.FindById(this.tasksTreeViewControl.SelectedTaskId);
+			this.selectedTaskId = this.tasksTreeViewControl.SelectedTaskId;
 			if(this.Modal)
 			{
 				this.DialogResult = DialogResult.OK;

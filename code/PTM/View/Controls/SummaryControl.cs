@@ -36,7 +36,7 @@ namespace PTM.View.Controls
 		private ToolBarButton toolBarButton2;
 		private ImageList toolBarImages;
 
-		private ArrayList parentTasksTable = new ArrayList();
+		private ArrayList parentTasksList = new ArrayList();
 		private ColumnHeader InactiveTimeHeader;
 		private ColumnHeader ActiveTimeHeader;
 		private DateTimePicker fromDateTimePicker;
@@ -44,7 +44,7 @@ namespace PTM.View.Controls
 		private RadioButton fromRadioButton;
 		private RadioButton toRadioButton;
 		private ToolTip toolTip;
-		private Task parentRow;
+		private Task parentTask;
 		private AsyncWorker worker;
 
 		internal SummaryControl()
@@ -57,20 +57,18 @@ namespace PTM.View.Controls
 			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
-			Task parentTaskRow;
-			parentTaskRow = Tasks.RootTasksRow;
-			parentTasksTable.Add(parentTaskRow);
-			this.parentTaskComboBox.DataSource = parentTasksTable;
+			parentTasksList.Add(Tasks.RootTasksRow);
 			this.parentTaskComboBox.DisplayMember = "Description";
 			this.parentTaskComboBox.ValueMember = "Id";
+			this.parentTaskComboBox.DataSource = parentTasksList;
 
 			this.fromDateTimePicker.Value = DateTime.Today;
 			this.toDateTimePicker.Value = DateTime.Today;
 
-			if (parentTasksTable.Count > 0)
+			if (parentTasksList.Count > 0)
 			{
-				parentRow = (Task) parentTasksTable[0];
-				this.parentTaskComboBox.SelectedValue = parentRow.Id;
+				parentTask = (Task) parentTasksList[0];
+				this.parentTaskComboBox.SelectedValue = parentTask.Id;
 			}
 			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.toDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
@@ -399,23 +397,6 @@ namespace PTM.View.Controls
 		private double totalTime = 0;
 		private double totalActiveTime = 0;
 
-//		private void Clear()
-//		{
-//			this.taskList.Items.Clear();
-//			indicator1.Maximum = 30600; //8.5 hrs.
-//			indicator1.Value = 0;
-//			indicator1.TextValue = "00.00 hrs.";
-//			indicator1.ForeColor = Color.Lime;
-//
-//			indicator2.Maximum = 100;
-//			indicator2.Value = 0;
-//			indicator2.TextValue = "0%";
-//
-//			totalTime = 0;
-//			totalActiveTime = 0;
-//		}
-
-
 		public override void OnTabPageSelected()
 		{
 			base.OnTabPageSelected();
@@ -427,24 +408,6 @@ namespace PTM.View.Controls
 		{
 			try
 			{
-//				DateTime fromDate;
-//				DateTime toDate;
-//				fromDate = fromDateTimePicker.Value.Date;
-//				if(this.toRadioButton.Checked)
-//				{
-//					toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
-//				}
-//				else
-//				{
-//					toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);						
-//				}
-//				Clear();
-//				this.Refresh();
-//				Cursor.Current = Cursors.WaitCursor;
-//				ArrayList summaryList = TasksSummaries.GetTaskSummary(
-//					Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
-//					fromDate, toDate);
-
 				totalTime = 0;
 				this.taskList.BeginUpdate();
 				foreach (TaskSummary summary in summaryList)
@@ -526,14 +489,17 @@ namespace PTM.View.Controls
 		private void browseButton_Click(object sender, EventArgs e)
 		{
 			TasksHierarchyForm tgForm = new TasksHierarchyForm();
-			tgForm.ShowDialog(this);
-			if (tgForm.SelectedTaskRow == null)
-				return;
-
-			SetParent(tgForm.SelectedTaskRow);
+			if(tgForm.ShowDialog(this) == DialogResult.OK)
+				SetParent(tgForm.SelectedTaskId);
+			
 		}
 
 		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
+		{
+			LaunchSummarySearch();
+		}
+
+		private void LaunchSummarySearch()
 		{
 			if (this.fromRadioButton.Checked)
 			{
@@ -551,15 +517,15 @@ namespace PTM.View.Controls
 			if (parentTaskComboBox.SelectedIndex == -1)
 				return;
 
-			parentRow = FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
-			this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+			parentTask = FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
+			LaunchSummarySearch();
 		}
 
 		private Task FindById(int taskId)
 		{
-			for(int i = 0;i<parentTasksTable.Count;i++)
+			for(int i = 0;i<parentTasksList.Count;i++)
 			{
-				Task task = (Task)parentTasksTable[i];
+				Task task = (Task)parentTasksList[i];
 				if(task.Id == taskId)
 					return task.Clone();
 			}
@@ -619,24 +585,30 @@ namespace PTM.View.Controls
 				GoToParentDetail();
 		}
 
-		private void SetParent(Task parent)
+		private void SetParent(int parentId)
 		{
-			if (FindById(parent.Id) == null)
+			if (FindById(parentId) == null)
 			{
-				parentRow = parent.Clone();
-				parentRow.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentRow.Id), this.parentTaskComboBox.MaxLength);
-				this.parentTasksTable.Insert(0, parentRow);
+				parentTask = Tasks.FindById(parentId);
+				parentTask.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentTask.Id), this.parentTaskComboBox.MaxLength);
+				this.parentTasksList.Insert(0, parentTask);
+				this.parentTaskComboBox.BeginUpdate();
+				this.parentTaskComboBox.DataSource = null;
+				this.parentTaskComboBox.DisplayMember = "Description";
+				this.parentTaskComboBox.ValueMember = "Id";
+				this.parentTaskComboBox.DataSource = parentTasksList;
+				this.parentTaskComboBox.EndUpdate();
 			}
-			this.parentTaskComboBox.SelectedValue = parent.Id;
+			this.parentTaskComboBox.SelectedValue = parentId;
 		}
 
 		private void GoToParentDetail()
 		{
-			if (Tasks.RootTasksRow.Id == this.parentRow.Id)
+			if (Tasks.RootTasksRow.Id == this.parentTask.Id)
 			{
 				return;
 			}
-			SetParent(Tasks.FindById(parentRow.ParentId));
+			SetParent(parentTask.ParentId);
 		}
 
 		private void GoToChildDetail()
@@ -646,7 +618,7 @@ namespace PTM.View.Controls
 				return;
 			}
 			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
-			SetParent(Tasks.FindById(sum.TaskId));
+			SetParent(sum.TaskId);
 		}
 
 		private void taskList_DoubleClick(object sender, EventArgs e)
@@ -655,7 +627,7 @@ namespace PTM.View.Controls
 				return;
 
 			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
-			SetParent(Tasks.FindById(sum.TaskId));
+			SetParent(sum.TaskId);
 		}
 
 		private void toRadioButton_CheckedChanged(object sender, EventArgs e)
