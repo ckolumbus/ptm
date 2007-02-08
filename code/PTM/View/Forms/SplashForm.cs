@@ -155,7 +155,7 @@ namespace PTM.View.Forms
 
 		internal void AddProgress(int percent)
 		{
-			SetLoadProgress(this.progressBar.Value + 10);
+			SetLoadProgress(this.progressBar.Value + percent);
 		}
 	}
 }

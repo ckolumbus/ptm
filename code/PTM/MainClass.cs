@@ -21,7 +21,7 @@ namespace PTM
 		/// <summary>
 		/// Boolean value to store single instance configuration 
 		/// </summary>
-		private static bool runSingleInstance = false;
+		private static bool runSingleInstance = true;
 
 		/// <summary>
 		/// MemoryMappedFile to share between instances

@@ -35,10 +35,36 @@ namespace PTM.Framework.Helpers
 					continue;
 				if(UpdateFromV095ToV96(oldVersion))
 					continue;
-				//if(UpdateFromV096ToVXX(oldVersion)) //Next check
+				if(UpdateFromV096ToV97(oldVersion))
+					continue;
+				//if(UpdateFromV097ToVXX(oldVersion)) //Next check
 				//	continue;
 				findNextUpdate = false;
 			}
+		}
+
+		private static bool UpdateFromV096ToV97(Configuration oldVersion)
+		{
+			if (string.Compare(oldVersion.Value.ToString().Trim(), "0.9.6") == 0)
+			{
+				try
+				{
+					DbHelper.DeleteColumn("Tasks", "StartDate");
+					DbHelper.DeleteColumn("Tasks", "StopDate");
+					DbHelper.DeleteColumn("Tasks", "IsFinished");
+					DbHelper.DeleteColumn("Tasks", "TotalTime");
+					DbHelper.DeleteColumn("ApplicationsLog", "ProcessId");
+					DbHelper.DeleteColumn("ApplicationsLog", "Caption");
+					ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.7"));
+					return true;
+				}
+				catch (OleDbException ex)
+				{
+					Logger.Write(ex.Message);
+					return false;
+				}
+			}
+			return false;
 		}
 
 		private static bool UpdateFromV095ToV96(Configuration oldVersion)
