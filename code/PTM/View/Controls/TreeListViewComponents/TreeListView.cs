@@ -576,7 +576,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 				case APIsEnums.WindowMessages.NOTIFY:
 				case (APIsEnums.WindowMessages) APIsEnums.ReflectedMessages.NOTIFY:
 					APIsStructs.NMHDR nmhdr = (APIsStructs.NMHDR) m.GetLParam(typeof(APIsStructs.NMHDR));
-					APIsStructs.NMHEADER nmheader =(APIsStructs.NMHEADER) m.GetLParam(typeof(APIsStructs.NMHEADER));
+					//APIsStructs.NMHEADER nmheader =(APIsStructs.NMHEADER) m.GetLParam(typeof(APIsStructs.NMHEADER));
 					switch((APIsEnums.ListViewNotifications) nmhdr.code)
 					{
 						#region APIsEnums.ListViewNotifications.MARQUEEBEGIN
@@ -722,7 +722,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 
 						#region APIsEnums.HeaderControlNotifications.BEGINDRAG
 						case (APIsEnums.ListViewNotifications) APIsEnums.HeaderControlNotifications.BEGINDRAG:
-							nmheader =(APIsStructs.NMHEADER) m.GetLParam(typeof(APIsStructs.NMHEADER));
+							APIsStructs.NMHEADER nmheader =(APIsStructs.NMHEADER) m.GetLParam(typeof(APIsStructs.NMHEADER));
 							if(nmheader.iItem == 0)
 							{
 								m.Result = (IntPtr)1;
@@ -1081,8 +1081,9 @@ namespace PTM.View.Controls.TreeListViewComponents
 //				{
 						//Changed from original code, for not to use unsafe code.
 						//APIsStructs.NMLVCUSTOMDRAW * nmlvcd = (APIsStructs.NMLVCUSTOMDRAW *)m.LParam.ToPointer();
-						APIsStructs.NMLVCUSTOMDRAW nmlvcd = (APIsStructs.NMLVCUSTOMDRAW)Marshal.PtrToStructure(m.LParam, typeof(APIsStructs.NMLVCUSTOMDRAW));
-						
+						//APIsStructs.NMLVCUSTOMDRAW nmlvcd = (APIsStructs.NMLVCUSTOMDRAW)Marshal.PtrToStructure(m.LParam, typeof(APIsStructs.NMLVCUSTOMDRAW));
+						APIsStructs.NMLVCUSTOMDRAW nmlvcd = (APIsStructs.NMLVCUSTOMDRAW) m.GetLParam(typeof (APIsStructs.NMLVCUSTOMDRAW));
+				
 						switch((APIsEnums.CustomDrawDrawStateFlags)nmlvcd.nmcd.dwDrawStage)
 						{
 							case APIsEnums.CustomDrawDrawStateFlags.PREPAINT:
@@ -1112,6 +1113,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 										nmlvcd.clrTextBk = (int)ColorUtil.RGB(color.R, color.G, color.B);
 									nmlvcd.nmcd.uItemState &= ~(uint)APIsEnums.CustomDrawItemStateFlags.SELECTED;
 									Marshal.StructureToPtr(nmlvcd, m.LParam, true);
+									
 									if(iCol == 0) item.DrawFocusCues();
 								}
 								if(iCol == 0)

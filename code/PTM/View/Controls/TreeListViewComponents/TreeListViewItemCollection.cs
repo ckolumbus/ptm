@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PTM.View.Controls.TreeListViewComponents
@@ -86,7 +85,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 						else
 							res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
 					}
-					catch(System.FormatException fex)
+					catch(FormatException fex)
 					{
 						fex = fex;
 						res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
@@ -740,7 +739,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 				switch(SortOrder)
 				{
 						// No sortorder -> at the end of the collection
-					case System.Windows.Forms.SortOrder.None:
+					case SortOrder.None:
 						index = this.Count;
 						break;
 					default:

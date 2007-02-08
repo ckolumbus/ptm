@@ -91,9 +91,9 @@ namespace System.Runtime.InteropServices.APIs
 //		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 //		internal static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
-		internal static extern IntPtr SendMessage(IntPtr hWnd, APIsEnums.HeaderControlMessages msg, IntPtr wParam,
-		                                       ref APIsStructs.HD_HITTESTINFO hd_hittestinfo);
+//		[DllImport("user32.dll", CharSet=CharSet.Auto)]
+//		internal static extern IntPtr SendMessage(IntPtr hWnd, APIsEnums.HeaderControlMessages msg, IntPtr wParam,
+//		                                       ref APIsStructs.HD_HITTESTINFO hd_hittestinfo);
 //
 //		[DllImport("user32.dll", CharSet=CharSet.Auto)]
 //		internal static extern int SendMessage(IntPtr hWnd, APIsEnums.WindowMessages msg, int wParam, int lParam);

@@ -4,7 +4,6 @@ using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PTM.Data;
 using PTM.Framework;
 using PTM.Framework.Infos;
 using PTM.View.Forms;

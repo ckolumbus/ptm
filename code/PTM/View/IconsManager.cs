@@ -45,17 +45,12 @@ namespace PTM.View
 				} //if
 				i++;
 			} while (resIcon != null);
+
 		} //LoadIconsFromResources
 		public static void Initialize()
 		{
 			LoadIconsFromResources();
 		}
-
-
-//		internal static Icon GetCommonTaskIcon(int iconId)
-//		{
-//			return (Icon) iconsCommonTasks[iconId];
-//		}
 
 
 		internal static int GetIconFromFile(string fileName)
