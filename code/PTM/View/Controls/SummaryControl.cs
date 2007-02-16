@@ -45,6 +45,8 @@ namespace PTM.View.Controls
 		private RadioButton toRadioButton;
 		private ToolTip toolTip;
 		private Task parentTask;
+		private GroupBox groupBox4;
+		private IndicatorControl indicator3;
 		private AsyncWorker worker;
 
 		internal SummaryControl()
@@ -111,7 +113,7 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (SummaryControl));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SummaryControl));
 			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
 			this.TaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
@@ -135,28 +137,27 @@ namespace PTM.View.Controls
 			this.toRadioButton = new System.Windows.Forms.RadioButton();
 			this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.indicator3 = new PTM.View.Controls.IndicatorControl();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// taskList
 			// 
 			this.taskList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
 			this.taskList.AllowColumnReorder = true;
-			this.taskList.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-			                               	{
-			                               		this.TaskHeader,
-			                               		this.ActiveTimeHeader,
-			                               		this.InactiveTimeHeader,
-			                               		this.PercentHeader
-			                               	});
+			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																					   this.TaskHeader,
+																					   this.ActiveTimeHeader,
+																					   this.InactiveTimeHeader,
+																					   this.PercentHeader});
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
@@ -222,11 +223,9 @@ namespace PTM.View.Controls
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.taskList);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
@@ -288,9 +287,7 @@ namespace PTM.View.Controls
 			// 
 			// panel1
 			// 
-			this.panel1.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.Controls.Add(this.toolBar);
 			this.panel1.Location = new System.Drawing.Point(352, 120);
 			this.panel1.Name = "panel1";
@@ -299,11 +296,9 @@ namespace PTM.View.Controls
 			// 
 			// toolBar
 			// 
-			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[]
-			                              	{
-			                              		this.toolBarButton1,
-			                              		this.toolBarButton2
-			                              	});
+			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+																					   this.toolBarButton1,
+																					   this.toolBarButton2});
 			this.toolBar.Divider = false;
 			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolBar.DropDownArrows = true;
@@ -328,8 +323,7 @@ namespace PTM.View.Controls
 			// toolBarImages
 			// 
 			this.toolBarImages.ImageSize = new System.Drawing.Size(16, 16);
-			this.toolBarImages.ImageStream =
-				((System.Windows.Forms.ImageListStreamer) (resources.GetObject("toolBarImages.ImageStream")));
+			this.toolBarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("toolBarImages.ImageStream")));
 			this.toolBarImages.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// fromRadioButton
@@ -370,8 +364,32 @@ namespace PTM.View.Controls
 			this.toolTip.AutomaticDelay = 0;
 			this.toolTip.ShowAlways = true;
 			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.indicator3);
+			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox4.ForeColor = System.Drawing.Color.Blue;
+			this.groupBox4.Location = new System.Drawing.Point(168, 64);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(72, 80);
+			this.groupBox4.TabIndex = 18;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Avg. Time";
+			this.groupBox4.Visible = false;
+			// 
+			// indicator3
+			// 
+			this.indicator3.BackColor = System.Drawing.Color.Black;
+			this.indicator3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.indicator3.ForeColor = System.Drawing.Color.Lime;
+			this.indicator3.Location = new System.Drawing.Point(3, 16);
+			this.indicator3.Name = "indicator3";
+			this.indicator3.Size = new System.Drawing.Size(66, 61);
+			this.indicator3.TabIndex = 0;
+			// 
 			// SummaryControl
 			// 
+			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.browseButton);
@@ -389,13 +407,16 @@ namespace PTM.View.Controls
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
+			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
 
 		private double totalTime = 0;
 		private double totalActiveTime = 0;
+		private int workedDays = 0;
 
 		public override void OnTabPageSelected()
 		{
@@ -404,13 +425,15 @@ namespace PTM.View.Controls
 			              new object[] {null});
 		}
 
-		private void UpdateTasksSummary(ArrayList summaryList)
+		private void UpdateTasksSummary(TaskSummaryResult taskSummaryResult)
 		{
 			try
 			{
 				totalTime = 0;
+				workedDays = taskSummaryResult.WorkedDays;
 				this.taskList.BeginUpdate();
-				foreach (TaskSummary summary in summaryList)
+				this.taskList.Items.Clear();
+				foreach (TaskSummary summary in taskSummaryResult.SummaryList)
 				{
 					totalTime += summary.TotalActiveTime;
 					totalTime += summary.TotalInactiveTime;
@@ -484,6 +507,19 @@ namespace PTM.View.Controls
 				toolTip.SetToolTip(this.indicator2, activeTime);
 				toolTip.SetToolTip(this.groupBox2, activeTime);
 			}
+
+			if(workedDays>0)
+			{
+				indicator3.Value = Convert.ToInt32(Math.Min(30600, totalTime/workedDays));
+				indicator3.TextValue =
+					new TimeSpan(0, 0, Convert.ToInt32(totalTime/workedDays, CultureInfo.InvariantCulture)).TotalHours.ToString("0.00",
+					CultureInfo.
+					InvariantCulture) +
+					" hrs.";
+			}				
+
+			toolTip.SetToolTip(this.indicator3, workedDays + " worked days");
+			toolTip.SetToolTip(this.groupBox4, workedDays+ " worked days");
 		}
 
 		private void browseButton_Click(object sender, EventArgs e)
@@ -634,6 +670,7 @@ namespace PTM.View.Controls
 		{
 			this.toDateTimePicker.Enabled = true;
 			this.fromRadioButton.Text = "From:";
+			this.groupBox4.Visible = true;
 		}
 
 		private void fromRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -641,6 +678,7 @@ namespace PTM.View.Controls
 			this.toDateTimePicker.Enabled = false;
 			this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
 			this.fromRadioButton.Text = "Date:";
+			this.groupBox4.Visible = false;
 		}
 
 		#region AsyncWork
@@ -663,10 +701,18 @@ namespace PTM.View.Controls
 			{
 				toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
 			}
-			ArrayList summaryList = TasksSummaries.GetTaskSummary(
+			TaskSummaryResult result = new TaskSummaryResult();
+			result.SummaryList = TasksSummaries.GetTaskSummary(
 				Tasks.FindById((int) this.parentTaskComboBox.SelectedValue),
 				fromDate, toDate);
-			return summaryList;
+			result.WorkedDays = TasksSummaries.GetWorkedDays(fromDate.Date, toDate.Date);
+			return result;
+		}
+
+		private class TaskSummaryResult
+		{
+			public ArrayList SummaryList;
+			public int WorkedDays;
 		}
 
 		private void worker_OnBeforeDoWork(AsyncWorker.OnBeforeDoWorkEventArgs e)
@@ -704,12 +750,17 @@ namespace PTM.View.Controls
 			this.taskList.Items.Clear();
 			indicator1.Maximum = 30600; //8.5 hrs.
 			indicator1.Value = 0;
-			indicator1.TextValue = "00.00 hrs.";
+			indicator1.TextValue = "0.00 hrs.";
 			indicator1.ForeColor = Color.Lime;
 
 			indicator2.Maximum = 100;
 			indicator2.Value = 0;
 			indicator2.TextValue = "0%";
+
+			indicator3.Maximum = 30600; //8.5 hrs.
+			indicator3.Value = 0;
+			indicator3.TextValue = "0.00 hrs.";
+			indicator3.ForeColor = Color.Lime;
 
 			totalTime = 0;
 			totalActiveTime = 0;
@@ -738,7 +789,7 @@ namespace PTM.View.Controls
 			this.browseButton.Enabled = true;
 		}
 
-		private delegate void UpdateTasksSummaryDelegate(ArrayList list);
+		private delegate void UpdateTasksSummaryDelegate(TaskSummaryResult result);
 
 		#endregion
 	}

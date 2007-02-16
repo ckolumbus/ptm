@@ -80,43 +80,75 @@ namespace PTM.Test.Framework
 			ArrayList result;
 			result = TasksSummaries.GetTaskSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
-			TaskSummary sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task1.Id);
+			TaskSummary sum1 = FindTaskSummaryByTaskId(result, task1.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 8);
 			Assert.IsTrue(sum1.TotalInactiveTime >= 3);
-			TaskSummary sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, task2.Id);
+			TaskSummary sum2 = FindTaskSummaryByTaskId(result, task2.Id);
 			Assert.IsTrue(sum2.TotalActiveTime >= 2);
 			Assert.IsTrue(sum2.TotalInactiveTime == 0);
 
 			result = TasksSummaries.GetTaskSummary(task1, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(3, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task1.Id);
+			sum1 = FindTaskSummaryByTaskId(result, task1.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 5);
 			Assert.IsTrue(sum1.TotalInactiveTime == 0);
-			sum2 = TasksSummaries.FindTaskSummaryByTaskId(result, task3.Id);
+			sum2 = FindTaskSummaryByTaskId(result, task3.Id);
 			Assert.IsTrue(sum2.TotalActiveTime >= 3);
 			Assert.IsTrue(sum2.TotalInactiveTime == 0);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task4.Id);
+			sum1 = FindTaskSummaryByTaskId(result, task4.Id);
 			Assert.IsTrue(sum1.TotalActiveTime == 0);
 			Assert.IsTrue(sum1.TotalInactiveTime >= 3);
 
 			result = TasksSummaries.GetTaskSummary(task3, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task3.Id);
+			sum1 = FindTaskSummaryByTaskId(result, task3.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 3);
 			Assert.IsTrue(sum1.TotalInactiveTime == 0);
 
 			result = TasksSummaries.GetTaskSummary(task4, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task4.Id);
+			sum1 = FindTaskSummaryByTaskId(result, task4.Id);
 			Assert.IsTrue(sum1.TotalActiveTime == 0);
 			Assert.IsTrue(sum1.TotalInactiveTime >= 3);
 
 			result = TasksSummaries.GetTaskSummary(task2, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(1, result.Count);
-			sum1 = TasksSummaries.FindTaskSummaryByTaskId(result, task2.Id);
+			sum1 = FindTaskSummaryByTaskId(result, task2.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 2);
 		}
 
+		private static TaskSummary FindTaskSummaryByTaskId(ArrayList taskSummaryList, int taskId)
+		{
+			foreach (TaskSummary taskSummary in taskSummaryList)
+			{
+				if (taskSummary.TaskId == taskId)
+					return taskSummary;
+			} //foreach
+			return null;
+		} //FindTaskSummaryByTaskId
+
+		[Test]
+		public void GetWorkedDaysTest()
+		{
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
+			InsertLog(taskId1, DateTime.Now.AddDays(-3), 1);
+			InsertLog(taskId1, DateTime.Now.AddDays(-4), 1);
+			InsertLog(Tasks.IdleTasksRow.Id, DateTime.Now.AddDays(-5), 1);
+			InsertLog(taskId1, DateTime.Now.AddDays(-6), 1);
+			Assert.AreEqual(0, TasksSummaries.GetWorkedDays(DateTime.Now, DateTime.Now.AddDays(1)));
+			Assert.AreEqual(0, TasksSummaries.GetWorkedDays(DateTime.Today, DateTime.Today));
+			Assert.AreEqual(2, TasksSummaries.GetWorkedDays(DateTime.Today.AddDays(-4), DateTime.Today));
+			Assert.AreEqual(3, TasksSummaries.GetWorkedDays(DateTime.Today.AddDays(-6), DateTime.Today.AddDays(-1)));
+			Assert.AreEqual(3, TasksSummaries.GetWorkedDays(DateTime.Today.AddDays(-6), DateTime.Today.AddDays(-3)));
+			Assert.AreEqual(2, TasksSummaries.GetWorkedDays(DateTime.Today.AddDays(-6), DateTime.Today.AddDays(-4)));
+		}
+
+		private void InsertLog(int taskId, DateTime insertTime, int duration)
+		{
+			DbHelper.ExecuteNonQuery("INSERT INTO TasksLog (TaskId, Duration, InsertTime) values (?, ?, ?)",
+				new string[] {"TaskId", "Duration", "InsertTime"},
+				new object[] {taskId, duration, insertTime});
+		}
 
 		[TearDown]
 		public void TearDown()

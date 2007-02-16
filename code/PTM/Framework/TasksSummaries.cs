@@ -14,31 +14,7 @@ namespace PTM.Framework
 		{
 		} //Summary
 
-		#region Private Methods
-
-		private const string NOT_DETAILED = "Not Detailed";
-
-		private static ArrayList ExecuteTaskSummary(DateTime initialDate, DateTime finalDate)
-		{
-			ArrayList summaryList = new ArrayList();
-			ArrayList list = DbHelper.ExecuteGetRows(
-				"SELECT TasksLog.TaskId, Sum( TasksLog.Duration ) AS TotalTime FROM TasksLog " +
-				"WHERE ( ( (TasksLog.InsertTime)>=? And (TasksLog.InsertTime)<=? ) )" +
-				"GROUP BY TasksLog.TaskId;",
-				new string[] {"InsertTimeFrom", "InsertTimeTo"},
-				new object[] {initialDate, finalDate});
-
-			foreach (IDictionary dictionary in list)
-			{
-				TaskSummary taskSum = new TaskSummary();
-				taskSum.TaskId = (int) dictionary["TaskId"];
-				taskSum.TotalActiveTime = (double) dictionary["TotalTime"];
-				summaryList.Add(taskSum);
-			} //foreach
-			return summaryList;
-		} //ExecuteTaskSummary
-
-		#endregion
+		
 
 		#region Public Methods
 
@@ -111,7 +87,51 @@ namespace PTM.Framework
 			return returnList;
 		} //GetTaskSummary
 
-		public static TaskSummary FindTaskSummaryByTaskId(ArrayList taskSummaryList, int taskId)
+		public static int GetWorkedDays(DateTime initialDate, DateTime finalDate)
+		{
+			DateTime curDate = initialDate.Date;
+			int workedDays = 0;
+			while(curDate<=finalDate.Date)
+			{
+				int count = Convert.ToInt32(DbHelper.ExecuteScalar("Select count(Id) from TasksLog where TaskId <> ? and InsertTime>= ? and InsertTime<?",
+				                         new string[] {"IdleTaskId", "InitialTime", "FinalTime"},
+				                         new object[] {Tasks.IdleTasksRow.Id, curDate, curDate.AddDays(1)}));
+				if(count>0)
+				{
+					workedDays++;
+				}
+				curDate = curDate.AddDays(1);
+			}
+			return workedDays;
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		private const string NOT_DETAILED = "Not Detailed";
+
+		private static ArrayList ExecuteTaskSummary(DateTime initialDate, DateTime finalDate)
+		{
+			ArrayList summaryList = new ArrayList();
+			ArrayList list = DbHelper.ExecuteGetRows(
+				"SELECT TasksLog.TaskId, Sum( TasksLog.Duration ) AS TotalTime FROM TasksLog " +
+				"WHERE ( ( (TasksLog.InsertTime)>=? And (TasksLog.InsertTime)<=? ) )" +
+				"GROUP BY TasksLog.TaskId;",
+				new string[] {"InsertTimeFrom", "InsertTimeTo"},
+				new object[] {initialDate, finalDate});
+
+			foreach (IDictionary dictionary in list)
+			{
+				TaskSummary taskSum = new TaskSummary();
+				taskSum.TaskId = (int) dictionary["TaskId"];
+				taskSum.TotalActiveTime = (double) dictionary["TotalTime"];
+				summaryList.Add(taskSum);
+			} //foreach
+			return summaryList;
+		} //ExecuteTaskSummary
+
+		private static TaskSummary FindTaskSummaryByTaskId(ArrayList taskSummaryList, int taskId)
 		{
 			foreach (TaskSummary taskSummary in taskSummaryList)
 			{
@@ -120,7 +140,6 @@ namespace PTM.Framework
 			} //foreach
 			return null;
 		} //FindTaskSummaryByTaskId
-
 		#endregion
 	} //Summary
 } //namespace
