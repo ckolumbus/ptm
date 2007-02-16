@@ -331,6 +331,7 @@ namespace PTM.View.Controls
 			try
 			{
 				this.applicationsList.BeginUpdate();
+				this.applicationsList.Items.Clear();
 				int appActiveTime = 0;
 				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
 				{

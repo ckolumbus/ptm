@@ -747,7 +747,6 @@ namespace PTM.View.Controls
 			this.browseButton.Enabled = false;
 			this.taskList.Items.Clear();
 
-			this.taskList.Items.Clear();
 			indicator1.Maximum = 30600; //8.5 hrs.
 			indicator1.Value = 0;
 			indicator1.TextValue = "0.00 hrs.";
