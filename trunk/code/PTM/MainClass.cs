@@ -18,15 +18,15 @@ namespace PTM
 	/// </summary>
 	internal sealed class MainClass
 	{
-		/// <summary>
-		/// Boolean value to store single instance configuration 
-		/// </summary>
-		private static bool runSingleInstance = true;
+//		/// <summary>
+//		/// Boolean value to store single instance configuration 
+//		/// </summary>
+		//private static bool runSingleInstance = true;
 
-		/// <summary>
-		/// MemoryMappedFile to share between instances
-		/// </summary>
-		internal static MemoryMappedFile sharedMemory;
+//		/// <summary>
+//		/// MemoryMappedFile to share between instances
+//		/// </summary>
+//		internal static MemoryMappedFile sharedMemory;
 
 
 		/// <summary>
@@ -42,16 +42,17 @@ namespace PTM
 			/// </summary>
 			private static void Main()
 		{
-			if (runSingleInstance)
-			{
-				RunSingleInstance();
-			}
-			else
-			{
+//			if (runSingleInstance)
+//			{
+//				RunSingleInstance();
+//			}
+//			else
+//			{
 				Launch();
-			} //if-else
+//			} //if-else
 		} //Main
 
+		/*
 		/// <summary>
 		/// Validates that no other application is runnin.
 		/// </summary>
@@ -136,6 +137,8 @@ namespace PTM
 			} //if-else
 		} //RunSingleInstance
 
+*/
+
 		private static SplashForm splash = new SplashForm();
 
 		internal static void Launch()
@@ -174,10 +177,10 @@ namespace PTM
 			IconsManager.Initialize();
 			Application.DoEvents();
 			MainForm main = new MainForm();
-			if (runSingleInstance)
-			{
-				main.HandleCreated += new EventHandler(main_HandleCreated);
-			}
+//			if (runSingleInstance)
+//			{
+//				main.HandleCreated += new EventHandler(main_HandleCreated);
+//			}
 			GC.Collect();
 			splash.SetLoadProgress(100);
 			splash.Refresh();
@@ -196,24 +199,24 @@ namespace PTM
 		} //timer_Elapsed
 
 
-		private static void main_HandleCreated(object sender, EventArgs e)
-		{
-			IntPtr mainWindowHandle = ((MainForm) sender).Handle;
-			try
-			{
-				lock (sender)
-				{
-					//Write the handle to the Shared Memory 
-					sharedMemory.WriteHandle(mainWindowHandle);
-				} //lock
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" +
-				                "Application Exiting...", "Exception thrown",
-				                MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Application.Exit();
-			} //try-catch
-		} //main_HandleCreated
+//		private static void main_HandleCreated(object sender, EventArgs e)
+//		{
+//			IntPtr mainWindowHandle = ((MainForm) sender).Handle;
+//			try
+//			{
+//				lock (sender)
+//				{
+//					//Write the handle to the Shared Memory 
+//					sharedMemory.WriteHandle(mainWindowHandle);
+//				} //lock
+//			}
+//			catch (Exception ex)
+//			{
+//				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" +
+//				                "Application Exiting...", "Exception thrown",
+//				                MessageBoxButtons.OK, MessageBoxIcon.Error);
+//				Application.Exit();
+//			} //try-catch
+//		} //main_HandleCreated
 	} //end of class
 } //enf of namespace

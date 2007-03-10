@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTMLite", "code\PTM\PTMLite.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

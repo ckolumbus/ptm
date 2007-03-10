@@ -38,8 +38,8 @@ namespace PTM.Framework
 			Application.DoEvents();
 			Logs.FillMissingTimeUntilNow();
 			Application.DoEvents();
-			ApplicationsLog.Initialize();
-			Application.DoEvents();
+//			ApplicationsLog.Initialize();
+//			Application.DoEvents();
 		}
 	} //MainModule
 } //namespace

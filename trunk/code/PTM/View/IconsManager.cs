@@ -52,7 +52,7 @@ namespace PTM.View
 			LoadIconsFromResources();
 		}
 
-
+/*
 		internal static int GetIconFromFile(string fileName)
 		{
 			if (iconsCommonTasks.Contains(fileName))
@@ -67,7 +67,8 @@ namespace PTM.View
 				return iconsList.Images.Count - 1;
 			} //if-else
 		} //GetIconFromFile
-
+*/
+		/*
 		private static Icon GetFileIcon(string fileName)
 		{
 			//Icon ri;
@@ -86,5 +87,7 @@ namespace PTM.View
 //			if(ri!= null) return ri;
 //			return null;
 		} //GetFileIcon
+*/
+
 	} //end of class IconsManager
 } //end of namespace

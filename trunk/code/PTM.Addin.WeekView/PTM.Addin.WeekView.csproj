@@ -67,7 +67,7 @@
                 <Reference
                     Name = "PTM"
                     AssemblyName = "PTM"
-                    HintPath = "..\PTM\bin\Debug\ptm.exe"
+                    HintPath = "..\PTM\bin\Debug\ptmlite.exe"
                 />
                 <Reference
                     Name = "System"
@@ -105,7 +105,7 @@
                 />
                 <File
                     RelPath = "WeekReport.cs"
-                    SubType = "UserControl"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

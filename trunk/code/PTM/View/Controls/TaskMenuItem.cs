@@ -14,9 +14,9 @@ namespace PTM.View.Controls
 	{
 		public TaskMenuItem() : base()
 		{
-			this.OwnerDraw = true;
-			this.DrawItem += new DrawItemEventHandler(TaskMenuItem_DrawItem);
-			this.MeasureItem += new MeasureItemEventHandler(TaskMenuItem_MeasureItem);
+//			this.OwnerDraw = true;
+//			this.DrawItem += new DrawItemEventHandler(TaskMenuItem_DrawItem);
+//			this.MeasureItem += new MeasureItemEventHandler(TaskMenuItem_MeasureItem);
 			TaskMenuItemHelper.Initialize();
 		}
 
@@ -71,7 +71,7 @@ namespace PTM.View.Controls
 				this.Pick(this, new EventArgs());
 			base.OnClick(e);
 		}
-
+/*
 		private void TaskMenuItem_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			this.rectangle = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
@@ -187,7 +187,7 @@ namespace PTM.View.Controls
 			//(int)Math.Ceiling(sizef.Height) + 16;
 		}
 
-
+*/
 		[DllImport("user32.dll")]
 		private static extern bool EndMenu();
 

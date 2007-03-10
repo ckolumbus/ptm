@@ -10,9 +10,8 @@ using PTM.Addin;
 using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.Framework.Infos;
-using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
-using NotifyIcon=HansBlomme.Windows.Forms.NotifyIcon;
+using NotifyIcon=System.Windows.Forms.NotifyIcon;
 using Timer=System.Timers.Timer;
 
 namespace PTM.View.Controls
@@ -31,7 +30,7 @@ namespace PTM.View.Controls
 		private Timer notifyTimer;
 		private NotifyIcon notifyIcon;
 		private IContainer components;
-		private TreeListView taskList;
+		private ListView taskList;
 		private Button switchToButton;
 		private Button deleteButton;
 		private ColumnHeader StartTimeHeader;
@@ -47,15 +46,15 @@ namespace PTM.View.Controls
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
-
 			worker = new AsyncWorker();
 			worker.OnBeforeDoWork += new AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
 			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
-			notifyIcon.MouseDown += new NotifyIcon.MouseDownEventHandler(notifyIcon_MouseDown);
+			notifyIcon.MouseDown += new MouseEventHandler(notifyIcon_MouseDown);
 			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
 			notifyAnswerTimer.Elapsed += new ElapsedEventHandler(notifyAnswerTimer_Elapsed);
-			notifyIcon.Click += new NotifyIcon.ClickEventHandler(notifyIcon_Click);
+			notifyIcon.Click += new EventHandler(notifyIcon_Click);
+			
 			addTaskButton.Click += new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
 
@@ -63,8 +62,8 @@ namespace PTM.View.Controls
 			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
 			Tasks.TaskDeleted += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			ApplicationsLog.ApplicationsLogChanged +=
-				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+//			ApplicationsLog.ApplicationsLogChanged +=
+//				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
 			this.taskList.SmallImageList = IconsManager.IconsList;
 			this.Load += new EventHandler(TasksLogControl_Load);
 
@@ -88,8 +87,8 @@ namespace PTM.View.Controls
 			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
 			Tasks.TaskDeleted -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
-			ApplicationsLog.ApplicationsLogChanged -=
-				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+//			ApplicationsLog.ApplicationsLogChanged -=
+//				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
 			base.OnHandleDestroyed(e);
 		}
 
@@ -125,8 +124,8 @@ namespace PTM.View.Controls
 			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.notifyAnswerTimer = new System.Timers.Timer();
 			this.notifyTimer = new System.Timers.Timer();
-			this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
-			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
+			this.notifyIcon = new NotifyIcon(this.components);
+			this.taskList = new System.Windows.Forms.ListView();
 			this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
 			this.switchToButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
@@ -203,12 +202,13 @@ namespace PTM.View.Controls
 																					   this.DurationTaskHeader,
 																					   this.StartTimeHeader});
 			this.taskList.ContextMenu = this.rigthClickMenu;
+			this.taskList.FullRowSelect = true;
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 32);
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 240);
-			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 1;
+			this.taskList.View = System.Windows.Forms.View.Details;
 			this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskList_KeyDown);
 			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
 			// 
@@ -389,8 +389,8 @@ namespace PTM.View.Controls
 		{
 			if (this.taskList.SelectedItems.Count == 0)
 				return false;
-			if (taskList.SelectedItems[0].Parent != null)
-				return false;
+//			if (taskList.SelectedItems[0].Parent != null)
+//				return false;
 
 			return true;
 		}
@@ -408,36 +408,36 @@ namespace PTM.View.Controls
 			}
 			else if (this.taskList.SelectedItems.Count == 1)
 			{
-				if (taskList.SelectedItems[0].Parent == null)
-				{
+//				if (taskList.SelectedItems[0].Parent == null)
+//				{
 					SetEditable();
-				}
-				else
-				{
-					SetNoEditable();
-				}
+//				}
+//				else
+//				{
+//					SetNoEditable();
+//				}
 			}
 			else
 			{
-				if (taskList.SelectedItems[0].Parent != null)
-				{
-					SetNoEditable();
-					return;
-				}
+//				if (taskList.SelectedItems[0].Parent != null)
+//				{
+//					SetNoEditable();
+//					return;
+//				}
 //				int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
-				for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
-				{
-					if (taskList.SelectedItems[i].Parent != null)
-					{
-						SetNoEditable();
-						return;
-					}
-//					if (((Log) taskList.SelectedItems[i].Tag).TaskId != taskId)
+//				for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
+//				{
+//					if (taskList.SelectedItems[i].Parent != null)
 //					{
-//						this.editButton.Enabled = false;
+//						SetNoEditable();
 //						return;
 //					}
-				}
+////					if (((Log) taskList.SelectedItems[i].Tag).TaskId != taskId)
+////					{
+////						this.editButton.Enabled = false;
+////						return;
+////					}
+//				}
 				SetEditable();
 			}
 		}
@@ -494,14 +494,14 @@ namespace PTM.View.Controls
 			MenuItem mnuEdit = new MenuItem();
 			MenuItem mnuSwitchTo = new MenuItem();
 			MenuItem mnuDelete = new MenuItem();
-			MenuItem menuItem11 = new MenuItem();
+			//MenuItem menuItem11 = new MenuItem();
 			this.rigthClickMenu.MenuItems.Clear();
 			this.rigthClickMenu.MenuItems.AddRange(new MenuItem[]
 			                                       	{
 			                                       		mnuEdit,
 			                                       		mnuSwitchTo,
-			                                       		mnuDelete,
-			                                       		menuItem11
+			                                       		mnuDelete//,
+			                                       		//menuItem11
 			                                       	});
 
 			mnuEdit.DefaultItem = true;
@@ -519,6 +519,7 @@ namespace PTM.View.Controls
 			mnuDelete.Text = "Delete";
 			mnuDelete.Click += new EventHandler(this.mnuDelete_Click);
 
+			/*
 			menuItem11.Index = 3;
 			menuItem11.Text = "-";
 
@@ -536,8 +537,9 @@ namespace PTM.View.Controls
 			}
 			ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
 			this.rigthClickMenu.MergeMenu(defaultTasksMenu);
+			*/
 		}
-
+/*
 		private void mnuTaskSetTo_Click(object sender, EventArgs e)
 		{
 			TaskMenuItem mnu = (TaskMenuItem) sender;
@@ -547,7 +549,7 @@ namespace PTM.View.Controls
 				Logs.UpdateLogTaskId(log.Id, mnu.TaskId);
 			}
 		}
-
+*/
 
 		private void taskList_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -568,7 +570,7 @@ namespace PTM.View.Controls
 				Cursor.Current = Cursors.WaitCursor;
 				for (int i = 0; i < this.taskList.Items.Count; i++)
 				{
-					TreeListViewItem item = this.taskList.Items[i];
+					ListViewItem item = this.taskList.Items[i];
 					if (((Log) item.Tag).TaskId == Tasks.IdleTasksRow.Id)
 						continue;
 					if (this.pathCheckBox.Checked)
@@ -606,13 +608,13 @@ namespace PTM.View.Controls
 				foreach (Log log in logs)
 				{
 					Task taskRow = Tasks.FindById(log.TaskId);
-					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+					ListViewItem itemA = new ListViewItem( new string[] {"","", ""});
 					SetListItemValues(itemA, log, taskRow);
 					taskList.Items.Insert(0, itemA);
-					foreach (ApplicationLog applicationLog in log.ApplicationsLog)
-					{
-						UpdateApplicationsList(applicationLog);
-					}
+//					foreach (ApplicationLog applicationLog in log.ApplicationsLog)
+//					{
+//						UpdateApplicationsList(applicationLog);
+//					}
 				}
 			}
 			catch (Exception ex)
@@ -704,18 +706,18 @@ namespace PTM.View.Controls
 		private void CreateNotifyMenu()
 		{
 			MenuItem exitContextMenuItem = new MenuItem();
-			MenuItem menuItem1 = new MenuItem();
+			//MenuItem menuItem1 = new MenuItem();
 			this.notifyContextMenu = new ContextMenu();
 			this.notifyContextMenu.MenuItems.AddRange(new MenuItem[]
 			                                          	{
-			                                          		exitContextMenuItem,
-			                                          		menuItem1
+			                                          		exitContextMenuItem//,
+			                                          		//menuItem1
 			                                          	});
 
 			exitContextMenuItem.Index = 0;
 			exitContextMenuItem.Text = "Exit";
 			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);
-
+/*
 			menuItem1.Index = 1;
 			menuItem1.Text = "-";
 
@@ -734,9 +736,10 @@ namespace PTM.View.Controls
 
 			ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
 			this.notifyContextMenu.MergeMenu(defaultTasksMenu);
+			*/
 			this.notifyIcon.ContextMenu = this.notifyContextMenu;
 		}
-
+/*
 		private void AddSubTasks(Task parentTask, TaskMenuItem menuItem, EventHandler handler)
 		{
 			//ArrayList a = new ArrayList();
@@ -756,7 +759,7 @@ namespace PTM.View.Controls
 			}
 			//menuItem.MenuItems.AddRange((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
 		}
-
+*/
 		private void exitContextMenuItem_Click(object sender, EventArgs e)
 		{
 			this.notifyTimer.Stop();
@@ -764,13 +767,13 @@ namespace PTM.View.Controls
 			this.notifyIcon.Visible = false;
 			this.Exit(this, e);
 		}
-
+/*
 		private void mnuTaskAdd_Click(object sender, EventArgs e)
 		{
 			TaskMenuItem mnu = (TaskMenuItem) sender;
 			AddTaskLog(mnu.TaskId, (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
 		}
-
+*/
 		#endregion
 
 		#region Framework events
@@ -822,7 +825,7 @@ namespace PTM.View.Controls
 					return;
 
 				taskRow = Tasks.FindById(e.Log.TaskId);
-				foreach (TreeListViewItem item in this.taskList.Items)
+				foreach (ListViewItem item in this.taskList.Items)
 				{
 					if (((Log) item.Tag).Id == e.Log.Id)
 					{
@@ -837,7 +840,7 @@ namespace PTM.View.Controls
 				if (this.logDate.Value.Date == currentDay)
 				{
 					taskRow = Tasks.FindById(e.Log.TaskId);
-					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+					ListViewItem itemA = new ListViewItem( new string[] {"","", ""});
 					SetListItemValues(itemA, e.Log, taskRow);
 					taskList.Items.Insert(0, itemA);
 				}
@@ -882,7 +885,7 @@ namespace PTM.View.Controls
 				notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[taskRow.IconId];
 			}
 		}
-
+/*
 		private void UpdateApplicationsList(ApplicationLog applicationLog)
 		{
 			if (applicationLog == null)
@@ -894,11 +897,11 @@ namespace PTM.View.Controls
 			TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
 			string activeTime = ViewHelper.TimeSpanToTimeString(active);
 			string caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;
-			foreach (TreeListViewItem logItem in this.taskList.Items)
+			foreach (ListViewItem logItem in this.taskList.Items)
 			{
 				if (((Log) logItem.Tag).Id == applicationLog.TaskLogId)
 				{
-					foreach (TreeListViewItem appItem in logItem.Items)
+					foreach (ListViewItem appItem in logItem.Items)
 					{
 						if (((ApplicationLog) appItem.Tag).Id == applicationLog.Id)
 						{
@@ -908,7 +911,7 @@ namespace PTM.View.Controls
 							return;
 						}
 					}
-					TreeListViewItem lvi =
+					ListViewItem lvi =
 						new TreeListViewItem(caption,
 						                     new string[] {activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture)});
 					lvi.Tag = applicationLog;
@@ -922,7 +925,7 @@ namespace PTM.View.Controls
 		{
 			this.UpdateApplicationsList(e.ApplicationLog);
 		}
-
+*/
 		#endregion
 
 		#region AsyncWork
@@ -935,11 +938,11 @@ namespace PTM.View.Controls
 		private object GetLogs(object p)
 		{
 			ArrayList list = Logs.GetLogsByDay(this.currentDay.Date);
-			foreach (Log log in list)
-			{
-				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
-				log.ApplicationsLog = applicationLogs;
-			}
+//			foreach (Log log in list)
+//			{
+//				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
+//				log.ApplicationsLog = applicationLogs;
+//			}
 			return list;
 		}
 

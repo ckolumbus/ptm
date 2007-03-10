@@ -74,10 +74,10 @@ namespace PTM.Framework.Infos
 		/// <summary>
 		/// ProcessId of the Application
 		/// </summary>
-		public int ProcessId
+		public int MainWindowHandle
 		{
-			get { return processId; }
-			set { processId = value; }
+			get { return mainWindowHandle; }
+			set { mainWindowHandle = value; }
 		} //ProcessId
 
 		/// <summary>
@@ -90,7 +90,7 @@ namespace PTM.Framework.Infos
 		} //LastUpdateTime
 
 		private int taskLogId;
-		private int processId;
+		private int mainWindowHandle;
 		private DateTime lastUpdateTime;
 	} //end of class ApplicationLog
 } //end of namespace PTM.Framework.Infos

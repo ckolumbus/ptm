@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using PTM.Addin;
 using PTM.Framework;
 using PTM.Framework.Infos;
-using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -18,7 +17,7 @@ namespace PTM.View.Controls
 	/// </summary>
 	internal class SummaryControl : AddinTabPage
 	{
-		private TreeListView taskList;
+		private ListView taskList;
 		private GroupBox groupBox1;
 		private GroupBox groupBox3;
 		private ColumnHeader PercentHeader;
@@ -114,7 +113,7 @@ namespace PTM.View.Controls
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SummaryControl));
-			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
+			this.taskList = new System.Windows.Forms.ListView();
 			this.TaskHeader = new System.Windows.Forms.ColumnHeader();
 			this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
 			this.InactiveTimeHeader = new System.Windows.Forms.ColumnHeader();
@@ -158,13 +157,14 @@ namespace PTM.View.Controls
 																					   this.ActiveTimeHeader,
 																					   this.InactiveTimeHeader,
 																					   this.PercentHeader});
+			this.taskList.FullRowSelect = true;
 			this.taskList.HideSelection = false;
 			this.taskList.Location = new System.Drawing.Point(8, 16);
 			this.taskList.MultiSelect = false;
 			this.taskList.Name = "taskList";
 			this.taskList.Size = new System.Drawing.Size(376, 184);
-			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
 			this.taskList.TabIndex = 0;
+			this.taskList.View = System.Windows.Forms.View.Details;
 			// 
 			// TaskHeader
 			// 
@@ -442,10 +442,10 @@ namespace PTM.View.Controls
 
 					TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
 					TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalInactiveTime));
-					TreeListViewItem lvi =
-						new TreeListViewItem(summary.Description,
+					ListViewItem lvi =
+						new ListViewItem(
 						                     new string[]
-						                     	{
+						                     	{   summary.Description,
 						                     		ViewHelper.TimeSpanToTimeString(activeTimeSpan),
 						                     		ViewHelper.TimeSpanToTimeString(inactiveTimeSpan),
 						                     		0.ToString("0.0%", CultureInfo.InvariantCulture),

@@ -82,7 +82,7 @@
                 <Reference
                     Name = "PTM"
                     AssemblyName = "PTM"
-                    HintPath = "..\code\PTM\bin\Debug\ptm.exe"
+                    HintPath = "..\code\PTM\bin\Debug\ptmlite.exe"
                 />
                 <Reference
                     Name = "nunit.framework"

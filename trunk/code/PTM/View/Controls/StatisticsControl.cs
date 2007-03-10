@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using PTM.Addin;
 using PTM.Framework;
 using PTM.Framework.Infos;
-using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
 
 namespace PTM.View.Controls
@@ -16,7 +15,7 @@ namespace PTM.View.Controls
 	/// </summary>
 	internal class StatisticsControl : AddinTabPage
 	{
-		private TreeListView applicationsList;
+		private ListView applicationsList;
 		private ColumnHeader colName;
 		private ColumnHeader colActiveTime;
 		private GroupBox groupBox3;
@@ -95,7 +94,7 @@ namespace PTM.View.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.applicationsList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
+			this.applicationsList = new System.Windows.Forms.ListView();
 			this.colName = new System.Windows.Forms.ColumnHeader();
 			this.colActiveTime = new System.Windows.Forms.ColumnHeader();
 			this.colAppPercent = new System.Windows.Forms.ColumnHeader();
@@ -117,22 +116,20 @@ namespace PTM.View.Controls
 			// 
 			// applicationsList
 			// 
-			this.applicationsList.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
-			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-			                                       	{
-			                                       		this.colName,
-			                                       		this.colActiveTime,
-			                                       		this.colAppPercent
-			                                       	});
+			this.applicationsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.applicationsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																							   this.colName,
+																							   this.colActiveTime,
+																							   this.colAppPercent});
+			this.applicationsList.FullRowSelect = true;
 			this.applicationsList.Location = new System.Drawing.Point(8, 16);
 			this.applicationsList.MultiSelect = false;
 			this.applicationsList.Name = "applicationsList";
 			this.applicationsList.Size = new System.Drawing.Size(376, 136);
 			this.applicationsList.TabIndex = 0;
+			this.applicationsList.View = System.Windows.Forms.View.Details;
 			// 
 			// colName
 			// 
@@ -152,11 +149,9 @@ namespace PTM.View.Controls
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				    | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.applicationsList);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
@@ -169,10 +164,8 @@ namespace PTM.View.Controls
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-				   | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.AppsActiveTimeValue);
 			this.groupBox4.Controls.Add(this.label8);
 			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -300,6 +293,7 @@ namespace PTM.View.Controls
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -344,10 +338,10 @@ namespace PTM.View.Controls
 					double percent = 0;
 					if (appActiveTime > 0)
 						percent = applicationsSummaryRow.TotalActiveTime/appActiveTime;
-					TreeListViewItem lvi =
-						new TreeListViewItem(applicationsSummaryRow.Name,
+					ListViewItem lvi =
+						new ListViewItem(
 						                     new string[]
-						                     	{
+						                     	{applicationsSummaryRow.Name,
 						                     		activeTime, percent.ToString("0.0%", CultureInfo.InvariantCulture),
 						                     		applicationsSummaryRow.TaskId.ToString(CultureInfo.InvariantCulture)
 						                     	});

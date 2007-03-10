@@ -27,10 +27,10 @@ namespace PTM
 		private MenuItem exitMenuItem;
 		private TabPage summaryPage;
 		private StatusBar statusBar;
-		private TabPage statisticsPage;
+		//private TabPage statisticsPage;
 		private TasksLogControl tasksLogControl;
 		private SummaryControl summaryControl;
-		private StatisticsControl statisticsControl;
+		//private StatisticsControl statisticsControl;
 		private MenuItem menuItem2;
 		private MenuItem aboutMenuItem;
 		private MenuItem menuItem4;
@@ -61,11 +61,11 @@ namespace PTM
 			this.tabControl.SuspendLayout();
 			this.tasksPage.SuspendLayout();
 			this.summaryPage.SuspendLayout();
-			this.statisticsPage.SuspendLayout();
+			//this.statisticsPage.SuspendLayout();
 			this.SuspendLayout();
 			this.tasksLogControl = new TasksLogControl();
 			this.summaryControl = new SummaryControl();
-			this.statisticsControl = new StatisticsControl();
+			//this.statisticsControl = new StatisticsControl();
 
 			this.tasksPage.Controls.Add(this.tasksLogControl);
 			// 
@@ -91,7 +91,7 @@ namespace PTM
 			this.summaryControl.Size = new Size(408, 358);
 			this.summaryControl.TabIndex = 0;
 			this.summaryControl.StatusChanged += new AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
-
+/*
 			this.statisticsPage.Controls.Add(this.statisticsControl);
 			// 
 			// statisticsControl
@@ -103,11 +103,11 @@ namespace PTM
 			this.statisticsControl.Size = new Size(408, 358);
 			this.statisticsControl.TabIndex = 0;
 			this.statisticsControl.StatusChanged += new AddinTabPage.StatusChangedDelegate(tabPage_StatusChanged);
-
+*/
 			this.tabControl.ResumeLayout(false);
 			this.tasksPage.ResumeLayout(false);
 			this.summaryPage.ResumeLayout(false);
-			this.statisticsPage.ResumeLayout(false);
+			//this.statisticsPage.ResumeLayout(false);
 			this.ResumeLayout();
 		}
 
@@ -188,7 +188,7 @@ namespace PTM
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tasksPage = new System.Windows.Forms.TabPage();
 			this.summaryPage = new System.Windows.Forms.TabPage();
-			this.statisticsPage = new System.Windows.Forms.TabPage();
+			//this.statisticsPage = new System.Windows.Forms.TabPage();
 			this.tabControl.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -284,7 +284,7 @@ namespace PTM
 				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.tasksPage);
 			this.tabControl.Controls.Add(this.summaryPage);
-			this.tabControl.Controls.Add(this.statisticsPage);
+			//this.tabControl.Controls.Add(this.statisticsPage);
 			this.tabControl.HotTrack = true;
 			this.tabControl.Location = new System.Drawing.Point(8, 8);
 			this.tabControl.Name = "tabControl";
@@ -308,6 +308,7 @@ namespace PTM
 			this.summaryPage.Size = new System.Drawing.Size(408, 358);
 			this.summaryPage.TabIndex = 2;
 			this.summaryPage.Text = "Summary";
+			/*
 			// 
 			// statisticsPage
 			// 
@@ -316,6 +317,7 @@ namespace PTM
 			this.statisticsPage.Size = new System.Drawing.Size(408, 358);
 			this.statisticsPage.TabIndex = 3;
 			this.statisticsPage.Text = "Statistics";
+			*/
 			// 
 			// MainForm
 			// 
@@ -378,7 +380,7 @@ namespace PTM
 				else
 				{
 					e.Cancel = true;
-					this.AnimateWindow();
+					//this.AnimateWindow();
 					this.Visible = false;
 				}
 			}
@@ -391,26 +393,26 @@ namespace PTM
 			base.OnClosing(e);
 		} //OnClosing
 
-		private void AnimateWindow()
-		{
-			// if the user has not disabled animating windows...
-			if (!this.AnimationDisabled)
-			{
-				ViewHelper.RECT animateFrom = new ViewHelper.RECT();
-				ViewHelper.GetWindowRect(this.Handle, ref animateFrom);
-
-				ViewHelper.RECT animateTo = new ViewHelper.RECT();
-				IntPtr notifyAreaHandle = ViewHelper.GetNotificationAreaHandle();
-
-				if (notifyAreaHandle != IntPtr.Zero)
-				{
-					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo))
-					{
-						ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
-					} //if
-				} //if
-			} //if
-		} //AnimateWindow
+//		private void AnimateWindow()
+//		{
+//			// if the user has not disabled animating windows...
+//			if (!this.AnimationDisabled)
+//			{
+//				ViewHelper.RECT animateFrom = new ViewHelper.RECT();
+//				ViewHelper.GetWindowRect(this.Handle, ref animateFrom);
+//
+//				ViewHelper.RECT animateTo = new ViewHelper.RECT();
+//				IntPtr notifyAreaHandle = ViewHelper.GetNotificationAreaHandle();
+//
+//				if (notifyAreaHandle != IntPtr.Zero)
+//				{
+//					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo))
+//					{
+//						ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
+//					} //if
+//				} //if
+//			} //if
+//		} //AnimateWindow
 
 		#endregion
 
@@ -429,7 +431,7 @@ namespace PTM
 		private static void Save()
 		{
             Logs.UpdateCurrentLogDuration();
-			ApplicationsLog.UpdateCurrentApplicationsLog();
+			//ApplicationsLog.UpdateCurrentApplicationsLog();
 		} //Save
 
 		private void exitMenuItem_Click(object sender, EventArgs e)

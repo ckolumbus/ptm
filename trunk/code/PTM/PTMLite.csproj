@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = "..\..\art\ptm3.ICO"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "PTM"
+                AssemblyName = "PTMLite"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "WinExe"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(SolutionDir)database\ptm.mdb $(TargetDir)&#xd;&#xa;copy $(ProjectDir)app.manifest $(TargetDir)&#xd;&#xa;$(SolutionDir)tools\thememe\thememe.exe ptm.exe app.manifest"
+                PostBuildEvent = "copy $(SolutionDir)database\ptm.mdb $(TargetDir)&#xd;&#xa;copy $(ProjectDir)app.manifest $(TargetDir)&#xd;&#xa;$(SolutionDir)tools\thememe\thememe.exe $(TargetFileName) app.manifest"
                 RootNamespace = "PTM"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = "PTM.MainClass"
@@ -138,11 +138,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\ApplicationSummaries.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Framework\Logs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -228,11 +223,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "View\IconHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "View\IconsManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -243,52 +233,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "View\MemoryMappedFile.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "View\ViewHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsComctl32.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsEnums.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsStructs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\APIsUser32.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\ColorUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\LocalWindowsHook.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\MouseHook.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\API\MouseHookEventArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -307,21 +252,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "View\Controls\NotifyIcon.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\StatisticsControl.cs"
-                    SubType = "UserControl"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\StatisticsControl.resx"
-                    DependentUpon = "StatisticsControl.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "View\Controls\SummaryControl.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -330,11 +260,6 @@
                     RelPath = "View\Controls\SummaryControl.resx"
                     DependentUpon = "SummaryControl.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "View\Controls\TaskMenuItem.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "View\Controls\TasksLogControl.cs"
@@ -354,46 +279,6 @@
                 <File
                     RelPath = "View\Controls\TasksTreeViewControl.resx"
                     DependentUpon = "TasksTreeViewControl.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\ITreeListViewItemComparer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\SelectedTreeListViewItemCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\TreeListView.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\TreeListView.resx"
-                    DependentUpon = "TreeListView.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\TreeListViewItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\TreeListViewItemCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\TreeListViewSubItemEdit.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "View\Controls\TreeListViewComponents\TreeListViewSubItemEdit.resx"
-                    DependentUpon = "TreeListViewSubItemEdit.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
