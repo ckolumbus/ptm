@@ -79,7 +79,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (TaskPropertiesForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TaskPropertiesForm));
 			this.chkIsActive = new System.Windows.Forms.CheckBox();
 			this.btnRigth = new System.Windows.Forms.Button();
 			this.btnLeft = new System.Windows.Forms.Button();
@@ -100,7 +100,7 @@ namespace PTM.View.Forms
 			// 
 			// btnRigth
 			// 
-			this.btnRigth.Image = ((System.Drawing.Image) (resources.GetObject("btnRigth.Image")));
+			this.btnRigth.Image = ((System.Drawing.Image)(resources.GetObject("btnRigth.Image")));
 			this.btnRigth.Location = new System.Drawing.Point(40, 56);
 			this.btnRigth.Name = "btnRigth";
 			this.btnRigth.Size = new System.Drawing.Size(18, 18);
@@ -109,7 +109,7 @@ namespace PTM.View.Forms
 			// 
 			// btnLeft
 			// 
-			this.btnLeft.Image = ((System.Drawing.Image) (resources.GetObject("btnLeft.Image")));
+			this.btnLeft.Image = ((System.Drawing.Image)(resources.GetObject("btnLeft.Image")));
 			this.btnLeft.Location = new System.Drawing.Point(16, 56);
 			this.btnLeft.Name = "btnLeft";
 			this.btnLeft.Size = new System.Drawing.Size(18, 18);
@@ -136,9 +136,7 @@ namespace PTM.View.Forms
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(240, 88);
@@ -149,9 +147,7 @@ namespace PTM.View.Forms
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor =
-				((System.Windows.Forms.AnchorStyles)
-				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(152, 88);
@@ -174,6 +170,7 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.chkIsActive);
 			this.Controls.Add(this.btnRigth);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "TaskPropertiesForm";
@@ -182,6 +179,7 @@ namespace PTM.View.Forms
 			this.Text = "Task Properties";
 			this.Load += new System.EventHandler(this.TaskPropertiesForm_Load);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
