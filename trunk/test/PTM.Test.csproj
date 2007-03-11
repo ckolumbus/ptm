@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{394ABD67-5EE0-4C35-AF98-0564E91C0551}"
     >
@@ -81,7 +81,7 @@
                 />
                 <Reference
                     Name = "PTM"
-                    AssemblyName = "PTM"
+                    AssemblyName = "PTMLite"
                     HintPath = "..\code\PTM\bin\Debug\ptmlite.exe"
                 />
                 <Reference
@@ -95,16 +95,6 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Business\ApplicationsLogTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Business\ApplicationSummariesTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

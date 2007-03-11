@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Runtime.InteropServices.APIs;
 using System.Windows.Forms;
 
 namespace PTM.View.Forms
@@ -247,12 +246,13 @@ namespace PTM.View.Forms
 			this.Left = screenWidth - this.Width;
 			this.Top = screenHeight - this.Height;
 
-			// Show the window without activating it.
-			APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
+//			// Show the window without activating it.
+//			APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
+//
+//			// Equivalent to setting TopMost = true, except don't activate the window.
+//			APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 4);
 
-			// Equivalent to setting TopMost = true, except don't activate the window.
-			APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 4);
-
+			base.Show();
 			this.timer.Start();
 		}
 	}

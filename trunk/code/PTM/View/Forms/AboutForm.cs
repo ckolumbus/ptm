@@ -60,7 +60,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (AboutForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AboutForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
@@ -73,7 +73,7 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
 			this.pictureBox1.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(72, 64);
@@ -83,9 +83,7 @@ namespace PTM.View.Forms
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Font =
-				new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold,
-				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.label1.Location = new System.Drawing.Point(80, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(168, 23);
@@ -96,7 +94,7 @@ namespace PTM.View.Forms
 			// 
 			this.button1.BackColor = System.Drawing.SystemColors.Control;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button1.Location = new System.Drawing.Point(264, 96);
+			this.button1.Location = new System.Drawing.Point(256, 104);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(64, 23);
 			this.button1.TabIndex = 2;
@@ -108,12 +106,13 @@ namespace PTM.View.Forms
 			this.lblVersion.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.lblVersion.Location = new System.Drawing.Point(80, 32);
 			this.lblVersion.Name = "lblVersion";
+			this.lblVersion.Size = new System.Drawing.Size(168, 32);
 			this.lblVersion.TabIndex = 3;
 			// 
 			// label3
 			// 
 			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label3.Location = new System.Drawing.Point(80, 56);
+			this.label3.Location = new System.Drawing.Point(72, 64);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(96, 23);
 			this.label3.TabIndex = 4;
@@ -121,8 +120,8 @@ namespace PTM.View.Forms
 			// 
 			// pictureBox2
 			// 
-			this.pictureBox2.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox2.Image")));
-			this.pictureBox2.Location = new System.Drawing.Point(176, 56);
+			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+			this.pictureBox2.Location = new System.Drawing.Point(168, 64);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(24, 16);
 			this.pictureBox2.TabIndex = 5;
@@ -130,7 +129,7 @@ namespace PTM.View.Forms
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(80, 104);
+			this.label4.Location = new System.Drawing.Point(72, 112);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(176, 23);
 			this.label4.TabIndex = 7;
@@ -140,7 +139,7 @@ namespace PTM.View.Forms
 			// 
 			this.linkLabel.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.linkLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.linkLabel.Location = new System.Drawing.Point(80, 80);
+			this.linkLabel.Location = new System.Drawing.Point(72, 88);
 			this.linkLabel.Name = "linkLabel";
 			this.linkLabel.Size = new System.Drawing.Size(176, 23);
 			this.linkLabel.TabIndex = 8;
@@ -152,7 +151,7 @@ namespace PTM.View.Forms
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(334, 129);
+			this.ClientSize = new System.Drawing.Size(334, 132);
 			this.Controls.Add(this.linkLabel);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.pictureBox2);
@@ -162,7 +161,7 @@ namespace PTM.View.Forms
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
@@ -171,6 +170,7 @@ namespace PTM.View.Forms
 			this.Text = "About PTM";
 			this.TopMost = true;
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -184,5 +184,6 @@ namespace PTM.View.Forms
 		{
 			Process.Start(linkLabel.Text);
 		}
+
 	}
 }

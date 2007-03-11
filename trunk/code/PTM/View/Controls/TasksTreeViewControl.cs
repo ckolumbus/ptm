@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PTM.Framework;
 using PTM.Framework.Infos;
@@ -17,7 +16,7 @@ namespace PTM.View.Controls
 		internal TasksTreeViewControl()
 		{
 			InitializeComponent();
-			InitCommonControls();
+			//InitCommonControls();
 			this.treeView.ItemDrag += new ItemDragEventHandler(treeView_ItemDrag);
 			this.treeView.DragDrop += new DragEventHandler(treeView_DragDrop);
 			this.treeView.DragOver += new DragEventHandler(treeView_DragOver);
@@ -356,35 +355,35 @@ namespace PTM.View.Controls
 		#region Drag And Drop
 
 		private Timer timer = new Timer();
-		private ImageList imageListDrag = new ImageList();
+		//private ImageList imageListDrag = new ImageList();
 		private TreeNode dragNode = null;
-		private TreeNode tempDropNode = null;
+		//private TreeNode tempDropNode = null;
 
-		[DllImport("comctl32.dll")]
-		internal static extern bool InitCommonControls();
-
-		[DllImport("comctl32.dll", CharSet = CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		internal static extern bool ImageList_BeginDrag(IntPtr himlTrack, int iTrack, int dxHotspot, int dyHotspot);
-
-		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		internal static extern bool ImageList_DragMove(int x, int y);
-
-		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		internal static extern void ImageList_EndDrag();
-
-		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		internal static extern bool ImageList_DragEnter(IntPtr hwndLock, int x, int y);
-
-		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		internal static extern bool ImageList_DragLeave(IntPtr hwndLock);
-
-		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		internal static extern bool ImageList_DragShowNolock([MarshalAs(UnmanagedType.Bool)]bool fShow);
+//		[DllImport("comctl32.dll")]
+//		internal static extern bool InitCommonControls();
+//
+//		[DllImport("comctl32.dll", CharSet = CharSet.Auto)]
+//		[return: MarshalAs(UnmanagedType.Bool)]
+//		internal static extern bool ImageList_BeginDrag(IntPtr himlTrack, int iTrack, int dxHotspot, int dyHotspot);
+//
+//		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+//		[return: MarshalAs(UnmanagedType.Bool)]
+//		internal static extern bool ImageList_DragMove(int x, int y);
+//
+//		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+//		internal static extern void ImageList_EndDrag();
+//
+//		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+//		[return: MarshalAs(UnmanagedType.Bool)]
+//		internal static extern bool ImageList_DragEnter(IntPtr hwndLock, int x, int y);
+//
+//		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+//		[return: MarshalAs(UnmanagedType.Bool)]
+//		internal static extern bool ImageList_DragLeave(IntPtr hwndLock);
+//
+//		[DllImport("comctl32.dll", CharSet=CharSet.Auto)]
+//		[return: MarshalAs(UnmanagedType.Bool)]
+//		internal static extern bool ImageList_DragShowNolock([MarshalAs(UnmanagedType.Bool)]bool fShow);
 
 		private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
 		{
@@ -392,56 +391,58 @@ namespace PTM.View.Controls
 			this.dragNode = (TreeNode) e.Item;
 			this.treeView.SelectedNode = this.dragNode;
 
-			// Reset image list used for drag image
-			this.imageListDrag.Images.Clear();
-			this.imageListDrag.ImageSize =
-  			new Size(Math.Min(this.dragNode.Bounds.Size.Width + this.treeView.Indent, 256), this.dragNode.Bounds.Height);
+//			// Reset image list used for drag image
+//			this.imageListDrag.Images.Clear();
+//			this.imageListDrag.ImageSize =
+//  			new Size(Math.Min(this.dragNode.Bounds.Size.Width + this.treeView.Indent, 256), this.dragNode.Bounds.Height);
 
 
-			// Create new bitmap
-			// This bitmap will contain the tree node image to be dragged
-			Bitmap bmp = new Bitmap(Math.Min(this.dragNode.Bounds.Width + this.treeView.Indent, 256), this.dragNode.Bounds.Height);
+//			// Create new bitmap
+//			// This bitmap will contain the tree node image to be dragged
+//			Bitmap bmp = new Bitmap(Math.Min(this.dragNode.Bounds.Width + this.treeView.Indent, 256), this.dragNode.Bounds.Height);
+//
+//			// Get graphics from bitmap
+//			using (Graphics gfx = Graphics.FromImage(bmp))
+//			{
+//				// Draw node icon into the bitmap
+//				gfx.DrawImage(this.groupsImageList.Images[0], 0, 0);
+//
+//				// Draw node label into bitmap
+//				gfx.DrawString(this.dragNode.Text,
+//				               this.treeView.Font,
+//				               new SolidBrush(this.treeView.ForeColor),
+//				               this.treeView.Indent, 1.0f);
+//			}
 
-			// Get graphics from bitmap
-			using (Graphics gfx = Graphics.FromImage(bmp))
-			{
-				// Draw node icon into the bitmap
-				gfx.DrawImage(this.groupsImageList.Images[0], 0, 0);
+//			// Add bitmap to imagelist
+//			this.imageListDrag.Images.Add(bmp);
 
-				// Draw node label into bitmap
-				gfx.DrawString(this.dragNode.Text,
-				               this.treeView.Font,
-				               new SolidBrush(this.treeView.ForeColor),
-				               this.treeView.Indent, 1.0f);
-			}
+//			// Get mouse position in client coordinates
+//			Point p = this.treeView.PointToClient(MousePosition);
 
-			// Add bitmap to imagelist
-			this.imageListDrag.Images.Add(bmp);
+//			// Compute delta between mouse position and node bounds
+//			//			int dx = p.X + this.treeView.Indent - this.dragNode.Bounds.Left;
+//			//			int dy = p.Y - this.dragNode.Bounds.Top;
+//			int dx = p.X + this.treeView.Indent - this.dragNode.Bounds.Left - this.treeView.Location.X;
+//			int dy = p.Y - this.dragNode.Bounds.Top - this.treeView.Location.Y;
 
-			// Get mouse position in client coordinates
-			Point p = this.treeView.PointToClient(MousePosition);
+//			// Begin dragging image
+//			if (ImageList_BeginDrag(this.imageListDrag.Handle, 0, dx, dy))
+//			{
+//				// Begin dragging
+//				this.treeView.DoDragDrop(bmp, DragDropEffects.Move);
+//				// End dragging image
+//				ImageList_EndDrag();
+//			}
 
-			// Compute delta between mouse position and node bounds
-			//			int dx = p.X + this.treeView.Indent - this.dragNode.Bounds.Left;
-			//			int dy = p.Y - this.dragNode.Bounds.Top;
-			int dx = p.X + this.treeView.Indent - this.dragNode.Bounds.Left - this.treeView.Location.X;
-			int dy = p.Y - this.dragNode.Bounds.Top - this.treeView.Location.Y;
-
-			// Begin dragging image
-			if (ImageList_BeginDrag(this.imageListDrag.Handle, 0, dx, dy))
-			{
-				// Begin dragging
-				this.treeView.DoDragDrop(bmp, DragDropEffects.Move);
-				// End dragging image
-				ImageList_EndDrag();
-			}
+			DoDragDrop(e.Item, DragDropEffects.Move);
 		}
 
 		private void treeView_DragOver(object sender, DragEventArgs e)
 		{
-			// Compute drag position and move image
-			Point formP = this.PointToClient(new Point(e.X, e.Y));
-			ImageList_DragMove(formP.X - this.treeView.Left, formP.Y - this.treeView.Top);
+//			// Compute drag position and move image
+//			Point formP = this.PointToClient(new Point(e.X, e.Y));
+//			ImageList_DragMove(formP.X - this.treeView.Left, formP.Y - this.treeView.Top);
 
 			// Get actual drop node
 			TreeNode dropNode = this.treeView.GetNodeAt(this.treeView.PointToClient(new Point(e.X, e.Y)));
@@ -453,14 +454,14 @@ namespace PTM.View.Controls
 
 			e.Effect = DragDropEffects.Move;
 
-			// if mouse is on a new node select it
-			if (this.tempDropNode != dropNode)
-			{
-				ImageList_DragShowNolock(false);
-				this.treeView.SelectedNode = dropNode;
-				ImageList_DragShowNolock(true);
-				tempDropNode = dropNode;
-			}
+//			// if mouse is on a new node select it
+//			if (this.tempDropNode != dropNode)
+//			{
+//				ImageList_DragShowNolock(false);
+//				this.treeView.SelectedNode = dropNode;
+//				ImageList_DragShowNolock(true);
+//				tempDropNode = dropNode;
+//			}
 
 			// Avoid that drop node is child of drag node 
 			TreeNode tmpNode = dropNode;
@@ -473,8 +474,8 @@ namespace PTM.View.Controls
 
 		private void treeView_DragDrop(object sender, DragEventArgs e)
 		{
-			// Unlock updates
-			ImageList_DragLeave(this.treeView.Handle);
+//			// Unlock updates
+//			ImageList_DragLeave(this.treeView.Handle);
 
 			// Get drop node
 			TreeNode dropNode = this.treeView.GetNodeAt(this.treeView.PointToClient(new Point(e.X, e.Y)));
@@ -521,8 +522,8 @@ namespace PTM.View.Controls
 
 		private void treeView_DragEnter(object sender, DragEventArgs e)
 		{
-			ImageList_DragEnter(this.treeView.Handle, e.X - this.treeView.Left,
-			                    e.Y - this.treeView.Top);
+//			ImageList_DragEnter(this.treeView.Handle, e.X - this.treeView.Left,
+//			                    e.Y - this.treeView.Top);
 
 			// Enable timer for scrolling dragged item
 			this.timer.Enabled = true;
@@ -530,7 +531,7 @@ namespace PTM.View.Controls
 
 		private void treeView_DragLeave(object sender, EventArgs e)
 		{
-			ImageList_DragLeave(this.treeView.Handle);
+//			ImageList_DragLeave(this.treeView.Handle);
 
 			// Disable timer for scrolling dragged item
 			this.timer.Enabled = false;
@@ -562,13 +563,13 @@ namespace PTM.View.Controls
 				{
 					node = node.PrevVisibleNode;
 
-					// hide drag image
-					ImageList_DragShowNolock(false);
+//					// hide drag image
+//					ImageList_DragShowNolock(false);
 					// scroll and refresh
 					node.EnsureVisible();
 					this.treeView.Refresh();
-					// show drag image
-					ImageList_DragShowNolock(true);
+//					// show drag image
+//					ImageList_DragShowNolock(true);
 				}
 			}
 				// if mouse is near to the bottom, scroll down
@@ -578,10 +579,10 @@ namespace PTM.View.Controls
 				{
 					node = node.NextVisibleNode;
 
-					ImageList_DragShowNolock(false);
+//					ImageList_DragShowNolock(false);
 					node.EnsureVisible();
 					this.treeView.Refresh();
-					ImageList_DragShowNolock(true);
+//					ImageList_DragShowNolock(true);
 				}
 			}
 		}

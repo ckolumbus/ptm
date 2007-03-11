@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Xml;
 
 namespace PTM.Framework.Helpers
@@ -13,28 +12,28 @@ namespace PTM.Framework.Helpers
 		{
 		}
 
-		[DllImport("WININET", CharSet=CharSet.Auto)]
-		static extern bool InternetGetConnectedState(
-			out InternetConnectionState lpdwFlags, 
-			int dwReserved);
+//		[DllImport("WININET", CharSet=CharSet.Auto)]
+//		static extern bool InternetGetConnectedState(
+//			out InternetConnectionState lpdwFlags, 
+//			int dwReserved);
 
-		[Flags]
-		enum InternetConnectionState: int
-		{
-			INTERNET_CONNECTION_MODEM = 0x1,
-			INTERNET_CONNECTION_LAN = 0x2,
-			INTERNET_CONNECTION_PROXY = 0x4,
-			INTERNET_RAS_INSTALLED = 0x10,
-			INTERNET_CONNECTION_OFFLINE = 0x20,
-			INTERNET_CONNECTION_CONFIGURED = 0x40
-		}
+//		[Flags]
+//		enum InternetConnectionState: int
+//		{
+//			INTERNET_CONNECTION_MODEM = 0x1,
+//			INTERNET_CONNECTION_LAN = 0x2,
+//			INTERNET_CONNECTION_PROXY = 0x4,
+//			INTERNET_RAS_INSTALLED = 0x10,
+//			INTERNET_CONNECTION_OFFLINE = 0x20,
+//			INTERNET_CONNECTION_CONFIGURED = 0x40
+//		}
 
 
-		public static bool IsConnectedToInternet()
-		{
-			InternetConnectionState Desc;
-			return InternetGetConnectedState(out Desc, 0);
-		}
+//		public static bool IsConnectedToInternet()
+//		{
+//			InternetConnectionState Desc;
+//			return InternetGetConnectedState(out Desc, 0);
+//		}
 
 
 		public struct UpdateInfo
@@ -61,15 +60,15 @@ namespace PTM.Framework.Helpers
 			}
 			else if (Convert.ToInt32(config.Value) == 1)
 			{
-				if (!IsConnectedToInternet())
-					return info;
+//				if (!IsConnectedToInternet())
+//					return info;
 				XmlDocument doc = new XmlDocument();
 				try
 				{
 
-					doc.Load(@"http://ptm.svn.sourceforge.net/viewvc/*checkout*/ptm/trunk/info.xml");
-					info.CurrentVersion = doc.SelectSingleNode(@"/root/CurrentVersion").InnerText;
-					info.CurrentInternalVersion = doc.SelectSingleNode(@"/root/CurrentInternalVersion").InnerText;
+					doc.Load(@"http://ptm.sourceforge.net/info.xml");
+					info.CurrentVersion = doc.SelectSingleNode(@"/root/LiteCurrentVersion").InnerText;
+					info.CurrentInternalVersion = doc.SelectSingleNode(@"/root/LiteCurrentInternalVersion").InnerText;
 					if (string.CompareOrdinal(info.CurrentInternalVersion, info.ThisInternalVersion) > 0)
 					{
 						info.UpdateAvailable = true;
