@@ -67,7 +67,7 @@ namespace PTM.Framework.Helpers
 				try
 				{
 
-					doc.Load(@"http://ptm.svn.sourceforge.net/viewvc/*checkout*/ptm/trunk/info.xml");
+					doc.Load(@"http://ptm.sourceforge.net/info.xml");
 					info.CurrentVersion = doc.SelectSingleNode(@"/root/CurrentVersion").InnerText;
 					info.CurrentInternalVersion = doc.SelectSingleNode(@"/root/CurrentInternalVersion").InnerText;
 					if (string.CompareOrdinal(info.CurrentInternalVersion, info.ThisInternalVersion) > 0)

@@ -82,7 +82,7 @@ namespace PTM
 				lock (typeof (MainForm))
 				{
 					sharedMemory = MemoryMappedFile.CreateMMF(
-						"Local\\sharedMemoryITimeTracker",
+						"Local\\sharedMemoryPTM",
 						MemoryMappedFile.FileAccess.ReadWrite, 8);
 				} //lock
 				Launch();
@@ -97,7 +97,7 @@ namespace PTM
 					lock (typeof (MainForm))
 					{
 						mainWindowHandle = MemoryMappedFile.ReadHandle(
-							"Local\\sharedMemoryITimeTracker");
+							"Local\\sharedMemoryPTM");
 					} //lock
 					if (mainWindowHandle != IntPtr.Zero)
 					{
