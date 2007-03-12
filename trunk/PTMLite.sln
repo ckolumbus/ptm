@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Test", "test\PTM.Test.c
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35} = {67C6D233-B9D3-4C17-AFA1-1AC780847B35}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Addin.WeekView", "code\PTM.Addin.WeekView\PTM.Addin.WeekView.csproj", "{A5EBB017-8C83-489D-A56C-11C12B0F3056}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTMLite.Addin.WeekView", "code\PTM.Addin.WeekView\PTMLite.Addin.WeekView.csproj", "{A5EBB017-8C83-489D-A56C-11C12B0F3056}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

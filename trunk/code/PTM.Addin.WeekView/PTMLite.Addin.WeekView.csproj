@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "PTM.Addin.WeekView"
+                AssemblyName = "PTMLite.Addin.WeekView"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "PTM.Addin.WeekView"
+                RootNamespace = "PTMLite.Addin.WeekView"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -66,7 +66,7 @@
             <References>
                 <Reference
                     Name = "PTM"
-                    AssemblyName = "PTM"
+                    AssemblyName = "PTMLite"
                     HintPath = "..\PTM\bin\Debug\ptmlite.exe"
                 />
                 <Reference
