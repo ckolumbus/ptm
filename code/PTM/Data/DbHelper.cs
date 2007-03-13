@@ -314,6 +314,8 @@ namespace PTM.Data
 
 		public static void CompactDB()
 		{
+			try
+			{
 			object[] oParams;
 
 			Type typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
@@ -360,6 +362,11 @@ namespace PTM.Data
 
 			Marshal.ReleaseComObject(objJRO);
 			objJRO = null;
+			}
+			catch(Exception ex)
+			{
+				ex = ex;
+			}
 		}
 
 
