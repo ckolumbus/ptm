@@ -314,52 +314,59 @@ namespace PTM.Data
 
 		public static void CompactDB()
 		{
-			object[] oParams;
-
-			Type typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
-			if (typJRO == null)
+			try
 			{
-				//phps. msjro is not registered
-				string strMsjrodll =
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), @"Common Files\System\ado\msjro.dll");
-				if (File.Exists(strMsjrodll))
+				object[] oParams;
+
+				Type typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
+				if (typJRO == null)
 				{
-					//start a process to register the dll
-					Process procRegisterMsjro = Process.Start("regsvr32.exe", string.Concat("/s \"", strMsjrodll, "\""));
-					procRegisterMsjro.WaitForExit();
-					typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
+					//phps. msjro is not registered
+					string strMsjrodll =
+						Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), @"Common Files\System\ado\msjro.dll");
+					if (File.Exists(strMsjrodll))
+					{
+						//start a process to register the dll
+						Process procRegisterMsjro = Process.Start("regsvr32.exe", string.Concat("/s \"", strMsjrodll, "\""));
+						procRegisterMsjro.WaitForExit();
+						typJRO = Type.GetTypeFromProgID("JRO.JetEngine");
+					}
 				}
-			}
 
-			if (typJRO == null)
-			{
-				throw new InvalidOperationException("JRO.JetEngine can not be created... please check if it is installed");
-			}
-
-			//create an inctance of a Jet Replication Object
-			object objJRO =
-				Activator.CreateInstance(typJRO);
-
-			string dataSource = GetDataSource();
-			string tempFile = Path.GetDirectoryName(dataSource) + "\\temp.mdb";
-			oParams = new object[]
+				if (typJRO == null)
 				{
-					connectionString,
-					"Provider=Microsoft.Jet.OLEDB.4.0;Data" +
-					" Source=" + tempFile + ";Jet OLEDB:Engine Type=5"
-				};
+					throw new InvalidOperationException("JRO.JetEngine can not be created... please check if it is installed");
+				}
 
-			objJRO.GetType().InvokeMember("CompactDatabase",
-			                              BindingFlags.InvokeMethod,
-			                              null,
-			                              objJRO,
-			                              oParams);
+				//create an inctance of a Jet Replication Object
+				object objJRO =
+					Activator.CreateInstance(typJRO);
 
-			File.Delete(dataSource);
-			File.Move(tempFile, dataSource);
+				string dataSource = GetDataSource();
+				string tempFile = Path.GetDirectoryName(dataSource) + "\\temp.mdb";
+				oParams = new object[]
+					{
+						connectionString,
+						"Provider=Microsoft.Jet.OLEDB.4.0;Data" +
+						" Source=" + tempFile + ";Jet OLEDB:Engine Type=5"
+					};
 
-			Marshal.ReleaseComObject(objJRO);
-			objJRO = null;
+				objJRO.GetType().InvokeMember("CompactDatabase",
+				                              BindingFlags.InvokeMethod,
+				                              null,
+				                              objJRO,
+				                              oParams);
+
+				File.Delete(dataSource);
+				File.Move(tempFile, dataSource);
+
+				Marshal.ReleaseComObject(objJRO);
+				objJRO = null;
+			}
+			catch(Exception ex)
+			{
+				ex = ex;
+			}
 		}
 
 
