@@ -42,6 +42,8 @@ namespace PTM
 			/// </summary>
 			private static void Main()
 		{
+			try
+			{
 //			if (runSingleInstance)
 //			{
 //				RunSingleInstance();
@@ -50,6 +52,23 @@ namespace PTM
 //			{
 				Launch();
 //			} //if-else
+			}
+			catch(Exception ex)
+			{
+				Logger.Write("---> PTM Exception!!!");
+				Logger.Write("--- Exception Message");
+				Logger.Write(ex.Message);
+				Logger.Write("--- Stack Trace");
+				Logger.Write(ex.StackTrace);
+				if(ex.InnerException!=null)
+				{
+					Logger.Write("--- Inner Exception Message");
+					Logger.Write(ex.InnerException.Message);
+					Logger.Write("--- Stack Trace");
+					Logger.Write(ex.InnerException.StackTrace);
+				}
+				throw;
+			}
 		} //Main
 
 		/*
