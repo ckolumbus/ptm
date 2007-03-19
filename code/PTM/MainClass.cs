@@ -40,16 +40,35 @@ namespace PTM
 		/// <summary>
 			/// Main Method, Application access point
 			/// </summary>
-			private static void Main()
+		private static void Main()
 		{
-			if (runSingleInstance)
+			try
 			{
-				RunSingleInstance();
+				if (runSingleInstance)
+				{
+					RunSingleInstance();
+				}
+				else
+				{
+					Launch();
+				} //if-else
 			}
-			else
+			catch(Exception ex)
 			{
-				Launch();
-			} //if-else
+				Logger.Write("---> PTM Exception!!!");
+				Logger.Write("--- Exception Message");
+				Logger.Write(ex.Message);
+				Logger.Write("--- Stack Trace");
+				Logger.Write(ex.StackTrace);
+				if(ex.InnerException!=null)
+				{
+					Logger.Write("--- Inner Exception Message");
+					Logger.Write(ex.InnerException.Message);
+					Logger.Write("--- Stack Trace");
+					Logger.Write(ex.InnerException.StackTrace);
+				}
+				throw;
+			}
 		} //Main
 
 		/// <summary>
