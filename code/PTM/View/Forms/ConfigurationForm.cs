@@ -295,35 +295,49 @@ namespace PTM.View.Forms
 
 		private void LoadStartUpStatup()
 		{
-			RegistryKey reg = Registry.CurrentUser.
-				OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			try
+			{
+				RegistryKey reg = Registry.CurrentUser.
+					OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
-			if (reg.GetValue("PTM") == null)
+				if (reg.GetValue("PTM") == null)
+				{
+					this.checkBox.Checked = false;
+				}
+				else
+				{
+					this.checkBox.Checked = true;
+				} //if-else
+				reg.Close();
+			}
+			catch
 			{
 				this.checkBox.Checked = false;
 			}
-			else
-			{
-				this.checkBox.Checked = true;
-			} //if-else
-			reg.Close();
 		} //LoadStartUpStatup
 
 		private static void SetWindowsStartUp(bool enable)
 		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey(
-				"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-			if (enable)
+			try
 			{
-				reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
+				RegistryKey reg = Registry.CurrentUser.OpenSubKey(
+					"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+				if (enable)
+				{
+					reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
+				}
+				else
+				{
+					reg.DeleteValue("PTM", false);
+				} //if-else
+
+				reg.Close();
 			}
-			else
+			catch
 			{
-				reg.DeleteValue("PTM", false);
-			} //if-else
-
-			reg.Close();
+				
+			}
 		} //SetWindowsStartUp
 
 		private void btnOk_Click(object sender, EventArgs e)

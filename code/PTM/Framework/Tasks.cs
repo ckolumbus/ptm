@@ -219,7 +219,7 @@ namespace PTM.Framework
 					childs.Add(((Task)tasks[i]).Clone());
 				}
 			}
-
+			childs.Sort();
 			return (Task[]) childs.ToArray(typeof (Task));
 		}
 

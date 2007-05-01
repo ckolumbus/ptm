@@ -129,15 +129,22 @@ namespace PTM
 
 		private void UpdateStartUpPath()
 		{
-			RegistryKey reg = Registry.CurrentUser.
-				OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-			if (reg.GetValue("PTM") != null)
+			try
 			{
-				if (reg.GetValue("PTM").ToString() != Assembly.GetExecutingAssembly().Location) //update path
-					reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
-			} //if-else
-			reg.Close();
+				RegistryKey reg = Registry.CurrentUser.
+					OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+				if (reg.GetValue("PTM") != null)
+				{
+					if (reg.GetValue("PTM").ToString() != Assembly.GetExecutingAssembly().Location) //update path
+						reg.SetValue("PTM", Assembly.GetExecutingAssembly().Location);
+				} //if-else
+				reg.Close();
+			}
+			catch
+			{
+				//do nothing
+			}
 		} //UpdateStartUpPath
 
 

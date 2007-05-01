@@ -1,11 +1,13 @@
 
 
+using System;
+
 namespace PTM.Framework.Infos
 {
 	/// <summary>
 	/// Descripción breve de Task.
 	/// </summary>
-	public class Task
+	public class Task : IComparable
 	{
 		private int id;
 		private int parentId;
@@ -56,5 +58,9 @@ namespace PTM.Framework.Infos
 		}
 
 
+		public int CompareTo(object obj)
+		{
+			return this.description.CompareTo(((Task) obj).description);
+		}
 	}
 }

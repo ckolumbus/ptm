@@ -27,7 +27,7 @@ namespace PTM.Data
 			userNameData = userName;
 			string dataSource = GetDataSource();
 			connectionString =
-				@"Provider=""Microsoft.Jet.OLEDB.4.0"";Data Source=""@DATA_SOURCE"";User ID=Admin;Password=x;";
+				@"Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Registry Path=;Jet OLEDB:Database Locking Mode=1;Data Source=""@DATA_SOURCE"";Jet OLEDB:Engine Type=5;Provider=""Microsoft.Jet.OLEDB.4.0"";Jet OLEDB:System database=;Jet OLEDB:SFP=False;persist security info=False;Extended Properties=;Mode=Share Deny None;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Create System Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;User ID=Admin;Jet OLEDB:Global Bulk Transactions=1";
 			connectionString = connectionString.Replace("@DATA_SOURCE", dataSource);
 		}
 
