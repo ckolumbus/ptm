@@ -67,7 +67,7 @@
                 <Reference
                     Name = "PTM"
                     AssemblyName = "PTM"
-                    HintPath = "..\PTM\bin\Debug\ptm.exe"
+                    HintPath = "..\PTM\bin\Release\ptm.exe"
                 />
                 <Reference
                     Name = "System"
