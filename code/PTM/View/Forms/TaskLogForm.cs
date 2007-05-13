@@ -97,7 +97,6 @@ namespace PTM.View.Forms
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(256, 252);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 6;
@@ -107,7 +106,6 @@ namespace PTM.View.Forms
 			// 
 			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(344, 252);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 7;
@@ -126,7 +124,6 @@ namespace PTM.View.Forms
 			// editButton
 			// 
 			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(344, 94);
 			this.editButton.Name = "editButton";
 			this.editButton.TabIndex = 4;
@@ -136,7 +133,6 @@ namespace PTM.View.Forms
 			// deleteButton
 			// 
 			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(344, 134);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.TabIndex = 5;
@@ -146,7 +142,6 @@ namespace PTM.View.Forms
 			// newButton
 			// 
 			this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.newButton.Location = new System.Drawing.Point(344, 54);
 			this.newButton.Name = "newButton";
 			this.newButton.TabIndex = 3;
@@ -159,7 +154,6 @@ namespace PTM.View.Forms
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.tasksTree);
-			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(6, 6);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(330, 240);
@@ -170,7 +164,6 @@ namespace PTM.View.Forms
 			// propertiesButton
 			// 
 			this.propertiesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.propertiesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.propertiesButton.Location = new System.Drawing.Point(344, 174);
 			this.propertiesButton.Name = "propertiesButton";
 			this.propertiesButton.TabIndex = 9;

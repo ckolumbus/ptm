@@ -470,7 +470,7 @@ namespace PTM
 
 		#endregion
 
-		private void tabPage_StatusChanged(AddinTabPage.StatusChangedEventAtgs e)
+		private void tabPage_StatusChanged(AddinTabPage.StatusChangedEventArgs e)
 		{
 			this.statusBar.Text = e.Status;
 		}

@@ -72,7 +72,6 @@ namespace PTM.View.Forms
 			this.newButton.Anchor =
 				((System.Windows.Forms.AnchorStyles)
 				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.newButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.newButton.Location = new System.Drawing.Point(264, 16);
 			this.newButton.Name = "newButton";
 			this.newButton.Size = new System.Drawing.Size(80, 23);
@@ -86,7 +85,6 @@ namespace PTM.View.Forms
 				((System.Windows.Forms.AnchorStyles)
 				 ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(264, 288);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(80, 23);
@@ -99,7 +97,6 @@ namespace PTM.View.Forms
 			this.deleteButton.Anchor =
 				((System.Windows.Forms.AnchorStyles)
 				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(264, 96);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(80, 23);
@@ -112,7 +109,6 @@ namespace PTM.View.Forms
 			this.editButton.Anchor =
 				((System.Windows.Forms.AnchorStyles)
 				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(264, 56);
 			this.editButton.Name = "editButton";
 			this.editButton.TabIndex = 2;
@@ -136,7 +132,6 @@ namespace PTM.View.Forms
 			this.propertiesButton.Anchor =
 				((System.Windows.Forms.AnchorStyles)
 				 ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.propertiesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.propertiesButton.Location = new System.Drawing.Point(264, 136);
 			this.propertiesButton.Name = "propertiesButton";
 			this.propertiesButton.Size = new System.Drawing.Size(80, 23);

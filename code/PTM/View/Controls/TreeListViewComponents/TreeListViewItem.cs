@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices.APIs;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace PTM.View.Controls.TreeListViewComponents
 {
@@ -808,6 +809,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 		}
 		internal void DrawPlusMinus(Graphics g)
 		{
+            /*
 			if(!IsInATreeListView) return;
 			if(TreeListView._updating) return;
 			Debug.Assert(!TreeListView.InvokeRequired);
@@ -821,6 +823,43 @@ namespace PTM.View.Controls.TreeListViewComponents
 					0, 0, SystemInformation.SmallIconSize.Width, SystemInformation.SmallIconSize.Height,
 					GraphicsUnit.Pixel, attr);
 			attr.Dispose();
+            */
+            if (!IsInATreeListView)
+                return;
+            if (TreeListView._updating)
+                return;
+            Debug.Assert(!TreeListView.InvokeRequired);
+            if (Items.Count == 0 || TreeListView.Columns.Count == 0)
+                return;
+
+            if (Application.RenderWithVisualStyles)
+            {
+                VisualStyleRenderer renderer;
+                if (IsExpanded)
+                    renderer = new VisualStyleRenderer(VisualStyleElement.TreeView.Glyph.Opened);
+                else
+                    renderer = new VisualStyleRenderer(VisualStyleElement.TreeView.Glyph.Closed);
+                renderer.DrawBackground(g, GetBounds(TreeListViewItemBoundsPortion.PlusMinus));
+            }
+            else
+            {
+                using (System.Drawing.Imaging.ImageAttributes attr = new System.Drawing.Imaging.ImageAttributes())
+                {
+                    attr.SetColorKey(Color.Transparent, Color.Transparent);
+                    if (TreeListView.Columns[0].Width > (Level + 1) * SystemInformation.SmallIconSize.Width)
+                    {
+                        g.DrawImage(TreeListView.plusMinusImageList.Images[IsExpanded ? 1 : 0],
+                        GetBounds(TreeListViewItemBoundsPortion.PlusMinus),
+                        0,
+                        0,
+                        SystemInformation.SmallIconSize.Width,
+                        SystemInformation.SmallIconSize.Height,
+                        GraphicsUnit.Pixel,
+                        attr);
+                    }
+                }
+            }
+
 		}
 		#endregion
 		#region DrawPlusMinusLines

@@ -155,12 +155,14 @@ namespace PTM
 			} //if-else
 		} //RunSingleInstance
 
-		private static SplashForm splash = new SplashForm();
+		private static SplashForm splash;// = new SplashForm();
 
 		internal static void Launch()
 		{
 			Application.CurrentCulture = CultureInfo.InvariantCulture;
-
+            Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+		    splash = new SplashForm();
 			splash.Show();
 			Timer timer = new Timer();
 			//Configure this timer to restart each second ( 1000 millis)
@@ -168,7 +170,7 @@ namespace PTM
 			timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
 			timer.Start();
 			//splash.Refresh();
-			//Application.EnableVisualStyles();
+			
 			//Application.DoEvents();
 			Application.DoEvents();
 			MainModule.Initialize("data");
@@ -198,19 +200,21 @@ namespace PTM
 				main.HandleCreated += new EventHandler(main_HandleCreated);
 			}
 			GC.Collect();
+            timer.Stop();
+            timer.Close();
 			splash.SetLoadProgress(100);
 			splash.Refresh();
 			Application.DoEvents();
 			splash.Close();
 			splash = null;
 			Application.DoEvents();
+            
 			Application.Run(main);
 		} //Launch
 
 		private static void timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			splash.AddProgress(5);
-			splash.Refresh();
 			Application.DoEvents();
 		} //timer_Elapsed
 

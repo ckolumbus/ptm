@@ -27,7 +27,7 @@ namespace PTM.View.Controls
 		private Button browseButton;
 		private ComboBox parentTaskComboBox;
 		private Label label2;
-		private AsyncWorker worker;
+        private BackgroundWorker worker = new BackgroundWorker();
 
 
 		/// <summary> 
@@ -48,10 +48,8 @@ namespace PTM.View.Controls
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			worker = new AsyncWorker();
-			worker.OnBeforeDoWork += new AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
-			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
-
+            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
 
 			Task parentTaskRow;
 			parentTaskRow = Tasks.RootTasksRow;
@@ -71,6 +69,10 @@ namespace PTM.View.Controls
 			this.Status = String.Empty;
 			//this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 		}
+
+
+
+
 
 		/// <summary> 
 		/// Clean up any resources being used.
@@ -158,7 +160,6 @@ namespace PTM.View.Controls
 				    | System.Windows.Forms.AnchorStyles.Left)
 				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.applicationsList);
-			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
 			this.groupBox3.Location = new System.Drawing.Point(8, 64);
 			this.groupBox3.Name = "groupBox3";
@@ -175,7 +176,6 @@ namespace PTM.View.Controls
 				   | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.AppsActiveTimeValue);
 			this.groupBox4.Controls.Add(this.label8);
-			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox4.ForeColor = System.Drawing.Color.Blue;
 			this.groupBox4.Location = new System.Drawing.Point(8, 232);
 			this.groupBox4.Name = "groupBox4";
@@ -186,7 +186,6 @@ namespace PTM.View.Controls
 			// 
 			// AppsActiveTimeValue
 			// 
-			this.AppsActiveTimeValue.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.AppsActiveTimeValue.ForeColor = System.Drawing.Color.Black;
 			this.AppsActiveTimeValue.Location = new System.Drawing.Point(112, 16);
 			this.AppsActiveTimeValue.Name = "AppsActiveTimeValue";
@@ -195,7 +194,6 @@ namespace PTM.View.Controls
 			// 
 			// label8
 			// 
-			this.label8.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label8.ForeColor = System.Drawing.Color.Black;
 			this.label8.Location = new System.Drawing.Point(8, 16);
 			this.label8.Name = "label8";
@@ -205,7 +203,6 @@ namespace PTM.View.Controls
 			// 
 			// browseButton
 			// 
-			this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.browseButton.Location = new System.Drawing.Point(320, 4);
 			this.browseButton.Name = "browseButton";
 			this.browseButton.TabIndex = 2;
@@ -243,7 +240,6 @@ namespace PTM.View.Controls
 			// 
 			// toRadioButton
 			// 
-			this.toRadioButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.toRadioButton.Location = new System.Drawing.Point(184, 32);
 			this.toRadioButton.Name = "toRadioButton";
 			this.toRadioButton.Size = new System.Drawing.Size(40, 24);
@@ -254,7 +250,6 @@ namespace PTM.View.Controls
 			// fromRadioButton
 			// 
 			this.fromRadioButton.Checked = true;
-			this.fromRadioButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.fromRadioButton.Location = new System.Drawing.Point(32, 32);
 			this.fromRadioButton.Name = "fromRadioButton";
 			this.fromRadioButton.Size = new System.Drawing.Size(48, 24);
@@ -275,7 +270,6 @@ namespace PTM.View.Controls
 			// 
 			// searchButton
 			// 
-			this.searchButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.searchButton.Location = new System.Drawing.Point(320, 32);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.TabIndex = 22;
@@ -304,8 +298,16 @@ namespace PTM.View.Controls
 
 		#endregion
 
-		//private SummaryDataset.TasksSummaryDataTable tasksSummaryDataset;
-		//private SummaryDataset.ApplicationsSummaryDataTable appsSummaryDataset;
+
+        private static void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            e.Result = GetTaskStatistics((TaskStatisticsArgs) e.Argument);
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            GetTaskDetails((TaskStatisticsResult) e.Result);
+        }
 
 		private void Statistics_Load(object sender, EventArgs e)
 		{
@@ -326,18 +328,18 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void GetTaskDetails(ArrayList appsSummaryList)
+        private void GetTaskDetails(TaskStatisticsResult result)
 		{
 			try
 			{
 				this.applicationsList.BeginUpdate();
 				this.applicationsList.Items.Clear();
 				int appActiveTime = 0;
-				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
+                foreach (ApplicationSummary applicationsSummaryRow in result.AppsSummaryList)
 				{
 					appActiveTime += (int) applicationsSummaryRow.TotalActiveTime;
 				}
-				foreach (ApplicationSummary applicationsSummaryRow in appsSummaryList)
+                foreach (ApplicationSummary applicationsSummaryRow in result.AppsSummaryList)
 				{
 					TimeSpan active = new TimeSpan(0, 0, (int) applicationsSummaryRow.TotalActiveTime);
 					string activeTime = ViewHelper.TimeSpanToTimeString(active);
@@ -411,60 +413,60 @@ namespace PTM.View.Controls
 
 		private void searchButton_Click(object sender, EventArgs e)
 		{
-			worker.DoWork((int) StatisticsControlWorks.GetTaskStatistics, new AsyncWorker.AsyncWorkerDelegate(GetTaskStatistics),
-			              new object[] {null});
+            SetWaitState();
+            TaskStatisticsArgs args = new TaskStatisticsArgs();
+            args.FromDate = fromDateTimePicker.Value.Date;
+            if (this.toRadioButton.Checked)
+            {
+                args.ToDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+            }
+            else
+            {
+                args.ToDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+            }
+
+            worker.RunWorkerAsync(args);
 		}
 
 		#region AsyncWork
 
-		private enum StatisticsControlWorks : int
+        //private enum StatisticsControlWorks : int
+        //{
+        //    GetTaskStatistics
+        //}
+
+        private static TaskStatisticsResult GetTaskStatistics(TaskStatisticsArgs args)
 		{
-			GetTaskStatistics
+            TaskStatisticsResult result = new TaskStatisticsResult();
+            result.AppsSummaryList = ApplicationSummaries.GetApplicationsSummary(
+				args.ParentId,
+				args.FromDate, args.ToDate);
+
+			return result;
 		}
 
-		private object GetTaskStatistics(object p)
-		{
-			DateTime fromDate;
-			DateTime toDate;
-			fromDate = fromDateTimePicker.Value.Date;
-			if (this.toRadioButton.Checked)
-			{
-				toDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
-			}
-			else
-			{
-				toDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
-			}
+        //private void worker_OnBeforeDoWork(AsyncWorker.OnBeforeDoWorkEventArgs e)
+        //{
+        //    switch (e.WorkId)
+        //    {
+        //        case (int) StatisticsControlWorks.GetTaskStatistics:
+        //            SetWaitState();
+        //            break;
+        //    }
+        //}
 
-			ArrayList appsSummaryList = ApplicationSummaries.GetApplicationsSummary(
-				(int) this.parentTaskComboBox.SelectedValue,
-				fromDate, toDate);
+        //private void worker_OnWorkDone(AsyncWorker.OnWorkDoneEventArgs e)
+        //{
+        //    switch (e.WorkId)
+        //    {
+        //        case (int) StatisticsControlWorks.GetTaskStatistics:
 
-			return appsSummaryList;
-		}
+        //            GetTaskDetailsDelegate del = new GetTaskDetailsDelegate(GetTaskDetails);
 
-		private void worker_OnBeforeDoWork(AsyncWorker.OnBeforeDoWorkEventArgs e)
-		{
-			switch (e.WorkId)
-			{
-				case (int) StatisticsControlWorks.GetTaskStatistics:
-					SetWaitState();
-					break;
-			}
-		}
-
-		private void worker_OnWorkDone(AsyncWorker.OnWorkDoneEventArgs e)
-		{
-			switch (e.WorkId)
-			{
-				case (int) StatisticsControlWorks.GetTaskStatistics:
-
-					GetTaskDetailsDelegate del = new GetTaskDetailsDelegate(GetTaskDetails);
-
-					this.Invoke(del, new object[] {e.Result});
-					break;
-			}
-		}
+        //            this.Invoke(del, new object[] {e.Result});
+        //            break;
+        //    }
+        //}
 
 		private void SetWaitState()
 		{
@@ -506,7 +508,19 @@ namespace PTM.View.Controls
 
 		}
 
-		private delegate void GetTaskDetailsDelegate(ArrayList logs);
+        public class TaskStatisticsArgs
+        {
+            public int ParentId;
+            public DateTime FromDate;
+            public DateTime ToDate;
+        }
+
+        public class TaskStatisticsResult
+        {
+            public ArrayList AppsSummaryList;
+        }
+
+		//private delegate void GetTaskDetailsDelegate(ArrayList logs);
 
 		#endregion
 	}

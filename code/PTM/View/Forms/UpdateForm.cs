@@ -63,7 +63,6 @@ namespace PTM.View.Forms
 			// 
 			// btnOk
 			// 
-			this.btnOk.FlatStyle = FlatStyle.System;
 			this.btnOk.Location = new Point(272, 56);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.TabIndex = 1;
@@ -81,7 +80,6 @@ namespace PTM.View.Forms
 			// linkLabel
 			// 
 			this.linkLabel.Cursor = Cursors.Hand;
-			this.linkLabel.FlatStyle = FlatStyle.System;
 			this.linkLabel.Location = new Point(8, 40);
 			this.linkLabel.Name = "linkLabel";
 			this.linkLabel.Size = new Size(176, 23);

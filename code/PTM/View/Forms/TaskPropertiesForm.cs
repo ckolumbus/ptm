@@ -91,7 +91,6 @@ namespace PTM.View.Forms
 			// 
 			// chkIsActive
 			// 
-			this.chkIsActive.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkIsActive.Location = new System.Drawing.Point(72, 56);
 			this.chkIsActive.Name = "chkIsActive";
 			this.chkIsActive.Size = new System.Drawing.Size(96, 24);
@@ -138,7 +137,6 @@ namespace PTM.View.Forms
 			// 
 			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(240, 88);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 13;
@@ -149,7 +147,6 @@ namespace PTM.View.Forms
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(152, 88);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 12;

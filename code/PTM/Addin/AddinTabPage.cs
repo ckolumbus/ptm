@@ -68,11 +68,11 @@ namespace PTM.Addin
 			}
 		}
 
-		public class StatusChangedEventAtgs : EventArgs
+		public class StatusChangedEventArgs : EventArgs
 		{
 			private string status;
 
-			public StatusChangedEventAtgs(string status)
+			public StatusChangedEventArgs(string status)
 			{
 				this.status = status;
 			}
@@ -85,15 +85,19 @@ namespace PTM.Addin
 		}
 
 
-		public delegate void StatusChangedDelegate(StatusChangedEventAtgs e);
+		public delegate void StatusChangedDelegate(StatusChangedEventArgs e);
 
 		public event StatusChangedDelegate StatusChanged;
 
 		protected void OnStatusChanged()
 		{
 			if (this.StatusChanged != null)
-				StatusChanged(new StatusChangedEventAtgs(status));
-			Application.DoEvents();
+			{
+                StatusChangedDelegate del = new StatusChangedDelegate(StatusChanged);
+                this.Invoke(del, new object[] { new StatusChangedEventArgs(status) });
+			}
+            //    StatusChanged(new StatusChangedEventArgs(status));
+            //Application.DoEvents();
 		}
 
 

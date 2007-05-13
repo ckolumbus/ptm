@@ -162,11 +162,6 @@ namespace PTM.Data
 				reader.Close();
 				return list;
 			}
-			catch (Exception ex)
-			{
-				ex = ex;
-				throw;
-			}
 			finally
 			{
 				cmd.Connection.Close();

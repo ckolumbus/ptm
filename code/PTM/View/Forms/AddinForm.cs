@@ -113,7 +113,6 @@ namespace PTM.View.Forms
 			// 
 			// addButton
 			// 
-			this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.addButton.Location = new System.Drawing.Point(344, 48);
 			this.addButton.Name = "addButton";
 			this.addButton.TabIndex = 6;
@@ -122,7 +121,6 @@ namespace PTM.View.Forms
 			// 
 			// removeButton
 			// 
-			this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.removeButton.Location = new System.Drawing.Point(344, 88);
 			this.removeButton.Name = "removeButton";
 			this.removeButton.TabIndex = 7;
@@ -132,7 +130,6 @@ namespace PTM.View.Forms
 			// closeButton
 			// 
 			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.closeButton.Location = new System.Drawing.Point(344, 200);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.TabIndex = 8;

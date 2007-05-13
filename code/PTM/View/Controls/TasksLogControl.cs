@@ -41,16 +41,15 @@ namespace PTM.View.Controls
 		private ToolTip shortcutToolTip;
 		private CheckBox pathCheckBox;
 		private DateTime currentDay;
-		private AsyncWorker worker;
+        private BackgroundWorker worker = new BackgroundWorker();
 
 		internal TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			worker = new AsyncWorker();
-			worker.OnBeforeDoWork += new AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
-			worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
+            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
 
 			notifyIcon.MouseDown += new NotifyIcon.MouseDownEventHandler(notifyIcon_MouseDown);
 			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
@@ -115,169 +114,169 @@ namespace PTM.View.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TasksLogControl));
-			this.editButton = new System.Windows.Forms.Button();
-			this.addTaskButton = new System.Windows.Forms.Button();
-			this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
-			this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
-			this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
-			this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
-			this.notifyAnswerTimer = new System.Timers.Timer();
-			this.notifyTimer = new System.Timers.Timer();
-			this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
-			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-			this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
-			this.switchToButton = new System.Windows.Forms.Button();
-			this.deleteButton = new System.Windows.Forms.Button();
-			this.logDate = new System.Windows.Forms.DateTimePicker();
-			this.label1 = new System.Windows.Forms.Label();
-			this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.pathCheckBox = new System.Windows.Forms.CheckBox();
-			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// editButton
-			// 
-			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.editButton.Location = new System.Drawing.Point(152, 280);
-			this.editButton.Name = "editButton";
-			this.editButton.Size = new System.Drawing.Size(72, 23);
-			this.editButton.TabIndex = 3;
-			this.editButton.Text = "Edit...";
-			this.shortcutToolTip.SetToolTip(this.editButton, "Enter");
-			this.editButton.Click += new System.EventHandler(this.editButton_Click);
-			// 
-			// addTaskButton
-			// 
-			this.addTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.addTaskButton.Location = new System.Drawing.Point(312, 280);
-			this.addTaskButton.Name = "addTaskButton";
-			this.addTaskButton.Size = new System.Drawing.Size(72, 23);
-			this.addTaskButton.TabIndex = 5;
-			this.addTaskButton.Text = "New...";
-			this.shortcutToolTip.SetToolTip(this.addTaskButton, "Ins");
-			// 
-			// TaskDescriptionHeader
-			// 
-			this.TaskDescriptionHeader.Text = "Task Description";
-			this.TaskDescriptionHeader.Width = 226;
-			// 
-			// StartTimeHeader
-			// 
-			this.StartTimeHeader.Text = "Start Time";
-			this.StartTimeHeader.Width = 80;
-			// 
-			// DurationTaskHeader
-			// 
-			this.DurationTaskHeader.Text = "Duration";
-			this.DurationTaskHeader.Width = 65;
-			// 
-			// notifyAnswerTimer
-			// 
-			this.notifyAnswerTimer.SynchronizingObject = this;
-			// 
-			// notifyTimer
-			// 
-			this.notifyTimer.Interval = 1000;
-			this.notifyTimer.SynchronizingObject = this;
-			// 
-			// notifyIcon
-			// 
-			this.notifyIcon.ContextMenu = this.notifyContextMenu;
-			this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-			this.notifyIcon.Text = "Current task";
-			this.notifyIcon.Visible = true;
-			// 
-			// taskList
-			// 
-			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.taskList.AutoArrange = false;
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskDescriptionHeader,
-																					   this.DurationTaskHeader,
-																					   this.StartTimeHeader});
-			this.taskList.ContextMenu = this.rigthClickMenu;
-			this.taskList.HideSelection = false;
-			this.taskList.Location = new System.Drawing.Point(8, 32);
-			this.taskList.Name = "taskList";
-			this.taskList.Size = new System.Drawing.Size(376, 240);
-			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
-			this.taskList.TabIndex = 1;
-			this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskList_KeyDown);
-			this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
-			// 
-			// switchToButton
-			// 
-			this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.switchToButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.switchToButton.Location = new System.Drawing.Point(232, 280);
-			this.switchToButton.Name = "switchToButton";
-			this.switchToButton.Size = new System.Drawing.Size(72, 23);
-			this.switchToButton.TabIndex = 4;
-			this.switchToButton.Text = "Switch To";
-			this.shortcutToolTip.SetToolTip(this.switchToButton, "Shift+Ins");
-			this.switchToButton.Click += new System.EventHandler(this.switchToButton_Click);
-			// 
-			// deleteButton
-			// 
-			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.deleteButton.Location = new System.Drawing.Point(72, 280);
-			this.deleteButton.Name = "deleteButton";
-			this.deleteButton.Size = new System.Drawing.Size(72, 23);
-			this.deleteButton.TabIndex = 2;
-			this.deleteButton.Text = "Delete";
-			this.shortcutToolTip.SetToolTip(this.deleteButton, "Del");
-			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
-			// 
-			// logDate
-			// 
-			this.logDate.Location = new System.Drawing.Point(48, 8);
-			this.logDate.Name = "logDate";
-			this.logDate.Size = new System.Drawing.Size(248, 20);
-			this.logDate.TabIndex = 0;
-			this.logDate.ValueChanged += new System.EventHandler(this.logDate_ValueChanged);
-			// 
-			// label1
-			// 
-			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(8, 12);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(40, 16);
-			this.label1.TabIndex = 6;
-			this.label1.Text = "Date:";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// pathCheckBox
-			// 
-			this.pathCheckBox.Location = new System.Drawing.Point(304, 8);
-			this.pathCheckBox.Name = "pathCheckBox";
-			this.pathCheckBox.Size = new System.Drawing.Size(80, 24);
-			this.pathCheckBox.TabIndex = 8;
-			this.pathCheckBox.Text = "Show path";
-			this.pathCheckBox.CheckedChanged += new System.EventHandler(this.pathCheckBox_CheckedChanged);
-			// 
-			// TasksLogControl
-			// 
-			this.Controls.Add(this.pathCheckBox);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.logDate);
-			this.Controls.Add(this.deleteButton);
-			this.Controls.Add(this.switchToButton);
-			this.Controls.Add(this.taskList);
-			this.Controls.Add(this.editButton);
-			this.Controls.Add(this.addTaskButton);
-			this.Name = "TasksLogControl";
-			this.Size = new System.Drawing.Size(392, 312);
-			((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TasksLogControl));
+            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
+            this.editButton = new System.Windows.Forms.Button();
+            this.addTaskButton = new System.Windows.Forms.Button();
+            this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
+            this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
+            this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
+            this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
+            this.notifyAnswerTimer = new System.Timers.Timer();
+            this.notifyTimer = new System.Timers.Timer();
+            this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
+            this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
+            this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
+            this.switchToButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.logDate = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.pathCheckBox = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // editButton
+            // 
+            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.editButton.Location = new System.Drawing.Point(152, 280);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(72, 23);
+            this.editButton.TabIndex = 3;
+            this.editButton.Text = "Edit...";
+            this.shortcutToolTip.SetToolTip(this.editButton, "Enter");
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
+            // 
+            // addTaskButton
+            // 
+            this.addTaskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.addTaskButton.Location = new System.Drawing.Point(312, 280);
+            this.addTaskButton.Name = "addTaskButton";
+            this.addTaskButton.Size = new System.Drawing.Size(72, 23);
+            this.addTaskButton.TabIndex = 5;
+            this.addTaskButton.Text = "New...";
+            this.shortcutToolTip.SetToolTip(this.addTaskButton, "Ins");
+            // 
+            // TaskDescriptionHeader
+            // 
+            this.TaskDescriptionHeader.Text = "Task Description";
+            this.TaskDescriptionHeader.Width = 226;
+            // 
+            // StartTimeHeader
+            // 
+            this.StartTimeHeader.Text = "Start Time";
+            this.StartTimeHeader.Width = 80;
+            // 
+            // DurationTaskHeader
+            // 
+            this.DurationTaskHeader.Text = "Duration";
+            this.DurationTaskHeader.Width = 65;
+            // 
+            // notifyAnswerTimer
+            // 
+            this.notifyAnswerTimer.SynchronizingObject = this;
+            // 
+            // notifyTimer
+            // 
+            this.notifyTimer.Interval = 1000;
+            this.notifyTimer.SynchronizingObject = this;
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenu = this.notifyContextMenu;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Current task";
+            this.notifyIcon.Visible = true;
+            // 
+            // taskList
+            // 
+            this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.taskList.AutoArrange = false;
+            this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.TaskDescriptionHeader,
+            this.DurationTaskHeader,
+            this.StartTimeHeader});
+            treeListViewItemCollectionComparer1.Column = 0;
+            treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.taskList.Comparer = treeListViewItemCollectionComparer1;
+            this.taskList.ContextMenu = this.rigthClickMenu;
+            this.taskList.HideSelection = false;
+            this.taskList.Location = new System.Drawing.Point(8, 32);
+            this.taskList.Name = "taskList";
+            this.taskList.Size = new System.Drawing.Size(376, 240);
+            this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
+            this.taskList.TabIndex = 1;
+            this.taskList.UseCompatibleStateImageBehavior = false;
+            this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
+            this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskList_KeyDown);
+            // 
+            // switchToButton
+            // 
+            this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.switchToButton.Location = new System.Drawing.Point(232, 280);
+            this.switchToButton.Name = "switchToButton";
+            this.switchToButton.Size = new System.Drawing.Size(72, 23);
+            this.switchToButton.TabIndex = 4;
+            this.switchToButton.Text = "Switch To";
+            this.shortcutToolTip.SetToolTip(this.switchToButton, "Shift+Ins");
+            this.switchToButton.Click += new System.EventHandler(this.switchToButton_Click);
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteButton.Location = new System.Drawing.Point(72, 280);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(72, 23);
+            this.deleteButton.TabIndex = 2;
+            this.deleteButton.Text = "Delete";
+            this.shortcutToolTip.SetToolTip(this.deleteButton, "Del");
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
+            // logDate
+            // 
+            this.logDate.Location = new System.Drawing.Point(48, 8);
+            this.logDate.Name = "logDate";
+            this.logDate.Size = new System.Drawing.Size(248, 20);
+            this.logDate.TabIndex = 0;
+            this.logDate.ValueChanged += new System.EventHandler(this.logDate_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(8, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 16);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Date:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // pathCheckBox
+            // 
+            this.pathCheckBox.Location = new System.Drawing.Point(304, 8);
+            this.pathCheckBox.Name = "pathCheckBox";
+            this.pathCheckBox.Size = new System.Drawing.Size(80, 24);
+            this.pathCheckBox.TabIndex = 8;
+            this.pathCheckBox.Text = "Show path";
+            this.pathCheckBox.CheckedChanged += new System.EventHandler(this.pathCheckBox_CheckedChanged);
+            // 
+            // TasksLogControl
+            // 
+            this.Controls.Add(this.pathCheckBox);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.logDate);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.switchToButton);
+            this.Controls.Add(this.taskList);
+            this.Controls.Add(this.editButton);
+            this.Controls.Add(this.addTaskButton);
+            this.Name = "TasksLogControl";
+            this.Size = new System.Drawing.Size(392, 312);
+            ((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 
@@ -285,11 +284,21 @@ namespace PTM.View.Controls
 
 		#region TaskLog
 
+        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SetLogDay((GetLogsResult) e.Result);
+        }
+
+        void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            e.Result = GetLogs();
+        }
+
 		private void TasksLogControl_Load(object sender, EventArgs e)
 		{
 			this.currentDay = DateTime.Today;
-			ArrayList logs = (ArrayList) this.GetLogs(this.currentDay);
-			SetLogDay(logs);
+            GetLogsResult result = this.GetLogs();
+            SetLogDay(result);
 			AddIdleTaskLog();
 		}
 
@@ -471,7 +480,9 @@ namespace PTM.View.Controls
 				this.switchToButton.Enabled = true;
 			}
 			this.currentDay = logDate.Value.Date;
-			worker.DoWork((int) TasksLogCotrolWorks.GetLogs, new AsyncWorker.AsyncWorkerDelegate(GetLogs), new object[] {null});
+            SetWaitState();
+            worker.RunWorkerAsync();
+			//worker.DoWork((int) TasksLogCotrolWorks.GetLogs, new AsyncWorker.AsyncWorkerDelegate(GetLogs), new object[] {null});
 		}
 
 		private void mnuEdit_Click(object sender, EventArgs e)
@@ -588,22 +599,18 @@ namespace PTM.View.Controls
 					config.Value = "0";
 				ConfigurationHelper.SaveConfiguration(config);
 			}
-			catch
-			{
-				throw;
-			}
 			finally
 			{
 				Cursor.Current = Cursors.Default;
 			}
 		}
 
-		private void SetLogDay(ArrayList logs)
+        private void SetLogDay(GetLogsResult result)
 		{
 			try
 			{
 				taskList.BeginUpdate();
-				foreach (Log log in logs)
+                foreach (Log log in result.LogList)
 				{
 					Task taskRow = Tasks.FindById(log.TaskId);
 					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
@@ -813,35 +820,44 @@ namespace PTM.View.Controls
 			CreateRigthClickMenu();
 		}
 
+        delegate void TasksLog_LogChangedDelegate(Logs.LogChangeEventArgs e);
 		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
 		{
-			Task taskRow;
-			if (e.Action == DataRowAction.Change)
-			{
-				if (e.Log.InsertTime.Date != this.currentDay)
-					return;
+            if (this.InvokeRequired)
+            {
+                TasksLog_LogChangedDelegate d = new TasksLog_LogChangedDelegate(TasksLog_LogChanged);
+                this.Invoke(d, new object[] { e });
+            }
+            else
+            {
+                Task taskRow;
+                if (e.Action == DataRowAction.Change)
+                {
+                    if (e.Log.InsertTime.Date != this.currentDay)
+                        return;
 
-				taskRow = Tasks.FindById(e.Log.TaskId);
-				foreach (TreeListViewItem item in this.taskList.Items)
-				{
-					if (((Log) item.Tag).Id == e.Log.Id)
-					{
-						SetListItemValues(item, e.Log, taskRow);
-						break;
-					}
-				}
-			}
-			else if (e.Action == DataRowAction.Add)
-			{
-				CheckCurrentDayChanged();
-				if (this.logDate.Value.Date == currentDay)
-				{
-					taskRow = Tasks.FindById(e.Log.TaskId);
-					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-					SetListItemValues(itemA, e.Log, taskRow);
-					taskList.Items.Insert(0, itemA);
-				}
-			}
+                    taskRow = Tasks.FindById(e.Log.TaskId);
+                    foreach (TreeListViewItem item in this.taskList.Items)
+                    {
+                        if (((Log) item.Tag).Id == e.Log.Id)
+                        {
+                            SetListItemValues(item, e.Log, taskRow);
+                            break;
+                        }
+                    }
+                }
+                else if (e.Action == DataRowAction.Add)
+                {
+                    CheckCurrentDayChanged();
+                    if (this.logDate.Value.Date == currentDay)
+                    {
+                        taskRow = Tasks.FindById(e.Log.TaskId);
+                        TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+                        SetListItemValues(itemA, e.Log, taskRow);
+                        taskList.Items.Insert(0, itemA);
+                    }
+                }
+            }
 		}
 
 		private void CheckCurrentDayChanged()
@@ -918,55 +934,35 @@ namespace PTM.View.Controls
 			}
 		}
 
+        delegate void ApplicationsLog_ApplicationsLogChangedDelegate(ApplicationsLog.ApplicationLogChangeEventArgs e);
 		private void ApplicationsLog_ApplicationsLogChanged(ApplicationsLog.ApplicationLogChangeEventArgs e)
 		{
-			this.UpdateApplicationsList(e.ApplicationLog);
+            if (this.InvokeRequired)
+            {
+                ApplicationsLog_ApplicationsLogChangedDelegate d = new ApplicationsLog_ApplicationsLogChangedDelegate(ApplicationsLog_ApplicationsLogChanged);
+                this.Invoke(d, new object[] { e});
+            }
+            else
+            {
+                this.UpdateApplicationsList(e.ApplicationLog);
+            }            
 		}
 
 		#endregion
 
 		#region AsyncWork
 
-		private enum TasksLogCotrolWorks : int
+        private GetLogsResult GetLogs()
 		{
-			GetLogs
-		}
-
-		private object GetLogs(object p)
-		{
-			ArrayList list = Logs.GetLogsByDay(this.currentDay.Date);
-			foreach (Log log in list)
+            GetLogsResult result = new GetLogsResult();
+            			result.LogList = Logs.GetLogsByDay(this.currentDay.Date);
+            foreach (Log log in result.LogList)
 			{
 				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
 				log.ApplicationsLog = applicationLogs;
 			}
-			return list;
+            return result;
 		}
-
-		private void worker_OnBeforeDoWork(AsyncWorker.OnBeforeDoWorkEventArgs e)
-		{
-			switch (e.WorkId)
-			{
-				case (int) TasksLogCotrolWorks.GetLogs:
-					SetWaitState();
-					break;
-			}
-		}
-
-		private void worker_OnWorkDone(AsyncWorker.OnWorkDoneEventArgs e)
-		{
-			switch (e.WorkId)
-			{
-				case (int) TasksLogCotrolWorks.GetLogs:
-					SetLogDayDelegate del = new SetLogDayDelegate(SetLogDay);
-
-					this.Invoke(del, new object[] {e.Result});
-					//this.SetLogDay((ArrayList) e.Result);
-					break;
-			}
-		}
-
-		private delegate void SetLogDayDelegate(ArrayList logs);
 
 		private void SetWaitState()
 		{
@@ -991,6 +987,11 @@ namespace PTM.View.Controls
 			}
 			this.logDate.Enabled = true;
 		}
+
+        public class GetLogsResult
+        {
+            public ArrayList LogList;
+        }
 
 		#endregion
 	}

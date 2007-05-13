@@ -96,7 +96,6 @@ namespace PTM.View.Forms
 			// 
 			// label1
 			// 
-			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label1.Location = new System.Drawing.Point(8, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(120, 23);
@@ -105,7 +104,6 @@ namespace PTM.View.Forms
 			// 
 			// noButton
 			// 
-			this.noButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.noButton.Font =
 				new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold,
 				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
@@ -118,7 +116,6 @@ namespace PTM.View.Forms
 			// 
 			// yesButton
 			// 
-			this.yesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.yesButton.Font =
 				new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold,
 				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
@@ -131,7 +128,6 @@ namespace PTM.View.Forms
 			// 
 			// currentTaskLabel
 			// 
-			this.currentTaskLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.currentTaskLabel.Font =
 				new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold,
 				                        System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));

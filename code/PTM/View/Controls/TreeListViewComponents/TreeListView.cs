@@ -232,7 +232,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 			}
 			#endregion
 			#region SmallImageList
-			private ImageList _smallimaglist = null;
+            private ImageList _smallimaglist = new ImageList(); // null;
 			/// <summary>
 			/// Gets or sets the ImageList to use when displaying items as small icons in the control (must be filled in)
 			/// </summary>
@@ -524,6 +524,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 		/// <summary>
 		/// Create a new instance of a TreeListView
 		/// </summary>
+		
 		public TreeListView()
 		{
 			InitializeComponent();
@@ -537,6 +538,26 @@ namespace PTM.View.Controls.TreeListViewComponents
 			stylePtr = (IntPtr) style;
 			APIsUser32.SendMessage(new HandleRef(this, Handle), (int) APIsEnums.ListViewMessages.SETEXTENDEDLISTVIEWSTYLE, IntPtr.Zero, stylePtr);
 		}
+        
+        /*
+        public TreeListView()
+        {
+            InitializeComponent();
+            _items = new TreeListViewItemCollection(this);
+            _items.SortOrder = _sorting;
+            _comctl32Version = APIsComctl32.GetMajorVersion();
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams parms = base.CreateParams;
+                parms.ExStyle |= (int)(APIsEnums.ListViewExtendedStyles.INFOTIP | APIsEnums.ListViewExtendedStyles.LABELTIP);
+                return (parms);
+            }
+        }*/
+
 		#endregion
 		#region WndProc
 		/// <summary>

@@ -92,7 +92,6 @@ namespace PTM.View.Forms
 			this.groupBox1.Controls.Add(this.durationLabel);
 			this.groupBox1.Controls.Add(this.trackBar);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.FlatStyle = FlatStyle.System;
 			this.groupBox1.Location = new Point(8, 112);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new Size(240, 88);
@@ -139,7 +138,6 @@ namespace PTM.View.Forms
 			// 
 			// checkBox
 			// 
-			this.checkBox.FlatStyle = FlatStyle.System;
 			this.checkBox.Location = new Point(8, 48);
 			this.checkBox.Name = "checkBox";
 			this.checkBox.Size = new Size(152, 24);
@@ -150,7 +148,6 @@ namespace PTM.View.Forms
 			// 
 			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.Controls.Add(this.numericUpDown);
-			this.groupBox2.FlatStyle = FlatStyle.System;
 			this.groupBox2.Location = new Point(8, 208);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new Size(240, 56);
@@ -196,7 +193,6 @@ namespace PTM.View.Forms
 			// 
 			// btnReset
 			// 
-			this.btnReset.FlatStyle = FlatStyle.System;
 			this.btnReset.Location = new Point(8, 16);
 			this.btnReset.Name = "btnReset";
 			this.btnReset.Size = new Size(96, 23);
@@ -207,7 +203,6 @@ namespace PTM.View.Forms
 			// btnOk
 			// 
 			this.btnOk.DialogResult = DialogResult.OK;
-			this.btnOk.FlatStyle = FlatStyle.System;
 			this.btnOk.Location = new Point(80, 280);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.TabIndex = 4;
@@ -217,7 +212,6 @@ namespace PTM.View.Forms
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = DialogResult.Cancel;
-			this.btnCancel.FlatStyle = FlatStyle.System;
 			this.btnCancel.Location = new Point(168, 280);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 5;
@@ -226,7 +220,6 @@ namespace PTM.View.Forms
 			// 
 			// checkBox1
 			// 
-			this.checkBox1.FlatStyle = FlatStyle.System;
 			this.checkBox1.Location = new Point(8, 80);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new Size(216, 24);

@@ -144,16 +144,26 @@ namespace PTM.View.Forms
 
 		#endregion
 
+        delegate void SetProgressCallBack(int percent);
+
 		internal void SetLoadProgress(int percent)
 		{
 			if (percent > 100)
 				return;
-			this.progressBar.Value = percent;
-			this.Refresh();
+            if (this.progressBar.InvokeRequired)
+            {
+                SetProgressCallBack d = new SetProgressCallBack(SetLoadProgress);
+                this.Invoke(d, new object[] { percent });
+            }
+            else
+            {
+                this.progressBar.Value = percent;
+            }			
+			//this.Refresh();
 			Application.DoEvents();
 		}
 
-		internal void AddProgress(int percent)
+        internal void AddProgress(int percent)
 		{
 			SetLoadProgress(this.progressBar.Value + percent);
 		}

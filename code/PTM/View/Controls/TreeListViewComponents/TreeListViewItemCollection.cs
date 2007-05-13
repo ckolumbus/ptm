@@ -87,7 +87,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 					}
 					catch(FormatException fex)
 					{
-						fex = fex;
+						//fex = fex;
 						res = string.CompareOrdinal(a.SubItems[Column].Text.ToUpper(), b.SubItems[Column].Text.ToUpper());
 					}					
 				}

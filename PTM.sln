@@ -1,43 +1,41 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Test", "test\PTM.Test.csproj", "{394ABD67-5EE0-4C35-AF98-0564E91C0551}"
 	ProjectSection(ProjectDependencies) = postProject
 		{67C6D233-B9D3-4C17-AFA1-1AC780847B35} = {67C6D233-B9D3-4C17-AFA1-1AC780847B35}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Addin.WeekView", "code\PTM.Addin.WeekView\PTM.Addin.WeekView.csproj", "{A5EBB017-8C83-489D-A56C-11C12B0F3056}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
-Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Release = Release
-	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.ActiveCfg = Debug|.NET
-		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug.Build.0 = Debug|.NET
-		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.ActiveCfg = Release|.NET
-		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release.Build.0 = Release|.NET
-		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Debug.ActiveCfg = Debug|.NET
-		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Debug.Build.0 = Debug|.NET
-		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Release.ActiveCfg = Release|.NET
-		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Release.Build.0 = Release|.NET
-		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Debug.ActiveCfg = Debug|.NET
-		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Debug.Build.0 = Debug|.NET
-		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Release.ActiveCfg = Release|.NET
-		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Release.Build.0 = Release|.NET
-	EndGlobalSection
-	GlobalSection(SolutionItems) = postSolution
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A3C5F4F-65FE-4C2A-9520-0E0C69C3940A}"
+	ProjectSection(SolutionItems) = preProject
 		info.xml = info.xml
 		art\people.ico = art\people.ico
 		database\ptm.mdb = database\ptm.mdb
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM\PTM.csproj", "{67C6D233-B9D3-4C17-AFA1-1AC780847B35}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{394ABD67-5EE0-4C35-AF98-0564E91C0551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5EBB017-8C83-489D-A56C-11C12B0F3056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C6D233-B9D3-4C17-AFA1-1AC780847B35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
