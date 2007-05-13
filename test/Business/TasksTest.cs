@@ -36,17 +36,17 @@ namespace PTM.Test.Framework
 		[Test]
 		public void InitializeTest()
 		{
-			Assert.IsNotNull(Tasks.RootTasksRow);
-			Assert.IsNotNull(Tasks.IdleTasksRow);
+			Assert.IsNotNull(Tasks.RootTask);
+			Assert.IsNotNull(Tasks.IdleTask);
 
-			Assert.AreEqual(-1, Tasks.RootTasksRow.ParentId);
+			Assert.AreEqual(-1, Tasks.RootTask.ParentId);
 		}
 
 		[Test]
 		public void InitializeExistingDBTest()
 		{
 			MainModule.Initialize("test");
-			Assert.IsNotNull(Tasks.RootTasksRow);
+			Assert.IsNotNull(Tasks.RootTask);
 		}
 
 		[Test]
@@ -54,12 +54,12 @@ namespace PTM.Test.Framework
 		{
 			int count = Tasks.Count;
 			int eventCount = tasksRowChangedEvent_RowAddedCount;
-			int id = Tasks.AddTask("AddTaskTest", Tasks.RootTasksRow.Id).Id;
+			int id = Tasks.AddTask("AddTaskTest", Tasks.RootTask.Id).Id;
 			Assert.AreEqual(count + 1, Tasks.Count);
 			Assert.AreEqual(eventCount + 1, tasksRowChangedEvent_RowAddedCount);
 			Task addedTask;
 			addedTask = Tasks.FindById(id);
-			Assert.AreEqual(Tasks.RootTasksRow.Id, addedTask.ParentId);
+			Assert.AreEqual(Tasks.RootTask.Id, addedTask.ParentId);
 			Assert.AreEqual("AddTaskTest", addedTask.Description);
 			Assert.AreEqual(true, addedTask.IsActive);
 		}
@@ -68,22 +68,22 @@ namespace PTM.Test.Framework
 		[ExpectedException(typeof (ApplicationException), "Task already exist")]
 		public void AddTaskAlreadyExists()
 		{
-			Tasks.AddTask("AddTaskAlreadyExists", Tasks.RootTasksRow.Id);
-			Tasks.AddTask("AddTaskAlreadyExists", Tasks.RootTasksRow.Id);
+			Tasks.AddTask("AddTaskAlreadyExists", Tasks.RootTask.Id);
+			Tasks.AddTask("AddTaskAlreadyExists", Tasks.RootTask.Id);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "Description can't be null")]
 		public void AddTaskDescripcionNull()
 		{
-			Tasks.AddTask(null, Tasks.RootTasksRow.Id);
+			Tasks.AddTask(null, Tasks.RootTask.Id);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "Description can't be empty")]
 		public void AddTaskDescripcionEmpty()
 		{
-			Tasks.AddTask(string.Empty, Tasks.RootTasksRow.Id);
+			Tasks.AddTask(string.Empty, Tasks.RootTask.Id);
 		}
 
 //		[Test]
@@ -101,7 +101,7 @@ namespace PTM.Test.Framework
 		public void UpdateTask()
 		{
 			Task task;
-			task = Tasks.AddTask("TaskTest", Tasks.RootTasksRow.Id);
+			task = Tasks.AddTask("TaskTest", Tasks.RootTask.Id);
 			int count = Tasks.Count;
 			int eventCount = tasksRowChangedEvent_RowUpdatedCount;
 			task.Description = "UpdatedTaskTest";
@@ -119,24 +119,24 @@ namespace PTM.Test.Framework
 		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
 		public void UpdateRootTaskTest()
 		{
-			Tasks.UpdateTask(Tasks.RootTasksRow);
+			Tasks.UpdateTask(Tasks.RootTask);
 		}
 		
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
 		public void UpdateIdleTaskTest()
 		{
-			Tasks.UpdateTask(Tasks.IdleTasksRow);
+			Tasks.UpdateTask(Tasks.IdleTask);
 		}
 		
 		[Test]
 		public void UpdateParentTask()
 		{
 			Task task1;
-			task1 = Tasks.AddTask("Task1Test", Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("Task1Test", Tasks.RootTask.Id);
 
 			Task task2;
-			task2 = Tasks.AddTask("Task2Test", Tasks.RootTasksRow.Id);
+			task2 = Tasks.AddTask("Task2Test", Tasks.RootTask.Id);
 
 			Tasks.UpdateParentTask(task2.Id, task1.Id);
 			Task updatedTask;
@@ -149,10 +149,10 @@ namespace PTM.Test.Framework
 		public void UpdateParentTaskMergeExistingTask()
 		{
 			Task task1;
-			task1 = Tasks.AddTask("Parent Task",  Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("Parent Task",  Tasks.RootTask.Id);
 			
 			Task task2;
-			task2 = Tasks.AddTask("To Be Merged Task", Tasks.RootTasksRow.Id);
+			task2 = Tasks.AddTask("To Be Merged Task", Tasks.RootTask.Id);
 			
 			Task task3;
 			task3 = Tasks.AddTask(task2.Description, task1.Id);
@@ -160,7 +160,7 @@ namespace PTM.Test.Framework
 			Log log2 = Logs.AddLog(task2.Id);
 			Log log3 = Logs.AddLog(task3.Id);
 			
-			Tasks.UpdateParentTask(task3.Id, Tasks.RootTasksRow.Id);
+			Tasks.UpdateParentTask(task3.Id, Tasks.RootTask.Id);
 			
 			Assert.IsNull(Tasks.FindById(task3.Id));//row3 is deleted
 			
@@ -174,8 +174,8 @@ namespace PTM.Test.Framework
 		public void UpdateParentTaskRootTaskTest()
 		{
 			Task task;
-			task = Tasks.AddTask("Task1Test", Tasks.RootTasksRow.Id);
-			Tasks.UpdateParentTask(Tasks.RootTasksRow.Id, task.Id);
+			task = Tasks.AddTask("Task1Test", Tasks.RootTask.Id);
+			Tasks.UpdateParentTask(Tasks.RootTask.Id, task.Id);
 		}
 		
 		[Test]
@@ -183,15 +183,15 @@ namespace PTM.Test.Framework
 		public void UpdateParentTaskIdleTaskTest()
 		{
 			Task task;
-			task = Tasks.AddTask("Task1Test", Tasks.RootTasksRow.Id);
-			Tasks.UpdateParentTask(Tasks.IdleTasksRow.Id, task.Id);
+			task = Tasks.AddTask("Task1Test", Tasks.RootTask.Id);
+			Tasks.UpdateParentTask(Tasks.IdleTask.Id, task.Id);
 		}
 
 		[Test]
 		public void DeleteTaskTest()
 		{
 			Task task;
-			task = Tasks.AddTask("TaskTest", Tasks.RootTasksRow.Id);
+			task = Tasks.AddTask("TaskTest", Tasks.RootTask.Id);
 			int count = Tasks.Count;
 			int eventCount = tasksRowDeletingEventCount;
 			Tasks.DeleteTask(task.Id);
@@ -206,7 +206,7 @@ namespace PTM.Test.Framework
 		public void DeleteCurrentTaskTest()
 		{
 			Task task;
-			task = Tasks.AddTask("TaskTest", Tasks.RootTasksRow.Id);
+			task = Tasks.AddTask("TaskTest", Tasks.RootTask.Id);
 			Logs.AddLog(task.Id);
 			Tasks.DeleteTask(task.Id);
 		}
@@ -215,14 +215,14 @@ namespace PTM.Test.Framework
 		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
 		public void DeleteRootTaskTest()
 		{
-			Tasks.DeleteTask(Tasks.RootTasksRow.Id);
+			Tasks.DeleteTask(Tasks.RootTask.Id);
 		}
 		
 		[Test]
 		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
 		public void DeleteIdleTaskTest()
 		{
-			Tasks.DeleteTask(Tasks.IdleTasksRow.Id);
+			Tasks.DeleteTask(Tasks.IdleTask.Id);
 		}
 
 		[Test]
@@ -232,7 +232,7 @@ namespace PTM.Test.Framework
 		public void DeleteChildOfCurrentTaskTest()
 		{
 			Task task1;
-			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id);
 
 			Task task2;
 			task2 = Tasks.AddTask("TaskTest2", task1.Id);
@@ -245,7 +245,7 @@ namespace PTM.Test.Framework
 		public void DeleteOnCascadeTaskTest()
 		{
 			Task task1;
-			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id);
 
 			Tasks.AddTask("TaskTest2", task1.Id);
 
@@ -260,19 +260,19 @@ namespace PTM.Test.Framework
 		public void GetChildTasksTest()
 		{
 			Task[] childs;
-			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
+			childs = Tasks.GetChildTasks(Tasks.RootTask.Id);
 			Assert.AreEqual(1, childs.Length, "Just get the default idle row");
 
 			Task task1;
-			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id);
 
 			Task task2;
-			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id);
+			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id);
 
 			Task task3;
 			task3 = Tasks.AddTask("TaskTest3", task1.Id);
 
-			childs = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
+			childs = Tasks.GetChildTasks(Tasks.RootTask.Id);
 			Assert.AreEqual(2 + 1, childs.Length, "2 plus default idle row");
 
 			childs = Tasks.GetChildTasks(task1.Id);
@@ -290,14 +290,14 @@ namespace PTM.Test.Framework
 		public void GetFullPathTest()
 		{
 			string path;
-			path = Tasks.GetFullPath(Tasks.RootTasksRow.Id);
+			path = Tasks.GetFullPath(Tasks.RootTask.Id);
 			Assert.AreEqual(String.Empty, path);
 
 			Task task1;
-			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id);
 
 			Task task2;
-			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id);
+			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id);
 
 			Task task3;
 			task3 = Tasks.AddTask("TaskTest3", task1.Id);
@@ -316,34 +316,34 @@ namespace PTM.Test.Framework
 		public void IsParentTest()
 		{
 			Task task1;
-			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id);
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id);
 
 			Task task2;
-			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id);
+			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id);
 
 			Task task3;
 			task3 = Tasks.AddTask("TaskTest3", task1.Id);
 
 			int result;
-			result = Tasks.IsParent(Tasks.RootTasksRow.Id, -1);
+			result = Tasks.IsParent(Tasks.RootTask.Id, -1);
 			Assert.AreEqual(-1, result);
 
-			result = Tasks.IsParent(-1, Tasks.RootTasksRow.Id);
+			result = Tasks.IsParent(-1, Tasks.RootTask.Id);
 			Assert.AreEqual(-1, result);
 
-			result = Tasks.IsParent(Tasks.RootTasksRow.Id, Tasks.RootTasksRow.Id);
+			result = Tasks.IsParent(Tasks.RootTask.Id, Tasks.RootTask.Id);
 			Assert.AreEqual(0, result);
 
-			result = Tasks.IsParent(Tasks.RootTasksRow.Id, task1.Id);
+			result = Tasks.IsParent(Tasks.RootTask.Id, task1.Id);
 			Assert.AreEqual(1, result);
 
-			result = Tasks.IsParent(Tasks.RootTasksRow.Id, task2.Id);
+			result = Tasks.IsParent(Tasks.RootTask.Id, task2.Id);
 			Assert.AreEqual(1, result);
 
-			result = Tasks.IsParent(Tasks.RootTasksRow.Id, task3.Id);
+			result = Tasks.IsParent(Tasks.RootTask.Id, task3.Id);
 			Assert.AreEqual(2, result);
 
-			result = Tasks.IsParent(task1.Id, Tasks.RootTasksRow.Id);
+			result = Tasks.IsParent(task1.Id, Tasks.RootTask.Id);
 			Assert.AreEqual(-1, result);
 
 			result = Tasks.IsParent(task1.Id, task2.Id);

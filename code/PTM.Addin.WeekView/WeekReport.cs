@@ -138,7 +138,7 @@ namespace PTM.Addin.WeekView
 					{				
 						Task task;
 						task = Tasks.FindById(log.MergeLog.TaskId);
-						if(task.Id == Tasks.IdleTasksRow.Id)
+						if(task.Id == Tasks.IdleTask.Id)
 							continue;
 					
 						Appointment appointment = new Appointment();

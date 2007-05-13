@@ -52,7 +52,7 @@ namespace PTM.View.Controls
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
 
 			Task parentTaskRow;
-			parentTaskRow = Tasks.RootTasksRow;
+			parentTaskRow = Tasks.RootTask;
 			parentTasksList.Add(parentTaskRow);
 			this.parentTaskComboBox.DisplayMember = "Description";
 			this.parentTaskComboBox.ValueMember = "Id";

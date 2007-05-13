@@ -14,6 +14,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Microsoft.Win32
 {
@@ -128,11 +129,11 @@ namespace Microsoft.Win32
 		// Install the hook
 		public void Install()
 		{
-			m_hhook = SetWindowsHookEx(
-				m_hookType,
-				m_filterFunc,
-				IntPtr.Zero,
-				(int) AppDomain.GetCurrentThreadId());
+            m_hhook = SetWindowsHookEx(
+                m_hookType,
+                m_filterFunc,
+                IntPtr.Zero,
+                AppDomain.GetCurrentThreadId());
 		}
 
 		// ************************************************************************

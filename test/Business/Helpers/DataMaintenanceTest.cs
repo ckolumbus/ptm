@@ -30,9 +30,9 @@ namespace PTM.Test.Framework.Helpers
 		public void DeleteIdleEntriesTest()
 		{
 			//Make task tree
-			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id).Id;
 
-			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id).Id;
 
 			int taskId3 = Tasks.AddTask("TaskTest3", taskId1).Id;
 
@@ -59,12 +59,12 @@ namespace PTM.Test.Framework.Helpers
 //				InsertLog(task2childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
 //				InsertLog(task3childdefaultId, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
 
-				InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
-				InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
-				InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
+				InsertLog(Tasks.IdleTask.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*3), duration);
+				InsertLog(Tasks.IdleTask.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*4), duration);
+				InsertLog(Tasks.IdleTask.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*5), duration);
 
 //				if (i > (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays).Value)
-//					InsertLog(Tasks.IdleTasksRow.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
+//					InsertLog(Tasks.IdleTask.Id, DateTime.Today.AddDays(-i).AddSeconds(duration*6), duration);
 			}
 
 			DataMaintenanceHelper.DeleteIdleEntries();
@@ -96,9 +96,9 @@ namespace PTM.Test.Framework.Helpers
 		public void GroupLogsTest()
 		{
 			//Make task tree
-			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id).Id;
 
-			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id).Id;
 
 			int taskId3 = Tasks.AddTask("TaskTest3", taskId1).Id;
 

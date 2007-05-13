@@ -39,7 +39,7 @@ namespace PTM.Framework
 					sumRow.TotalActiveTime = 0;
 				} //if
 
-				if (sumRow.TaskId != Tasks.IdleTasksRow.Id) //ignore idle time
+				if (sumRow.TaskId != Tasks.IdleTask.Id) //ignore idle time
 				{
 					if (row.Id != parentRow.Id)
 					{
@@ -95,7 +95,7 @@ namespace PTM.Framework
 			{
 				int count = Convert.ToInt32(DbHelper.ExecuteScalar("Select count(Id) from TasksLog where TaskId <> ? and InsertTime>= ? and InsertTime<?",
 				                         new string[] {"IdleTaskId", "InitialTime", "FinalTime"},
-				                         new object[] {Tasks.IdleTasksRow.Id, curDate, curDate.AddDays(1)}));
+				                         new object[] {Tasks.IdleTask.Id, curDate, curDate.AddDays(1)}));
 				if(count>0)
 				{
 					workedDays++;

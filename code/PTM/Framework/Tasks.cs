@@ -34,7 +34,7 @@ namespace PTM.Framework
 			}
 		}
 
-		public static Task RootTasksRow
+		public static Task RootTask
 		{
 			get
 			{
@@ -44,7 +44,7 @@ namespace PTM.Framework
 			}
 		}
 
-		public static Task IdleTasksRow
+		public static Task IdleTask
 		{
 			get
 			{

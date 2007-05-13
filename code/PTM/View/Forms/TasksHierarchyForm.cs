@@ -178,7 +178,7 @@ namespace PTM.View.Forms
 
 		private void TreeView_AfterSelect(object sender, EventArgs e)
 		{
-			if (tasksTreeViewControl.SelectedTaskId == Tasks.RootTasksRow.Id)
+			if (tasksTreeViewControl.SelectedTaskId == Tasks.RootTask.Id)
 			{
 				this.editButton.Enabled = false;
 				this.deleteButton.Enabled = false;

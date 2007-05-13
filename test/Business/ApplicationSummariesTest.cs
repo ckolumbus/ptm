@@ -29,9 +29,9 @@ namespace PTM.Test.Framework
 		[Test]
 		public void GetApplicationSummaryTest()
 		{
-			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id).Id;
 
-			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id).Id;
+			int taskId2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id).Id;
 
 			int taskId3 = Tasks.AddTask("TaskTest3", taskId1).Id;
 
@@ -55,7 +55,7 @@ namespace PTM.Test.Framework
 
 			ArrayList result;
 			result =
-				ApplicationSummaries.GetApplicationsSummary(Tasks.RootTasksRow.Id, DateTime.Today,
+				ApplicationSummaries.GetApplicationsSummary(Tasks.RootTask.Id, DateTime.Today,
 				                                            DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.IsTrue(result.Count > 0);
 			double total = 0;

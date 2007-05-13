@@ -77,7 +77,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (Exception ex)
 				{
-					ex = ex; //do nothing
+					//ex = ex; //do nothing
 				}
 			}
 			return info;

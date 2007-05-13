@@ -27,7 +27,7 @@ namespace PTM.Framework.Helpers
 
 			//Delete Idle logs
 			DbHelper.ExecuteNonQuery("DELETE FROM TasksLog " +
-			                         " WHERE TasksLog.TaskId =  " + Tasks.IdleTasksRow.Id +
+			                         " WHERE TasksLog.TaskId =  " + Tasks.IdleTask.Id +
 			                         " AND TasksLog.InsertTime < ?", new string[] {"InsertTime"},
 			                         new object[] {limitDate});
 		}

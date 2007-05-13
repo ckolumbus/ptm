@@ -61,7 +61,7 @@ namespace PTM.View.Controls
             //worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
-			parentTasksList.Add(Tasks.RootTasksRow);
+			parentTasksList.Add(Tasks.RootTask);
 			this.parentTaskComboBox.DisplayMember = "Description";
 			this.parentTaskComboBox.ValueMember = "Id";
 			this.parentTaskComboBox.DataSource = parentTasksList;
@@ -673,7 +673,7 @@ namespace PTM.View.Controls
 
 		private void GoToParentDetail()
 		{
-			if (Tasks.RootTasksRow.Id == this.parentTask.Id)
+			if (Tasks.RootTask.Id == this.parentTask.Id)
 			{
 				return;
 			}

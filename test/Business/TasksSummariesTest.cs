@@ -30,10 +30,10 @@ namespace PTM.Test.Framework
 		public void GetTaskSummaryTest()
 		{
 			Task task1;
-			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id, true);
+			task1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id, true);
 			
 			Task task2;
-			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTasksRow.Id, true);
+			task2 = Tasks.AddTask("TaskTest2", Tasks.RootTask.Id, true);
 			
 			Task task3;
 			task3 = Tasks.AddTask("TaskTest3", task1.Id, true);
@@ -78,7 +78,7 @@ namespace PTM.Test.Framework
 			//row2 ->2
 
 			ArrayList result;
-			result = TasksSummaries.GetTaskSummary(Tasks.RootTasksRow, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
+			result = TasksSummaries.GetTaskSummary(Tasks.RootTask, DateTime.Today, DateTime.Today.AddDays(1).AddSeconds(-1));
 			Assert.AreEqual(2, result.Count);
 			TaskSummary sum1 = FindTaskSummaryByTaskId(result, task1.Id);
 			Assert.IsTrue(sum1.TotalActiveTime >= 8);
@@ -130,10 +130,10 @@ namespace PTM.Test.Framework
 		[Test]
 		public void GetWorkedDaysTest()
 		{
-			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTasksRow.Id).Id;
+			int taskId1 = Tasks.AddTask("TaskTest1", Tasks.RootTask.Id).Id;
 			InsertLog(taskId1, DateTime.Now.AddDays(-3), 1);
 			InsertLog(taskId1, DateTime.Now.AddDays(-4), 1);
-			InsertLog(Tasks.IdleTasksRow.Id, DateTime.Now.AddDays(-5), 1);
+			InsertLog(Tasks.IdleTask.Id, DateTime.Now.AddDays(-5), 1);
 			InsertLog(taskId1, DateTime.Now.AddDays(-6), 1);
 			Assert.AreEqual(0, TasksSummaries.GetWorkedDays(DateTime.Now, DateTime.Now.AddDays(1)));
 			Assert.AreEqual(0, TasksSummaries.GetWorkedDays(DateTime.Today, DateTime.Today));

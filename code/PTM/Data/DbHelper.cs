@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using PTM.View;
 
 namespace PTM.Data
 {
@@ -360,7 +361,8 @@ namespace PTM.Data
 			}
 			catch(Exception ex)
 			{
-				ex = ex;
+                Logger.Write(ex.Message);
+                Logger.Write(ex.StackTrace);
 			}
 		}
 

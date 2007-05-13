@@ -32,10 +32,10 @@ namespace PTM.Test.Framework
 		[Test]
 		public void GetApplicationsLogTest()
 		{
-			Logs.AddLog(Tasks.RootTasksRow.Id);
+			Logs.AddLog(Tasks.RootTask.Id);
 			Thread.Sleep(6);
 			ArrayList apps;
-			apps = ApplicationsLog.GetApplicationsLog(Tasks.RootTasksRow.Id);
+			apps = ApplicationsLog.GetApplicationsLog(Tasks.RootTask.Id);
 			Assert.IsNotNull(apps);
 		}
 

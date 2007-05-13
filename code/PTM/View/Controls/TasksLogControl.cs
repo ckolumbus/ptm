@@ -506,13 +506,18 @@ namespace PTM.View.Controls
 			MenuItem mnuSwitchTo = new MenuItem();
 			MenuItem mnuDelete = new MenuItem();
 			MenuItem menuItem11 = new MenuItem();
+            TaskMenuItem idleMenuItem = new TaskMenuItem(Tasks.IdleTask.Id);
+            idleMenuItem.Text = Tasks.IdleTask.Description;
+            idleMenuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
+
 			this.rigthClickMenu.MenuItems.Clear();
 			this.rigthClickMenu.MenuItems.AddRange(new MenuItem[]
 			                                       	{
 			                                       		mnuEdit,
 			                                       		mnuSwitchTo,
 			                                       		mnuDelete,
-			                                       		menuItem11
+			                                       		menuItem11,
+                                                        idleMenuItem
 			                                       	});
 
 			mnuEdit.DefaultItem = true;
@@ -535,9 +540,11 @@ namespace PTM.View.Controls
 
 			ArrayList a = new ArrayList();
 			Task[] tasks;
-			tasks = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
+			tasks = Tasks.GetChildTasks(Tasks.RootTask.Id);
 			foreach (Task task in tasks)
 			{
+                if (task.Id == Tasks.IdleTask.Id)
+                    continue;
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
 				menuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
@@ -580,7 +587,7 @@ namespace PTM.View.Controls
 				for (int i = 0; i < this.taskList.Items.Count; i++)
 				{
 					TreeListViewItem item = this.taskList.Items[i];
-					if (((Log) item.Tag).TaskId == Tasks.IdleTasksRow.Id)
+					if (((Log) item.Tag).TaskId == Tasks.IdleTask.Id)
 						continue;
 					if (this.pathCheckBox.Checked)
 					{
@@ -712,26 +719,31 @@ namespace PTM.View.Controls
 		{
 			MenuItem exitContextMenuItem = new MenuItem();
 			MenuItem menuItem1 = new MenuItem();
+            menuItem1.Text = "-";
+            TaskMenuItem idleMenuItem = new TaskMenuItem(Tasks.IdleTask.Id);
+            idleMenuItem.Text = Tasks.IdleTask.Description;
+            idleMenuItem.Pick += new EventHandler(mnuTaskAdd_Click);
+
 			this.notifyContextMenu = new ContextMenu();
 			this.notifyContextMenu.MenuItems.AddRange(new MenuItem[]
 			                                          	{
 			                                          		exitContextMenuItem,
-			                                          		menuItem1
+			                                          		menuItem1,
+                                                            idleMenuItem
 			                                          	});
 
 			exitContextMenuItem.Index = 0;
 			exitContextMenuItem.Text = "Exit";
-			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);
-
-			menuItem1.Index = 1;
-			menuItem1.Text = "-";
+			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);			
 
 
 			ArrayList a = new ArrayList();
 			Task[] tasks;
-			tasks = Tasks.GetChildTasks(Tasks.RootTasksRow.Id);
+			tasks = Tasks.GetChildTasks(Tasks.RootTask.Id);
 			foreach (Task task in tasks)
 			{
+                if (task.Id == Tasks.IdleTask.Id)
+                    continue;
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
 				menuItem.Pick += new EventHandler(mnuTaskAdd_Click);
@@ -877,7 +889,7 @@ namespace PTM.View.Controls
 //			{
 //				item.Text = taskRow.Description;
 //			}
-			if (this.pathCheckBox.Checked && taskRow.Id != Tasks.IdleTasksRow.Id)
+			if (this.pathCheckBox.Checked && taskRow.Id != Tasks.IdleTask.Id)
 				item.Text = Tasks.GetFullPath(taskRow.Id);
 			else
 				item.Text = taskRow.Description;

@@ -39,7 +39,7 @@ namespace PTM.View.Forms
 			}
 			else
 			{
-				tasksTree.SelectedTaskId = Tasks.RootTasksRow.Id;
+				tasksTree.SelectedTaskId = Tasks.RootTask.Id;
 			}
 			tasksTree.DoubleClick += new EventHandler(tasksTree_DoubleClick);
 		}
@@ -211,7 +211,7 @@ namespace PTM.View.Forms
 			if (this.tasksTree.SelectedTaskId == -1)
 				return;
 
-			if (tasksTree.SelectedTaskId == Tasks.RootTasksRow.Id)
+			if (tasksTree.SelectedTaskId == Tasks.RootTask.Id)
 			{
 				this.editButton.Enabled = false;
 				this.deleteButton.Enabled = false;
@@ -250,7 +250,7 @@ namespace PTM.View.Forms
 
 		private void tasksTree_DoubleClick(object sender, EventArgs e)
 		{
-			if (this.tasksTree.SelectedTaskId == Tasks.RootTasksRow.Id)
+			if (this.tasksTree.SelectedTaskId == Tasks.RootTask.Id)
 				return;
 			this.selectedTaskId = tasksTree.SelectedTaskId;
 			this.DialogResult = DialogResult.OK;

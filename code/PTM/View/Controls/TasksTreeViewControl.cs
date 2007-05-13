@@ -215,9 +215,9 @@ namespace PTM.View.Controls
 		private void LoadTree()
 		{
 			treeView.Nodes.Clear();
-			TreeNode nodeParent = CreateNode(Tasks.RootTasksRow);
+			TreeNode nodeParent = CreateNode(Tasks.RootTask);
 			this.treeView.Nodes.Add(nodeParent);
-			AddChildNodes(Tasks.RootTasksRow, nodeParent);
+			AddChildNodes(Tasks.RootTask, nodeParent);
 		}
 
 		private void AddChildNodes(Task parentRow, TreeNode nodeParent)
@@ -225,7 +225,7 @@ namespace PTM.View.Controls
 			Task[] childsRows = Tasks.GetChildTasks(parentRow.Id);
 			foreach (Task row in childsRows)
 			{
-				if (row.Id == Tasks.IdleTasksRow.Id)
+				if (row.Id == Tasks.IdleTask.Id)
 					continue;
 				TreeNode nodeChild = CreateNode(row);
 				nodeParent.Nodes.Add(nodeChild);

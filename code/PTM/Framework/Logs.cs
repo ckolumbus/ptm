@@ -73,7 +73,7 @@ namespace PTM.Framework
 
 		public static void DeleteLog(int id)
 		{
-			int idleTaskId = Tasks.IdleTasksRow.Id;
+			int idleTaskId = Tasks.IdleTask.Id;
 			UpdateLogTaskId(id, idleTaskId);
 		}
 
@@ -139,7 +139,7 @@ namespace PTM.Framework
 				return;
 			}
 
-			int defaultTaskId = Tasks.IdleTasksRow.Id;
+			int defaultTaskId = Tasks.IdleTask.Id;
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 			int duration = (int) ((DateTime.Now - lastLogFinish).TotalSeconds > ((int) config.Value)*60
 			                      	? (int) config.Value*60
@@ -213,7 +213,7 @@ namespace PTM.Framework
 
 		public static void AddIdleTaskLog()
 		{
-			AddLog(Tasks.IdleTasksRow.Id);
+			AddLog(Tasks.IdleTask.Id);
 		}
 
 		public static void ChangeLogsTaskId(int oldTaskId, int newTaskId)
