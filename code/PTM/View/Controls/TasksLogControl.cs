@@ -62,6 +62,7 @@ namespace PTM.View.Controls
 			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
 			Tasks.TaskDeleted += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+            Logs.CurrentLogDurationChanged += new ElapsedEventHandler(Logs_CurrentLogDurationChanged);
 			ApplicationsLog.ApplicationsLogChanged +=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
 			this.taskList.SmallImageList = IconsManager.IconsList;
@@ -80,6 +81,8 @@ namespace PTM.View.Controls
 			CreateRigthClickMenu();
 			CreateNotifyMenu();
 		}
+
+
 
 		protected override void OnHandleDestroyed(EventArgs e)
 		{
@@ -863,14 +866,56 @@ namespace PTM.View.Controls
                     CheckCurrentDayChanged();
                     if (this.logDate.Value.Date == currentDay)
                     {
+                        //unbold no current log font.
+                        foreach (TreeListViewItem item in this.taskList.Items)
+                        {
+                            if (item.Font.Bold && Logs.CurrentLog != null && ((Log)item.Tag).Id != Logs.CurrentLog.Id)
+                            {
+                                item.Font = new Font(item.Font, FontStyle.Regular);
+                                break;
+                            }
+                        }
+
                         taskRow = Tasks.FindById(e.Log.TaskId);
                         TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+                        itemA.Font = new Font(itemA.Font, FontStyle.Bold);
                         SetListItemValues(itemA, e.Log, taskRow);
                         taskList.Items.Insert(0, itemA);
                     }
                 }
             }
 		}
+
+	    private delegate void Logs_CurrentLogDurationChangedDelegate(object sender, ElapsedEventArgs e);
+        private void Logs_CurrentLogDurationChanged(object sender, ElapsedEventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                Logs_CurrentLogDurationChangedDelegate d = new Logs_CurrentLogDurationChangedDelegate(Logs_CurrentLogDurationChanged);
+                this.Invoke(d, new object[] { sender, e });
+            }
+            else
+            {
+
+                foreach (TreeListViewItem item in this.taskList.Items)
+                {
+                    if (Logs.CurrentLog != null && ((Log)item.Tag).Id == Logs.CurrentLog.Id)
+                    {
+                        item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(Logs.CurrentLog.Duration);
+                        if (!item.Font.Bold)
+                            item.Font = new Font(item.Font, FontStyle.Bold);
+
+                        if (notifyIcon.Tag == null || (int)notifyIcon.Tag != Tasks.CurrentTask.Id)
+                        {
+                            notifyIcon.Text = Tasks.CurrentTask.Description;
+                            notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
+                            notifyIcon.Tag = Tasks.CurrentTask.Id;
+                        }                
+                        break;
+                    }
+                }                
+            }
+        }
 
 		private void CheckCurrentDayChanged()
 		{
@@ -885,14 +930,15 @@ namespace PTM.View.Controls
 		private void SetListItemValues(ListViewItem item, Log log, Task taskRow)
 		{
 			item.Tag = log;
-//			if (item.SubItems[TaskDescriptionHeader.Index].Text != taskRow.Description)
-//			{
-//				item.Text = taskRow.Description;
-//			}
-			if (this.pathCheckBox.Checked && taskRow.Id != Tasks.IdleTask.Id)
-				item.Text = Tasks.GetFullPath(taskRow.Id);
-			else
-				item.Text = taskRow.Description;
+            if (taskRow!=null)
+            {
+                if (this.pathCheckBox.Checked && taskRow.Id != Tasks.IdleTask.Id)
+                    item.Text = Tasks.GetFullPath(taskRow.Id);
+                else
+                    item.Text = taskRow.Description;
+
+                item.ImageIndex = taskRow.IconId;
+            }
 
 			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
 			//item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
@@ -901,14 +947,7 @@ namespace PTM.View.Controls
 			cultureInfo.DateTimeFormat.ShortTimePattern = "hh:mm tt";
 			cultureInfo.DateTimeFormat.AMDesignator = "a.m.";
 			cultureInfo.DateTimeFormat.PMDesignator = "p.m.";
-			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);
-
-			item.ImageIndex = taskRow.IconId;
-			if (Logs.CurrentLog != null && log.Id == Logs.CurrentLog.Id)
-			{
-				notifyIcon.Text = taskRow.Description;
-				notifyIcon.Icon = (Icon) IconsManager.CommonTaskIconsTable[taskRow.IconId];
-			}
+			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);		
 		}
 
 		private void UpdateApplicationsList(ApplicationLog applicationLog)

@@ -205,10 +205,10 @@ namespace PTM.Framework
 
 			DbHelper.ExecuteNonQuery("UPDATE TasksLog SET Duration = ? WHERE Id = " + currentLog.Id,
 			                         new string[] {"Duration"}, new object[] {currentLog.Duration});
-			if (LogChanged != null)
-			{
-				LogChanged(new LogChangeEventArgs(currentLog, DataRowAction.Change));
-			}
+            //if (LogChanged != null)
+            //{
+            //    LogChanged(new LogChangeEventArgs(currentLog, DataRowAction.Change));
+            //}
 		}
 
 		public static void AddIdleTaskLog()
@@ -240,12 +240,12 @@ namespace PTM.Framework
 			TimeSpan t = new TimeSpan(0, 0, currentLog.Duration);
 			t = t.Add(new TimeSpan(0, 0, 1));
 			currentLog.Duration = Convert.ToInt32(t.TotalSeconds);
-			if (LogChanged != null)
-			{
-				LogChanged(new LogChangeEventArgs(currentLog, DataRowAction.Change));
-			}
-			if (TasksLogDurationCountElapsed != null)
-				TasksLogDurationCountElapsed(sender, e);
+            //if (LogChanged != null)
+            //{
+            //    LogChanged(new LogChangeEventArgs(currentLog, DataRowAction.Change));
+            //}
+			if (CurrentLogDurationChanged != null)
+				CurrentLogDurationChanged(sender, e);
 		}
 
 		#endregion
@@ -277,7 +277,7 @@ namespace PTM.Framework
 		}
 
 		public static event LogChangeEventHandler LogChanged;
-		public static event ElapsedEventHandler TasksLogDurationCountElapsed;
+		public static event ElapsedEventHandler CurrentLogDurationChanged;
 		public static event EventHandler AfterStartLogging;
 		public static event EventHandler AfterStopLogging;
 

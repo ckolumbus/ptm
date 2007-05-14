@@ -78,7 +78,7 @@ namespace PTM.View.Controls
 			this.toDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 
-			Logs.TasksLogDurationCountElapsed += new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			Logs.CurrentLogDurationChanged += new ElapsedEventHandler(TaskLogTimer_Elapsed);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
 
 			this.Status = String.Empty;
@@ -86,7 +86,7 @@ namespace PTM.View.Controls
 
 		protected override void OnHandleDestroyed(EventArgs e)
 		{
-			Logs.TasksLogDurationCountElapsed -= new ElapsedEventHandler(TaskLogTimer_Elapsed);
+			Logs.CurrentLogDurationChanged -= new ElapsedEventHandler(TaskLogTimer_Elapsed);
 			base.OnHandleDestroyed(e);
 		}
 

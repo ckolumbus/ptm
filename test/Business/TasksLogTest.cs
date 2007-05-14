@@ -44,7 +44,7 @@ namespace PTM.Test.Framework
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			Logs.AfterStartLogging += new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging += new EventHandler(TasksLog_AfterStopLogging);
-			Logs.TasksLogDurationCountElapsed += new ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
+			Logs.CurrentLogDurationChanged += new ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
 		}
 
 		[Test]
@@ -208,7 +208,7 @@ namespace PTM.Test.Framework
 			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			Logs.AfterStartLogging -= new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging -= new EventHandler(TasksLog_AfterStopLogging);
-			Logs.TasksLogDurationCountElapsed -= new ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
+			Logs.CurrentLogDurationChanged -= new ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
 			DbHelper.DeleteDataSource();
 		}
 

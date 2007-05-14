@@ -58,6 +58,13 @@ namespace HansBlomme.Windows.Forms
 
 		//public event MenuItemRightClickEventHandler MenuItemRightClick;
 
+	    private object tag;
+	    public object Tag
+	    {
+            set { tag = value; }
+            get { return tag; }
+	    }
+
 		public NotifyIcon()
 		{
 			this.Messages = new MessageHandler();
