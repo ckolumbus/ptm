@@ -107,7 +107,39 @@ namespace PTM.Framework
 			} //foreach
 			return results;
 		} //GetApplicationsLog
-		#endregion
+
+        public static void DeleteApplicationLog(int applicationLogId)
+        {
+            IDictionary result;
+            result = DbHelper.ExecuteGetFirstRow("SELECT TaskLogId FROM ApplicationsLog WHERE Id = " + applicationLogId);
+            if (result == null)
+                throw new ApplicationException("The application log entry doesn't exists.");
+            int logId = Convert.ToInt32(result["TaskLogId"]);
+            //if (logId == Logs.CurrentLog.Id)
+            //    throw new ApplicationException("Applications log entries from current task can't be deleted.");
+
+            for (int i = 0; i < currentApplicationsLog.Count;i++ )
+            {
+                ApplicationLog applicationLog = (ApplicationLog) currentApplicationsLog[i];
+                if(applicationLog.Id == applicationLogId)
+                {
+                    currentApplicationsLog.RemoveAt(i);
+                    break;
+                }
+            }
+
+            DbHelper.ExecuteNonQuery("DELETE FROM ApplicationsLog WHERE Id = " + applicationLogId);
+
+            if (ApplicationsLogChanged != null)
+            {
+                ApplicationLog alog = new ApplicationLog();
+                alog.Id = applicationLogId;
+                alog.TaskLogId = logId;
+                ApplicationsLogChanged(new ApplicationLogChangeEventArgs(alog, DataRowAction.Delete));
+            }
+        }
+
+	    #endregion
 
 		#region Private Methods
 

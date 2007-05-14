@@ -90,6 +90,7 @@ namespace PTM.View.Controls
 			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
 			Tasks.TaskDeleted -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
 			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+            Logs.CurrentLogDurationChanged -= new ElapsedEventHandler(Logs_CurrentLogDurationChanged);
 			ApplicationsLog.ApplicationsLogChanged -=
 				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
 			base.OnHandleDestroyed(e);
@@ -341,7 +342,9 @@ namespace PTM.View.Controls
 
 		private void EditSelectedTaskLog()
 		{
-			if (!isValidEditableLog())
+            if (taskList.SelectedItems.Count == 0)
+                return;
+            if (!isValidEditableLog(taskList.SelectedItems[0]))
 				return;
 			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
 
@@ -358,7 +361,10 @@ namespace PTM.View.Controls
 
 		private void SwitchToSelectedLog()
 		{
-			if (!isValidEditableLog())
+            if (taskList.SelectedItems.Count == 0)
+                return;
+
+            if (!isValidEditableLog(taskList.SelectedItems[0]))
 				return;
 			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
 			AddTaskLog(taskId,
@@ -367,17 +373,37 @@ namespace PTM.View.Controls
 
 		private void DeleteSelectedTaskLog()
 		{
-			if (!isValidEditableLog())
-				return;
+            //if (!isValidEditableLog())
+            //    return;
 
 			for (int i = 0; i < taskList.SelectedItems.Count; i++)
 			{
+                if (!isValidEditableLog(taskList.SelectedItems[i]))
+                    continue;
 				int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
 				Logs.DeleteLog(taskLogId);
 			}
 		}
 
-		private void addTaskButton_Click(object sender, EventArgs e)
+        private void DeleteSelectedAppLog()
+        {
+            for (int i = 0; i < taskList.SelectedItems.Count; i++)
+            {
+                if (taskList.SelectedItems[i].Parent==null)
+                    continue;
+                int appId = ((ApplicationLog)taskList.SelectedItems[i].Tag).Id;
+                try
+                {
+                    ApplicationsLog.DeleteApplicationLog(appId);
+                }
+                catch(ApplicationException aex)
+                {
+                    MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+	    private void addTaskButton_Click(object sender, EventArgs e)
 		{
 			NewTaskLog(false);
 		}
@@ -395,13 +421,12 @@ namespace PTM.View.Controls
 		private void deleteButton_Click(object sender, EventArgs e)
 		{
 			DeleteSelectedTaskLog();
+            DeleteSelectedAppLog();
 		}
 
-		private bool isValidEditableLog()
+		private static bool isValidEditableLog(TreeListViewItem item)
 		{
-			if (this.taskList.SelectedItems.Count == 0)
-				return false;
-			if (taskList.SelectedItems[0].Parent != null)
+            if (item.Parent != null)
 				return false;
 
 			return true;
@@ -457,7 +482,7 @@ namespace PTM.View.Controls
 		private void SetEditable()
 		{
 			this.editButton.Enabled = true;
-			this.deleteButton.Enabled = true;
+			//this.deleteButton.Enabled = true;
 			this.switchToButton.Enabled = true;
 			this.taskList.ContextMenu = this.rigthClickMenu;
 		}
@@ -465,7 +490,7 @@ namespace PTM.View.Controls
 		private void SetNoEditable()
 		{
 			this.editButton.Enabled = false;
-			this.deleteButton.Enabled = false;
+			//this.deleteButton.Enabled = false;
 			this.switchToButton.Enabled = false;
 			this.taskList.ContextMenu = null;
 		}
@@ -628,7 +653,7 @@ namespace PTM.View.Controls
 					taskList.Items.Insert(0, itemA);
 					foreach (ApplicationLog applicationLog in log.ApplicationsLog)
 					{
-						UpdateApplicationsList(applicationLog);
+						UpdateApplicationsList(applicationLog, DataRowAction.Add);
 					}
 				}
 			}
@@ -950,37 +975,57 @@ namespace PTM.View.Controls
 			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);		
 		}
 
-		private void UpdateApplicationsList(ApplicationLog applicationLog)
+		private void UpdateApplicationsList(ApplicationLog applicationLog, DataRowAction action)
 		{
 			if (applicationLog == null)
 			{
 				return;
 			}
 
+            string activeTime = null;
+            string caption = null;
 
-			TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
-			string activeTime = ViewHelper.TimeSpanToTimeString(active);
-			string caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;
+            if(action == DataRowAction.Add || action == DataRowAction.Change)
+            {
+                TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
+                activeTime = ViewHelper.TimeSpanToTimeString(active);
+                caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;                
+            }
+
 			foreach (TreeListViewItem logItem in this.taskList.Items)
 			{
 				if (((Log) logItem.Tag).Id == applicationLog.TaskLogId)
 				{
-					foreach (TreeListViewItem appItem in logItem.Items)
-					{
-						if (((ApplicationLog) appItem.Tag).Id == applicationLog.Id)
-						{
-							appItem.Tag = applicationLog;
-							appItem.SubItems[TaskDescriptionHeader.Index].Text = caption;
-							appItem.SubItems[DurationTaskHeader.Index].Text = activeTime;
-							return;
-						}
-					}
-					TreeListViewItem lvi =
-						new TreeListViewItem(caption,
-						                     new string[] {activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture)});
-					lvi.Tag = applicationLog;
-					lvi.ImageIndex = IconsManager.GetIconFromFile(applicationLog.ApplicationFullPath);
-					logItem.Items.Add(lvi);
+                    if (action == DataRowAction.Add)
+                    {
+                        TreeListViewItem lvi = new TreeListViewItem(caption,
+                         new string[] { activeTime, "", applicationLog.Id.ToString(CultureInfo.InvariantCulture) });
+                        lvi.Tag = applicationLog;
+                        lvi.ImageIndex = IconsManager.GetIconFromFile(applicationLog.ApplicationFullPath);
+                        logItem.Items.Add(lvi);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < logItem.Items.Count; i++)
+                        {
+                            TreeListViewItem appItem = logItem.Items[i];
+                            if (((ApplicationLog)appItem.Tag).Id == applicationLog.Id)
+                            {
+                                if (action == DataRowAction.Change)
+                                {
+                                    appItem.Tag = applicationLog;
+                                    appItem.SubItems[TaskDescriptionHeader.Index].Text = caption;
+                                    appItem.SubItems[DurationTaskHeader.Index].Text = activeTime;
+                                    return;
+                                }
+                                if (action == DataRowAction.Delete)
+                                {
+                                    logItem.Items.RemoveAt(i);
+                                    return;
+                                }
+                            }
+                        }
+                    }
 				}
 			}
 		}
@@ -995,7 +1040,7 @@ namespace PTM.View.Controls
             }
             else
             {
-                this.UpdateApplicationsList(e.ApplicationLog);
+                this.UpdateApplicationsList(e.ApplicationLog, e.Action);
             }            
 		}
 

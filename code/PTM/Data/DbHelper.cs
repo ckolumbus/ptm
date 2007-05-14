@@ -78,10 +78,6 @@ namespace PTM.Data
 				cmd.Connection.Open();
 				return cmd.ExecuteNonQuery();
 			}
-			catch
-			{
-				throw;
-			}
 			finally
 			{
 				cmd.Connection.Close();
@@ -103,10 +99,6 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				return cmd.ExecuteNonQuery();
-			}
-			catch
-			{
-				throw;
 			}
 			finally
 			{
@@ -131,10 +123,6 @@ namespace PTM.Data
 					listDictionary.Add(reader.GetName(i), reader[i]);
 				reader.Close();
 				return listDictionary;
-			}
-			catch
-			{
-				throw;
 			}
 			finally
 			{
@@ -223,10 +211,6 @@ namespace PTM.Data
 				cmd = new OleDbCommand("SELECT @@IDENTITY", cmd.Connection);
 				return (int) cmd.ExecuteScalar();
 			}
-			catch
-			{
-				throw;
-			}
 			finally
 			{
 				cmd.Connection.Close();
@@ -242,10 +226,6 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				return cmd.ExecuteScalar();
-			}
-			catch
-			{
-				throw;
 			}
 			finally
 			{
@@ -268,10 +248,6 @@ namespace PTM.Data
 			{
 				cmd.Connection.Open();
 				return cmd.ExecuteScalar();
-			}
-			catch
-			{
-				throw;
 			}
 			finally
 			{
@@ -305,7 +281,7 @@ namespace PTM.Data
 			if (paramValue.GetType() == typeof (bool))
 				return OleDbType.Boolean;
 
-			throw new DataException("Type Db type not found:" + paramValue.ToString());
+			throw new DataException("Type Db type not found:" + paramValue);
 		}
 
 		public static void CompactDB()
@@ -357,7 +333,6 @@ namespace PTM.Data
 			File.Move(tempFile, dataSource);
 
 			Marshal.ReleaseComObject(objJRO);
-			objJRO = null;
 			}
 			catch(Exception ex)
 			{
