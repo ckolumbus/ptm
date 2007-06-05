@@ -70,17 +70,19 @@ namespace PTM.Framework
 			if (currentApplicationsLog == null)
 				return;
 			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ? WHERE (Id = ?)";
-			foreach (ApplicationLog applicationLog in currentApplicationsLog)
-			{
-				DbHelper.ExecuteNonQuery(cmd,
-					new string[]
-											{"ActiveTime", "Id"},
-					new object[]
-											{
-												applicationLog.ActiveTime,
-												applicationLog.Id
-											});
-			} //foreach
+            lock (currentApplicationsLog)
+            {
+                foreach (ApplicationLog applicationLog in currentApplicationsLog)
+                {
+                    DbHelper.ExecuteNonQuery(cmd,
+                                             new string[] {"ActiveTime", "Id"},
+                                             new object[]
+                                                 {
+                                                     applicationLog.ActiveTime,
+                                                     applicationLog.Id
+                                                 });
+                } //foreach
+            }
 		} //UpdateCurrentApplicationsLog
 
 		/// <summary>

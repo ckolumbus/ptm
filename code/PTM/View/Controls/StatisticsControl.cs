@@ -424,7 +424,7 @@ namespace PTM.View.Controls
             {
                 args.ToDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
             }
-
+            args.ParentId = Tasks.FindById((int)this.parentTaskComboBox.SelectedValue).Id;
             worker.RunWorkerAsync(args);
 		}
 
