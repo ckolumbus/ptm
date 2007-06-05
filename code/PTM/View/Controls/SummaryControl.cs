@@ -404,6 +404,13 @@ namespace PTM.View.Controls
 			this.panel1.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.ResumeLayout(false);
 
 		}
 
@@ -561,8 +568,10 @@ namespace PTM.View.Controls
 				this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
 				this.toDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
 			}
-            SetWaitState();
-            worker.RunWorkerAsync();
+		    AsyncGetTaskSummary();
+            //SetWaitState();
+            //worker.RunWorkerAsync();
+
             //worker.DoWork((int) StatisticsControlWorks.GetTaskSummary, new AsyncWorker.AsyncWorkerDelegate(GetTasksSummary),
             //              new object[] {null});
 		}

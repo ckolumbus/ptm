@@ -43,7 +43,7 @@ namespace PTM.View.Controls
 		private DateTime currentDay;
         private BackgroundWorker worker = new BackgroundWorker();
 
-		internal TasksLogControl()
+        internal TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();

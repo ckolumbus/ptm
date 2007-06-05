@@ -92,7 +92,7 @@ namespace PTM.Framework
 			ArrayList resultsHT =
 				DbHelper.ExecuteGetRows(
 				"SELECT Id, Name, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
-				taskLogId.ToString());
+				taskLogId);
 			ArrayList results = new ArrayList();
 			foreach (IDictionary dictionary in resultsHT)
 			{
@@ -329,7 +329,7 @@ namespace PTM.Framework
 		{
 			if (loggingThread != null && loggingThread.IsAlive)
 			{
-				loggingThread.Join(5000);
+				loggingThread.Join(100);
 			} //if-else
 		} //JoinLoggingThread
 

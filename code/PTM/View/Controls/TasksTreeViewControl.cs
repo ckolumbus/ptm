@@ -10,11 +10,11 @@ using PTM.View.Forms;
 
 namespace PTM.View.Controls
 {
-	internal class TasksTreeViewControl : UserControl
+	public class TasksTreeViewControl : UserControl
 	{
 		private IContainer components;
 
-		internal TasksTreeViewControl()
+        public TasksTreeViewControl()
 		{
 			InitializeComponent();
 			InitCommonControls();
@@ -29,7 +29,7 @@ namespace PTM.View.Controls
 			timer.Interval = 200;
 		}
 
-		internal event EventHandler SelectedTaskChanged;
+        public event EventHandler SelectedTaskChanged;
 
 		protected override void Dispose(bool disposing)
 		{
@@ -132,7 +132,7 @@ namespace PTM.View.Controls
 		private MenuItem mnuDelete;
 		private MenuItem mnuRename;
 		private MenuItem mnuProperties;
-		internal const string NEW_TASK = "New Task";
+        public const string NEW_TASK = "New Task";
 
 		protected override void OnLoad(EventArgs e)
 		{
