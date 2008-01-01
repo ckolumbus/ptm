@@ -51,8 +51,9 @@ namespace PTM.View.Controls
 
 		internal SummaryControl()
 		{
-			// This call is required by the Windows.Forms Form Designer.
+            // This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+            InitializaInnerUserControls();
 
             worker = new BackgroundWorker();
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
@@ -114,306 +115,307 @@ namespace PTM.View.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SummaryControl));
-			this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-			this.TaskHeader = new System.Windows.Forms.ColumnHeader();
-			this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
-			this.InactiveTimeHeader = new System.Windows.Forms.ColumnHeader();
-			this.PercentHeader = new System.Windows.Forms.ColumnHeader();
-			this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.indicator1 = new PTM.View.Controls.IndicatorControl();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
-			this.browseButton = new System.Windows.Forms.Button();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.indicator2 = new PTM.View.Controls.IndicatorControl();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.toolBar = new System.Windows.Forms.ToolBar();
-			this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
-			this.toolBarButton2 = new System.Windows.Forms.ToolBarButton();
-			this.toolBarImages = new System.Windows.Forms.ImageList(this.components);
-			this.fromRadioButton = new System.Windows.Forms.RadioButton();
-			this.toRadioButton = new System.Windows.Forms.RadioButton();
-			this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.indicator3 = new PTM.View.Controls.IndicatorControl();
-			this.groupBox1.SuspendLayout();
-			this.groupBox3.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.panel1.SuspendLayout();
-			this.groupBox4.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// taskList
-			// 
-			this.taskList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
-			this.taskList.AllowColumnReorder = true;
-			this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					   this.TaskHeader,
-																					   this.ActiveTimeHeader,
-																					   this.InactiveTimeHeader,
-																					   this.PercentHeader});
-			this.taskList.HideSelection = false;
-			this.taskList.Location = new System.Drawing.Point(8, 16);
-			this.taskList.MultiSelect = false;
-			this.taskList.Name = "taskList";
-			this.taskList.Size = new System.Drawing.Size(376, 184);
-			this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
-			this.taskList.TabIndex = 0;
-			// 
-			// TaskHeader
-			// 
-			this.TaskHeader.Text = "Description";
-			this.TaskHeader.Width = 200;
-			// 
-			// ActiveTimeHeader
-			// 
-			this.ActiveTimeHeader.Text = "Active Time";
-			this.ActiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.ActiveTimeHeader.Width = 70;
-			// 
-			// InactiveTimeHeader
-			// 
-			this.InactiveTimeHeader.Text = "Inactive Time";
-			this.InactiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.InactiveTimeHeader.Width = 70;
-			// 
-			// PercentHeader
-			// 
-			this.PercentHeader.Text = "Percent";
-			this.PercentHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.PercentHeader.Width = 50;
-			// 
-			// fromDateTimePicker
-			// 
-			this.fromDateTimePicker.CustomFormat = "";
-			this.fromDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.fromDateTimePicker.Location = new System.Drawing.Point(80, 32);
-			this.fromDateTimePicker.Name = "fromDateTimePicker";
-			this.fromDateTimePicker.Size = new System.Drawing.Size(88, 20);
-			this.fromDateTimePicker.TabIndex = 0;
-			this.fromDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.indicator1);
-			this.groupBox1.ForeColor = System.Drawing.Color.Blue;
-			this.groupBox1.Location = new System.Drawing.Point(8, 64);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(72, 80);
-			this.groupBox1.TabIndex = 4;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Total Time";
-			// 
-			// indicator1
-			// 
-			this.indicator1.BackColor = System.Drawing.Color.Black;
-			this.indicator1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.indicator1.ForeColor = System.Drawing.Color.Lime;
-			this.indicator1.Location = new System.Drawing.Point(3, 16);
-			this.indicator1.Name = "indicator1";
-			this.indicator1.Size = new System.Drawing.Size(66, 61);
-			this.indicator1.TabIndex = 0;
-			// 
-			// groupBox3
-			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox3.Controls.Add(this.taskList);
-			this.groupBox3.ForeColor = System.Drawing.Color.Blue;
-			this.groupBox3.Location = new System.Drawing.Point(8, 144);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(392, 208);
-			this.groupBox3.TabIndex = 3;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Tasks";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(8, 4);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(72, 23);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "Detail Level:";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// parentTaskComboBox
-			// 
-			this.parentTaskComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.parentTaskComboBox.Location = new System.Drawing.Point(80, 5);
-			this.parentTaskComboBox.MaxLength = 50;
-			this.parentTaskComboBox.Name = "parentTaskComboBox";
-			this.parentTaskComboBox.Size = new System.Drawing.Size(232, 21);
-			this.parentTaskComboBox.TabIndex = 1;
-			// 
-			// browseButton
-			// 
-			this.browseButton.Location = new System.Drawing.Point(320, 4);
-			this.browseButton.Name = "browseButton";
-			this.browseButton.TabIndex = 2;
-			this.browseButton.Text = "Browse...";
-			this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.indicator2);
-			this.groupBox2.ForeColor = System.Drawing.Color.Blue;
-			this.groupBox2.Location = new System.Drawing.Point(88, 64);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(72, 80);
-			this.groupBox2.TabIndex = 5;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Active %";
-			// 
-			// indicator2
-			// 
-			this.indicator2.BackColor = System.Drawing.Color.Black;
-			this.indicator2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.indicator2.ForeColor = System.Drawing.Color.Lime;
-			this.indicator2.Location = new System.Drawing.Point(3, 16);
-			this.indicator2.Name = "indicator2";
-			this.indicator2.Size = new System.Drawing.Size(66, 61);
-			this.indicator2.TabIndex = 0;
-			// 
-			// panel1
-			// 
-			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.panel1.Controls.Add(this.toolBar);
-			this.panel1.Location = new System.Drawing.Point(352, 120);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(48, 24);
-			this.panel1.TabIndex = 14;
-			// 
-			// toolBar
-			// 
-			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																					   this.toolBarButton1,
-																					   this.toolBarButton2});
-			this.toolBar.Divider = false;
-			this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.toolBar.DropDownArrows = true;
-			this.toolBar.ImageList = this.toolBarImages;
-			this.toolBar.Location = new System.Drawing.Point(0, 0);
-			this.toolBar.Name = "toolBar";
-			this.toolBar.ShowToolTips = true;
-			this.toolBar.Size = new System.Drawing.Size(48, 26);
-			this.toolBar.TabIndex = 0;
-			this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar_ButtonClick);
-			// 
-			// toolBarButton1
-			// 
-			this.toolBarButton1.ImageIndex = 0;
-			this.toolBarButton1.ToolTipText = "Down level";
-			// 
-			// toolBarButton2
-			// 
-			this.toolBarButton2.ImageIndex = 1;
-			this.toolBarButton2.ToolTipText = "Up level";
-			// 
-			// toolBarImages
-			// 
-			this.toolBarImages.ImageSize = new System.Drawing.Size(16, 16);
-			this.toolBarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("toolBarImages.ImageStream")));
-			this.toolBarImages.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// fromRadioButton
-			// 
-			this.fromRadioButton.Checked = true;
-			this.fromRadioButton.Location = new System.Drawing.Point(32, 32);
-			this.fromRadioButton.Name = "fromRadioButton";
-			this.fromRadioButton.Size = new System.Drawing.Size(48, 24);
-			this.fromRadioButton.TabIndex = 15;
-			this.fromRadioButton.TabStop = true;
-			this.fromRadioButton.Text = "Date:";
-			this.fromRadioButton.CheckedChanged += new System.EventHandler(this.fromRadioButton_CheckedChanged);
-			// 
-			// toRadioButton
-			// 
-			this.toRadioButton.Location = new System.Drawing.Point(184, 32);
-			this.toRadioButton.Name = "toRadioButton";
-			this.toRadioButton.Size = new System.Drawing.Size(40, 24);
-			this.toRadioButton.TabIndex = 16;
-			this.toRadioButton.Text = "To:";
-			this.toRadioButton.CheckedChanged += new System.EventHandler(this.toRadioButton_CheckedChanged);
-			// 
-			// toDateTimePicker
-			// 
-			this.toDateTimePicker.CustomFormat = "";
-			this.toDateTimePicker.Enabled = false;
-			this.toDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.toDateTimePicker.Location = new System.Drawing.Point(224, 32);
-			this.toDateTimePicker.Name = "toDateTimePicker";
-			this.toDateTimePicker.Size = new System.Drawing.Size(88, 20);
-			this.toDateTimePicker.TabIndex = 17;
-			this.toDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
-			// 
-			// toolTip
-			// 
-			this.toolTip.AutomaticDelay = 0;
-			this.toolTip.ShowAlways = true;
-			// 
-			// groupBox4
-			// 
-			this.groupBox4.Controls.Add(this.indicator3);
-			this.groupBox4.ForeColor = System.Drawing.Color.Blue;
-			this.groupBox4.Location = new System.Drawing.Point(168, 64);
-			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(72, 80);
-			this.groupBox4.TabIndex = 18;
-			this.groupBox4.TabStop = false;
-			this.groupBox4.Text = "Avg. Time";
-			this.groupBox4.Visible = false;
-			// 
-			// indicator3
-			// 
-			this.indicator3.BackColor = System.Drawing.Color.Black;
-			this.indicator3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.indicator3.ForeColor = System.Drawing.Color.Lime;
-			this.indicator3.Location = new System.Drawing.Point(3, 16);
-			this.indicator3.Name = "indicator3";
-			this.indicator3.Size = new System.Drawing.Size(66, 61);
-			this.indicator3.TabIndex = 0;
-			// 
-			// SummaryControl
-			// 
-			this.Controls.Add(this.groupBox4);
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.browseButton);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.groupBox3);
-			this.Controls.Add(this.fromDateTimePicker);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.toDateTimePicker);
-			this.Controls.Add(this.toRadioButton);
-			this.Controls.Add(this.fromRadioButton);
-			this.Controls.Add(this.parentTaskComboBox);
-			this.Name = "SummaryControl";
-			this.Size = new System.Drawing.Size(408, 360);
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox3.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
-			this.groupBox4.ResumeLayout(false);
-			this.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryControl));
+            this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
+            this.TaskHeader = new System.Windows.Forms.ColumnHeader();
+            this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
+            this.InactiveTimeHeader = new System.Windows.Forms.ColumnHeader();
+            this.PercentHeader = new System.Windows.Forms.ColumnHeader();
+            this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
+            this.browseButton = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.toolBar = new System.Windows.Forms.ToolBar();
+            this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButton2 = new System.Windows.Forms.ToolBarButton();
+            this.toolBarImages = new System.Windows.Forms.ImageList(this.components);
+            this.fromRadioButton = new System.Windows.Forms.RadioButton();
+            this.toRadioButton = new System.Windows.Forms.RadioButton();
+            this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox3.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // taskList
+            // 
+            this.taskList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
+            this.taskList.AllowColumnReorder = true;
+            this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.TaskHeader,
+            this.ActiveTimeHeader,
+            this.InactiveTimeHeader,
+            this.PercentHeader});
+            treeListViewItemCollectionComparer1.Column = 0;
+            treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.taskList.Comparer = treeListViewItemCollectionComparer1;
+            this.taskList.HideSelection = false;
+            this.taskList.Location = new System.Drawing.Point(8, 16);
+            this.taskList.MultiSelect = false;
+            this.taskList.Name = "taskList";
+            this.taskList.Size = new System.Drawing.Size(376, 184);
+            this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
+            this.taskList.TabIndex = 0;
+            this.taskList.UseCompatibleStateImageBehavior = false;
+            // 
+            // TaskHeader
+            // 
+            this.TaskHeader.Text = "Description";
+            this.TaskHeader.Width = 200;
+            // 
+            // ActiveTimeHeader
+            // 
+            this.ActiveTimeHeader.Text = "Active Time";
+            this.ActiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ActiveTimeHeader.Width = 70;
+            // 
+            // InactiveTimeHeader
+            // 
+            this.InactiveTimeHeader.Text = "Inactive Time";
+            this.InactiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.InactiveTimeHeader.Width = 70;
+            // 
+            // PercentHeader
+            // 
+            this.PercentHeader.Text = "Percent";
+            this.PercentHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.PercentHeader.Width = 50;
+            // 
+            // fromDateTimePicker
+            // 
+            this.fromDateTimePicker.CustomFormat = "";
+            this.fromDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.fromDateTimePicker.Location = new System.Drawing.Point(80, 32);
+            this.fromDateTimePicker.Name = "fromDateTimePicker";
+            this.fromDateTimePicker.Size = new System.Drawing.Size(88, 20);
+            this.fromDateTimePicker.TabIndex = 0;
+            this.fromDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.ForeColor = System.Drawing.Color.Blue;
+            this.groupBox1.Location = new System.Drawing.Point(8, 64);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(72, 80);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Total Time";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.taskList);
+            this.groupBox3.ForeColor = System.Drawing.Color.Blue;
+            this.groupBox3.Location = new System.Drawing.Point(8, 144);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(392, 208);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Tasks";
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(8, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 23);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Detail Level:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // parentTaskComboBox
+            // 
+            this.parentTaskComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.parentTaskComboBox.Location = new System.Drawing.Point(80, 5);
+            this.parentTaskComboBox.MaxLength = 50;
+            this.parentTaskComboBox.Name = "parentTaskComboBox";
+            this.parentTaskComboBox.Size = new System.Drawing.Size(232, 21);
+            this.parentTaskComboBox.TabIndex = 1;
+            // 
+            // browseButton
+            // 
+            this.browseButton.Location = new System.Drawing.Point(320, 4);
+            this.browseButton.Name = "browseButton";
+            this.browseButton.Size = new System.Drawing.Size(75, 23);
+            this.browseButton.TabIndex = 2;
+            this.browseButton.Text = "Browse...";
+            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.ForeColor = System.Drawing.Color.Blue;
+            this.groupBox2.Location = new System.Drawing.Point(88, 64);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(72, 80);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Active %";
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.toolBar);
+            this.panel1.Location = new System.Drawing.Point(352, 120);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(48, 24);
+            this.panel1.TabIndex = 14;
+            // 
+            // toolBar
+            // 
+            this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+            this.toolBarButton1,
+            this.toolBarButton2});
+            this.toolBar.Divider = false;
+            this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolBar.DropDownArrows = true;
+            this.toolBar.ImageList = this.toolBarImages;
+            this.toolBar.Location = new System.Drawing.Point(0, 0);
+            this.toolBar.Name = "toolBar";
+            this.toolBar.ShowToolTips = true;
+            this.toolBar.Size = new System.Drawing.Size(48, 26);
+            this.toolBar.TabIndex = 0;
+            this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar_ButtonClick);
+            // 
+            // toolBarButton1
+            // 
+            this.toolBarButton1.ImageIndex = 0;
+            this.toolBarButton1.Name = "toolBarButton1";
+            this.toolBarButton1.ToolTipText = "Down level";
+            // 
+            // toolBarButton2
+            // 
+            this.toolBarButton2.ImageIndex = 1;
+            this.toolBarButton2.Name = "toolBarButton2";
+            this.toolBarButton2.ToolTipText = "Up level";
+            // 
+            // toolBarImages
+            // 
+            this.toolBarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("toolBarImages.ImageStream")));
+            this.toolBarImages.TransparentColor = System.Drawing.Color.Transparent;
+            this.toolBarImages.Images.SetKeyName(0, "");
+            this.toolBarImages.Images.SetKeyName(1, "");
+            // 
+            // fromRadioButton
+            // 
+            this.fromRadioButton.Checked = true;
+            this.fromRadioButton.Location = new System.Drawing.Point(31, 32);
+            this.fromRadioButton.Name = "fromRadioButton";
+            this.fromRadioButton.Size = new System.Drawing.Size(51, 24);
+            this.fromRadioButton.TabIndex = 15;
+            this.fromRadioButton.TabStop = true;
+            this.fromRadioButton.Text = "Date:";
+            this.fromRadioButton.CheckedChanged += new System.EventHandler(this.fromRadioButton_CheckedChanged);
+            // 
+            // toRadioButton
+            // 
+            this.toRadioButton.Location = new System.Drawing.Point(186, 32);
+            this.toRadioButton.Name = "toRadioButton";
+            this.toRadioButton.Size = new System.Drawing.Size(43, 24);
+            this.toRadioButton.TabIndex = 16;
+            this.toRadioButton.Text = "To:";
+            this.toRadioButton.CheckedChanged += new System.EventHandler(this.toRadioButton_CheckedChanged);
+            // 
+            // toDateTimePicker
+            // 
+            this.toDateTimePicker.CustomFormat = "";
+            this.toDateTimePicker.Enabled = false;
+            this.toDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.toDateTimePicker.Location = new System.Drawing.Point(224, 32);
+            this.toDateTimePicker.Name = "toDateTimePicker";
+            this.toDateTimePicker.Size = new System.Drawing.Size(88, 20);
+            this.toDateTimePicker.TabIndex = 17;
+            this.toDateTimePicker.Value = new System.DateTime(2006, 10, 2, 0, 0, 0, 0);
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 0;
+            this.toolTip.ShowAlways = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.ForeColor = System.Drawing.Color.Blue;
+            this.groupBox4.Location = new System.Drawing.Point(168, 64);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(72, 80);
+            this.groupBox4.TabIndex = 18;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Avg. Time";
+            this.groupBox4.Visible = false;
+            // 
+            // SummaryControl
+            // 
+            this.Controls.Add(this.fromDateTimePicker);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.browseButton);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.toDateTimePicker);
+            this.Controls.Add(this.toRadioButton);
+            this.Controls.Add(this.fromRadioButton);
+            this.Controls.Add(this.parentTaskComboBox);
+            this.Name = "SummaryControl";
+            this.Size = new System.Drawing.Size(408, 360);
             this.groupBox3.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
 
+        private void InitializaInnerUserControls()
+        {
+            this.indicator1 = new PTM.View.Controls.IndicatorControl();
+            this.indicator2 = new PTM.View.Controls.IndicatorControl();
+            this.indicator3 = new PTM.View.Controls.IndicatorControl();
+            // 
+            // indicator1
+            // 
+            this.indicator1.BackColor = System.Drawing.Color.Black;
+            this.indicator1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indicator1.ForeColor = System.Drawing.Color.Lime;
+            this.indicator1.Location = new System.Drawing.Point(3, 16);
+            this.indicator1.Name = "indicator1";
+            this.indicator1.Size = new System.Drawing.Size(66, 61);
+            this.indicator1.TabIndex = 0;
+            // 
+            // indicator2
+            // 
+            this.indicator2.BackColor = System.Drawing.Color.Black;
+            this.indicator2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indicator2.ForeColor = System.Drawing.Color.Lime;
+            this.indicator2.Location = new System.Drawing.Point(3, 16);
+            this.indicator2.Name = "indicator2";
+            this.indicator2.Size = new System.Drawing.Size(66, 61);
+            this.indicator2.TabIndex = 0;
+            // 
+            // indicator3
+            // 
+            this.indicator3.BackColor = System.Drawing.Color.Black;
+            this.indicator3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indicator3.ForeColor = System.Drawing.Color.Lime;
+            this.indicator3.Location = new System.Drawing.Point(3, 16);
+            this.indicator3.Name = "indicator3";
+            this.indicator3.Size = new System.Drawing.Size(66, 61);
+            this.indicator3.TabIndex = 0;
+
+            this.groupBox1.Controls.Add(this.indicator1);
+            this.groupBox2.Controls.Add(this.indicator2);
+            this.groupBox4.Controls.Add(this.indicator3);
+        }
 		#endregion
 
 		private double totalTime = 0;
