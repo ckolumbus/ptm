@@ -309,9 +309,9 @@ namespace PTM.View.Controls
             // fromRadioButton
             // 
             this.fromRadioButton.Checked = true;
-            this.fromRadioButton.Location = new System.Drawing.Point(31, 32);
+            this.fromRadioButton.Location = new System.Drawing.Point(28, 32);
             this.fromRadioButton.Name = "fromRadioButton";
-            this.fromRadioButton.Size = new System.Drawing.Size(51, 24);
+            this.fromRadioButton.Size = new System.Drawing.Size(54, 24);
             this.fromRadioButton.TabIndex = 15;
             this.fromRadioButton.TabStop = true;
             this.fromRadioButton.Text = "Date:";
