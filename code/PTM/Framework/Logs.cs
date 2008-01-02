@@ -123,32 +123,25 @@ namespace PTM.Framework
 			int lastLogDuration = (int) DbHelper.ExecuteScalar("Select Duration from TasksLog Where InsertTime >= ?",
 			                                                   new string[] {"Duration"}, new object[] {lastLogInsert});
 
-			FillMissingTimeUntilNowRecursively(lastLogInsert, lastLogDuration);
-		}
+            DateTime lastLogFinish = lastLogInsert.AddSeconds(lastLogDuration);
 
-		private static void FillMissingTimeUntilNowRecursively(DateTime lastLogInsert, int lastLogDuration)
-		{
-			if (DateTime.Now.Subtract(lastLogInsert).TotalSeconds < 60) // less than 1 minute is ignored
-			{
-				return;
-			}
+            int defaultTaskId = Tasks.IdleTask.Id;
+            Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 
-			DateTime lastLogFinish = lastLogInsert.AddSeconds(lastLogDuration);
-			if ((DateTime.Now - lastLogFinish).TotalSeconds < 60) // less than 1 minute is ignored
-			{
-				return;
-			}
+            while (lastLogFinish.AddSeconds(60) < DateTime.Now) //less than 1 minute is ignored
+            {
+                int duration = (int)((DateTime.Now - lastLogFinish).TotalSeconds > ((int)config.Value) * 60
+                                    ? (int)config.Value * 60
+                                    : (DateTime.Now - lastLogFinish).TotalSeconds);
 
-			int defaultTaskId = Tasks.IdleTask.Id;
-			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
-			int duration = (int) ((DateTime.Now - lastLogFinish).TotalSeconds > ((int) config.Value)*60
-			                      	? (int) config.Value*60
-			                      	: (DateTime.Now - lastLogFinish).TotalSeconds);
+                DbHelper.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)",
+                                       new string[] { "Duration", "InsertTime", "TaskId" },
+                                       new object[] { duration, lastLogFinish, defaultTaskId });
 
-			DbHelper.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)",
-			                       new string[] {"Duration", "InsertTime", "TaskId"},
-			                       new object[] {duration, lastLogFinish, defaultTaskId});
-			FillMissingTimeUntilNowRecursively(lastLogFinish, duration);
+                lastLogInsert = lastLogFinish;
+                lastLogDuration = duration;
+                lastLogFinish = lastLogInsert.AddSeconds(lastLogDuration);
+            }
 		}
 
 		public static ArrayList GetLogsByDay(DateTime day)
