@@ -125,13 +125,21 @@ namespace PTM.Framework
 
             DateTime lastLogFinish = lastLogInsert.AddSeconds(lastLogDuration);
 
+                    
+            Configuration configDataMaintenanceDays = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
+            DateTime limitDate = DateTime.Today.AddDays(-(int)configDataMaintenanceDays.Value);
+
+            if (lastLogFinish < limitDate) //if the last entry was before the limit date for maintenance then take the maintenance date limit.
+                lastLogFinish = limitDate;
+
+            Configuration configLogDuration = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
+
             int defaultTaskId = Tasks.IdleTask.Id;
-            Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
 
             while (lastLogFinish.AddSeconds(60) < DateTime.Now) //less than 1 minute is ignored
             {
-                int duration = (int)((DateTime.Now - lastLogFinish).TotalSeconds > ((int)config.Value) * 60
-                                    ? (int)config.Value * 60
+                int duration = (int)((DateTime.Now - lastLogFinish).TotalSeconds > ((int)configLogDuration.Value) * 60
+                                    ? (int)configLogDuration.Value * 60
                                     : (DateTime.Now - lastLogFinish).TotalSeconds);
 
                 DbHelper.ExecuteInsert("INSERT INTO TasksLog(Duration, InsertTime, TaskId) VALUES (?, ?, ?)",
