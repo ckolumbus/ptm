@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("Week View Addin")]
+[assembly: AssemblyTitle("PTM Week View Addin")]
 [assembly: AssemblyDescription("PTM WeekViewAddin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Carlos D. Estrada")]
@@ -26,7 +26,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.1.0")]
+[assembly: AssemblyVersion("1.2.0")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
