@@ -50,13 +50,14 @@ namespace PTM.View.Controls
 
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-
 			notifyIcon.MouseDown += new NotifyIcon.MouseDownEventHandler(notifyIcon_MouseDown);
 			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
 			notifyAnswerTimer.Elapsed += new ElapsedEventHandler(notifyAnswerTimer_Elapsed);
 			notifyIcon.Click += new NotifyIcon.ClickEventHandler(notifyIcon_Click);
 			addTaskButton.Click += new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
+            this.logDate.CloseUp += new EventHandler(logDate_CloseUp);
+            this.logDate.DropDown += new EventHandler(logDate_DropDown);
 
 			Tasks.TaskChanged += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
 			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
@@ -82,8 +83,20 @@ namespace PTM.View.Controls
 			CreateNotifyMenu();
 		}
 
+	    private DateTime dateBeforeDropDown;
+        void logDate_DropDown(object sender, EventArgs e)
+        {
+            dateBeforeDropDown = logDate.Value;
+            this.logDate.ValueChanged -= new EventHandler(this.logDate_ValueChanged);
+        }
 
-
+        void logDate_CloseUp(object sender, EventArgs e)
+        {
+            this.logDate.ValueChanged += new EventHandler(this.logDate_ValueChanged);
+            if (!logDate.Value.Equals(dateBeforeDropDown))
+                GetLogsAsync();
+        }
+        
 		protected override void OnHandleDestroyed(EventArgs e)
 		{
 			Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
@@ -497,23 +510,10 @@ namespace PTM.View.Controls
 
 		private void logDate_ValueChanged(object sender, EventArgs e)
 		{
-			if (logDate.Value.Date != DateTime.Today)
-			{
-				this.addTaskButton.Enabled = false;
-				this.switchToButton.Enabled = false;
-			}
-			else
-			{
-				this.addTaskButton.Enabled = true;
-				this.switchToButton.Enabled = true;
-			}
-			this.currentDay = logDate.Value.Date;
-            SetWaitState();
-            worker.RunWorkerAsync();
-			//worker.DoWork((int) TasksLogCotrolWorks.GetLogs, new AsyncWorker.AsyncWorkerDelegate(GetLogs), new object[] {null});
+		    GetLogsAsync();
 		}
 
-		private void mnuEdit_Click(object sender, EventArgs e)
+	    private void mnuEdit_Click(object sender, EventArgs e)
 		{
 			EditSelectedTaskLog();
 		}
@@ -1047,6 +1047,23 @@ namespace PTM.View.Controls
 		#endregion
 
 		#region AsyncWork
+        
+        private void GetLogsAsync()
+        {
+            if (logDate.Value.Date != DateTime.Today)
+            {
+                this.addTaskButton.Enabled = false;
+                this.switchToButton.Enabled = false;
+            }
+            else
+            {
+                this.addTaskButton.Enabled = true;
+                this.switchToButton.Enabled = true;
+            }
+            this.currentDay = logDate.Value.Date;
+            SetWaitState();
+            worker.RunWorkerAsync();
+        }
 
         private GetLogsResult GetLogs()
 		{
