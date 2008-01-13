@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Addin;
@@ -56,6 +57,7 @@ namespace PTM.View.Controls
             InitializaInnerUserControls();
 
             worker = new BackgroundWorker();
+		    worker.WorkerSupportsCancellation = true;
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
             //worker.OnBeforeDoWork += new AsyncWorker.OnBeforeDoWorkDelegate(worker_OnBeforeDoWork);
@@ -76,7 +78,11 @@ namespace PTM.View.Controls
 				this.parentTaskComboBox.SelectedValue = parentTask.Id;
 			}
 			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
+            fromDateTimePicker.DropDown += new EventHandler(fromDateTimePicker_DropDown);
+            fromDateTimePicker.CloseUp += new EventHandler(fromDateTimePicker_CloseUp);
 			this.toDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
+            toDateTimePicker.DropDown += new EventHandler(toDateTimePicker_DropDown);
+            toDateTimePicker.CloseUp += new EventHandler(toDateTimePicker_CloseUp);			
 			this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
 
 			Logs.CurrentLogDurationChanged += new ElapsedEventHandler(TaskLogTimer_Elapsed);
@@ -85,7 +91,7 @@ namespace PTM.View.Controls
 			this.Status = String.Empty;
 		}
 
-		protected override void OnHandleDestroyed(EventArgs e)
+        protected override void OnHandleDestroyed(EventArgs e)
 		{
 			Logs.CurrentLogDurationChanged -= new ElapsedEventHandler(TaskLogTimer_Elapsed);
 			base.OnHandleDestroyed(e);
@@ -422,21 +428,24 @@ namespace PTM.View.Controls
 		private double totalActiveTime = 0;
 		private int workedDays = 0;
 
-        private static void worker_DoWork(object sender, DoWorkEventArgs e)
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            e.Result = GetTasksSummary((TaskSummaryArguments) e.Argument);            
+            e.Result = GetTasksSummary((TaskSummaryArguments) e.Argument);
+            if (worker.CancellationPending)
+                e.Cancel = true;
         }
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if(e.Cancelled) return;
             UpdateTasksSummary((TaskSummaryResult) e.Result);
         }
 
 		public override void OnTabPageSelected()
 		{
 			base.OnTabPageSelected();
-
-		    AsyncGetTaskSummary();
+            if(fromRadioButton.Checked && fromDateTimePicker.Value.Date == DateTime.Today) //autorefresh if today summary is selected.
+		        AsyncGetTaskSummary();
 		}
 
 	    private void AsyncGetTaskSummary()
@@ -453,6 +462,8 @@ namespace PTM.View.Controls
 	            args.ToDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
 	        }
 	        args.ParentTask = Tasks.FindById((int) this.parentTaskComboBox.SelectedValue);
+            if(worker.IsBusy) worker.CancelAsync();
+            while(worker.IsBusy) Application.DoEvents();
 	        worker.RunWorkerAsync(args);
 	    }
 
@@ -561,6 +572,34 @@ namespace PTM.View.Controls
 		{
 			LaunchSummarySearch();
 		}
+
+        void fromDateTimePicker_CloseUp(object sender, EventArgs e)
+        {
+            this.fromDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
+            if (!fromDateTimePicker.Value.Equals(timeBeforeDropDown_fromDateTimePicker))
+                LaunchSummarySearch();
+        }
+
+        private DateTime timeBeforeDropDown_fromDateTimePicker;
+        void fromDateTimePicker_DropDown(object sender, EventArgs e)
+        {
+            timeBeforeDropDown_fromDateTimePicker = this.fromDateTimePicker.Value;
+            this.fromDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+        }
+
+        void toDateTimePicker_CloseUp(object sender, EventArgs e)
+        {
+            this.toDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
+            if (!toDateTimePicker.Value.Equals(timeBeforeDropDown_toDateTimePicker))
+                LaunchSummarySearch();
+        }
+
+        private DateTime timeBeforeDropDown_toDateTimePicker;
+        void toDateTimePicker_DropDown(object sender, EventArgs e)
+        {
+            timeBeforeDropDown_toDateTimePicker = this.toDateTimePicker.Value;
+            this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+        }
 
 		private void LaunchSummarySearch()
 		{
@@ -754,6 +793,8 @@ namespace PTM.View.Controls
 			this.parentTaskComboBox.Enabled = false;
 			toDateTimePicker.Enabled = false;
 			fromDateTimePicker.Enabled = false;
+		    this.fromRadioButton.Enabled = false;
+		    this.toRadioButton.Enabled = false;
 			this.browseButton.Enabled = false;
 			this.taskList.Items.Clear();
 
@@ -796,6 +837,9 @@ namespace PTM.View.Controls
 
 			fromDateTimePicker.Enabled = true;
 			this.browseButton.Enabled = true;
+            this.fromRadioButton.Enabled = true;
+            this.toRadioButton.Enabled = true;
+
 		}
 
 		#endregion
