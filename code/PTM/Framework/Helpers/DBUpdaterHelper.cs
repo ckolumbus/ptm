@@ -1,4 +1,3 @@
-using System;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using PTM.Data;
@@ -37,11 +36,30 @@ namespace PTM.Framework.Helpers
 					continue;
 				if(UpdateFromV096ToV97(oldVersion))
 					continue;
-				//if(UpdateFromV097ToVXX(oldVersion)) //Next check
-				//	continue;
+				if(UpdateFromV097ToV098(oldVersion))
+					continue;
 				findNextUpdate = false;
 			}
 		}
+
+        private static bool UpdateFromV097ToV098(Configuration oldVersion)
+        {
+            if (string.Compare(oldVersion.Value.ToString().Trim(), "0.9.7") == 0)
+            {
+                try
+                {
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.PlaySoundOnReminder, "1"));
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.8"));
+                    return true;
+                }
+                catch (OleDbException ex)
+                {
+                    Logger.Write(ex.Message);
+                    return false;
+                }
+            }
+            return false;
+        }
 
 		private static bool UpdateFromV096ToV97(Configuration oldVersion)
 		{

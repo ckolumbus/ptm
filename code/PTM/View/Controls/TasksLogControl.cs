@@ -25,8 +25,7 @@ namespace PTM.View.Controls
 		private Button editButton;
 		private Button addTaskButton;
 		private ColumnHeader TaskDescriptionHeader;
-		private ColumnHeader DurationTaskHeader;
-		private Timer notifyAnswerTimer;
+        private ColumnHeader DurationTaskHeader;
 		private ContextMenu notifyContextMenu;
 		private Timer notifyTimer;
 		private NotifyIcon notifyIcon;
@@ -52,7 +51,6 @@ namespace PTM.View.Controls
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
 			notifyIcon.MouseDown += new NotifyIcon.MouseDownEventHandler(notifyIcon_MouseDown);
 			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
-			notifyAnswerTimer.Elapsed += new ElapsedEventHandler(notifyAnswerTimer_Elapsed);
 			notifyIcon.Click += new NotifyIcon.ClickEventHandler(notifyIcon_Click);
 			addTaskButton.Click += new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
@@ -140,7 +138,6 @@ namespace PTM.View.Controls
             this.TaskDescriptionHeader = new System.Windows.Forms.ColumnHeader();
             this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
             this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
-            this.notifyAnswerTimer = new System.Timers.Timer();
             this.notifyTimer = new System.Timers.Timer();
             this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
             this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
@@ -151,7 +148,6 @@ namespace PTM.View.Controls
             this.label1 = new System.Windows.Forms.Label();
             this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.pathCheckBox = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -191,10 +187,6 @@ namespace PTM.View.Controls
             this.DurationTaskHeader.Text = "Duration";
             this.DurationTaskHeader.Width = 65;
             // 
-            // notifyAnswerTimer
-            // 
-            this.notifyAnswerTimer.SynchronizingObject = this;
-            // 
             // notifyTimer
             // 
             this.notifyTimer.Interval = 1000;
@@ -204,6 +196,7 @@ namespace PTM.View.Controls
             // 
             this.notifyIcon.ContextMenu = this.notifyContextMenu;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Tag = null;
             this.notifyIcon.Text = "Current task";
             this.notifyIcon.Visible = true;
             // 
@@ -291,7 +284,6 @@ namespace PTM.View.Controls
             this.Controls.Add(this.addTaskButton);
             this.Name = "TasksLogControl";
             this.Size = new System.Drawing.Size(392, 312);
-            ((System.ComponentModel.ISupportInitialize)(this.notifyAnswerTimer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
             this.ResumeLayout(false);
 
@@ -349,7 +341,7 @@ namespace PTM.View.Controls
 		private void ResetNotifyTimer(int defaultMins)
 		{
 			notifyTimer.Stop();
-			notifyTimer.Interval = 1000*60*defaultMins;
+		    notifyTimer.Interval = 1000*60*defaultMins;
 			notifyTimer.Start();
 		}
 
@@ -694,47 +686,33 @@ namespace PTM.View.Controls
 		{
 			notifyForm = new NotifyForm(this.notifyIcon.Text);
 			notifyForm.Show();
-			notifyAnswerTimer.Start();
+            notifyForm.Closed += new EventHandler(notifyForm_Closed);
 		}
 
-		private void notifyAnswerTimer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-//			Thread th = new Thread(new ThreadStart(GetAnswer));
-//			th.Priority = ThreadPriority.BelowNormal;
-//			th.Start();
-			GetAnswer();
-		}
+        void notifyForm_Closed(object sender, EventArgs e)
+        {
+            if (notifyForm.Result == NotifyForm.NotifyResult.Cancel)
+            {
+                this.AddIdleTaskLog();
+            }
+            else if (notifyForm.Result == NotifyForm.NotifyResult.No)
+            {
+                NewTaskLog(true);
+            }
+            else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
+            {
+                AddTaskLog(Tasks.CurrentTask.Id,
+                           (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 
 		private void notifyIcon_Click(object sender, EventArgs e)
 		{
 			this.ParentForm.Activate();
-		}
-
-		private void GetAnswer()
-		{
-			notifyAnswerTimer.Stop();
-			if (notifyForm.Result == NotifyForm.NotifyResult.Waiting)
-			{
-				notifyAnswerTimer.Start();
-				return;
-			}
-			else if (notifyForm.Result == NotifyForm.NotifyResult.Cancel)
-			{
-				this.AddIdleTaskLog();
-			}
-			else if (notifyForm.Result == NotifyForm.NotifyResult.No)
-			{
-				NewTaskLog(true);
-			}
-			else if (notifyForm.Result == NotifyForm.NotifyResult.Yes)
-			{
-				AddTaskLog(Tasks.CurrentTask.Id,
-				           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
 		}
 
 		#endregion
@@ -807,7 +785,6 @@ namespace PTM.View.Controls
 		private void exitContextMenuItem_Click(object sender, EventArgs e)
 		{
 			this.notifyTimer.Stop();
-			this.notifyAnswerTimer.Stop();
 			this.notifyIcon.Visible = false;
 			this.Exit(this, e);
 		}
