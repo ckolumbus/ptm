@@ -121,6 +121,14 @@ namespace Calendar
                 OnTitleChanged();
             }
         }
+
+        private object tag;
+        public object Tag
+        {
+            get { return tag; }
+            set { tag = value; }
+        }
+
         protected virtual void OnTitleChanged()
         {
         }

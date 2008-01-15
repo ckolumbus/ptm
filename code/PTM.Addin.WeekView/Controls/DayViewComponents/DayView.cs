@@ -751,9 +751,15 @@ namespace Calendar
             if (y < this.HeaderHeight)
                 return null;
 
-            foreach (Appointment view in appointmentViews)
-                if (view.Rectangle.Contains(x, y))
-                    return view;
+            for (int day = 0; day < daysToShow; day++)
+            {
+                Appointments apps = (Appointments) cachedAppointments[startDate.AddDays(day).Day];
+                if (apps!=null)
+                foreach (Appointment view in apps)
+                    if (view.Rectangle.Contains(x, y))
+                        return view;
+            }
+            
 
             return null;
         }
