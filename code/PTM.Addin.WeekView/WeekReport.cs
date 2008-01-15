@@ -12,10 +12,10 @@ namespace PTM.Addin.WeekView
 	{
 		private Calendar.DayView dayView;
 		private Button backButton;
-		private Button forwardButton;
-		private Label weekLabel;
+        private Button forwardButton;
 		private IContainer components = null;
         private ToolTip toolTip;
+        private MonthCalendar monthCalendar;
 		private int currentWeek;
 
 		public WeekReport()
@@ -55,11 +55,11 @@ namespace PTM.Addin.WeekView
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WeekReport));
-            Calendar.DrawTool drawTool2 = new Calendar.DrawTool();
+            Calendar.DrawTool drawTool1 = new Calendar.DrawTool();
             this.backButton = new System.Windows.Forms.Button();
-            this.weekLabel = new System.Windows.Forms.Label();
             this.forwardButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.monthCalendar = new System.Windows.Forms.MonthCalendar();
             this.dayView = new Calendar.DayView();
             this.SuspendLayout();
             // 
@@ -67,35 +67,43 @@ namespace PTM.Addin.WeekView
             // 
             this.backButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.backButton.Image = ((System.Drawing.Image)(resources.GetObject("backButton.Image")));
-            this.backButton.Location = new System.Drawing.Point(8, 8);
+            this.backButton.Location = new System.Drawing.Point(11, 20);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(24, 23);
             this.backButton.TabIndex = 1;
+            this.toolTip.SetToolTip(this.backButton, "Past week");
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
-            // 
-            // weekLabel
-            // 
-            this.weekLabel.Location = new System.Drawing.Point(32, 8);
-            this.weekLabel.Name = "weekLabel";
-            this.weekLabel.Size = new System.Drawing.Size(136, 23);
-            this.weekLabel.TabIndex = 2;
-            this.weekLabel.Text = "00/00/2000 - 00/00/2000";
-            this.weekLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // forwardButton
             // 
             this.forwardButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.forwardButton.Image = ((System.Drawing.Image)(resources.GetObject("forwardButton.Image")));
-            this.forwardButton.Location = new System.Drawing.Point(168, 8);
+            this.forwardButton.Location = new System.Drawing.Point(150, 20);
             this.forwardButton.Name = "forwardButton";
             this.forwardButton.Size = new System.Drawing.Size(24, 23);
             this.forwardButton.TabIndex = 3;
+            this.toolTip.SetToolTip(this.forwardButton, "Next week");
             this.forwardButton.Click += new System.EventHandler(this.forwardButton_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 100;
+            this.toolTip.ReshowDelay = 50;
+            // 
+            // monthCalendar
+            // 
+            this.monthCalendar.Enabled = false;
+            this.monthCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Sunday;
+            this.monthCalendar.Location = new System.Drawing.Point(6, 17);
+            this.monthCalendar.Name = "monthCalendar";
+            this.monthCalendar.ShowTodayCircle = false;
+            this.monthCalendar.TabIndex = 4;
             // 
             // dayView
             // 
-            drawTool2.DayView = this.dayView;
-            this.dayView.ActiveTool = drawTool2;
+            drawTool1.DayView = this.dayView;
+            this.dayView.ActiveTool = drawTool1;
             this.dayView.AllowInplaceEditing = false;
             this.dayView.AllowNew = false;
             this.dayView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -104,11 +112,11 @@ namespace PTM.Addin.WeekView
             this.dayView.DaysToShow = 7;
             this.dayView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.dayView.HalfHourHeight = 34;
-            this.dayView.Location = new System.Drawing.Point(8, 32);
+            this.dayView.Location = new System.Drawing.Point(186, 3);
             this.dayView.Name = "dayView";
             this.dayView.SelectionEnd = new System.DateTime(((long)(0)));
             this.dayView.SelectionStart = new System.DateTime(((long)(0)));
-            this.dayView.Size = new System.Drawing.Size(368, 304);
+            this.dayView.Size = new System.Drawing.Size(190, 333);
             this.dayView.StartDate = new System.DateTime(((long)(0)));
             this.dayView.TabIndex = 0;
             this.dayView.WorkingHourEnd = 23;
@@ -119,9 +127,9 @@ namespace PTM.Addin.WeekView
             // WeekReport
             // 
             this.Controls.Add(this.forwardButton);
-            this.Controls.Add(this.weekLabel);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.dayView);
+            this.Controls.Add(this.monthCalendar);
             this.Name = "WeekReport";
             this.Size = new System.Drawing.Size(384, 344);
             this.ResumeLayout(false);
@@ -198,13 +206,12 @@ namespace PTM.Addin.WeekView
 			try
 			{
 				Cursor.Current = Cursors.WaitCursor;
-				this.dayView.StartDate = DateTime.Today.AddDays(- Convert.ToInt32(DateTime.Today.DayOfWeek) + week*7);
-				this.weekLabel.Text = this.dayView.StartDate.ToShortDateString() + " - " +
-					this.dayView.StartDate.AddDays(6).ToShortDateString();
-			}
-			catch
-			{
-				throw;
+                DateTime startDate = DateTime.Today.AddDays(-Convert.ToInt32(DateTime.Today.DayOfWeek) + week * 7);
+			    this.monthCalendar.BoldedDates = new DateTime[] { startDate, startDate.AddDays(1), startDate.AddDays(2), startDate.AddDays(3), startDate.AddDays(4), startDate.AddDays(5), startDate.AddDays(6) };
+                this.monthCalendar.SetDate(startDate);
+                this.monthCalendar.UpdateBoldedDates();
+                this.monthCalendar.Refresh();
+			    this.dayView.StartDate = startDate;
 			}
 			finally
 			{
