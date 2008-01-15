@@ -142,7 +142,7 @@ namespace PTM.View.Forms
             this.linkLabel.Size = new System.Drawing.Size(176, 23);
             this.linkLabel.TabIndex = 8;
             this.linkLabel.TabStop = true;
-            this.linkLabel.Text = "http://sourceforge.net/projects/ptm";
+            this.linkLabel.Text = "http://ptm.sourceforge.net";
             this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
             // 
             // AboutForm
