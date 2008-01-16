@@ -1,5 +1,6 @@
 using System.Data.OleDb;
 using System.Windows.Forms;
+using PTM.Common;
 using PTM.Data;
 using PTM.View;
 
@@ -54,7 +55,7 @@ namespace PTM.Framework.Helpers
                 }
                 catch (OleDbException ex)
                 {
-                    Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
                     return false;
                 }
             }
@@ -78,7 +79,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -97,7 +98,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -131,7 +132,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -150,7 +151,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -188,7 +189,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -208,7 +209,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -227,7 +228,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}
@@ -253,7 +254,7 @@ namespace PTM.Framework.Helpers
 				}
 				catch (OleDbException ex)
 				{
-					Logger.Write(ex.Message);
+                    Logger.WriteException(ex);
 					return false;
 				}
 			}

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using PTM.Common;
 using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.View;
@@ -55,18 +56,7 @@ namespace PTM
 			}
 			catch(Exception ex)
 			{
-				Logger.Write("---> PTM Exception!!!");
-				Logger.Write("--- Exception Message");
-				Logger.Write(ex.Message);
-				Logger.Write("--- Stack Trace");
-				Logger.Write(ex.StackTrace);
-				if(ex.InnerException!=null)
-				{
-					Logger.Write("--- Inner Exception Message");
-					Logger.Write(ex.InnerException.Message);
-					Logger.Write("--- Stack Trace");
-					Logger.Write(ex.InnerException.StackTrace);
-				}
+				Logger.WriteException(ex);
 				throw;
 			}
 		} //Main

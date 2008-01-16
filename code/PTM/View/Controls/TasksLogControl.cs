@@ -649,12 +649,6 @@ namespace PTM.View.Controls
 					}
 				}
 			}
-			catch (Exception ex)
-			{
-				Logger.Write(ex.Message);
-				Logger.Write(ex.StackTrace);
-				throw;
-			}
 			finally
 			{
 				taskList.EndUpdate();

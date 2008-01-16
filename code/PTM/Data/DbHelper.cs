@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using PTM.View;
+using PTM.Common;
 
 namespace PTM.Data
 {
@@ -336,8 +336,7 @@ namespace PTM.Data
 			}
 			catch(Exception ex)
 			{
-                Logger.Write(ex.Message);
-                Logger.Write(ex.StackTrace);
+                Logger.WriteException(ex);
 			}
 		}
 

@@ -3,8 +3,8 @@ using System.Collections;
 using System.Reflection;
 using System.Text;
 using PTM.Addin;
+using PTM.Common;
 using PTM.Data;
-using PTM.View;
 
 namespace PTM.Framework.Helpers
 {
@@ -13,7 +13,7 @@ namespace PTM.Framework.Helpers
 	/// </summary>
 	public class AddinHelper
 	{
-		public AddinHelper()
+		private AddinHelper()
 		{
 		}
 
@@ -50,8 +50,8 @@ namespace PTM.Framework.Helpers
 			}
 			catch (Exception ex)
 			{
-				Logger.Write("Error loading the addin from " + path);
-				Logger.Write(ex.Message);
+				Logger.WriteMessage("Error loading the addin from " + path);
+				Logger.WriteException(ex);
 				return "Loading Error!";
 			}
 			return sb.ToString();
@@ -81,9 +81,9 @@ namespace PTM.Framework.Helpers
 			ArrayList addins = GetAddins();
 			foreach (string path in addins)
 			{
-				Assembly addinAssembly;
 				try
 				{
+                    Assembly addinAssembly;
 					addinAssembly = Assembly.LoadFile(path);
 					Type[] addinTypes;
 					addinTypes = addinAssembly.GetTypes();
@@ -99,9 +99,8 @@ namespace PTM.Framework.Helpers
 				}
 				catch (Exception ex)
 				{
-					Logger.Write("Error loading the addin from " + path);
-					Logger.Write(ex.Message);
-					//MessageBox.Show("Error loading the addin from " + path, "PTM " + ConfigurationHelper.GetVersionString(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					Logger.WriteMessage("Error loading the addin from " + path);
+					Logger.WriteException(ex);
 					continue;
 				}
 			}

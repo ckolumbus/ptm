@@ -256,7 +256,7 @@
     <Compile Include="View\IconsManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\Logger.cs">
+    <Compile Include="Common\Logger.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\MemoryMappedFile.cs">

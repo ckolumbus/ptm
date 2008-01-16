@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Xml;
+using PTM.Common;
 
 namespace PTM.Framework.Helpers
 {
@@ -77,7 +78,8 @@ namespace PTM.Framework.Helpers
 				}
 				catch (Exception ex)
 				{
-					//ex = ex; //do nothing
+                    //do nothing
+                    Logger.WriteException(ex);
 				}
 			}
 			return info;
