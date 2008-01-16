@@ -33,7 +33,6 @@ namespace PTM.Framework.Helpers
 			try
 			{
 				Assembly addinAssembly = Assembly.LoadFile(path);
-
 				Type[] addinTypes;
 				addinTypes = addinAssembly.GetTypes();
 
