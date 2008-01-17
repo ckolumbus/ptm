@@ -106,7 +106,7 @@
     <Compile Include="Framework\ApplicationSummaries.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Framework\Helpers\AddinHelper.cs">
+    <Compile Include="Addin\AddinHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Framework\Helpers\ConfigurationHelper.cs">

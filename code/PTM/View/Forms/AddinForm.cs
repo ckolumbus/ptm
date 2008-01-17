@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using PTM.Addin;
 using PTM.Framework.Helpers;
 
 namespace PTM.View.Forms
@@ -173,7 +174,7 @@ namespace PTM.View.Forms
 
 		private void AddinForm_Load(object sender, EventArgs e)
 		{
-			ArrayList addins = AddinHelper.GetAddins();
+			string[] addins = AddinHelper.GetConfiguredAddinsPaths();
 			foreach (string path in addins)
 			{
 				AddAddinToList(path);
