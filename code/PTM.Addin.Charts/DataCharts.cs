@@ -1,60 +1,77 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using PTM.Framework;
+using PTM.Framework.Infos;
 using ZedGraph;
 
 namespace PTM.Addin.Charts
 {
     public partial class DataCharts : AddinTabPage
     {
+
+        private ArrayList parentTasksList = new ArrayList();
+
         public DataCharts()
         {
             InitializeComponent();
+            this.chartComboBox.SelectedIndex = 0;
+            this.Text = "Charts";
+            this.Status = "Ready";
+
+            //Task parentTask;
+            //parentTask = Tasks.RootTask;
+            //parentTasksList.Add(parentTask);
+            //this.parentTaskComboBox.DisplayMember = "Description";
+            //this.parentTaskComboBox.ValueMember = "Id";
+            //this.parentTaskComboBox.DataSource = parentTasksList;
+            //parentTaskComboBox.SelectedIndex = 0;
+
+            this.fromDateTimePicker.Value = DateTime.Today;
+            this.toDateTimePicker.Value = DateTime.Today;
+
         }
 
-        private void DataCharts_Load(object sender, EventArgs e)
+        private void generateButton_Click(object sender, EventArgs e)
         {
-            CreateGraph(zg);
+            zg.GraphPane = new GraphPane();
+            PointPairList workedTimeList = new PointPairList();
+            PointPairList activeTimeList = new PointPairList();
+            PointPairList inactiveTimeList = new PointPairList();
+
+            DateTime curDate = this.fromDateTimePicker.Value.Date;
+            DateTime toDate = this.toDateTimePicker.Value.Date;
+            while (curDate <= toDate)
+			{
+                double xDate = new XDate(curDate);
+                int workedTime = TasksSummaries.GetWorkedTime(curDate, curDate);
+                int activeTime = TasksSummaries.GetActiveTime(curDate, curDate);
+			    int inactiveTime = workedTime - activeTime;
+                workedTimeList.Add(xDate, workedTime / 3600);
+                activeTimeList.Add(xDate, activeTime / 3600);
+                inactiveTimeList.Add(xDate, inactiveTime / 3600);
+    		    curDate = curDate.AddDays(1);
+			}
+
+            zg.GraphPane.Title.Text = "Hrs. worked vs. Date";
+            zg.GraphPane.XAxis.Title.Text = "Date";
+            zg.GraphPane.YAxis.Title.Text = "Hrs.";
+            zg.GraphPane.XAxis.Type = AxisType.Date;
+            zg.GraphPane.AddCurve("Worked time",
+               workedTimeList, Color.Blue, SymbolType.Default);
+            zg.GraphPane.AddCurve("Active time",
+               activeTimeList, Color.Green, SymbolType.Default);
+            zg.GraphPane.AddCurve("Inactive time",
+               inactiveTimeList, Color.Red, SymbolType.Default); 
+
+            zg.AxisChange();
         }
 
-        private void CreateGraph(ZedGraphControl zgc)
-        {
-            GraphPane myPane = zgc.GraphPane;
 
-            // Set the titles and axis labels
-            myPane.Title.Text = "My Test Date Graph";
-            myPane.XAxis.Title.Text = "X Value";
-            myPane.YAxis.Title.Text = "My Y Axis";
-
-            // Make up some data points from the Sine function
-            PointPairList list = new PointPairList();
-            for (double x = 0; x < 36; x++)
-            {
-                double y = Math.Sin(x * Math.PI / 15.0);
-
-                list.Add(x, y);
-            }
-
-            // Generate a blue curve with circle symbols, and "My Curve 2" in the legend
-            LineItem myCurve = myPane.AddCurve("My Curve", list, Color.Blue,
-                              SymbolType.Circle);
-            // Fill the area under the curve with a white-red gradient at 45 degrees
-            myCurve.Line.Fill = new Fill(Color.White, Color.Red, 45F);
-            // Make the symbols opaque by filling them with white
-            myCurve.Symbol.Fill = new Fill(Color.White);
-
-            // Fill the axis background with a color gradient
-            myPane.Chart.Fill = new Fill(Color.White, Color.LightGoldenrodYellow, 45F);
-
-            // Fill the pane background with a color gradient
-            myPane.Fill = new Fill(Color.White, Color.FromArgb(220, 220, 255), 45F);
-
-            // Calculate the Axis Scale Ranges
-            zgc.AxisChange();
-        }
     }
 }

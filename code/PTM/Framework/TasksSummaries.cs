@@ -18,7 +18,7 @@ namespace PTM.Framework
 
 		#region Public Methods
 
-		public static ArrayList GetTaskSummary(Task parentRow, DateTime initialDate, DateTime finalDate)
+		public static ArrayList GetTaskSummary(Task parentTask, DateTime initialDate, DateTime finalDate)
 		{
 			Logs.UpdateCurrentLogDuration();
 			ArrayList summaryList;
@@ -41,7 +41,7 @@ namespace PTM.Framework
 
 				if (sumRow.TaskId != Tasks.IdleTask.Id) //ignore idle time
 				{
-					if (row.Id != parentRow.Id)
+					if (row.Id != parentTask.Id)
 					{
 						if (row.ParentId ==-1)
 						{
@@ -49,7 +49,7 @@ namespace PTM.Framework
 							continue;
 						} //if
 
-						if (row.ParentId == parentRow.Id)
+						if (row.ParentId == parentTask.Id)
 						{
 							TaskSummary retrow = FindTaskSummaryByTaskId(returnList, sumRow.TaskId);
 							if (retrow == null)
@@ -104,6 +104,32 @@ namespace PTM.Framework
 			}
 			return workedDays;
 		}
+
+        public static int GetWorkedTime(DateTime initialDate, DateTime finalDate)
+        {
+            initialDate = initialDate.Date;
+            finalDate = finalDate.Date.AddDays(1);
+            object workedTime = DbHelper.ExecuteScalar("Select Sum(Duration) from TasksLog where TaskId <> ? and InsertTime>= ? and InsertTime<?",
+                                         new string[] { "IdleTaskId", "InitialTime", "FinalTime" },
+                                         new object[] { Tasks.IdleTask.Id, initialDate, finalDate});
+            if (workedTime == DBNull.Value)
+                return 0;
+            else 
+                return Convert.ToInt32(workedTime);
+        }
+
+        public static int GetActiveTime(DateTime initialDate, DateTime finalDate)
+        {
+            initialDate = initialDate.Date;
+            finalDate = finalDate.Date.AddDays(1);
+            object workedTime = DbHelper.ExecuteScalar("Select Sum(Duration) from TasksLog Inner Join Tasks On TasksLog.TaskId = Tasks.Id Where Tasks.IsActive <> 0 and TaskId <> ? and InsertTime>= ? and InsertTime<?",
+                                         new string[] { "IdleTaskId", "InitialTime", "FinalTime" },
+                                         new object[] { Tasks.IdleTask.Id, initialDate, finalDate });
+            if (workedTime == DBNull.Value)
+                return 0;
+            else
+                return Convert.ToInt32(workedTime);
+        }
 
 		#endregion
 

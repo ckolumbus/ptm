@@ -88,7 +88,7 @@ namespace PTM.View.Controls
 			Logs.CurrentLogDurationChanged += new ElapsedEventHandler(TaskLogTimer_Elapsed);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
 
-			this.Status = String.Empty;
+			this.Status = "Ready";
 		}
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -825,7 +825,7 @@ namespace PTM.View.Controls
 
 		private void SetReadyState()
 		{
-			this.Status = "";
+			this.Status = "Ready";
 			this.Cursor = Cursors.Default;
 			foreach (Control control in this.Controls)
 			{

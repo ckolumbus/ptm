@@ -46,9 +46,9 @@ namespace PTM.View.Controls
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
 
-			Task parentTaskRow;
-			parentTaskRow = Tasks.RootTask;
-			parentTasksList.Add(parentTaskRow);
+			Task parentTask;
+			parentTask = Tasks.RootTask;
+			parentTasksList.Add(parentTask);
 			this.parentTaskComboBox.DisplayMember = "Description";
 			this.parentTaskComboBox.ValueMember = "Id";
 			this.parentTaskComboBox.DataSource = parentTasksList;
@@ -61,8 +61,7 @@ namespace PTM.View.Controls
 			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 			this.toDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
 
-			this.Status = String.Empty;
-			//this.parentTaskComboBox.SelectedIndexChanged += new EventHandler(parentTaskComboBox_SelectedIndexChanged);
+            this.Status = "Ready";
 		}
 
 
@@ -486,7 +485,7 @@ namespace PTM.View.Controls
 
 		private void SetReadyState()
 		{
-			this.Status = "";
+			this.Status = "Ready";
 			this.Cursor = Cursors.Default;
 			foreach (Control control in this.Controls)
 			{

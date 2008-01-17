@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Reflection;
-using System.Text;
 using PTM.Addin;
 using PTM.Common;
 using PTM.Data;
