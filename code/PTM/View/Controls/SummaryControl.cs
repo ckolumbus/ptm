@@ -48,7 +48,7 @@ namespace PTM.View.Controls
 		private Task parentTask;
 		private GroupBox groupBox4;
 		private IndicatorControl indicator3;
-        private BackgroundWorker worker = new BackgroundWorker();
+        private BackgroundWorker worker;
 
 		internal SummaryControl()
 		{
