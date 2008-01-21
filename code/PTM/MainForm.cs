@@ -118,15 +118,20 @@ namespace PTM
 			list = AddinHelper.GetTabPageAddins();
 			foreach (AddinTabPage addin in list)
 			{
-				TabPage tabPage = new TabPage(addin.Text);
-				addin.Dock = DockStyle.Fill;
-				tabPage.Controls.Add(addin);
-				this.tabControl.Controls.Add(tabPage);
+			    LoadAddin(addin);
 			}
 		}
 
+	    private void LoadAddin(AddinTabPage addin)
+	    {
+	        TabPage tabPage = new TabPage(addin.Text);
+	        addin.Dock = DockStyle.Fill;
+	        tabPage.Controls.Add(addin);
+	        this.tabControl.Controls.Add(tabPage);
+	    }
 
-		private void UpdateStartUpPath()
+
+	    private void UpdateStartUpPath()
 		{
 			try
 			{

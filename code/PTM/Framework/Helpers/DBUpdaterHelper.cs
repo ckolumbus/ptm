@@ -1,5 +1,9 @@
+using System;
 using System.Data.OleDb;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
+using PTM.Addin;
 using PTM.Common;
 using PTM.Data;
 using PTM.View;
@@ -39,9 +43,44 @@ namespace PTM.Framework.Helpers
 					continue;
 				if(UpdateFromV097ToV098(oldVersion))
 					continue;
+                if (UpdateFromV098ToV099(oldVersion))
+                    continue;
 				findNextUpdate = false;
 			}
 		}
+
+        private static bool UpdateFromV098ToV099(Configuration oldVersion)
+        {
+            if (string.Compare(oldVersion.Value.ToString().Trim(), "0.9.8") == 0)
+            {
+                try
+                {
+                    try
+                    {
+                    //if addins are prsents in current path then add them
+                    string curPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                    if (File.Exists(curPath + @"\PTM.Addin.Charts.dll") && !AddinHelper.ExistAddin(curPath + @"\PTM.Addin.Charts.dll"))
+                        AddinHelper.AddAddinAssembly(curPath + @"\PTM.Addin.Charts.dll");
+
+                    if (File.Exists(curPath + @"\PTM.Addin.WeekView.dll") && !AddinHelper.ExistAddin(curPath + @"\PTM.Addin.WeekView.dll"))
+                        AddinHelper.AddAddinAssembly(curPath + @"\PTM.Addin.WeekView.dll");
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.WriteException(ex);
+                    }
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.9"));
+                    return true;
+                }
+                catch (OleDbException ex)
+                {
+                    Logger.WriteException(ex);
+                    return false;
+                }
+            }
+            return false;
+        }
 
         private static bool UpdateFromV097ToV098(Configuration oldVersion)
         {

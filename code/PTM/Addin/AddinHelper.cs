@@ -19,6 +19,8 @@ namespace PTM.Addin
 				throw new ApplicationException("The length from an addin path can't be greater than 255");
 			if (GetAddinDescription(path) == null)
 				throw new ApplicationException("No add-in types found.");
+            if(ExistAddin(path))
+                throw new ApplicationException("Add-in is already registered.");
 			DbHelper.ExecuteNonQuery("INSERT INTO Addins (path) values (?)", new string[] {"Path"},
 			                         new object[] {path});
 		}
@@ -102,5 +104,16 @@ namespace PTM.Addin
 			return tabPageAddins;
 		}
 
+	    public static bool ExistAddin(string path)
+	    {
+	        string[] addinsPaths;
+	        addinsPaths = GetConfiguredAddinsPaths();
+	        foreach (string addinPath in addinsPaths)
+	        {
+                if (string.Compare(path, addinPath, true) == 0)
+                    return true;
+	        }
+	        return false;
+	    }
 	}
 }
