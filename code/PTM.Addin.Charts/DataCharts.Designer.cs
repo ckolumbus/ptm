@@ -90,9 +90,9 @@ namespace PTM.Addin.Charts
             this.chartComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.chartComboBox.Items.AddRange(new object[] {
             "- Select a chart -",
-            "Worked time vs. Date",
-            "Worked time vs. Week",
-            "Worked time vs. Month"});
+            "Hrs. worked vs. Day",
+            "Hrs. worked vs. Week",
+            "Hrs. worked vs. Month"});
             this.chartComboBox.Location = new System.Drawing.Point(78, 4);
             this.chartComboBox.MaxLength = 50;
             this.chartComboBox.Name = "chartComboBox";
