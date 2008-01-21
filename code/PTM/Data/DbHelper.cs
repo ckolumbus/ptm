@@ -63,7 +63,17 @@ namespace PTM.Data
 				return false;
 			else
 			{
-				File.Delete(dataSource);
+                try
+                {
+                    File.Delete(dataSource);
+                }
+                catch(IOException)
+                {
+                    //try again
+                    System.Threading.Thread.Sleep(2000);
+                    File.Delete(dataSource);
+                }
+				
 				return true;
 			}
 		}

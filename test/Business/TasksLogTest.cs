@@ -209,7 +209,7 @@ namespace PTM.Test.Framework
 			Logs.AfterStartLogging -= new EventHandler(TasksLog_AfterStartLogging);
 			Logs.AfterStopLogging -= new EventHandler(TasksLog_AfterStopLogging);
 			Logs.CurrentLogDurationChanged -= new ElapsedEventHandler(TasksLog_TasksLogDurationCountElapsed);
-			DbHelper.DeleteDataSource();
+			//DbHelper.DeleteDataSource();
 		}
 
 		private void TasksLog_AfterStartLogging(object sender, EventArgs e)

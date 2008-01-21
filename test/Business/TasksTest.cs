@@ -368,7 +368,7 @@ namespace PTM.Test.Framework
 			Logs.StopLogging();
 			Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowChanged);
 			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleting);
-			DbHelper.DeleteDataSource();
+			//DbHelper.DeleteDataSource();
 		}
 
 		private void Tasks_TasksRowChanged(Tasks.TaskChangeEventArgs e)
