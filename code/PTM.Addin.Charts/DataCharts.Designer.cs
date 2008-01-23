@@ -92,7 +92,10 @@ namespace PTM.Addin.Charts
             "- Select a chart -",
             "Hrs. worked vs. Day",
             "Hrs. worked vs. Week",
-            "Hrs. worked vs. Month"});
+            "Hrs. worked vs. Month",
+            "%Active-Inactive vs. Day",
+            "%Active-Inactive vs. Week",
+            "%Active-Inactive vs. Month"});
             this.chartComboBox.Location = new System.Drawing.Point(78, 4);
             this.chartComboBox.MaxLength = 50;
             this.chartComboBox.Name = "chartComboBox";

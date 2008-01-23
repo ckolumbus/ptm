@@ -37,28 +37,7 @@ namespace PTM.Addin.Charts
 
         }
 
-        private void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            e.Result = GetChartData((GenerateChartArguments) e.Argument);
-            if (worker.CancellationPending)
-                e.Cancel = true;
-        }
 
-        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            SetReadyState();
-            if (e.Error != null)
-            {
-                Logger.WriteException(e.Error);
-                MessageBox.Show(this, e.Error.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (e.Cancelled)
-            {
-                return;
-            }
-            ChartCollectedData((ChartInfo)e.Result);
-        }
 
         private void generateButton_Click(object sender, EventArgs e)
         {
@@ -75,7 +54,7 @@ namespace PTM.Addin.Charts
                 return;
             }
 
-            if (this.chartComboBox.SelectedIndex == 2)
+            if (this.chartComboBox.SelectedIndex == 2 || this.chartComboBox.SelectedIndex == 5)
             {
                 //fix from date to the beggining of the week
                 this.fromDateTimePicker.Value =
@@ -85,7 +64,7 @@ namespace PTM.Addin.Charts
                     this.toDateTimePicker.Value.AddDays(6 - (int)this.toDateTimePicker.Value.DayOfWeek);               
             }
 
-            if (this.chartComboBox.SelectedIndex == 3)
+            if (this.chartComboBox.SelectedIndex == 3 || this.chartComboBox.SelectedIndex == 6)
             {
                 //fix from date to the beggining of the month
                 this.fromDateTimePicker.Value =
@@ -99,42 +78,22 @@ namespace PTM.Addin.Charts
             while (worker.IsBusy) Application.DoEvents();
             GenerateChartArguments arg = new GenerateChartArguments();
             arg.SelectedChart = this.chartComboBox.SelectedIndex;
+            arg.ChartTitle = this.chartComboBox.Text;
             arg.FromDate = this.fromDateTimePicker.Value.Date;
-            arg.ToDate = this.toDateTimePicker.Value.Date;
+            arg.ToDate = this.toDateTimePicker.Value.Date;           
             worker.RunWorkerAsync(arg);
         }
 
-        private ChartInfo GetChartData(GenerateChartArguments args)
-        {
-            if(args.SelectedChart == 1)
-                return GetWorkedTimeVsDayData(args);
-            else if (args.SelectedChart == 2)
-                return GetWorkedTimeVsWeekData(args);
-            else if (args.SelectedChart == 3)
-                return GetWorkedTimeVsMonthData(args);
-
-            throw new NotImplementedException("Selected chart is not implemented yet");
-        }
-
-        private void ChartCollectedData(ChartInfo chartInfo)
-        {
-            if (chartInfo.Arguments.SelectedChart == 1)
-                ChartWorkedTimeVsDay(chartInfo);
-            else if (chartInfo.Arguments.SelectedChart == 2)
-                ChartWorkedTimeVsWeek(chartInfo);
-            else if (chartInfo.Arguments.SelectedChart == 3)
-                ChartWorkedTimeVsMonth(chartInfo);
-        }
-
-
-        #region Worked time vs days
+        #region Worked time vs Days
 
         private ChartInfo GetWorkedTimeVsDayData(GenerateChartArguments args)
         {
             ChartPointsList workedTimeList = new ChartPointsList();
             ChartPointsList activeTimeList = new ChartPointsList();
             ChartPointsList inactiveTimeList = new ChartPointsList();
-
+            ChartInfo info = new ChartInfo();
+            info.Arguments = args;
+            
             DateTime curDate = args.FromDate;
             DateTime toDate = args.ToDate;
             while (curDate <= toDate)
@@ -146,28 +105,28 @@ namespace PTM.Addin.Charts
                 {
                     int activeTime = TasksSummaries.GetActiveTime(curDate, curDate);
                     int inactiveTime = workedTime - activeTime;
-                    //double xDate = new XDate(curDate);
                     string date = curDate.ToShortDateString();
-                    workedTimeList.Add(date, Convert.ToDouble(workedTime * 1.0/ 3600));
-                    activeTimeList.Add(date, Convert.ToDouble(activeTime * 1.0 / 3600));
-                    inactiveTimeList.Add(date, Convert.ToDouble(inactiveTime * 1.0 / 3600));
+                    info.AddX(date);
+                    workedTimeList.Add(Convert.ToDouble(workedTime * 1.0/ 3600));
+                    activeTimeList.Add(Convert.ToDouble(activeTime * 1.0 / 3600));
+                    inactiveTimeList.Add(Convert.ToDouble(inactiveTime * 1.0 / 3600));
                 }
                 curDate = curDate.AddDays(1);
             }
-
-            return new ChartInfo(args, new ChartPointsList[] { workedTimeList , activeTimeList, inactiveTimeList});            
+            info.PointsList = new ChartPointsList[] {workedTimeList, activeTimeList, inactiveTimeList};
+            return info;
         }
 
         private void ChartWorkedTimeVsDay(ChartInfo info)
         {
             zg.ZoomOutAll(zg.GraphPane);
-            zg.GraphPane.Title.Text = "Hrs. worked vs. Day";
+            zg.GraphPane.Title.Text = info.Arguments.ChartTitle;
             zg.GraphPane.XAxis.Title.Text = "Day";
             zg.GraphPane.YAxis.Title.Text = "Hrs.";
             zg.GraphPane.XAxis.Type = AxisType.Text;
             zg.GraphPane.XAxis.Scale.FontSpec.Angle = 80;
             
-            zg.GraphPane.XAxis.Scale.TextLabels = (string[]) info.PointsList[0].XAxisData.ToArray(typeof (string));
+            zg.GraphPane.XAxis.Scale.TextLabels = (string[]) info.XAxisData.ToArray(typeof (string));
             zg.GraphPane.AddCurve("Worked time", null, (double[])info.PointsList[0].YAxisData.ToArray(typeof(double)), Color.Blue);
             zg.GraphPane.AddCurve("Active time", null, (double[])info.PointsList[1].YAxisData.ToArray(typeof(double)), Color.Green);
             zg.GraphPane.AddCurve("Inactive time", null, (double[])info.PointsList[2].YAxisData.ToArray(typeof(double)), Color.Red);
@@ -184,7 +143,8 @@ namespace PTM.Addin.Charts
             ChartPointsList workedTimeList = new ChartPointsList();
             ChartPointsList activeTimeList = new ChartPointsList();
             ChartPointsList inactiveTimeList = new ChartPointsList();
-
+            ChartInfo info = new ChartInfo();
+            info.Arguments = args;
 
             DateTime curDate = args.FromDate;
             DateTime toDate = args.ToDate;
@@ -200,26 +160,27 @@ namespace PTM.Addin.Charts
                 {
                     int activeTime = TasksSummaries.GetActiveTime(curDate, endcurDate);
                     int inactiveTime = workedTime - activeTime;
-                    //XDate xDate = new XDate(curDate);
                     string week = curDate.ToShortDateString() + "-" + endcurDate.ToShortDateString();
-                    workedTimeList.Add(week, Convert.ToDouble(workedTime * 1.0 / 3600));
-                    activeTimeList.Add(week, Convert.ToDouble(activeTime * 1.0 / 3600));
-                    inactiveTimeList.Add(week, Convert.ToDouble(inactiveTime * 1.0 / 3600));
+                    info.AddX(week);
+                    workedTimeList.Add(Convert.ToDouble(workedTime * 1.0 / 3600));
+                    activeTimeList.Add(Convert.ToDouble(activeTime * 1.0 / 3600));
+                    inactiveTimeList.Add(Convert.ToDouble(inactiveTime * 1.0 / 3600));
                 }
                 curDate = curDate.AddDays(7);
             }
-            return new ChartInfo(args, new ChartPointsList[] { workedTimeList, activeTimeList, inactiveTimeList });            
+            info.PointsList = new ChartPointsList[] { workedTimeList, activeTimeList, inactiveTimeList };
+            return info;
         }
 
         private void ChartWorkedTimeVsWeek(ChartInfo info)
         {
-            zg.GraphPane.Title.Text = "Hrs. worked vs. Week";
+            zg.GraphPane.Title.Text = info.Arguments.ChartTitle;
             zg.GraphPane.XAxis.Title.Text = "Week";
             zg.GraphPane.YAxis.Title.Text = "Hrs.";
             zg.GraphPane.XAxis.Type = AxisType.Text;
             zg.GraphPane.XAxis.Scale.FontSpec.Angle = 80;
 
-            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.PointsList[0].XAxisData.ToArray(typeof(string));
+            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.XAxisData.ToArray(typeof(string));
             zg.GraphPane.AddCurve("Worked time", null, (double[])info.PointsList[0].YAxisData.ToArray(typeof(double)), Color.Blue);
             zg.GraphPane.AddCurve("Active time", null, (double[])info.PointsList[1].YAxisData.ToArray(typeof(double)), Color.Green);
             zg.GraphPane.AddCurve("Inactive time", null, (double[])info.PointsList[2].YAxisData.ToArray(typeof(double)), Color.Red);
@@ -236,7 +197,8 @@ namespace PTM.Addin.Charts
             ChartPointsList workedTimeList = new ChartPointsList();
             ChartPointsList activeTimeList = new ChartPointsList();
             ChartPointsList inactiveTimeList = new ChartPointsList();
-
+            ChartInfo info = new ChartInfo();
+            info.Arguments = args;
 
             DateTime curDate = args.FromDate;
             DateTime toDate = args.ToDate;
@@ -252,26 +214,27 @@ namespace PTM.Addin.Charts
                 {
                     int activeTime = TasksSummaries.GetActiveTime(curDate, endcurDate);
                     int inactiveTime = workedTime - activeTime;
-                    //XDate xDate = new XDate(curDate);
                     string month = curDate.ToString("MMM-yyyy");
-                    workedTimeList.Add(month, Convert.ToDouble(workedTime * 1.0 / 3600));
-                    activeTimeList.Add(month, Convert.ToDouble(activeTime * 1.0 / 3600));
-                    inactiveTimeList.Add(month, Convert.ToDouble(inactiveTime * 1.0 / 3600));
+                    info.AddX(month);
+                    workedTimeList.Add(Convert.ToDouble(workedTime * 1.0 / 3600));
+                    activeTimeList.Add(Convert.ToDouble(activeTime * 1.0 / 3600));
+                    inactiveTimeList.Add(Convert.ToDouble(inactiveTime * 1.0 / 3600));
                 }
                 curDate = curDate.AddMonths(1);
             }
-            return new ChartInfo(args, new ChartPointsList[] { workedTimeList, activeTimeList, inactiveTimeList });
+            info.PointsList = new ChartPointsList[] { workedTimeList, activeTimeList, inactiveTimeList };
+            return info;
         }
 
         private void ChartWorkedTimeVsMonth(ChartInfo info)
         {
-            zg.GraphPane.Title.Text = "Hrs. worked vs. Month";
+            zg.GraphPane.Title.Text = info.Arguments.ChartTitle;
             zg.GraphPane.XAxis.Title.Text = "Month";
             zg.GraphPane.YAxis.Title.Text = "Hrs.";
             zg.GraphPane.XAxis.Type = AxisType.Text;
             zg.GraphPane.XAxis.Scale.FontSpec.Angle = 80;
 
-            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.PointsList[0].XAxisData.ToArray(typeof(string));
+            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.XAxisData.ToArray(typeof(string));
             zg.GraphPane.AddCurve("Worked time", null, (double[])info.PointsList[0].YAxisData.ToArray(typeof(double)), Color.Blue);
             zg.GraphPane.AddCurve("Active time", null, (double[])info.PointsList[1].YAxisData.ToArray(typeof(double)), Color.Green);
             zg.GraphPane.AddCurve("Inactive time", null, (double[])info.PointsList[2].YAxisData.ToArray(typeof(double)), Color.Red);
@@ -281,6 +244,158 @@ namespace PTM.Addin.Charts
         }
         #endregion
 
+
+        #region % Active time vs Days
+
+        private ChartInfo GetPercentActiveTimeVsDayData(GenerateChartArguments args)
+        {
+            ChartPointsList activeTimeList = new ChartPointsList();
+            ChartPointsList inactiveTimeList = new ChartPointsList();
+            ChartInfo info = new ChartInfo();
+            info.Arguments = args;
+
+            DateTime curDate = args.FromDate;
+            DateTime toDate = args.ToDate;
+            while (curDate <= toDate)
+            {
+                if (worker.CancellationPending)
+                    return null;
+                int workedTime = TasksSummaries.GetWorkedTime(curDate, curDate);
+                if (workedTime != 0)
+                {
+                    int activeTime = TasksSummaries.GetActiveTime(curDate, curDate);
+                    int inactiveTime = workedTime - activeTime;
+                    string date = curDate.ToShortDateString();
+                    info.AddX(date);
+                    activeTimeList.Add(Convert.ToDouble(activeTime * 100.0 / workedTime));
+                    inactiveTimeList.Add(Convert.ToDouble(inactiveTime * 100.0 / workedTime));
+                }
+                curDate = curDate.AddDays(1);
+            }
+
+            info.PointsList = new ChartPointsList[] { activeTimeList, inactiveTimeList };
+            return info;
+        }
+
+        private void ChartPercentActiveTimeVsDay(ChartInfo info)
+        {
+            zg.ZoomOutAll(zg.GraphPane);
+            zg.GraphPane.Title.Text = info.Arguments.ChartTitle;
+            zg.GraphPane.XAxis.Title.Text = "Day";
+            zg.GraphPane.YAxis.Title.Text = "%";
+            zg.GraphPane.XAxis.Type = AxisType.Text;
+            zg.GraphPane.XAxis.Scale.FontSpec.Angle = 80;
+
+            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.XAxisData.ToArray(typeof(string));
+            zg.GraphPane.AddCurve("% Active time", null, (double[])info.PointsList[0].YAxisData.ToArray(typeof(double)), Color.Green);
+            zg.GraphPane.AddCurve("% Inactive time", null, (double[])info.PointsList[1].YAxisData.ToArray(typeof(double)), Color.Red);
+
+            zg.AxisChange();
+            this.Refresh();
+        }
+
+        #endregion
+
+        #region % Active time vs Week
+        private ChartInfo GetPercentActiveTimeVsWeekData(GenerateChartArguments args)
+        {
+            ChartPointsList activeTimeList = new ChartPointsList();
+            ChartPointsList inactiveTimeList = new ChartPointsList();
+            ChartInfo info = new ChartInfo();
+            info.Arguments = args;
+
+            DateTime curDate = args.FromDate;
+            DateTime toDate = args.ToDate;
+
+            while (curDate <= toDate)
+            {
+                if (worker.CancellationPending)
+                    return null;
+
+                DateTime endcurDate = curDate.AddDays(7).AddSeconds(-1);
+                int workedTime = TasksSummaries.GetWorkedTime(curDate, endcurDate);
+                if (workedTime != 0)
+                {
+                    int activeTime = TasksSummaries.GetActiveTime(curDate, endcurDate);
+                    int inactiveTime = workedTime - activeTime;
+                    string week = curDate.ToShortDateString() + "-" + endcurDate.ToShortDateString();
+                    info.AddX(week);
+                    activeTimeList.Add(Convert.ToDouble(activeTime * 100.0 / workedTime));
+                    inactiveTimeList.Add(Convert.ToDouble(inactiveTime * 100.0 / workedTime));
+                }
+                curDate = curDate.AddDays(7);
+            }
+            info.PointsList = new ChartPointsList[] { activeTimeList, inactiveTimeList };
+            return info;
+        }
+
+        private void ChartPercentActiveTimeVsWeek(ChartInfo info)
+        {
+            zg.GraphPane.Title.Text = info.Arguments.ChartTitle;
+            zg.GraphPane.XAxis.Title.Text = "Week";
+            zg.GraphPane.YAxis.Title.Text = "%";
+            zg.GraphPane.XAxis.Type = AxisType.Text;
+            zg.GraphPane.XAxis.Scale.FontSpec.Angle = 80;
+
+            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.XAxisData.ToArray(typeof(string));
+            zg.GraphPane.AddCurve("% Active time", null, (double[])info.PointsList[0].YAxisData.ToArray(typeof(double)), Color.Green);
+            zg.GraphPane.AddCurve("% Inactive time", null, (double[])info.PointsList[1].YAxisData.ToArray(typeof(double)), Color.Red);
+
+            zg.AxisChange();
+            this.Refresh();
+        }
+
+        #endregion
+
+        #region %Active time vs Month
+        private ChartInfo GetPercentActiveTimeVsMonthData(GenerateChartArguments args)
+        {
+            ChartPointsList activeTimeList = new ChartPointsList();
+            ChartPointsList inactiveTimeList = new ChartPointsList();
+            ChartInfo info = new ChartInfo();
+            info.Arguments = args;
+
+            DateTime curDate = args.FromDate;
+            DateTime toDate = args.ToDate;
+
+            while (curDate <= toDate)
+            {
+                if (worker.CancellationPending)
+                    return null;
+
+                DateTime endcurDate = curDate.AddMonths(1).AddSeconds(-1);
+                int workedTime = TasksSummaries.GetWorkedTime(curDate, endcurDate);
+                if (workedTime != 0)
+                {
+                    int activeTime = TasksSummaries.GetActiveTime(curDate, endcurDate);
+                    int inactiveTime = workedTime - activeTime;
+                    string month = curDate.ToString("MMM-yyyy");
+                    info.AddX(month);
+                    activeTimeList.Add(Convert.ToDouble(activeTime * 100.0 / workedTime));
+                    inactiveTimeList.Add(Convert.ToDouble(inactiveTime * 100.0 / workedTime));
+                }
+                curDate = curDate.AddMonths(1);
+            }
+            info.PointsList = new ChartPointsList[] { activeTimeList, inactiveTimeList };
+            return info;
+        }
+
+        private void ChartPercentActiveTimeVsMonth(ChartInfo info)
+        {
+            zg.GraphPane.Title.Text = info.Arguments.ChartTitle;
+            zg.GraphPane.XAxis.Title.Text = "Month";
+            zg.GraphPane.YAxis.Title.Text = "%";
+            zg.GraphPane.XAxis.Type = AxisType.Text;
+            zg.GraphPane.XAxis.Scale.FontSpec.Angle = 80;
+
+            zg.GraphPane.XAxis.Scale.TextLabels = (string[])info.XAxisData.ToArray(typeof(string));
+            zg.GraphPane.AddCurve("% Active time", null, (double[])info.PointsList[0].YAxisData.ToArray(typeof(double)), Color.Green);
+            zg.GraphPane.AddCurve("% Inactive time", null, (double[])info.PointsList[1].YAxisData.ToArray(typeof(double)), Color.Red);
+
+            zg.AxisChange();
+            this.Refresh();
+        }
+        #endregion
 
         private void SetWaitState()
         {
@@ -323,11 +438,69 @@ namespace PTM.Addin.Charts
         }
 
 
+        #region Async Worker
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            e.Result = GetChartData((GenerateChartArguments)e.Argument);
+            if (worker.CancellationPending)
+                e.Cancel = true;
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SetReadyState();
+            if (e.Error != null)
+            {
+                Logger.WriteException(e.Error);
+                MessageBox.Show(this, e.Error.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (e.Cancelled)
+            {
+                return;
+            }
+            ChartCollectedData((ChartInfo)e.Result);
+        }
+
+        private ChartInfo GetChartData(GenerateChartArguments args)
+        {
+            if (args.SelectedChart == 1)
+                return GetWorkedTimeVsDayData(args);
+            else if (args.SelectedChart == 2)
+                return GetWorkedTimeVsWeekData(args);
+            else if (args.SelectedChart == 3)
+                return GetWorkedTimeVsMonthData(args);
+            else if (args.SelectedChart == 4)
+                return GetPercentActiveTimeVsDayData(args);
+            else if (args.SelectedChart == 5)
+                return GetPercentActiveTimeVsWeekData(args);
+            else if (args.SelectedChart == 6)
+                return GetPercentActiveTimeVsMonthData(args);
+            throw new NotImplementedException("Selected chart is not implemented yet");
+        }
+
+        private void ChartCollectedData(ChartInfo chartInfo)
+        {
+            if (chartInfo.Arguments.SelectedChart == 1)
+                ChartWorkedTimeVsDay(chartInfo);
+            else if (chartInfo.Arguments.SelectedChart == 2)
+                ChartWorkedTimeVsWeek(chartInfo);
+            else if (chartInfo.Arguments.SelectedChart == 3)
+                ChartWorkedTimeVsMonth(chartInfo);
+            else if (chartInfo.Arguments.SelectedChart == 4)
+                ChartPercentActiveTimeVsDay(chartInfo);
+            else if (chartInfo.Arguments.SelectedChart == 5)
+                ChartPercentActiveTimeVsWeek(chartInfo);
+            else if (chartInfo.Arguments.SelectedChart == 6)
+                ChartPercentActiveTimeVsMonth(chartInfo);
+        }
+
         private class GenerateChartArguments
         {
             private int selectedChart;
             private DateTime fromDate;
             private DateTime toDate;
+            private string chartTitle;
 
             public int SelectedChart
             {
@@ -346,17 +519,30 @@ namespace PTM.Addin.Charts
                 get { return toDate; }
                 set { toDate = value; }
             }
+
+            public string ChartTitle
+            {
+                get { return chartTitle; }
+                set { chartTitle = value; }
+            }
         }
 
         private class ChartInfo
         {
-            public ChartInfo(GenerateChartArguments arguments, ChartPointsList[] pointsList)
-            {
-                this.arguments = arguments;
-                this.pointsList = pointsList;
-            }
+
             GenerateChartArguments arguments;
             private ChartPointsList[] pointsList;
+            private ArrayList xAxisData = new ArrayList();
+            public ArrayList XAxisData
+            {
+                get { return xAxisData; }
+                set { xAxisData = value; }
+            }
+
+            public void AddX(object x)
+            {
+                this.xAxisData.Add(x);
+            }
 
             public GenerateChartArguments Arguments
             {
@@ -374,19 +560,11 @@ namespace PTM.Addin.Charts
 
         private class ChartPointsList
         {
-            private ArrayList xAxisData = new ArrayList();
             private ArrayList yAxisData = new ArrayList();
 
-            public void Add(object x, object y)
+            public void Add(object y)
             {
-                this.xAxisData.Add(x);
                 this.yAxisData.Add(y);
-            }
-
-            public ArrayList XAxisData
-            {
-                get { return xAxisData; }
-                set { xAxisData = value; }
             }
 
             public ArrayList YAxisData
@@ -395,7 +573,7 @@ namespace PTM.Addin.Charts
                 set { yAxisData = value; }
             }
         }
-
+        #endregion
 
     }
 }
