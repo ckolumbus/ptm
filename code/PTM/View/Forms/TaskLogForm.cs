@@ -50,10 +50,10 @@ namespace PTM.View.Forms
 			tasksTree.Initialize();
 			this.tasksTree.SelectedTaskChanged += new EventHandler(taskTree_SelectedTaskChanged);
 			tasksTree.DoubleClick += new EventHandler(tasksTree_DoubleClick);
-			Task row;
-			row = Tasks.FindById(editTaskId);
+			Task task;
+			task = Tasks.FindById(editTaskId);
 
-			this.tasksTree.SelectedTaskId = row.ParentId;
+			this.tasksTree.SelectedTaskId = task.Id;
 
 			//SetChildTask(row);
 		}

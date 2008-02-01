@@ -31,7 +31,7 @@ namespace PTM.View.Controls
 		private NotifyIcon notifyIcon;
 		private IContainer components;
 		private TreeListView taskList;
-		private Button switchToButton;
+		private Button propertiesButton;
 		private Button deleteButton;
 		private ColumnHeader StartTimeHeader;
 		private DateTimePicker logDate;
@@ -131,7 +131,7 @@ namespace PTM.View.Controls
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TasksLogControl));
-            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
+            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer2 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
             this.editButton = new System.Windows.Forms.Button();
             this.addTaskButton = new System.Windows.Forms.Button();
             this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
@@ -142,7 +142,7 @@ namespace PTM.View.Controls
             this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
             this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
             this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
-            this.switchToButton = new System.Windows.Forms.Button();
+            this.propertiesButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.logDate = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
@@ -210,9 +210,9 @@ namespace PTM.View.Controls
             this.TaskDescriptionHeader,
             this.DurationTaskHeader,
             this.StartTimeHeader});
-            treeListViewItemCollectionComparer1.Column = 0;
-            treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.taskList.Comparer = treeListViewItemCollectionComparer1;
+            treeListViewItemCollectionComparer2.Column = 0;
+            treeListViewItemCollectionComparer2.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.taskList.Comparer = treeListViewItemCollectionComparer2;
             this.taskList.ContextMenu = this.rigthClickMenu;
             this.taskList.HideSelection = false;
             this.taskList.Location = new System.Drawing.Point(8, 32);
@@ -224,16 +224,16 @@ namespace PTM.View.Controls
             this.taskList.SelectedIndexChanged += new System.EventHandler(this.taskList_SelectedIndexChanged);
             this.taskList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.taskList_KeyDown);
             // 
-            // switchToButton
+            // propertiesButton
             // 
-            this.switchToButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.switchToButton.Location = new System.Drawing.Point(232, 280);
-            this.switchToButton.Name = "switchToButton";
-            this.switchToButton.Size = new System.Drawing.Size(72, 23);
-            this.switchToButton.TabIndex = 4;
-            this.switchToButton.Text = "Switch To";
-            this.shortcutToolTip.SetToolTip(this.switchToButton, "Shift+Ins");
-            this.switchToButton.Click += new System.EventHandler(this.switchToButton_Click);
+            this.propertiesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.propertiesButton.Location = new System.Drawing.Point(232, 280);
+            this.propertiesButton.Name = "propertiesButton";
+            this.propertiesButton.Size = new System.Drawing.Size(72, 23);
+            this.propertiesButton.TabIndex = 4;
+            this.propertiesButton.Text = "Properties...";
+            this.shortcutToolTip.SetToolTip(this.propertiesButton, "Ctrl + P");
+            this.propertiesButton.Click += new System.EventHandler(this.switchToButton_Click);
             // 
             // deleteButton
             // 
@@ -278,12 +278,13 @@ namespace PTM.View.Controls
             this.Controls.Add(this.label1);
             this.Controls.Add(this.logDate);
             this.Controls.Add(this.deleteButton);
-            this.Controls.Add(this.switchToButton);
+            this.Controls.Add(this.propertiesButton);
             this.Controls.Add(this.taskList);
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.addTaskButton);
             this.Name = "TasksLogControl";
             this.Size = new System.Drawing.Size(392, 312);
+            this.shortcutToolTip.SetToolTip(this, "Shift + P");
             ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
             this.ResumeLayout(false);
 
@@ -364,17 +365,15 @@ namespace PTM.View.Controls
 			}
 		}
 
-		private void SwitchToSelectedLog()
-		{
+        private void ShowTaskProperties()
+        {
             if (taskList.SelectedItems.Count == 0)
                 return;
-
-            if (!isValidEditableLog(taskList.SelectedItems[0]))
-				return;
-			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
-			AddTaskLog(taskId,
-			           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
-		}
+            int taskId = ((Log)taskList.SelectedItems[0].Tag).TaskId;
+            TaskPropertiesForm pf;
+            pf = new TaskPropertiesForm(taskId);
+            pf.ShowDialog(this);
+        }
 
 		private void DeleteSelectedTaskLog()
 		{
@@ -439,7 +438,7 @@ namespace PTM.View.Controls
 
 		private void switchToButton_Click(object sender, EventArgs e)
 		{
-			SwitchToSelectedLog();
+            ShowTaskProperties();
 		}
 
 		private void taskList_SelectedIndexChanged(object sender, EventArgs e)
@@ -488,7 +487,7 @@ namespace PTM.View.Controls
 		{
 			this.editButton.Enabled = true;
 			//this.deleteButton.Enabled = true;
-			this.switchToButton.Enabled = true;
+			this.propertiesButton.Enabled = true;
 			this.taskList.ContextMenu = this.rigthClickMenu;
 		}
 
@@ -496,7 +495,7 @@ namespace PTM.View.Controls
 		{
 			this.editButton.Enabled = false;
 			//this.deleteButton.Enabled = false;
-			this.switchToButton.Enabled = false;
+			this.propertiesButton.Enabled = false;
 			this.taskList.ContextMenu = null;
 		}
 
@@ -510,9 +509,9 @@ namespace PTM.View.Controls
 			EditSelectedTaskLog();
 		}
 
-		private void mnuSwitchTo_Click(object sender, EventArgs e)
+		private void mnuShowProperties_Click(object sender, EventArgs e)
 		{
-			SwitchToSelectedLog();
+			ShowTaskProperties();
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
@@ -523,7 +522,7 @@ namespace PTM.View.Controls
 		private void CreateRigthClickMenu()
 		{
 			MenuItem mnuEdit = new MenuItem();
-			MenuItem mnuSwitchTo = new MenuItem();
+			MenuItem mnuShowProperties = new MenuItem();
 			MenuItem mnuDelete = new MenuItem();
 			MenuItem menuItem11 = new MenuItem();
             TaskMenuItem idleMenuItem = new TaskMenuItem(Tasks.IdleTask.Id);
@@ -534,7 +533,7 @@ namespace PTM.View.Controls
 			this.rigthClickMenu.MenuItems.AddRange(new MenuItem[]
 			                                       	{
 			                                       		mnuEdit,
-			                                       		mnuSwitchTo,
+			                                       		mnuShowProperties,
 			                                       		mnuDelete,
 			                                       		menuItem11,
                                                         idleMenuItem
@@ -545,10 +544,10 @@ namespace PTM.View.Controls
 			mnuEdit.Text = "Edit...";
 			mnuEdit.Click += new EventHandler(this.mnuEdit_Click);
 
-			mnuSwitchTo.Index = 1;
-			mnuSwitchTo.Shortcut = Shortcut.ShiftIns;
-			mnuSwitchTo.Text = "Switch To";
-			mnuSwitchTo.Click += new EventHandler(this.mnuSwitchTo_Click);
+			mnuShowProperties.Index = 1;
+			mnuShowProperties.Shortcut = Shortcut.CtrlP;
+			mnuShowProperties.Text = "Show task properties...";
+			mnuShowProperties.Click += new EventHandler(this.mnuShowProperties_Click);
 
 			mnuDelete.Index = 2;
 			mnuDelete.Shortcut = Shortcut.Del;
@@ -1024,12 +1023,12 @@ namespace PTM.View.Controls
             if (logDate.Value.Date != DateTime.Today)
             {
                 this.addTaskButton.Enabled = false;
-                this.switchToButton.Enabled = false;
+                this.propertiesButton.Enabled = false;
             }
             else
             {
                 this.addTaskButton.Enabled = true;
-                this.switchToButton.Enabled = true;
+                this.propertiesButton.Enabled = true;
             }
             this.currentDay = logDate.Value.Date;
             SetWaitState();
