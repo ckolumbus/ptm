@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using PTM.Addin;
-using PTM.Common;
+using PTM.Util;
 using PTM.Data;
 using PTM.View;
 

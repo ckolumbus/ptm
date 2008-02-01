@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Xml;
-using PTM.Common;
+using PTM.Util;
 
 namespace PTM.Framework.Helpers
 {

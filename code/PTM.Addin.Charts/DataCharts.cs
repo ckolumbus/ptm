@@ -3,7 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using PTM.Common;
+using PTM.Util;
 using PTM.Framework;
 using ZedGraph;
 
@@ -407,6 +407,7 @@ namespace PTM.Addin.Charts
             this.chartComboBox.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
             zg.GraphPane.CurveList.Clear();
+            zg.GraphPane.GraphObjList.Clear();
             zg.Enabled = false;
 
             zg.GraphPane.Title.Text = String.Empty;

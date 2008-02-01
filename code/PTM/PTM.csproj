@@ -193,6 +193,12 @@
     <Compile Include="View\Controls\StatisticsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="View\Controls\SubjectiveMetricsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Controls\SubjectiveMetricsControl.Designer.cs">
+      <DependentUpon>SubjectiveMetricsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\SummaryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -256,7 +262,7 @@
     <Compile Include="View\IconsManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\Logger.cs">
+    <Compile Include="Utils\Logger.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\MemoryMappedFile.cs">
@@ -280,6 +286,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\StatisticsControl.resx">
       <DependentUpon>StatisticsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Controls\SubjectiveMetricsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SubjectiveMetricsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\SummaryControl.resx">
       <DependentUpon>SummaryControl.cs</DependentUpon>

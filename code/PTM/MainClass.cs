@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
-using PTM.Common;
+using PTM.Util;
 using PTM.Framework;
 using PTM.Framework.Helpers;
 using PTM.View;
