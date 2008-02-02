@@ -801,7 +801,10 @@ namespace PTM.View.Controls
 				{
 					if (((Log) item.Tag).TaskId == e.Task.Id)
 					{
-						item.SubItems[TaskDescriptionHeader.Index].Text = e.Task.Description;
+                        if (this.pathCheckBox.Checked)
+                            item.SubItems[TaskDescriptionHeader.Index].Text = Tasks.GetFullPath(e.Task.Id);
+                        else
+						    item.SubItems[TaskDescriptionHeader.Index].Text = e.Task.Description;
 						item.ImageIndex = e.Task.IconId;
 					}
 				}

@@ -162,14 +162,17 @@ namespace PTM.View.Controls
 
 		internal void AddNewTask()
 		{
-			int newId=0;
+			int newId;
 			try
 			{
-				newId = Tasks.AddTask(NEW_TASK, (int) treeView.SelectedNode.Tag).Id;
+			    int parentId = (int) treeView.SelectedNode.Tag;
+			    string newTaskName = GetNewTaskName(parentId);
+                newId = Tasks.AddTask(newTaskName, parentId).Id;
 			}
 			catch (ApplicationException aex)
 			{
 				MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
 			}
 			Application.DoEvents();//first insert the new node (event fired)
 			treeView.LabelEdit = true;
@@ -178,6 +181,21 @@ namespace PTM.View.Controls
 			treeView.SelectedNode = node;
 			node.BeginEdit();
 		}
+
+        private static string GetNewTaskName(int parentId)
+        {
+            if(Tasks.FindByParentIdAndDescription(parentId, NEW_TASK)==null)
+               return NEW_TASK;
+            
+            int counter = 1;
+            string newTaskName;
+            do
+            {
+                newTaskName = NEW_TASK + counter;
+                counter++;
+            } while (Tasks.FindByParentIdAndDescription(parentId, newTaskName) != null);
+            return newTaskName;
+        }
 
 		internal void EditSelectedTaskDescription()
 		{
