@@ -33,13 +33,17 @@ namespace PTM.Framework
 				currentSum.Description = currentTask.Description;
 				currentSum.IsActive = currentTask.IsActive;
 				currentSum.IconId = currentTask.IconId;
-			    currentSum.TotalEstimation = currentTask.Estimation;
+			    
 				if (!currentSum.IsActive)
 				{
 					currentSum.TotalInactiveTime = currentSum.TotalActiveTime;
 					currentSum.TotalActiveTime = 0;
 				} //if
 
+                currentSum.TotalEstimation = currentTask.Estimation;
+                if (currentSum.TotalEstimation != 0)
+                    currentSum.TotalTimeOverEstimation = currentSum.TotalActiveTime + currentSum.TotalInactiveTime;
+                
                 if (currentTask.Id != Tasks.IdleTask.Id) //ignore idle time
 				{
 					if (currentTask.Id != parentTask.Id)
@@ -52,21 +56,27 @@ namespace PTM.Framework
 
 						if (currentTask.ParentId == parentTask.Id)
 						{
-							TaskSummary retrow = FindTaskSummaryByTaskId(returnList, currentSum.TaskId);
-							if (retrow == null)
+							TaskSummary retSum = FindTaskSummaryByTaskId(returnList, currentSum.TaskId);
+							if (retSum == null)
 							{
 								returnList.Add(currentSum);
 							}
 							else
 							{
-								retrow.TotalInactiveTime += currentSum.TotalInactiveTime;
-								retrow.TotalActiveTime += currentSum.TotalActiveTime;
-                                retrow.TotalEstimation += currentSum.TotalEstimation;
+								retSum.TotalInactiveTime += currentSum.TotalInactiveTime;
+								retSum.TotalActiveTime += currentSum.TotalActiveTime;
+                                retSum.TotalEstimation += currentSum.TotalEstimation;
+                                retSum.TotalTimeOverEstimation += currentSum.TotalTimeOverEstimation;
 							}
 						}
 						else
 						{
-							TaskSummary currentSumParent = FindTaskSummaryByTaskId(summaryList, currentTask.ParentId);
+						    TaskSummary currentSumParent;
+                            //First look at the return list
+                            currentSumParent = FindTaskSummaryByTaskId(returnList, currentTask.ParentId);
+                            if (currentSumParent==null)//If not found look at the summaryList
+							    currentSumParent = FindTaskSummaryByTaskId(summaryList, currentTask.ParentId);
+						    
 							if (currentSumParent == null) //If parent not in the summary list
 							{
 								currentSumParent = currentSum;
@@ -78,6 +88,7 @@ namespace PTM.Framework
                                 currentSumParent.TotalInactiveTime += currentSum.TotalInactiveTime;
                                 currentSumParent.TotalActiveTime += currentSum.TotalActiveTime;
                                 currentSumParent.TotalEstimation += currentSum.TotalEstimation;
+                                currentSumParent.TotalTimeOverEstimation += currentSum.TotalTimeOverEstimation;
 							}
 						}
 					}

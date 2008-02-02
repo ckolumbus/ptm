@@ -48,7 +48,9 @@ namespace PTM.View.Controls
 		private Task parentTask;
 		private GroupBox groupBox4;
 		private IndicatorControl indicator3;
+        private IndicatorControl indicator4;
         private ColumnHeader GoalHeader;
+        private GroupBox groupBox5;
         private BackgroundWorker worker;
 
 		internal SummaryControl()
@@ -148,6 +150,7 @@ namespace PTM.View.Controls
             this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -358,7 +361,7 @@ namespace PTM.View.Controls
             // groupBox4
             // 
             this.groupBox4.ForeColor = System.Drawing.Color.Blue;
-            this.groupBox4.Location = new System.Drawing.Point(168, 64);
+            this.groupBox4.Location = new System.Drawing.Point(248, 64);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(72, 80);
             this.groupBox4.TabIndex = 18;
@@ -366,8 +369,19 @@ namespace PTM.View.Controls
             this.groupBox4.Text = "Avg. Time";
             this.groupBox4.Visible = false;
             // 
+            // groupBox5
+            // 
+            this.groupBox5.ForeColor = System.Drawing.Color.Blue;
+            this.groupBox5.Location = new System.Drawing.Point(168, 64);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(72, 80);
+            this.groupBox5.TabIndex = 19;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Goals %";
+            // 
             // SummaryControl
             // 
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.fromDateTimePicker);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.panel1);
@@ -394,6 +408,7 @@ namespace PTM.View.Controls
             this.indicator1 = new PTM.View.Controls.IndicatorControl();
             this.indicator2 = new PTM.View.Controls.IndicatorControl();
             this.indicator3 = new PTM.View.Controls.IndicatorControl();
+            this.indicator4 = new PTM.View.Controls.IndicatorControl();
             // 
             // indicator1
             // 
@@ -425,15 +440,29 @@ namespace PTM.View.Controls
             this.indicator3.Size = new System.Drawing.Size(66, 61);
             this.indicator3.TabIndex = 0;
 
+            // 
+            // indicator4
+            // 
+            this.indicator4.BackColor = System.Drawing.Color.Black;
+            this.indicator4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indicator4.ForeColor = System.Drawing.Color.Lime;
+            this.indicator4.Location = new System.Drawing.Point(3, 16);
+            this.indicator4.Name = "indicator4";
+            this.indicator4.Size = new System.Drawing.Size(66, 61);
+            this.indicator4.TabIndex = 0;
+
             this.groupBox1.Controls.Add(this.indicator1);
             this.groupBox2.Controls.Add(this.indicator2);
             this.groupBox4.Controls.Add(this.indicator3);
+            this.groupBox5.Controls.Add(this.indicator4);
         }
 		#endregion
 
 		private double totalTime = 0;
 		private double totalActiveTime = 0;
 		private int workedDays = 0;
+        private double totalEstimation = 0;
+	    private double totalTimeOverEstimation = 0;
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -486,20 +515,27 @@ namespace PTM.View.Controls
 				{
 					totalTime += summary.TotalActiveTime;
 					totalTime += summary.TotalInactiveTime;
+				    totalEstimation += summary.TotalEstimation;
+                    totalTimeOverEstimation += summary.TotalTimeOverEstimation;
 					if (summary.IsActive)
 						totalActiveTime += summary.TotalActiveTime;
 
 					//TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
 					//TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalInactiveTime));
-                    TimeSpan elapsedTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(totalTime));
+                    TimeSpan elapsedTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime + summary.TotalInactiveTime));
                     TimeSpan estimationTimeSpan = new TimeSpan(0, Convert.ToInt32(summary.TotalEstimation), 0);
+				    string estimation;
+                    if (summary.TotalEstimation == 0)
+                        estimation = "Not setted";
+                    else
+                        estimation = ViewHelper.TimeSpanToTimeString(estimationTimeSpan);
 					TreeListViewItem lvi =
 						new TreeListViewItem(summary.Description,
 						                     new string[]
 						                     	{
 						                     		ViewHelper.TimeSpanToTimeString(elapsedTimeSpan),
 						                     		0.ToString("0.0%", CultureInfo.InvariantCulture),
-                                                    ViewHelper.TimeSpanToTimeString(estimationTimeSpan),
+                                                    estimation,
 						                     		0.ToString("0.0%", CultureInfo.InvariantCulture),
 						                     	});
 					
@@ -531,7 +567,7 @@ namespace PTM.View.Controls
 				    percent = (sum.TotalActiveTime + sum.TotalInactiveTime)/totalTime;
 
                 if (sum.TotalEstimation > 0)
-                    goalPercent = (sum.TotalActiveTime + sum.TotalInactiveTime) / (sum.TotalEstimation*60);
+                    goalPercent = sum.TotalTimeOverEstimation / (sum.TotalEstimation*60);
 
 				item.SubItems[PercentHeader.Index].Text = percent.ToString("0.0%", CultureInfo.InvariantCulture);
                 item.SubItems[PercentGoalHeader.Index].Text = goalPercent.ToString("0.0%", CultureInfo.InvariantCulture);
@@ -569,7 +605,14 @@ namespace PTM.View.Controls
 					CultureInfo.
 					InvariantCulture) +
 					" hrs.";
-			}				
+			}
+
+            if (totalEstimation > 0)
+            {
+                int percentGoals = Convert.ToInt32(totalTimeOverEstimation * 100 / (totalEstimation * 60.0));
+                indicator4.Value = Convert.ToInt32(Math.Min(100, percentGoals));
+                indicator4.TextValue = percentGoals + "%";
+            }
 
 			toolTip.SetToolTip(this.indicator3, workedDays + " worked days");
 			toolTip.SetToolTip(this.groupBox4, workedDays+ " worked days");
@@ -827,8 +870,15 @@ namespace PTM.View.Controls
 			indicator3.TextValue = "0.00 hrs.";
 			indicator3.ForeColor = Color.Lime;
 
+            indicator4.Maximum = 100;
+            indicator4.Value = 0;
+            indicator4.TextValue = "0%";
+            indicator4.ForeColor = Color.Lime;
+
 			totalTime = 0;
 			totalActiveTime = 0;
+            totalEstimation = 0;
+            totalTimeOverEstimation = 0;
 
 			this.Refresh();
 			this.Cursor = Cursors.WaitCursor;

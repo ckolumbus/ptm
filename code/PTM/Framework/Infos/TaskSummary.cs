@@ -31,7 +31,8 @@ namespace PTM.Framework.Infos
 		/// </summary>
 		private bool isActive;
 
-        private int totalEstimation;
+        private double totalEstimation;
+	    private double totalTimeOverEstimation;
 
 	    private int iconId;
 
@@ -68,10 +69,16 @@ namespace PTM.Framework.Infos
 			set { totalInactiveTime = value; }
 		} //TotalTime
 
-        public int TotalEstimation
+        public double TotalEstimation
         {
             get { return totalEstimation; }
             set { totalEstimation = value; }
+        }
+
+        public double TotalTimeOverEstimation
+        {
+            get { return totalTimeOverEstimation; }
+            set { totalTimeOverEstimation = value; }
         }
 
 		/// <summary>
