@@ -5,12 +5,6 @@ namespace PTM.Framework.Infos
 	/// </summary>
 	public class TaskSummary
 	{
-		/// <summary>
-		/// TaskSummary Constructor
-		/// </summary>
-		public TaskSummary()
-		{
-		} //TaskSummary
 
 		/// <summary>
 		/// Task Id of this summary
@@ -37,7 +31,9 @@ namespace PTM.Framework.Infos
 		/// </summary>
 		private bool isActive;
 
-		private int iconId;
+        private int totalEstimation;
+
+	    private int iconId;
 
 		public bool IsActive
 		{
@@ -71,6 +67,12 @@ namespace PTM.Framework.Infos
 			get { return totalInactiveTime; }
 			set { totalInactiveTime = value; }
 		} //TotalTime
+
+        public int TotalEstimation
+        {
+            get { return totalEstimation; }
+            set { totalEstimation = value; }
+        }
 
 		/// <summary>
 		/// Description Accessors

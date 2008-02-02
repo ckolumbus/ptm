@@ -24,65 +24,70 @@ namespace PTM.Framework
 			ArrayList summaryList;
 			ArrayList returnList = new ArrayList();
 
-			summaryList = ExecuteTaskSummary(initialDate, finalDate);
+			summaryList = ExecuteTaskSummary(initialDate, finalDate);           
 
 			while (summaryList.Count > 0)
 			{
-				TaskSummary sumRow = (TaskSummary) summaryList[0];
-				Task row = Tasks.FindById(sumRow.TaskId);
-				sumRow.Description = row.Description;
-				sumRow.IsActive = row.IsActive;
-				sumRow.IconId = row.IconId;
-				if (!sumRow.IsActive)
+				TaskSummary currentSum = (TaskSummary) summaryList[0];
+				Task currentTask = Tasks.FindById(currentSum.TaskId);
+				currentSum.Description = currentTask.Description;
+				currentSum.IsActive = currentTask.IsActive;
+				currentSum.IconId = currentTask.IconId;
+			    currentSum.TotalEstimation = currentTask.Estimation;
+				if (!currentSum.IsActive)
 				{
-					sumRow.TotalInactiveTime = sumRow.TotalActiveTime;
-					sumRow.TotalActiveTime = 0;
+					currentSum.TotalInactiveTime = currentSum.TotalActiveTime;
+					currentSum.TotalActiveTime = 0;
 				} //if
 
-				if (sumRow.TaskId != Tasks.IdleTask.Id) //ignore idle time
+                if (currentTask.Id != Tasks.IdleTask.Id) //ignore idle time
 				{
-					if (row.Id != parentTask.Id)
+					if (currentTask.Id != parentTask.Id)
 					{
-						if (row.ParentId ==-1)
+						if (currentTask.ParentId ==-1)
 						{
-							summaryList.Remove(sumRow);
+							summaryList.Remove(currentSum);
 							continue;
 						} //if
 
-						if (row.ParentId == parentTask.Id)
+						if (currentTask.ParentId == parentTask.Id)
 						{
-							TaskSummary retrow = FindTaskSummaryByTaskId(returnList, sumRow.TaskId);
+							TaskSummary retrow = FindTaskSummaryByTaskId(returnList, currentSum.TaskId);
 							if (retrow == null)
 							{
-								returnList.Add(sumRow);
+								returnList.Add(currentSum);
 							}
 							else
 							{
-								retrow.TotalInactiveTime += sumRow.TotalInactiveTime;
-								retrow.TotalActiveTime += sumRow.TotalActiveTime;
-							} //if-else
+								retrow.TotalInactiveTime += currentSum.TotalInactiveTime;
+								retrow.TotalActiveTime += currentSum.TotalActiveTime;
+                                retrow.TotalEstimation += currentSum.TotalEstimation;
+							}
 						}
 						else
 						{
-							TaskSummary psumRow = FindTaskSummaryByTaskId(summaryList, row.ParentId);
-							if (psumRow == null)
+							TaskSummary currentSumParent = FindTaskSummaryByTaskId(summaryList, currentTask.ParentId);
+							if (currentSumParent == null) //If parent not in the summary list
 							{
-								Task prow = Tasks.FindById(row.ParentId);
-								psumRow = sumRow;
-								psumRow.TaskId = prow.Id;
-								continue;
-							} //if
-							psumRow.TotalInactiveTime += sumRow.TotalInactiveTime;
-							psumRow.TotalActiveTime += sumRow.TotalActiveTime;
-						} //if-else
+								currentSumParent = currentSum;
+                                currentSumParent.TaskId = currentTask.ParentId; //just swith to parent task
+								continue; //continue without remove the current sum from list
+							}
+                            else //else acum totals
+							{
+                                currentSumParent.TotalInactiveTime += currentSum.TotalInactiveTime;
+                                currentSumParent.TotalActiveTime += currentSum.TotalActiveTime;
+                                currentSumParent.TotalEstimation += currentSum.TotalEstimation;
+							}
+						}
 					}
 					else
 					{
-						sumRow.Description = NOT_DETAILED;
-						returnList.Add(sumRow);
-					} //if-else
+						currentSum.Description = NOT_DETAILED;
+						returnList.Add(currentSum);
+					}
 				} //if
-				summaryList.Remove(sumRow);
+				summaryList.Remove(currentSum);
 			} //while
 			return returnList;
 		} //GetTaskSummary
