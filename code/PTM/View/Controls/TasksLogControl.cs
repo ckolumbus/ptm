@@ -131,7 +131,7 @@ namespace PTM.View.Controls
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TasksLogControl));
-            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer2 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
+            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
             this.editButton = new System.Windows.Forms.Button();
             this.addTaskButton = new System.Windows.Forms.Button();
             this.notifyContextMenu = new System.Windows.Forms.ContextMenu();
@@ -202,6 +202,7 @@ namespace PTM.View.Controls
             // 
             // taskList
             // 
+            this.taskList.AllowColumnReorder = true;
             this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -210,9 +211,9 @@ namespace PTM.View.Controls
             this.TaskDescriptionHeader,
             this.DurationTaskHeader,
             this.StartTimeHeader});
-            treeListViewItemCollectionComparer2.Column = 0;
-            treeListViewItemCollectionComparer2.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.taskList.Comparer = treeListViewItemCollectionComparer2;
+            treeListViewItemCollectionComparer1.Column = 0;
+            treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.taskList.Comparer = treeListViewItemCollectionComparer1;
             this.taskList.ContextMenu = this.rigthClickMenu;
             this.taskList.HideSelection = false;
             this.taskList.Location = new System.Drawing.Point(8, 32);

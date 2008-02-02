@@ -140,9 +140,9 @@ namespace PTM.Framework
 			}
 
 			DbHelper.ExecuteNonQuery(
-				"UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ? WHERE (Id = ?)"
-				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Id"}, 
-				new object[]{task.Description, task.IconId, task.IsActive, task.ParentId, task.Id});
+				"UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ? WHERE (Id = ?)"
+				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Id"}, 
+				new object[]{task.Description, task.IconId, task.IsActive, task.ParentId,task.Estimation, task.Id});
 
 			for(int i = 0;i <tasks.Count;i++)
 			{
@@ -177,10 +177,10 @@ namespace PTM.Framework
 
 		private static void DeleteOnCascade(int taskId)
 		{
-			Task[] childTasks;
-			while (true)
+		    while (true)
 			{
-				childTasks = GetChildTasks(taskId);
+			    Task[] childTasks;
+			    childTasks = GetChildTasks(taskId);
 				if (childTasks.Length == 0)
 				{
 					if (TaskDeleting != null)
@@ -307,6 +307,11 @@ namespace PTM.Framework
 					task.ParentId = (int) row["ParentId"];
 				task.IconId = (int) row["IconId"];
 				task.IsActive = (bool) row["IsActive"];
+                if (row["Estimation"] == DBNull.Value)
+                    task.Estimation = 0;
+                else
+                    task.Estimation = (int) row["Estimation"];
+
 				tasks.Add(task);
 			}
 			if (tasks.Count == 0)

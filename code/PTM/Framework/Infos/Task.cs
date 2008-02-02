@@ -14,7 +14,7 @@ namespace PTM.Framework.Infos
 		private string description;
 		private int iconId;
 		private bool isActive;
-
+	    private int estimation;
 
 		public int Id
 		{
@@ -46,6 +46,12 @@ namespace PTM.Framework.Infos
 			set { isActive = value; }
 		}
 
+	    public int Estimation
+	    {
+	        get{ return estimation;}
+            set { estimation = value; }
+	    }
+
 		public Task Clone()
 		{
 			Task task = new Task();
@@ -54,6 +60,7 @@ namespace PTM.Framework.Infos
 			task.description = this.description;
 			task.iconId = this.iconId;
 			task.isActive = this.isActive;
+		    task.estimation = this.estimation;
 			return task;
 		}
 
