@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -8,6 +9,7 @@ using System.Threading;
 using System.Timers;
 using PTM.Data;
 using PTM.Framework.Infos;
+using PTM.Util;
 using PTM.View;
 using Timer=System.Timers.Timer;
 
@@ -216,7 +218,11 @@ namespace PTM.Framework
 				return;
 
 			}
-			finally
+            catch (Win32Exception w32Ex) //Bug 1884407
+		    {
+		        Logger.WriteException(w32Ex);
+		    }
+            finally
 			{
 				lastProcess = processId;
 				lastCallTime = DateTime.Now;
