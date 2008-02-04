@@ -366,7 +366,6 @@ namespace PTM.View.Controls
             this.groupBox4.TabIndex = 18;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Time/Days";
-            this.groupBox4.Visible = false;
             // 
             // groupBox5
             // 
@@ -544,7 +543,6 @@ namespace PTM.View.Controls
         {
             this.toDateTimePicker.Enabled = true;
             this.fromRadioButton.Text = "From:";
-            this.groupBox4.Visible = true;
         }
 
         private void fromRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -552,7 +550,6 @@ namespace PTM.View.Controls
             this.toDateTimePicker.Enabled = false;
             this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
             this.fromRadioButton.Text = "Date:";
-            this.groupBox4.Visible = false;
         }
 
         #endregion

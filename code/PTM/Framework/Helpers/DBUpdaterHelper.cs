@@ -45,31 +45,57 @@ namespace PTM.Framework.Helpers
 					continue;
                 if (UpdateFromV098ToV099(oldVersion))
                     continue;
+                if (UpdateFromV099ToV0910(oldVersion))
+                    continue;
 				findNextUpdate = false;
+                RegisterAddins();
 			}
 		}
 
-        private static bool UpdateFromV098ToV099(Configuration oldVersion)
+        private static void RegisterAddins()
+        {
+            try
+            {
+                //if addins are prsents in current path then add them
+                string curPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                if (File.Exists(curPath + @"\PTM.Addin.Charts.dll") && !AddinHelper.ExistAddin(curPath + @"\PTM.Addin.Charts.dll"))
+                    AddinHelper.AddAddinAssembly(curPath + @"\PTM.Addin.Charts.dll");
+
+                if (File.Exists(curPath + @"\PTM.Addin.WeekView.dll") && !AddinHelper.ExistAddin(curPath + @"\PTM.Addin.WeekView.dll"))
+                    AddinHelper.AddAddinAssembly(curPath + @"\PTM.Addin.WeekView.dll");
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteException(ex);
+            }
+        }
+
+        private static bool UpdateFromV099ToV0910(Configuration oldVersion)
+        {
+            if (string.Compare(oldVersion.Value.ToString().Trim(), "0.9.9") == 0)
+            {
+                try
+                {
+                    DbHelper.AddColumn("Tasks", "Estimation", "Integer");
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.10"));
+                    return true;
+                }
+                catch (OleDbException ex)
+                {
+                    Logger.WriteException(ex);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+	    private static bool UpdateFromV098ToV099(Configuration oldVersion)
         {
             if (string.Compare(oldVersion.Value.ToString().Trim(), "0.9.8") == 0)
             {
                 try
                 {
-                    try
-                    {
-                    //if addins are prsents in current path then add them
-                    string curPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-                    if (File.Exists(curPath + @"\PTM.Addin.Charts.dll") && !AddinHelper.ExistAddin(curPath + @"\PTM.Addin.Charts.dll"))
-                        AddinHelper.AddAddinAssembly(curPath + @"\PTM.Addin.Charts.dll");
-
-                    if (File.Exists(curPath + @"\PTM.Addin.WeekView.dll") && !AddinHelper.ExistAddin(curPath + @"\PTM.Addin.WeekView.dll"))
-                        AddinHelper.AddAddinAssembly(curPath + @"\PTM.Addin.WeekView.dll");
-                    }
-                    catch(Exception ex)
-                    {
-                        Logger.WriteException(ex);
-                    }
                     ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "0.9.9"));
                     return true;
                 }
