@@ -187,9 +187,6 @@
     <Compile Include="View\Controls\IndicatorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\Controls\NotifyIcon.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="View\Controls\StatisticsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

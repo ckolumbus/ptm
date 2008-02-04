@@ -12,7 +12,6 @@ using PTM.Framework.Helpers;
 using PTM.Framework.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
-using NotifyIcon=HansBlomme.Windows.Forms.NotifyIcon;
 using Timer=System.Timers.Timer;
 
 namespace PTM.View.Controls
@@ -49,9 +48,9 @@ namespace PTM.View.Controls
 
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-			notifyIcon.MouseDown += new NotifyIcon.MouseDownEventHandler(notifyIcon_MouseDown);
+            notifyIcon.MouseDown+=new MouseEventHandler(notifyIcon_MouseDown);
 			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
-			notifyIcon.Click += new NotifyIcon.ClickEventHandler(notifyIcon_Click);
+            notifyIcon.Click+=new EventHandler(notifyIcon_Click);
 			addTaskButton.Click += new EventHandler(addTaskButton_Click);
 			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
             this.logDate.CloseUp += new EventHandler(logDate_CloseUp);
@@ -139,7 +138,7 @@ namespace PTM.View.Controls
             this.StartTimeHeader = new System.Windows.Forms.ColumnHeader();
             this.DurationTaskHeader = new System.Windows.Forms.ColumnHeader();
             this.notifyTimer = new System.Timers.Timer();
-            this.notifyIcon = new HansBlomme.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
             this.rigthClickMenu = new System.Windows.Forms.ContextMenu();
             this.propertiesButton = new System.Windows.Forms.Button();
