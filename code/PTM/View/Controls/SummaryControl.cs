@@ -787,10 +787,6 @@ namespace PTM.View.Controls
                     sum.TotalActiveTime++;
                 }
                 totalTime++;
-                TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalActiveTime));
-                TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalInactiveTime));
-                currentTaskSummary.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(activeTimeSpan);
-                currentTaskSummary.SubItems[PercentGoalHeader.Index].Text = ViewHelper.TimeSpanToTimeString(inactiveTimeSpan);
 
                 this.CalculateTasksPercents();
                 SetIndicatorsValues();

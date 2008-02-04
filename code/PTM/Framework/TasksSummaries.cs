@@ -16,12 +16,12 @@ namespace PTM.Framework
 
 		#region Public Methods
 
-        public static int GetExecutedTime(Task task)
+        public static int GetExecutedTime(int taskId)
         {
             Logs.UpdateCurrentLogDuration();
             object workedTime = DbHelper.ExecuteScalar("Select Sum(Duration) from TasksLog where TaskId = ?",
                                          new string[] { "IdleTaskId" },
-                                         new object[] { task.Id });
+                                         new object[] { taskId });
             if (workedTime == DBNull.Value)
                 return 0;
             else

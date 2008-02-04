@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -481,6 +482,22 @@ namespace PTM.View.Controls
 			}
 		}
 
+	    private IDictionary taskExecutedTimeCache = new HybridDictionary();
+        private int GetCachedExecutedTime(int taskId)
+        {
+            if (taskExecutedTimeCache.Contains(taskId))
+            {
+                return (int)taskExecutedTimeCache[taskId];
+            }
+            else
+            {
+                int executedTime = TasksSummaries.GetExecutedTime(taskId);
+                taskExecutedTimeCache.Add(taskId, executedTime);
+                return executedTime;
+            }            
+        }
+
+
 	    private void DisplaySelectedItemStatus()
 	    {
 	        if (this.taskList.SelectedItems.Count <= 0)
@@ -503,22 +520,22 @@ namespace PTM.View.Controls
                     return;
                 }
 
-                Task task = Tasks.FindById(taskId);
-                
-                int executedTime = TasksSummaries.GetExecutedTime(task);
+                int executedTime = GetCachedExecutedTime(taskId);
                 TimeSpan executedTimeSpan = new TimeSpan(0, 0, executedTime);
-                
+
+                Task task = Tasks.FindById(taskId);
+
                 if(task.Estimation>0)
                 {
                     TimeSpan estimatedTimeSpan = new TimeSpan(0, task.Estimation, 0);
                     double percentGoal = executedTime / (task.Estimation*60.0);
-                    this.Status = "Elapsed time: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
+                    this.Status = "Time elapsed: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
                         "     Estimated:" + ViewHelper.TimeSpanToTimeString(estimatedTimeSpan) +
-                    "     % of Estimated:" + percentGoal.ToString("0.0%", CultureInfo.InvariantCulture);
+                    "     % Elapsed:" + percentGoal.ToString("0.0%", CultureInfo.InvariantCulture);
                 }
                 else
                 {
-                    this.Status = "Elapsed time: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
+                    this.Status = "Time elapsed: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
                     "     Not estimated.";
                 }
                 
@@ -944,20 +961,26 @@ namespace PTM.View.Controls
                     {
                         item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(Logs.CurrentLog.Duration);
                         if (!item.Font.Bold)
-                            item.Font = new Font(item.Font, FontStyle.Bold);
-
-                        if (notifyIcon.Tag == null || (int)notifyIcon.Tag != Tasks.CurrentTask.Id)
-                        {
-                            notifyIcon.Text = Tasks.CurrentTask.Description;
-                            notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
-                            notifyIcon.Tag = Tasks.CurrentTask.Id;
-                        }
-                        if(this.taskList.SelectedItems.Count>0 && this.taskList.SelectedItems[0].Parent == null
-                            && ((Log)this.taskList.SelectedItems[0].Tag).TaskId == Tasks.CurrentTask.Id)
-                            DisplaySelectedItemStatus();
+                            item.Font = new Font(item.Font, FontStyle.Bold);                        
                         break;
                     }
-                }                
+                }
+
+                if (notifyIcon.Tag == null || (int)notifyIcon.Tag != Tasks.CurrentTask.Id)
+                {
+                    notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
+                    notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
+                    notifyIcon.Tag = Tasks.CurrentTask.Id;
+                }
+
+                //update cache
+                if (taskExecutedTimeCache.Contains(Tasks.CurrentTask.Id))
+                    taskExecutedTimeCache[Tasks.CurrentTask.Id] = (int) taskExecutedTimeCache[Tasks.CurrentTask.Id]+1;
+
+                if (this.taskList.SelectedItems.Count > 0 && this.taskList.SelectedItems[0].Parent == null
+                    && ((Log)this.taskList.SelectedItems[0].Tag).TaskId == Tasks.CurrentTask.Id)
+                    DisplaySelectedItemStatus();
+
             }
         }
 
