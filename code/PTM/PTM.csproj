@@ -238,6 +238,12 @@
     <Compile Include="View\Forms\ConfigurationForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="View\Forms\ExceptionMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Forms\ExceptionMessageForm.Designer.cs">
+      <DependentUpon>ExceptionMessageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\Forms\NotifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -314,6 +320,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\ConfigurationForm.resx">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Forms\ExceptionMessageForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExceptionMessageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\NotifyForm.resx">
       <DependentUpon>NotifyForm.cs</DependentUpon>

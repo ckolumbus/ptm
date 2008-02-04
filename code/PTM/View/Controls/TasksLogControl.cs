@@ -197,7 +197,7 @@ namespace PTM.View.Controls
             this.notifyIcon.ContextMenu = this.notifyContextMenu;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Tag = null;
-            this.notifyIcon.Text = "Current task";
+            this.notifyIcon.Text = "PTM";
             this.notifyIcon.Visible = true;
             // 
             // taskList
@@ -444,11 +444,15 @@ namespace PTM.View.Controls
 
 		private void taskList_SelectedIndexChanged(object sender, EventArgs e)
 		{
+            DisplaySelectedItemStatus();
+
 			if (this.taskList.SelectedItems.Count <= 0)
 			{
 				SetNoEditable();
+			    return;
 			}
-			else if (this.taskList.SelectedItems.Count == 1)
+
+		    if (this.taskList.SelectedItems.Count == 1)
 			{
 				if (taskList.SelectedItems[0].Parent == null)
 				{
@@ -466,7 +470,6 @@ namespace PTM.View.Controls
 					SetNoEditable();
 					return;
 				}
-//				int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
 				for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
 				{
 					if (taskList.SelectedItems[i].Parent != null)
@@ -474,20 +477,58 @@ namespace PTM.View.Controls
 						SetNoEditable();
 						return;
 					}
-//					if (((Log) taskList.SelectedItems[i].Tag).TaskId != taskId)
-//					{
-//						this.editButton.Enabled = false;
-//						return;
-//					}
 				}
 				SetEditable();
 			}
 		}
 
-		private void SetEditable()
+	    private void DisplaySelectedItemStatus()
+	    {
+	        if (this.taskList.SelectedItems.Count <= 0)
+	        {
+	            this.Status = String.Empty;
+	            return;
+	        }
+            if (taskList.SelectedItems[0].Parent != null)
+            {
+                this.Status = String.Empty;
+                return;
+            }
+            else
+            {
+                int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+
+                if(taskId == Tasks.IdleTask.Id)
+                {
+                    this.Status = String.Empty;
+                    return;
+                }
+
+                Task task = Tasks.FindById(taskId);
+                
+                int executedTime = TasksSummaries.GetExecutedTime(task);
+                TimeSpan executedTimeSpan = new TimeSpan(0, 0, executedTime);
+                
+                if(task.Estimation>0)
+                {
+                    TimeSpan estimatedTimeSpan = new TimeSpan(0, task.Estimation, 0);
+                    double percentGoal = executedTime / (task.Estimation*60.0);
+                    this.Status = "Elapsed time: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
+                        "     Estimated:" + ViewHelper.TimeSpanToTimeString(estimatedTimeSpan) +
+                    "     % of Estimated:" + percentGoal.ToString("0.0%", CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    this.Status = "Elapsed time: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
+                    "     Not estimated.";
+                }
+                
+            }
+	    }
+
+	    private void SetEditable()
 		{
 			this.editButton.Enabled = true;
-			//this.deleteButton.Enabled = true;
 			this.propertiesButton.Enabled = true;
 			this.taskList.ContextMenu = this.rigthClickMenu;
 		}
@@ -495,7 +536,6 @@ namespace PTM.View.Controls
 		private void SetNoEditable()
 		{
 			this.editButton.Enabled = false;
-			//this.deleteButton.Enabled = false;
 			this.propertiesButton.Enabled = false;
 			this.taskList.ContextMenu = null;
 		}
@@ -811,6 +851,7 @@ namespace PTM.View.Controls
 			}
 			CreateNotifyMenu();
 			CreateRigthClickMenu();
+		    DisplaySelectedItemStatus();
 		}
 
 		private void TasksDataTable_TasksRowDeleting(Tasks.TaskChangeEventArgs e)
@@ -832,6 +873,7 @@ namespace PTM.View.Controls
 		{
 			CreateNotifyMenu();
 			CreateRigthClickMenu();
+            DisplaySelectedItemStatus();
 		}
 
         delegate void TasksLog_LogChangedDelegate(Logs.LogChangeEventArgs e);
@@ -882,6 +924,7 @@ namespace PTM.View.Controls
                         taskList.Items.Insert(0, itemA);
                     }
                 }
+                DisplaySelectedItemStatus();
             }
 		}
 
@@ -909,7 +952,10 @@ namespace PTM.View.Controls
                             notifyIcon.Text = Tasks.CurrentTask.Description;
                             notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
                             notifyIcon.Tag = Tasks.CurrentTask.Id;
-                        }                
+                        }
+                        if(this.taskList.SelectedItems.Count>0 && this.taskList.SelectedItems[0].Parent == null
+                            && ((Log)this.taskList.SelectedItems[0].Tag).TaskId == Tasks.CurrentTask.Id)
+                            DisplaySelectedItemStatus();
                         break;
                     }
                 }                

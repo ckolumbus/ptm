@@ -14,9 +14,19 @@ namespace PTM.Framework
 		{
 		} //Summary
 
-		
-
 		#region Public Methods
+
+        public static int GetExecutedTime(Task task)
+        {
+            Logs.UpdateCurrentLogDuration();
+            object workedTime = DbHelper.ExecuteScalar("Select Sum(Duration) from TasksLog where TaskId = ?",
+                                         new string[] { "IdleTaskId" },
+                                         new object[] { task.Id });
+            if (workedTime == DBNull.Value)
+                return 0;
+            else
+                return Convert.ToInt32(workedTime);
+        }
 
 		public static ArrayList GetTaskSummary(Task parentTask, DateTime initialDate, DateTime finalDate)
 		{
@@ -105,6 +115,7 @@ namespace PTM.Framework
 
 		public static int GetWorkedDays(DateTime initialDate, DateTime finalDate)
 		{
+            Logs.UpdateCurrentLogDuration();
 			DateTime curDate = initialDate.Date;
 			int workedDays = 0;
 			while(curDate<=finalDate.Date)
@@ -123,6 +134,7 @@ namespace PTM.Framework
 
         public static int GetWorkedTime(DateTime initialDate, DateTime finalDate)
         {
+            Logs.UpdateCurrentLogDuration();
             initialDate = initialDate.Date;
             finalDate = finalDate.Date.AddDays(1);
             object workedTime = DbHelper.ExecuteScalar("Select Sum(Duration) from TasksLog where TaskId <> ? and InsertTime>= ? and InsertTime<?",

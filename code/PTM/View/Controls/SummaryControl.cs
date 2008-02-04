@@ -3,7 +3,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using PTM.Addin;
@@ -37,7 +36,7 @@ namespace PTM.View.Controls
 		private ToolBarButton toolBarButton2;
 		private ImageList toolBarImages;
 
-		private ArrayList parentTasksList = new ArrayList();
+		private ArrayList recentParentTasksList = new ArrayList();
 		private ColumnHeader PercentGoalHeader;
 		private ColumnHeader TimeHeader;
 		private DateTimePicker fromDateTimePicker;
@@ -67,17 +66,17 @@ namespace PTM.View.Controls
             //worker.OnWorkDone += new AsyncWorker.OnWorkDoneDelegate(worker_OnWorkDone);
 
 			this.taskList.SmallImageList = IconsManager.IconsList;
-			parentTasksList.Add(Tasks.RootTask);
+			recentParentTasksList.Add(Tasks.RootTask);
 			this.parentTaskComboBox.DisplayMember = "Description";
 			this.parentTaskComboBox.ValueMember = "Id";
-			this.parentTaskComboBox.DataSource = parentTasksList;
+			this.parentTaskComboBox.DataSource = recentParentTasksList;
 
 			this.fromDateTimePicker.Value = DateTime.Today;
 			this.toDateTimePicker.Value = DateTime.Today;
 
-			if (parentTasksList.Count > 0)
+			if (recentParentTasksList.Count > 0)
 			{
-				parentTask = (Task) parentTasksList[0];
+				parentTask = (Task) recentParentTasksList[0];
 				this.parentTaskComboBox.SelectedValue = parentTask.Id;
 			}
 			this.fromDateTimePicker.ValueChanged += new EventHandler(this.dateTimePicker_ValueChanged);
@@ -464,46 +463,101 @@ namespace PTM.View.Controls
         private double totalEstimation = 0;
 	    private double totalTimeOverEstimation = 0;
 
-        private void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            e.Result = GetTasksSummary((TaskSummaryArguments) e.Argument);
-            if (worker.CancellationPending)
-                e.Cancel = true;
-        }
+        #region Events
 
-        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if(e.Cancelled) return;
-            UpdateTasksSummary((TaskSummaryResult) e.Result);
-        }
-
-		public override void OnTabPageSelected()
+        public override void OnTabPageSelected()
 		{
 			base.OnTabPageSelected();
             if(fromRadioButton.Checked && fromDateTimePicker.Value.Date == DateTime.Today) //autorefresh if today summary is selected.
 		        AsyncGetTaskSummary();
-		}
+        }
 
-	    private void AsyncGetTaskSummary()
-	    {
-	        SetWaitState();
-	        TaskSummaryArguments args = new TaskSummaryArguments();
-	        args.FromDate = fromDateTimePicker.Value.Date;
-	        if (this.toRadioButton.Checked)
-	        {
-	            args.ToDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
-	        }
-	        else
-	        {
-	            args.ToDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
-	        }
-	        args.ParentTask = Tasks.FindById((int) this.parentTaskComboBox.SelectedValue);
-            if(worker.IsBusy) worker.CancelAsync();
-            while(worker.IsBusy) Application.DoEvents();
-	        worker.RunWorkerAsync(args);
-	    }
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            TasksHierarchyForm tgForm = new TasksHierarchyForm();
+            if (tgForm.ShowDialog(this) == DialogResult.OK)
+                SetParent(tgForm.SelectedTaskId);
 
-	    private void UpdateTasksSummary(TaskSummaryResult taskSummaryResult)
+        }
+
+        private void dateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            LaunchSummarySearch();
+        }
+
+        void fromDateTimePicker_CloseUp(object sender, EventArgs e)
+        {
+            this.fromDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
+            if (!fromDateTimePicker.Value.Equals(timeBeforeDropDown_fromDateTimePicker))
+                LaunchSummarySearch();
+        }
+
+        private DateTime timeBeforeDropDown_fromDateTimePicker;
+        void fromDateTimePicker_DropDown(object sender, EventArgs e)
+        {
+            timeBeforeDropDown_fromDateTimePicker = this.fromDateTimePicker.Value;
+            this.fromDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+        }
+
+        void toDateTimePicker_CloseUp(object sender, EventArgs e)
+        {
+            this.toDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
+            if (!toDateTimePicker.Value.Equals(timeBeforeDropDown_toDateTimePicker))
+                LaunchSummarySearch();
+        }
+
+        private DateTime timeBeforeDropDown_toDateTimePicker;
+        void toDateTimePicker_DropDown(object sender, EventArgs e)
+        {
+            timeBeforeDropDown_toDateTimePicker = this.toDateTimePicker.Value;
+            this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+        }
+
+        private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (parentTaskComboBox.SelectedIndex == -1)
+                return;
+
+            parentTask = FindOnRecentParentTaskById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
+            LaunchSummarySearch();
+        }
+
+        private void toolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        {
+            if (e.Button.ImageIndex == 0)
+                GoToChildDetail();
+            else if (e.Button.ImageIndex == 1)
+                GoToParentDetail();
+        }
+
+
+        private void taskList_DoubleClick(object sender, EventArgs e)
+        {
+            if (this.taskList.SelectedItems.Count == 0)
+                return;
+
+            TaskSummary sum = (TaskSummary)this.taskList.SelectedItems[0].Tag;
+            SetParent(sum.TaskId);
+        }
+
+        private void toRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            this.toDateTimePicker.Enabled = true;
+            this.fromRadioButton.Text = "From:";
+            this.groupBox4.Visible = true;
+        }
+
+        private void fromRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            this.toDateTimePicker.Enabled = false;
+            this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+            this.fromRadioButton.Text = "Date:";
+            this.groupBox4.Visible = false;
+        }
+
+        #endregion
+
+        private void UpdateTasksSummary(TaskSummaryResult taskSummaryResult)
 		{
 			try
 			{
@@ -571,6 +625,10 @@ namespace PTM.View.Controls
 
 				item.SubItems[PercentHeader.Index].Text = percent.ToString("0.0%", CultureInfo.InvariantCulture);
                 item.SubItems[PercentGoalHeader.Index].Text = goalPercent.ToString("0.0%", CultureInfo.InvariantCulture);
+
+                if (goalPercent>1)
+			        item.SubItems[PercentGoalHeader.Index].ForeColor = Color.Red;
+                			    
 			}
 		}
 
@@ -612,53 +670,14 @@ namespace PTM.View.Controls
                 int percentGoals = Convert.ToInt32(totalTimeOverEstimation * 100 / (totalEstimation * 60.0));
                 indicator4.Value = Convert.ToInt32(Math.Min(100, percentGoals));
                 indicator4.TextValue = percentGoals + "%";
+                if (percentGoals>100)
+                    indicator4.ForeColor = Color.Red;    
             }
 
 			toolTip.SetToolTip(this.indicator3, workedDays + " worked days");
 			toolTip.SetToolTip(this.groupBox4, workedDays+ " worked days");
-		}
-
-		private void browseButton_Click(object sender, EventArgs e)
-		{
-			TasksHierarchyForm tgForm = new TasksHierarchyForm();
-			if(tgForm.ShowDialog(this) == DialogResult.OK)
-				SetParent(tgForm.SelectedTaskId);
-			
-		}
-
-		private void dateTimePicker_ValueChanged(object sender, EventArgs e)
-		{
-			LaunchSummarySearch();
-		}
-
-        void fromDateTimePicker_CloseUp(object sender, EventArgs e)
-        {
-            this.fromDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
-            if (!fromDateTimePicker.Value.Equals(timeBeforeDropDown_fromDateTimePicker))
-                LaunchSummarySearch();
-        }
-
-        private DateTime timeBeforeDropDown_fromDateTimePicker;
-        void fromDateTimePicker_DropDown(object sender, EventArgs e)
-        {
-            timeBeforeDropDown_fromDateTimePicker = this.fromDateTimePicker.Value;
-            this.fromDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
-        }
-
-        void toDateTimePicker_CloseUp(object sender, EventArgs e)
-        {
-            this.toDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
-            if (!toDateTimePicker.Value.Equals(timeBeforeDropDown_toDateTimePicker))
-                LaunchSummarySearch();
-        }
-
-        private DateTime timeBeforeDropDown_toDateTimePicker;
-        void toDateTimePicker_DropDown(object sender, EventArgs e)
-        {
-            timeBeforeDropDown_toDateTimePicker = this.toDateTimePicker.Value;
-            this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
-        }
-
+		}    
+		
 		private void LaunchSummarySearch()
 		{
 			if (this.fromRadioButton.Checked)
@@ -668,112 +687,31 @@ namespace PTM.View.Controls
 				this.toDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
 			}
 		    AsyncGetTaskSummary();
-            //SetWaitState();
-            //worker.RunWorkerAsync();
-
-            //worker.DoWork((int) StatisticsControlWorks.GetTaskSummary, new AsyncWorker.AsyncWorkerDelegate(GetTasksSummary),
-            //              new object[] {null});
 		}
-
-		private void parentTaskComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        
+		private Task FindOnRecentParentTaskById(int taskId)
 		{
-			if (parentTaskComboBox.SelectedIndex == -1)
-				return;
-
-			parentTask = FindById(Convert.ToInt32(parentTaskComboBox.SelectedValue));
-			LaunchSummarySearch();
-		}
-
-		private Task FindById(int taskId)
-		{
-			for(int i = 0;i<parentTasksList.Count;i++)
+			for(int i = 0;i<recentParentTasksList.Count;i++)
 			{
-				Task task = (Task)parentTasksList[i];
+				Task task = (Task)recentParentTasksList[i];
 				if(task.Id == taskId)
 					return task.Clone();
 			}
 			return null;
 		}
 
-        private delegate void TaskLogTimer_ElapsedDelegate(object sender, ElapsedEventArgs e);
-		private void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void SetParent(int parentId)
 		{
-            if(this.InvokeRequired)
-            {
-                TaskLogTimer_ElapsedDelegate del = new TaskLogTimer_ElapsedDelegate(TaskLogTimer_Elapsed);
-                this.Invoke(del, new object[] {sender, e});
-            }
-            else
-            {
-                UpdateSummaryTime();
-            }		    
-		}
-
-	    private void UpdateSummaryTime()
-	    {
-	        if (!this.Visible)
-	            return;
-
-	        if (this.fromDateTimePicker.Value > DateTime.Today || this.toDateTimePicker.Value < DateTime.Today)
-	            return;
-
-	        ListViewItem currentTaskSummary = null;
-
-	        int minGeneration = Int32.MaxValue;
-	        foreach (ListViewItem item in this.taskList.Items)
-	        {
-	            TaskSummary sum = (TaskSummary) item.Tag;
-	            int generations = Tasks.IsParent(sum.TaskId, Logs.CurrentLog.TaskId);
-	            if (generations >= 0 && generations < minGeneration)
-	            {
-	                minGeneration = generations;
-	                currentTaskSummary = item;
-	            }
-	        }
-
-	        if (currentTaskSummary != null)
-	        {
-	            TaskSummary sum = (TaskSummary) currentTaskSummary.Tag;
-	            if (!sum.IsActive)
-	            {
-	                sum.TotalInactiveTime++;
-	            }
-	            else
-	            {
-	                totalActiveTime ++;
-	                sum.TotalActiveTime++;
-	            }
-	            totalTime++;
-	            TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalActiveTime));
-	            TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalInactiveTime));
-	            currentTaskSummary.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(activeTimeSpan);
-	            currentTaskSummary.SubItems[PercentGoalHeader.Index].Text = ViewHelper.TimeSpanToTimeString(inactiveTimeSpan);
-
-	            this.CalculateTasksPercents();
-	            SetIndicatorsValues();
-	        }
-	    }
-
-	    private void toolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
-		{
-			if (e.Button.ImageIndex == 0)
-				GoToChildDetail();
-			else if (e.Button.ImageIndex == 1)
-				GoToParentDetail();
-		}
-
-		private void SetParent(int parentId)
-		{
-			if (FindById(parentId) == null)
+			if (FindOnRecentParentTaskById(parentId) == null)
 			{
 				parentTask = Tasks.FindById(parentId);
 				parentTask.Description = ViewHelper.FixTaskPath(Tasks.GetFullPath(parentTask.Id), this.parentTaskComboBox.MaxLength);
-				this.parentTasksList.Insert(0, parentTask);
+				this.recentParentTasksList.Insert(0, parentTask);
 				this.parentTaskComboBox.BeginUpdate();
 				this.parentTaskComboBox.DataSource = null;
 				this.parentTaskComboBox.DisplayMember = "Description";
 				this.parentTaskComboBox.ValueMember = "Id";
-				this.parentTaskComboBox.DataSource = parentTasksList;
+				this.parentTaskComboBox.DataSource = recentParentTasksList;
 				this.parentTaskComboBox.EndUpdate();
 			}
 			this.parentTaskComboBox.SelectedValue = parentId;
@@ -796,33 +734,104 @@ namespace PTM.View.Controls
 			}
 			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
 			SetParent(sum.TaskId);
-		}
+        }
 
-		private void taskList_DoubleClick(object sender, EventArgs e)
-		{
-			if (this.taskList.SelectedItems.Count == 0)
-				return;
+        #region Framework events
 
-			TaskSummary sum = (TaskSummary) this.taskList.SelectedItems[0].Tag;
-			SetParent(sum.TaskId);
-		}
+        private delegate void TaskLogTimer_ElapsedDelegate(object sender, ElapsedEventArgs e);
+        private void TaskLogTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                TaskLogTimer_ElapsedDelegate del = new TaskLogTimer_ElapsedDelegate(TaskLogTimer_Elapsed);
+                this.Invoke(del, new object[] { sender, e });
+            }
+            else
+            {
+                UpdateSummaryTime();
+            }
+        }
 
-		private void toRadioButton_CheckedChanged(object sender, EventArgs e)
-		{
-			this.toDateTimePicker.Enabled = true;
-			this.fromRadioButton.Text = "From:";
-			this.groupBox4.Visible = true;
-		}
+        private void UpdateSummaryTime()
+        {
+            if (!this.Visible)
+                return;
 
-		private void fromRadioButton_CheckedChanged(object sender, EventArgs e)
-		{
-			this.toDateTimePicker.Enabled = false;
-			this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
-			this.fromRadioButton.Text = "Date:";
-			this.groupBox4.Visible = false;
-		}
+            if (this.fromDateTimePicker.Value > DateTime.Today || this.toDateTimePicker.Value < DateTime.Today)
+                return;
 
-		#region AsyncWork
+            ListViewItem currentTaskSummary = null;
+
+            int minGeneration = Int32.MaxValue;
+            foreach (ListViewItem item in this.taskList.Items)
+            {
+                TaskSummary sum = (TaskSummary)item.Tag;
+                int generations = Tasks.IsParent(sum.TaskId, Logs.CurrentLog.TaskId);
+                if (generations >= 0 && generations < minGeneration)
+                {
+                    minGeneration = generations;
+                    currentTaskSummary = item;
+                }
+            }
+
+            if (currentTaskSummary != null)
+            {
+                TaskSummary sum = (TaskSummary)currentTaskSummary.Tag;
+                if (!sum.IsActive)
+                {
+                    sum.TotalInactiveTime++;
+                }
+                else
+                {
+                    totalActiveTime++;
+                    sum.TotalActiveTime++;
+                }
+                totalTime++;
+                TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalActiveTime));
+                TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(sum.TotalInactiveTime));
+                currentTaskSummary.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(activeTimeSpan);
+                currentTaskSummary.SubItems[PercentGoalHeader.Index].Text = ViewHelper.TimeSpanToTimeString(inactiveTimeSpan);
+
+                this.CalculateTasksPercents();
+                SetIndicatorsValues();
+            }
+        }
+
+        #endregion
+
+        #region AsyncWork
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            e.Result = GetTasksSummary((TaskSummaryArguments)e.Argument);
+            if (worker.CancellationPending)
+                e.Cancel = true;
+        }
+
+        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled) return;
+            UpdateTasksSummary((TaskSummaryResult)e.Result);
+        }
+
+        private void AsyncGetTaskSummary()
+        {
+            SetWaitState();
+            TaskSummaryArguments args = new TaskSummaryArguments();
+            args.FromDate = fromDateTimePicker.Value.Date;
+            if (this.toRadioButton.Checked)
+            {
+                args.ToDate = toDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+            }
+            else
+            {
+                args.ToDate = fromDateTimePicker.Value.Date.AddDays(1).AddSeconds(-1);
+            }
+            args.ParentTask = Tasks.FindById((int)this.parentTaskComboBox.SelectedValue);
+            if (worker.IsBusy) worker.CancelAsync();
+            while (worker.IsBusy) Application.DoEvents();
+            worker.RunWorkerAsync(args);
+        }
 
         private static TaskSummaryResult GetTasksSummary(TaskSummaryArguments args)
 		{			

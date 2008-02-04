@@ -57,7 +57,9 @@ namespace PTM
 			catch(Exception ex)
 			{
 				Logger.WriteException(ex);
-			    MessageBox.Show(ex.Message, "PTM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExceptionMessageForm exForm = new ExceptionMessageForm(ex);
+			    exForm.ShowDialog();
+			    //MessageBox.Show(ex.Message + "\n" + ex.StackTrace , "PTM", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			    throw;
 			}
 		} //Main
