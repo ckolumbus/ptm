@@ -186,7 +186,7 @@ namespace PTM.View.Controls
             // 
             // TimeHeader
             // 
-            this.TimeHeader.Text = "Time";
+            this.TimeHeader.Text = "Time Elapsed";
             this.TimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // PercentHeader
@@ -197,12 +197,12 @@ namespace PTM.View.Controls
             // 
             // GoalHeader
             // 
-            this.GoalHeader.Text = "Goal";
+            this.GoalHeader.Text = "Estimated";
             this.GoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // PercentGoalHeader
             // 
-            this.PercentGoalHeader.Text = "% Goal";
+            this.PercentGoalHeader.Text = "% Elapsed";
             this.PercentGoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.PercentGoalHeader.Width = 50;
             // 
@@ -275,7 +275,7 @@ namespace PTM.View.Controls
             this.groupBox2.Size = new System.Drawing.Size(72, 80);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Active %";
+            this.groupBox2.Text = "% Active";
             // 
             // panel1
             // 
@@ -362,10 +362,10 @@ namespace PTM.View.Controls
             this.groupBox4.ForeColor = System.Drawing.Color.Blue;
             this.groupBox4.Location = new System.Drawing.Point(248, 64);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(72, 80);
+            this.groupBox4.Size = new System.Drawing.Size(77, 80);
             this.groupBox4.TabIndex = 18;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Avg. Time";
+            this.groupBox4.Text = "Time/Days";
             this.groupBox4.Visible = false;
             // 
             // groupBox5
@@ -376,7 +376,7 @@ namespace PTM.View.Controls
             this.groupBox5.Size = new System.Drawing.Size(72, 80);
             this.groupBox5.TabIndex = 19;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Goals %";
+            this.groupBox5.Text = "% Elapsed";
             // 
             // SummaryControl
             // 
@@ -580,7 +580,7 @@ namespace PTM.View.Controls
                     TimeSpan estimationTimeSpan = new TimeSpan(0, Convert.ToInt32(summary.TotalEstimation), 0);
 				    string estimation;
                     if (summary.TotalEstimation == 0)
-                        estimation = "Not setted";
+                        estimation = "Not estimated";
                     else
                         estimation = ViewHelper.TimeSpanToTimeString(estimationTimeSpan);
 					TreeListViewItem lvi =
@@ -665,6 +665,9 @@ namespace PTM.View.Controls
 					" hrs.";
 			}
 
+            toolTip.SetToolTip(this.indicator3, workedDays + " worked days");
+            toolTip.SetToolTip(this.groupBox4, workedDays + " worked days");
+
             if (totalEstimation > 0)
             {
                 int percentGoals = Convert.ToInt32(totalTimeOverEstimation * 100 / (totalEstimation * 60.0));
@@ -674,8 +677,12 @@ namespace PTM.View.Controls
                     indicator4.ForeColor = Color.Red;    
             }
 
-			toolTip.SetToolTip(this.indicator3, workedDays + " worked days");
-			toolTip.SetToolTip(this.groupBox4, workedDays+ " worked days");
+		    string totalEstimatedString = ViewHelper.TimeSpanToTimeString(new TimeSpan(0, 0, Convert.ToInt32(totalEstimation*60)));
+
+            toolTip.SetToolTip(this.indicator4, totalEstimatedString + " estimated time");
+            toolTip.SetToolTip(this.groupBox5, totalEstimatedString + " estimated time");
+
+
 		}    
 		
 		private void LaunchSummarySearch()
