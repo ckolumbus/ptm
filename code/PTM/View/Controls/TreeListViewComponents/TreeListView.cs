@@ -1261,11 +1261,10 @@ namespace PTM.View.Controls.TreeListViewComponents
 				_skipMouseDownEvent = false;
 				if(!Cancel)
 				{
-					TreeListViewLabelEditEventArgs e = new TreeListViewLabelEditEventArgs(EditedItem.Item, EditedItem.ColumnIndex, Text);
+					TreeListViewLabelEditEventArgs e = new TreeListViewLabelEditEventArgs(editedItem.Item, editedItem.ColumnIndex, Text);
 					OnAfterLabelEdit(e);
 					if(!e.Cancel)
-						editedItem.Item.SubItems[
-							editedItem.ColumnIndex].Text = Text;
+						editedItem.Item.SubItems[editedItem.ColumnIndex].Text = Text;
 				}
 				_inedit = false;
 				_editeditem = new EditItemInformations(null, 0, "");
