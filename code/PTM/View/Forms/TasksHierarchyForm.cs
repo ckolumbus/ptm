@@ -168,7 +168,7 @@ namespace PTM.View.Forms
 
 		private void editButton_Click(object sender, EventArgs e)
 		{
-			tasksTreeViewControl.EditSelectedTaskDescription();
+			//tasksTreeViewControl.EditSelectedTaskDescription();
 		}
 
 		private void deleteButton_Click(object sender, EventArgs e)

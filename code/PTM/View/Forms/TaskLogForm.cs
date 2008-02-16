@@ -242,7 +242,7 @@ namespace PTM.View.Forms
 
 		private void editButton_Click(object sender, EventArgs e)
 		{
-			tasksTree.EditSelectedTaskDescription();
+			//tasksTree.EditSelectedTaskDescription();
 		}
 
 		private void deleteButton_Click(object sender, EventArgs e)
