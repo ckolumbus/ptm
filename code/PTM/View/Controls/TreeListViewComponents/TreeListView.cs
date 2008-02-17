@@ -122,8 +122,15 @@ namespace PTM.View.Controls.TreeListViewComponents
 	        private bool _dragging = false;
             protected override void OnItemDrag(ItemDragEventArgs e)
             {
+                if(this.InEdit) return;
                 _dragging = true;
                 base.OnItemDrag(e);                                
+            }
+
+            protected override void OnDragOver(DragEventArgs drgevent)
+            {
+                if (this.InEdit) return;
+                base.OnDragOver(drgevent);
             }
 
             protected override void OnDragDrop(DragEventArgs drgevent)

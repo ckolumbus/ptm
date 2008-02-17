@@ -363,7 +363,7 @@ namespace PTM.View.Controls
 
 		private void browseButton_Click(object sender, EventArgs e)
 		{
-			TasksHierarchyForm tgForm = new TasksHierarchyForm();
+            TaskLogForm tgForm = new TaskLogForm();
 			if(tgForm.ShowDialog(this)==DialogResult.OK)
 			{
 				if (FindById(tgForm.SelectedTaskId) == null)

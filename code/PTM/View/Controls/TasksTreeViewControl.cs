@@ -45,6 +45,7 @@ namespace PTM.View.Controls
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.mnuAdd = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // treeMenu
@@ -52,12 +53,14 @@ namespace PTM.View.Controls
             this.treeMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuProperties,
             this.menuItem5,
-            this.mnuDelete,
-            this.mnuRename});
+            this.mnuAdd,
+            this.mnuRename,
+            this.mnuDelete});
             // 
             // mnuProperties
             // 
             this.mnuProperties.Index = 0;
+            this.mnuProperties.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
             this.mnuProperties.Text = "Properties...";
             this.mnuProperties.Click += new System.EventHandler(this.mnuProperties_Click);
             // 
@@ -68,13 +71,15 @@ namespace PTM.View.Controls
             // 
             // mnuDelete
             // 
-            this.mnuDelete.Index = 2;
+            this.mnuDelete.Index = 4;
+            this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.mnuDelete.Text = "Delete";
             this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
             // 
             // mnuRename
             // 
             this.mnuRename.Index = 3;
+            this.mnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.mnuRename.Text = "Rename";
             this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
             // 
@@ -102,7 +107,20 @@ namespace PTM.View.Controls
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Width = 200;
+            this.columnHeader1.Text = "Tasks";
+            this.columnHeader1.Width = 260;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Time Elapsed";
+            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // mnuAdd
+            // 
+            this.mnuAdd.Index = 2;
+            this.mnuAdd.Shortcut = System.Windows.Forms.Shortcut.Ins;
+            this.mnuAdd.Text = "Add New";
+            this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
             // 
             // TasksTreeViewControl
             // 
@@ -125,6 +143,7 @@ namespace PTM.View.Controls
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
+        private MenuItem mnuAdd;
         public const string NEW_TASK = "New Task";
 
         #region Initialization
@@ -183,7 +202,7 @@ namespace PTM.View.Controls
 			{
                 if(treeView.SelectedItems.Count<=0)
                 {
-                    MessageBox.Show("You need to select a task first.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Please select a task.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 			    int parentId = (int) treeView.SelectedItems[0].Tag;
@@ -220,6 +239,11 @@ namespace PTM.View.Controls
 
 		internal void EditSelectedTaskDescription()
 		{
+            if (treeView.SelectedItems.Count <= 0)
+            {
+                MessageBox.Show("Please select a task.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 			treeView.LabelEdit = true;
 			treeView.SelectedItems[0].BeginEdit();
 		}
@@ -257,6 +281,11 @@ namespace PTM.View.Controls
 
         internal void DeleteSelectedTask()
         {
+            if (treeView.SelectedItems.Count <= 0)
+            {
+                MessageBox.Show("Please select a task.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             if (MessageBox.Show(
                     "All tasks and sub-tasks assigned to this task will be deleted too. \nAre you sure you want to delete '" +
                     this.treeView.SelectedItems[0].Text + "'?",
@@ -608,14 +637,19 @@ namespace PTM.View.Controls
 
         #endregion
 
+        private void mnuAdd_Click(object sender, EventArgs e)
+        {
+            AddNewTask();
+        }
+
+        private void mnuRename_Click(object sender, EventArgs e)
+        {
+            this.EditSelectedTaskDescription();
+        }
+
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
 			this.DeleteSelectedTask();
-		}
-
-		private void mnuRename_Click(object sender, EventArgs e)
-		{
-			this.EditSelectedTaskDescription();
 		}
 
 		public void ShowPropertiesSelectedTask()
@@ -661,6 +695,8 @@ namespace PTM.View.Controls
                 node.Remove();
         }
         #endregion
+
+
 
     }
 }
