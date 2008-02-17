@@ -118,6 +118,32 @@ namespace PTM.View.Controls.TreeListViewComponents
 			{
 				if(AfterCollapse != null) AfterCollapse(this, e);
 			}
+
+	        private bool _dragging = false;
+            protected override void OnItemDrag(ItemDragEventArgs e)
+            {
+                _dragging = true;
+                base.OnItemDrag(e);                                
+            }
+
+            protected override void OnDragDrop(DragEventArgs drgevent)
+            {
+                _dragging = false;
+                base.OnDragDrop(drgevent);
+            }
+
+            protected override void OnDragEnter(DragEventArgs drgevent)
+            {
+                _dragging = true;
+                base.OnDragEnter(drgevent);
+            }
+
+            protected override void OnDragLeave(EventArgs e)
+            {
+                _dragging = false;
+                base.OnDragLeave(e);
+            }
+
 			#endregion
 			#region Internal calls
 			internal void RaiseBeforeExpand(TreeListViewCancelEventArgs e)
@@ -663,6 +689,8 @@ namespace PTM.View.Controls.TreeListViewComponents
 								cancel = true;
 							}
 							#endregion
+                            if (_dragging)
+                                cancel=true;
 							if(cancel)
 							{
 								m.Result = (IntPtr)1;

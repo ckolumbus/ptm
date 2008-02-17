@@ -80,7 +80,6 @@ namespace PTM.View.Controls
             // 
             // treeView
             // 
-            this.treeView.Activation = System.Windows.Forms.ItemActivation.TwoClick;
             this.treeView.AllowColumnReorder = true;
             this.treeView.AllowDrop = true;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -182,6 +181,11 @@ namespace PTM.View.Controls
 			int newId;
 			try
 			{
+                if(treeView.SelectedItems.Count<=0)
+                {
+                    MessageBox.Show("You need to select a task first.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 			    int parentId = (int) treeView.SelectedItems[0].Tag;
 			    string newTaskName = GetNewTaskName(parentId);
                 newId = Tasks.AddTask(newTaskName, parentId).Id;
@@ -348,7 +352,9 @@ namespace PTM.View.Controls
         void treeView_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(this.treeView.SelectedItems.Count<=0)
+            {
                 return;
+            }
             if (currentSelectedTask != (int)this.treeView.SelectedItems[0].Tag)
             {
                 currentSelectedTask = (int)this.treeView.SelectedItems[0].Tag;
@@ -399,7 +405,6 @@ namespace PTM.View.Controls
             // Get drag node and select it
             this.dragNode = (TreeListViewItem)e.Item;
             this.dragNode.Selected = true;
-
             // Reset image list used for drag image
             this.imageListDrag.Images.Clear();
             this.imageListDrag.ImageSize =
@@ -450,7 +455,7 @@ namespace PTM.View.Controls
             // Compute drag position and move image
             Point formP = this.PointToClient(new Point(e.X, e.Y));
             ImageList_DragMove(formP.X - this.treeView.Left, formP.Y - this.treeView.Top);
-
+            
             // Get actual drop node
             TreeListViewItem dropNode = this.treeView.GetItemAt(this.treeView.PointToClient(new Point(e.X, e.Y)));
             if (dropNode == null)
@@ -465,7 +470,13 @@ namespace PTM.View.Controls
             if (this.tempDropNode != dropNode)
             {
                 ImageList_DragShowNolock(false);
-                dropNode.Selected = true;
+
+                if (tempDropNode != null)
+                {
+                    this.treeView.Refresh();                  
+                }
+                dropNode.DrawInsertionLine();
+
                 ImageList_DragShowNolock(true);
                 tempDropNode = dropNode;
             }
@@ -525,6 +536,7 @@ namespace PTM.View.Controls
                 // Disable scroll timer
                 this.timer.Enabled = false;
             }
+            this.treeView.Refresh(); 
         }
 
         private void treeView_DragEnter(object sender, DragEventArgs e)
@@ -539,7 +551,7 @@ namespace PTM.View.Controls
         private void treeView_DragLeave(object sender, EventArgs e)
         {
             ImageList_DragLeave(this.treeView.Handle);
-
+            this.treeView.Refresh();
             // Disable timer for scrolling dragged item
             this.timer.Enabled = false;
         }
