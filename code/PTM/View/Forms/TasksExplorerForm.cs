@@ -9,7 +9,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for TasksGroupsForm.
 	/// </summary>
-	internal class TasksHierarchyForm : Form
+	internal class TasksExplorerForm : Form
 	{
 		private TasksTreeViewControl tasksTreeViewControl;
 		private Button newButton;
@@ -19,7 +19,7 @@ namespace PTM.View.Forms
 		private IContainer components;
 		private Button propertiesButton;
 
-		internal TasksHierarchyForm()
+		internal TasksExplorerForm()
 		{
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);
@@ -49,7 +49,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TasksHierarchyForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TasksExplorerForm));
             this.newButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
@@ -119,7 +119,7 @@ namespace PTM.View.Forms
             this.propertiesButton.Text = "Properties";
             this.propertiesButton.Click += new System.EventHandler(this.propertiesButton_Click);
             // 
-            // TasksHierarchyForm
+            // TasksExplorerForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(490, 351);
@@ -131,7 +131,7 @@ namespace PTM.View.Forms
             this.Controls.Add(this.newButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
-            this.Name = "TasksHierarchyForm";
+            this.Name = "TasksExplorerForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Tasks Explorer";

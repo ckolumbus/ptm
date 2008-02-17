@@ -10,7 +10,7 @@ namespace PTM.View.Forms
 	/// <summary>
 	/// Summary description for TaskNotificationForm.
 	/// </summary>
-	internal class TaskLogForm : Form
+	internal class TaskSelectForm : Form
 	{
 		private Button okButton;
 		private Button cancelButton;
@@ -26,7 +26,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private Container components = null;
 
-		internal TaskLogForm()
+		internal TaskSelectForm()
 		{
 			InitializeComponent();
 
@@ -44,7 +44,7 @@ namespace PTM.View.Forms
 			tasksTree.DoubleClick += new EventHandler(tasksTree_DoubleClick);
 		}
 
-		internal TaskLogForm(int editTaskId)
+		internal TaskSelectForm(int editTaskId)
 		{
 			InitializeComponent();
 			tasksTree.Initialize();
@@ -81,7 +81,7 @@ namespace PTM.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskLogForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskSelectForm));
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.tasksTree = new PTM.View.Controls.TasksTreeViewControl();
@@ -177,7 +177,7 @@ namespace PTM.View.Forms
             this.propertiesButton.Text = "Properties";
             this.propertiesButton.Click += new System.EventHandler(this.propertiesButton_Click);
             // 
-            // TaskLogForm
+            // TaskSelectForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -194,7 +194,7 @@ namespace PTM.View.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(440, 318);
-            this.Name = "TaskLogForm";
+            this.Name = "TaskSelectForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tasks";

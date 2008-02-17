@@ -316,7 +316,7 @@ namespace PTM.View.Controls
 		internal void NewTaskLog(bool mustAddATask)
 		{
 			notifyTimer.Stop();
-			TaskLogForm tasklog = new TaskLogForm();
+			TaskSelectForm tasklog = new TaskSelectForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
 				AddTaskLog(tasklog.SelectedTaskId,
@@ -355,13 +355,13 @@ namespace PTM.View.Controls
 				return;
 			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
 
-			TaskLogForm taskLogForm = new TaskLogForm(taskId);
-			if (taskLogForm.ShowDialog(this.Parent) == DialogResult.OK)
+			TaskSelectForm taskSelectForm = new TaskSelectForm(taskId);
+			if (taskSelectForm.ShowDialog(this.Parent) == DialogResult.OK)
 			{
 				for (int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskId);
+					Logs.UpdateLogTaskId(taskLogId, taskSelectForm.SelectedTaskId);
 				}
 			}
 		}

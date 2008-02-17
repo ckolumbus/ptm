@@ -39,13 +39,13 @@ namespace PTM.View.Controls
             this.treeMenu = new System.Windows.Forms.ContextMenu();
             this.mnuProperties = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
-            this.mnuDelete = new System.Windows.Forms.MenuItem();
+            this.mnuAdd = new System.Windows.Forms.MenuItem();
             this.mnuRename = new System.Windows.Forms.MenuItem();
+            this.mnuDelete = new System.Windows.Forms.MenuItem();
             this.treeView = new PTM.View.Controls.TreeListViewComponents.TreeListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.mnuAdd = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // treeMenu
@@ -59,6 +59,7 @@ namespace PTM.View.Controls
             // 
             // mnuProperties
             // 
+            this.mnuProperties.DefaultItem = true;
             this.mnuProperties.Index = 0;
             this.mnuProperties.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
             this.mnuProperties.Text = "Properties...";
@@ -69,12 +70,12 @@ namespace PTM.View.Controls
             this.menuItem5.Index = 1;
             this.menuItem5.Text = "-";
             // 
-            // mnuDelete
+            // mnuAdd
             // 
-            this.mnuDelete.Index = 4;
-            this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.mnuDelete.Text = "Delete";
-            this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
+            this.mnuAdd.Index = 2;
+            this.mnuAdd.Shortcut = System.Windows.Forms.Shortcut.Ins;
+            this.mnuAdd.Text = "Add New";
+            this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
             // 
             // mnuRename
             // 
@@ -82,6 +83,13 @@ namespace PTM.View.Controls
             this.mnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.mnuRename.Text = "Rename";
             this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
+            // 
+            // mnuDelete
+            // 
+            this.mnuDelete.Index = 4;
+            this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
+            this.mnuDelete.Text = "Delete";
+            this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
             // 
             // treeView
             // 
@@ -114,13 +122,6 @@ namespace PTM.View.Controls
             // 
             this.columnHeader2.Text = "Time Elapsed";
             this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // mnuAdd
-            // 
-            this.mnuAdd.Index = 2;
-            this.mnuAdd.Shortcut = System.Windows.Forms.Shortcut.Ins;
-            this.mnuAdd.Text = "Add New";
-            this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
             // 
             // TasksTreeViewControl
             // 

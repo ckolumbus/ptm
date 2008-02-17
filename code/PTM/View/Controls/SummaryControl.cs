@@ -473,7 +473,7 @@ namespace PTM.View.Controls
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            TaskLogForm tgForm = new TaskLogForm();
+            TaskSelectForm tgForm = new TaskSelectForm();
             if (tgForm.ShowDialog(this) == DialogResult.OK)
                 SetParent(tgForm.SelectedTaskId);
 

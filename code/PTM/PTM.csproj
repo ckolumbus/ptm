@@ -247,13 +247,13 @@
     <Compile Include="View\Forms\SplashForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Forms\TaskLogForm.cs">
+    <Compile Include="View\Forms\TaskSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\Forms\TaskPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Forms\TasksHierarchyForm.cs">
+    <Compile Include="View\Forms\TasksExplorerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\Forms\UpdateForm.cs">
@@ -328,14 +328,16 @@
     <EmbeddedResource Include="View\Forms\SplashForm.resx">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Forms\TaskLogForm.resx">
-      <DependentUpon>TaskLogForm.cs</DependentUpon>
+    <EmbeddedResource Include="View\Forms\TaskSelectForm.resx">
+      <DependentUpon>TaskSelectForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\TaskPropertiesForm.resx">
       <DependentUpon>TaskPropertiesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Forms\TasksHierarchyForm.resx">
-      <DependentUpon>TasksHierarchyForm.cs</DependentUpon>
+    <EmbeddedResource Include="View\Forms\TasksExplorerForm.resx">
+      <DependentUpon>TasksExplorerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>

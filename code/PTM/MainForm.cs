@@ -468,7 +468,7 @@ namespace PTM
 
 		private void menuItem7_Click(object sender, EventArgs e)
 		{
-			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
+			TasksExplorerForm taskHForm = new TasksExplorerForm();
 			taskHForm.ShowDialog(this);
 		}
 
