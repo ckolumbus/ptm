@@ -214,9 +214,10 @@ namespace PTM.View.Controls
                 return;
 			}
 			Application.DoEvents();//first insert the new node (event fired)
-			TreeListViewItem node = FindTaskNode(newId);
-			node.EnsureVisible();
+            TreeListViewItem node = FindTaskNode(newId);
+            node.EnsureVisible();
 		    node.Selected = true;
+            treeView.Refresh();
 			node.BeginEdit();
 		}
 
