@@ -151,6 +151,12 @@ namespace PTM.View.Controls.TreeListViewComponents
                 base.OnDragLeave(e);
             }
 
+            protected override void OnMouseUp(MouseEventArgs e)
+            {
+                _dragging = false;
+                base.OnMouseUp(e);
+            }
+
 			#endregion
 			#region Internal calls
 			internal void RaiseBeforeExpand(TreeListViewCancelEventArgs e)
