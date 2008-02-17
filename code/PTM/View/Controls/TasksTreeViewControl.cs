@@ -43,9 +43,8 @@ namespace PTM.View.Controls
             this.mnuRename = new System.Windows.Forms.MenuItem();
             this.mnuDelete = new System.Windows.Forms.MenuItem();
             this.treeView = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.tasksColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // treeMenu
@@ -96,15 +95,15 @@ namespace PTM.View.Controls
             this.treeView.AllowColumnReorder = true;
             this.treeView.AllowDrop = true;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
+            this.tasksColumnHeader,
+            this.columnHeader2});
             treeListViewItemCollectionComparer1.Column = 0;
             treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.treeView.Comparer = treeListViewItemCollectionComparer1;
             this.treeView.ContextMenu = this.treeMenu;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.HideSelection = false;
+            this.treeView.LabelEdit = true;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.MultiSelect = false;
             this.treeView.Name = "treeView";
@@ -113,10 +112,10 @@ namespace PTM.View.Controls
             this.treeView.TabIndex = 0;
             this.treeView.UseCompatibleStateImageBehavior = false;
             // 
-            // columnHeader1
+            // tasksColumnHeader
             // 
-            this.columnHeader1.Text = "Tasks";
-            this.columnHeader1.Width = 260;
+            this.tasksColumnHeader.Text = "Tasks";
+            this.tasksColumnHeader.Width = 260;
             // 
             // columnHeader2
             // 
@@ -141,9 +140,8 @@ namespace PTM.View.Controls
 		private MenuItem mnuDelete;
 		private MenuItem mnuRename;
 		private MenuItem mnuProperties;
-        private ColumnHeader columnHeader1;
+        private ColumnHeader tasksColumnHeader;
         private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader3;
         private MenuItem mnuAdd;
         public const string NEW_TASK = "New Task";
 
@@ -216,7 +214,6 @@ namespace PTM.View.Controls
                 return;
 			}
 			Application.DoEvents();//first insert the new node (event fired)
-			treeView.LabelEdit = true;
 			TreeListViewItem node = FindTaskNode(newId);
 			node.EnsureVisible();
 		    node.Selected = true;
@@ -245,15 +242,14 @@ namespace PTM.View.Controls
                 MessageBox.Show("Please select a task.", this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-			treeView.LabelEdit = true;
 			treeView.SelectedItems[0].BeginEdit();
 		}
 
 		private void treeView_AfterLabelEdit(object sender, TreeListViewLabelEditEventArgs e)
 		{
-			treeView.LabelEdit = false;
-			Task row = Tasks.FindById(Convert.ToInt32(e.Item.Tag));
-			if (row != null)
+            Task task = Tasks.FindById(Convert.ToInt32(e.Item.Tag));
+
+			if (task != null)
 			{
 				if (e.Label == null || e.Label == String.Empty)
 				{
@@ -261,10 +257,12 @@ namespace PTM.View.Controls
 					return;
 				}
 
-				row.Description = e.Label;
+                if(this.treeView.Columns[e.ColumnIndex] == this.tasksColumnHeader)
+				    task.Description = e.Label;
+
 				try
 				{
-					Tasks.UpdateTask(row);
+					Tasks.UpdateTask(task);
 				}
 				catch (ApplicationException aex)
 				{
@@ -324,9 +322,13 @@ namespace PTM.View.Controls
             }
         }
 
+        static int priority = 1;
         private static TreeListViewItem CreateNode(Task task)
         {
-            TreeListViewItem node = new TreeListViewItem(task.Description, task.IconId);
+            TreeListViewItem node; // = new TreeListViewItem(task.Description, task.IconId);
+            node = new TreeListViewItem(task.Description, new string[] { priority.ToString()});
+            node.ImageIndex = task.IconId;
+            priority++;
             node.Tag = task.Id;
             return node;
         }
@@ -657,7 +659,9 @@ namespace PTM.View.Controls
 		{
             if(treeView.SelectedItems.Count==0)
                 return;
-			TaskPropertiesForm pf;
+			if(Tasks.RootTask.Id == (int) treeView.SelectedItems[0].Tag)
+                return;
+            TaskPropertiesForm pf;
 			pf = new TaskPropertiesForm((int) treeView.SelectedItems[0].Tag);
 			pf.ShowDialog(this);
 		}
