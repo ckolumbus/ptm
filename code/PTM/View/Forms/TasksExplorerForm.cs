@@ -23,8 +23,14 @@ namespace PTM.View.Forms
 		{
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);
+            tasksTreeViewControl.DoubleClick += new EventHandler(tasksTreeViewControl_DoubleClick);
 			this.tasksTreeViewControl.Initialize();
 		}
+
+        void tasksTreeViewControl_DoubleClick(object sender, EventArgs e)
+        {
+            this.tasksTreeViewControl.ShowPropertiesSelectedTask();
+        }
 
 		/// <summary>
 		/// Clean up any resources being used.

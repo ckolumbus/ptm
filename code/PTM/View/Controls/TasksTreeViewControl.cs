@@ -655,6 +655,8 @@ namespace PTM.View.Controls
 
 		public void ShowPropertiesSelectedTask()
 		{
+            if(treeView.SelectedItems.Count==0)
+                return;
 			TaskPropertiesForm pf;
 			pf = new TaskPropertiesForm((int) treeView.SelectedItems[0].Tag);
 			pf.ShowDialog(this);
@@ -686,6 +688,7 @@ namespace PTM.View.Controls
             {
                 TreeListViewItem node = FindTaskNode(e.Task.Id);
                 node.Text = e.Task.Description;
+                node.ImageIndex = e.Task.IconId;
             }
         }
 
