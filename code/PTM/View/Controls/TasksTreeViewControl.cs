@@ -436,7 +436,8 @@ namespace PTM.View.Controls
         {
             // Get drag node and select it
             this.dragNode = (TreeListViewItem)e.Item;
-            this.dragNode.Selected = true;
+            if((int)dragNode.Tag == Tasks.RootTask.Id)
+                return;
             // Reset image list used for drag image
             this.imageListDrag.Images.Clear();
             this.imageListDrag.ImageSize =
