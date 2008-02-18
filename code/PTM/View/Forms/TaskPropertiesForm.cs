@@ -271,10 +271,13 @@ namespace PTM.View.Forms
             // 
             // notesTextBox
             // 
+            this.notesTextBox.AcceptsReturn = true;
+            this.notesTextBox.AcceptsTab = true;
             this.notesTextBox.Location = new System.Drawing.Point(102, 148);
             this.notesTextBox.MaxLength = 255;
             this.notesTextBox.Multiline = true;
             this.notesTextBox.Name = "notesTextBox";
+            this.notesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.notesTextBox.Size = new System.Drawing.Size(279, 87);
             this.notesTextBox.TabIndex = 23;
             // 
