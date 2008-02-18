@@ -140,9 +140,9 @@ namespace PTM.Framework
 			}
 
 			DbHelper.ExecuteNonQuery(
-				"UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ? WHERE (Id = ?)"
-				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Id"}, 
-				new object[]{task.Description, task.IconId, task.IsActive, task.ParentId,task.Estimation, task.Id});
+                "UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ?, Hidden = ?, Priority = ?, Notes = ? WHERE (Id = ?)"
+				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Hidden", "Priority", "Notes", "Id"},
+				new object[]{task.Description, task.IconId, task.IsActive, task.ParentId,task.Estimation, task.Hidden, task.Priority, task.Notes, task.Id});
 
 			for(int i = 0;i <tasks.Count;i++)
 			{
@@ -312,6 +312,21 @@ namespace PTM.Framework
                 else
                     task.Estimation = (int) row["Estimation"];
 
+                if (row["Hidden"] == DBNull.Value)
+                    task.Hidden = false;
+                else
+                    task.Hidden = (bool)row["Hidden"];
+
+                if (row["Priority"] == DBNull.Value)
+                    task.Priority = 0;
+                else
+                    task.Priority = (int)row["Priority"];
+
+                if (row["Notes"] == DBNull.Value)
+                    task.Notes = String.Empty;
+                else
+                    task.Notes = (string)row["Notes"];
+
 				tasks.Add(task);
 			}
 			if (tasks.Count == 0)
@@ -383,12 +398,11 @@ namespace PTM.Framework
 		private static void InsertTask(ref Task task)
 		{
 			task.Id = DbHelper.ExecuteInsert(
-				"INSERT INTO Tasks(Description, IconId, IsActive, ParentId) VALUES (?, ?, ?, ?)",
-				new string[] {"Description", "IconId", "IsActive", "ParentId"},
-				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId});
+                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                new string[] { "Description", "IconId", "IsActive", "ParentId", "Hidden", "Priority", "Notes" },
+				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId, task.Hidden, task.Priority, task.Notes});
 		}
-
-
+        
 		private static void ValidateTaskData(ref Task task)
 		{
 			if (task.Description == null)

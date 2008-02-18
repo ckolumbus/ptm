@@ -44,7 +44,7 @@ namespace PTM.View.Controls
             this.mnuDelete = new System.Windows.Forms.MenuItem();
             this.treeView = new PTM.View.Controls.TreeListViewComponents.TreeListView();
             this.tasksColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.priorityColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // treeMenu
@@ -96,7 +96,7 @@ namespace PTM.View.Controls
             this.treeView.AllowDrop = true;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.tasksColumnHeader,
-            this.columnHeader2});
+            this.priorityColumnHeader});
             treeListViewItemCollectionComparer1.Column = 0;
             treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.treeView.Comparer = treeListViewItemCollectionComparer1;
@@ -108,25 +108,25 @@ namespace PTM.View.Controls
             this.treeView.MultiSelect = false;
             this.treeView.Name = "treeView";
             this.treeView.ShowGroups = false;
-            this.treeView.Size = new System.Drawing.Size(243, 215);
+            this.treeView.Size = new System.Drawing.Size(359, 215);
             this.treeView.TabIndex = 0;
             this.treeView.UseCompatibleStateImageBehavior = false;
             // 
             // tasksColumnHeader
             // 
             this.tasksColumnHeader.Text = "Tasks";
-            this.tasksColumnHeader.Width = 260;
+            this.tasksColumnHeader.Width = 294;
             // 
-            // columnHeader2
+            // priorityColumnHeader
             // 
-            this.columnHeader2.Text = "Time Elapsed";
-            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.priorityColumnHeader.Text = "Priority";
+            this.priorityColumnHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // TasksTreeViewControl
             // 
             this.Controls.Add(this.treeView);
             this.Name = "TasksTreeViewControl";
-            this.Size = new System.Drawing.Size(243, 215);
+            this.Size = new System.Drawing.Size(359, 215);
             this.ResumeLayout(false);
 
 		}
@@ -141,33 +141,37 @@ namespace PTM.View.Controls
 		private MenuItem mnuRename;
 		private MenuItem mnuProperties;
         private ColumnHeader tasksColumnHeader;
-        private ColumnHeader columnHeader2;
+        private ColumnHeader priorityColumnHeader;
         private MenuItem mnuAdd;
+	    private bool showHidden;
         public const string NEW_TASK = "New Task";
 
-        #region Initialization
+
+	    public bool ShowHidden
+	    {
+	        get { return showHidden; }
+	        set { showHidden = value; }
+	    }
+
+	    #region Initialization
         public TasksTreeViewControl()
         {
             InitializeComponent();
             InitCommonControls();
-            this.treeView.ItemDrag += new ItemDragEventHandler(treeView_ItemDrag);
-            this.treeView.DragDrop += new DragEventHandler(treeView_DragDrop);
-            this.treeView.DragOver += new DragEventHandler(treeView_DragOver);
-            this.treeView.DragEnter += new DragEventHandler(treeView_DragEnter);
-            this.treeView.DragLeave += new EventHandler(treeView_DragLeave);
-            this.treeView.GiveFeedback += new GiveFeedbackEventHandler(treeView_GiveFeedback);
-            this.treeView.DoubleClick += new EventHandler(treeView_DoubleClick);
-            this.timer.Tick += new EventHandler(timer_Tick);
+            treeView.ItemDrag += new ItemDragEventHandler(treeView_ItemDrag);
+            treeView.DragDrop += new DragEventHandler(treeView_DragDrop);
+            treeView.DragOver += new DragEventHandler(treeView_DragOver);
+            treeView.DragEnter += new DragEventHandler(treeView_DragEnter);
+            treeView.DragLeave += new EventHandler(treeView_DragLeave);
+            treeView.GiveFeedback += new GiveFeedbackEventHandler(treeView_GiveFeedback);
+            treeView.DoubleClick += new EventHandler(treeView_DoubleClick);
+            timer.Tick += new EventHandler(timer_Tick);
+            treeView.SmallImageList = IconsManager.IconsList;
+            treeView.SelectedIndexChanged += new EventHandler(treeView_SelectedIndexChanged);
+            treeView.AfterLabelEdit += new TreeListViewLabelEditEventHandler(treeView_AfterLabelEdit);
+            treeView.BeforeLabelEdit += new TreeListViewBeforeLabelEditEventHandler(treeView_BeforeLabelEdit);
             timer.Interval = 200;
         }
-
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-		    treeView.SmallImageList = IconsManager.IconsList;
-            treeView.SelectedIndexChanged += new EventHandler(treeView_SelectedIndexChanged);
-			treeView.AfterLabelEdit += new TreeListViewLabelEditEventHandler(treeView_AfterLabelEdit);
-		}
 
         protected override void OnHandleDestroyed(EventArgs e)
 		{
@@ -183,16 +187,16 @@ namespace PTM.View.Controls
 			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleting);
 		}
 
-        private void LoadTree()
+        #endregion
+
+        public void LoadTree()
         {
             treeView.Items.Clear();
             TreeListViewItem nodeParent = CreateNode(Tasks.RootTask);
             this.treeView.Items.Add(nodeParent);
             AddChildNodes(Tasks.RootTask, nodeParent);
+            nodeParent.Expand();
         }
-
-        #endregion
-
 
         internal void AddNewTask()
 		{
@@ -246,29 +250,60 @@ namespace PTM.View.Controls
 			treeView.SelectedItems[0].BeginEdit();
 		}
 
+        void treeView_BeforeLabelEdit(object sender, TreeListViewBeforeLabelEditEventArgs e)
+        {
+            if(this.priorityColumnHeader == this.treeView.Columns[e.ColumnIndex])
+            {
+                ComboBox cbx = new ComboBox();
+                cbx.Items.AddRange(new object[]{"(null)",1,2,3,4,5,6,7,8,9});
+                e.Editor = cbx;
+                cbx.Text = e.Label;
+            }
+        }
+
 		private void treeView_AfterLabelEdit(object sender, TreeListViewLabelEditEventArgs e)
 		{
             Task task = Tasks.FindById(Convert.ToInt32(e.Item.Tag));
 
 			if (task != null)
 			{
-				if (e.Label == null || e.Label == String.Empty)
-				{
-                    e.Cancel = true;
-					return;
-				}
-
-                if(this.treeView.Columns[e.ColumnIndex] == this.tasksColumnHeader)
-				    task.Description = e.Label;
-
+				if(this.treeView.Columns[e.ColumnIndex] == this.tasksColumnHeader)
+                {
+                    if (e.Label == null || e.Label == String.Empty)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                    task.Description = e.Label;
+                }
+                if (this.priorityColumnHeader == this.treeView.Columns[e.ColumnIndex])
+                {
+                    int priority;
+                    if (e.Label == null || e.Label == String.Empty || e.Label == "(null)")
+                    {
+                        task.Priority = 0;
+                    }
+                    else if (int.TryParse(e.Label, out priority) && priority >= 0 && priority<=9)
+                    {
+                        task.Priority = priority;
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
 				try
 				{
 					Tasks.UpdateTask(task);
 				}
 				catch (ApplicationException aex)
 				{
-					e.Cancel = true;
 					MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+                finally
+				{
+                    e.Cancel = true; //always cancel, the event Tasks.TaskChanged will change the value.
 				}
 			}
 			else
@@ -277,8 +312,7 @@ namespace PTM.View.Controls
 				                MessageBoxIcon.Information);
 			}
 		}
-
-
+        
         internal void DeleteSelectedTask()
         {
             if (treeView.SelectedItems.Count <= 0)
@@ -312,24 +346,25 @@ namespace PTM.View.Controls
 
         private void AddChildNodes(Task parentRow, TreeListViewItem nodeParent)
         {
-            Task[] childsRows = Tasks.GetChildTasks(parentRow.Id);
-            foreach (Task row in childsRows)
+            Task[] childTasks = Tasks.GetChildTasks(parentRow.Id);
+            foreach (Task task in childTasks)
             {
-                if (row.Id == Tasks.IdleTask.Id)
+                if (task.Id == Tasks.IdleTask.Id)
                     continue;
-                TreeListViewItem nodeChild = CreateNode(row);
+                if(task.Hidden && !this.showHidden)
+                    continue;
+                TreeListViewItem nodeChild = CreateNode(task);
                 nodeParent.Items.Add(nodeChild);
-                AddChildNodes(row, nodeChild);
+                AddChildNodes(task, nodeChild);
             }
         }
 
-        static int priority = 1;
         private static TreeListViewItem CreateNode(Task task)
         {
             TreeListViewItem node; // = new TreeListViewItem(task.Description, task.IconId);
-            node = new TreeListViewItem(task.Description, new string[] { priority.ToString()});
+            string priority = task.Priority > 0 ? task.Priority.ToString() : String.Empty;
+            node = new TreeListViewItem(task.Description, new string[] { priority });
             node.ImageIndex = task.IconId;
-            priority++;
             node.Tag = task.Id;
             return node;
         }
@@ -695,6 +730,8 @@ namespace PTM.View.Controls
                 TreeListViewItem node = FindTaskNode(e.Task.Id);
                 node.Text = e.Task.Description;
                 node.ImageIndex = e.Task.IconId;
+                string priority = e.Task.Priority == 0 ? String.Empty : e.Task.Priority.ToString();
+                node.SubItems[priorityColumnHeader.Index].Text = priority;
             }
         }
 

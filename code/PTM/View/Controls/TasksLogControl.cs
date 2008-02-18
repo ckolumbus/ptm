@@ -621,6 +621,8 @@ namespace PTM.View.Controls
 			{
                 if (task.Id == Tasks.IdleTask.Id)
                     continue;
+                if (task.Hidden) continue;
+			    
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
 				menuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
@@ -799,6 +801,8 @@ namespace PTM.View.Controls
 			foreach (Task task in tasks)
 			{
                 if (task.Id == Tasks.IdleTask.Id)
+                    continue;
+                if(task.Hidden)
                     continue;
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;

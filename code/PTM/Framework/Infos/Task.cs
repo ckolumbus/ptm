@@ -11,12 +11,15 @@ namespace PTM.Framework.Infos
 	{
 		private int id;
 		private int parentId;
-		private string description;
+		private string description = String.Empty;
 		private int iconId;
 		private bool isActive;
 	    private int estimation;
+	    private bool hidden;
+	    private int priority;
+	    private string notes = String.Empty;
 
-		public int Id
+	    public int Id
 		{
 			get { return id; }
 			set { id = value; }
@@ -52,6 +55,24 @@ namespace PTM.Framework.Infos
             set { estimation = value; }
 	    }
 
+        public bool Hidden
+        {
+            get { return hidden; }
+            set { hidden = value; }
+        }
+
+        public int Priority
+        {
+            get { return priority; }
+            set { priority = value; }
+        }
+
+        public string Notes
+        {
+            get { return notes; }
+            set { notes = value; }
+        }
+
 		public Task Clone()
 		{
 			Task task = new Task();
@@ -61,6 +82,9 @@ namespace PTM.Framework.Infos
 			task.iconId = this.iconId;
 			task.isActive = this.isActive;
 		    task.estimation = this.estimation;
+		    task.hidden = this.hidden;
+		    task.priority = this.priority;
+		    task.notes = this.notes;
 			return task;
 		}
 

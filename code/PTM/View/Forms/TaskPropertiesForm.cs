@@ -30,6 +30,11 @@ namespace PTM.View.Forms
         private Label label2;
         private Label label3;
         private NumericUpDown minsNumericUpDown;
+        private CheckBox chkHidden;
+        private NumericUpDown priorityUpDown;
+        private Label label4;
+        private Label label5;
+        private TextBox notesTextBox;
 
 
 		private int taskId;
@@ -96,14 +101,20 @@ namespace PTM.View.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.minsNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.chkHidden = new System.Windows.Forms.CheckBox();
+            this.priorityUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.notesTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hrsNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minsNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.priorityUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // chkIsActive
             // 
-            this.chkIsActive.Location = new System.Drawing.Point(72, 70);
+            this.chkIsActive.Location = new System.Drawing.Point(102, 248);
             this.chkIsActive.Name = "chkIsActive";
             this.chkIsActive.Size = new System.Drawing.Size(96, 24);
             this.chkIsActive.TabIndex = 10;
@@ -139,18 +150,19 @@ namespace PTM.View.Forms
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(72, 16);
+            this.txtDescription.Location = new System.Drawing.Point(102, 36);
+            this.txtDescription.MaxLength = 80;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(240, 20);
+            this.txtDescription.Size = new System.Drawing.Size(279, 20);
             this.txtDescription.TabIndex = 11;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(240, 101);
+            this.cancelButton.Location = new System.Drawing.Point(306, 278);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.Size = new System.Drawing.Size(75, 31);
             this.cancelButton.TabIndex = 13;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -159,16 +171,16 @@ namespace PTM.View.Forms
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(152, 101);
+            this.okButton.Location = new System.Drawing.Point(218, 278);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.Size = new System.Drawing.Size(75, 31);
             this.okButton.TabIndex = 12;
             this.okButton.Text = "Ok";
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // hrsNumericUpDown
             // 
-            this.hrsNumericUpDown.Location = new System.Drawing.Point(158, 44);
+            this.hrsNumericUpDown.Location = new System.Drawing.Point(102, 79);
             this.hrsNumericUpDown.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -181,7 +193,7 @@ namespace PTM.View.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(69, 49);
+            this.label1.Location = new System.Drawing.Point(13, 83);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 15;
@@ -190,7 +202,7 @@ namespace PTM.View.Forms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(209, 48);
+            this.label2.Location = new System.Drawing.Point(153, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(24, 13);
             this.label2.TabIndex = 16;
@@ -199,7 +211,7 @@ namespace PTM.View.Forms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(278, 48);
+            this.label3.Location = new System.Drawing.Point(222, 83);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 18;
@@ -207,7 +219,7 @@ namespace PTM.View.Forms
             // 
             // minsNumericUpDown
             // 
-            this.minsNumericUpDown.Location = new System.Drawing.Point(239, 44);
+            this.minsNumericUpDown.Location = new System.Drawing.Point(183, 79);
             this.minsNumericUpDown.Maximum = new decimal(new int[] {
             59,
             0,
@@ -217,12 +229,66 @@ namespace PTM.View.Forms
             this.minsNumericUpDown.Size = new System.Drawing.Size(36, 20);
             this.minsNumericUpDown.TabIndex = 17;
             // 
+            // chkHidden
+            // 
+            this.chkHidden.AutoSize = true;
+            this.chkHidden.Location = new System.Drawing.Point(225, 252);
+            this.chkHidden.Name = "chkHidden";
+            this.chkHidden.Size = new System.Drawing.Size(58, 17);
+            this.chkHidden.TabIndex = 19;
+            this.chkHidden.Text = "Hidden";
+            this.chkHidden.UseVisualStyleBackColor = true;
+            // 
+            // priorityUpDown
+            // 
+            this.priorityUpDown.Location = new System.Drawing.Point(102, 110);
+            this.priorityUpDown.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.priorityUpDown.Name = "priorityUpDown";
+            this.priorityUpDown.Size = new System.Drawing.Size(36, 20);
+            this.priorityUpDown.TabIndex = 20;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 112);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "Priority:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 151);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Notes:";
+            // 
+            // notesTextBox
+            // 
+            this.notesTextBox.Location = new System.Drawing.Point(102, 148);
+            this.notesTextBox.MaxLength = 255;
+            this.notesTextBox.Multiline = true;
+            this.notesTextBox.Name = "notesTextBox";
+            this.notesTextBox.Size = new System.Drawing.Size(279, 87);
+            this.notesTextBox.TabIndex = 23;
+            // 
             // TaskPropertiesForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(320, 129);
+            this.ClientSize = new System.Drawing.Size(393, 318);
+            this.Controls.Add(this.notesTextBox);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.priorityUpDown);
+            this.Controls.Add(this.chkHidden);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.minsNumericUpDown);
             this.Controls.Add(this.label2);
@@ -247,6 +313,7 @@ namespace PTM.View.Forms
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hrsNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minsNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.priorityUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,12 +330,19 @@ namespace PTM.View.Forms
 			this.chkIsActive.Checked = task.IsActive;
 		    this.minsNumericUpDown.Value = task.Estimation % 60;
             this.hrsNumericUpDown.Value = (task.Estimation - task.Estimation % 60)/60;
+		    this.priorityUpDown.Value = task.Priority;
+		    this.notesTextBox.Text = task.Notes;
+		    this.chkHidden.Checked = task.Hidden;
+
             if(task.Id == Tasks.IdleTask.Id)
             {
                 this.txtDescription.Enabled = false;
                 this.chkIsActive.Enabled = false;
                 this.minsNumericUpDown.Enabled = false;
                 this.hrsNumericUpDown.Enabled = false;
+                this.priorityUpDown.Enabled = false;
+                this.notesTextBox.Enabled = false;
+                this.chkHidden.Enabled = false;
                 this.btnRigth.Enabled = false;
                 this.btnLeft.Enabled = false;
                 this.okButton.Enabled = false;
@@ -307,6 +381,10 @@ namespace PTM.View.Forms
 				task.IconId = this.IconId;
 				task.Description = this.Description;
 			    task.Estimation = (int) (this.minsNumericUpDown.Value + this.hrsNumericUpDown.Value*60);
+			    task.Priority = Convert.ToInt32(this.priorityUpDown.Value);
+			    task.Notes = this.notesTextBox.Text;
+			    task.Hidden = this.chkHidden.Checked;
+
 				Tasks.UpdateTask(task);
 			}
 			catch (ApplicationException aex)

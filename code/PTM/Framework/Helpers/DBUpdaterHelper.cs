@@ -47,6 +47,8 @@ namespace PTM.Framework.Helpers
                     continue;
                 if (UpdateFromV099ToV0910(oldVersion))
                     continue;
+                if (UpdateFromV_0_9_10_ToV_1_0_0(oldVersion))
+                    continue;
 				findNextUpdate = false;
                 RegisterAddins();
 			}
@@ -69,6 +71,27 @@ namespace PTM.Framework.Helpers
             {
                 Logger.WriteException(ex);
             }
+        }
+
+        private static bool UpdateFromV_0_9_10_ToV_1_0_0(Configuration oldVersion)
+        {
+            if (string.Compare(oldVersion.Value.ToString().Trim(), "0.9.10") == 0)
+            {
+                try
+                {
+                    DbHelper.AddColumn("Tasks", "Hidden", "Bit");
+                    DbHelper.AddColumn("Tasks", "Priority", "Integer");
+                    DbHelper.AddColumn("Tasks", "Notes", "VarChar(255)");
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "1.0.0"));
+                    return true;
+                }
+                catch (OleDbException ex)
+                {
+                    Logger.WriteException(ex);
+                    return false;
+                }
+            }
+            return false;
         }
 
         private static bool UpdateFromV099ToV0910(Configuration oldVersion)
