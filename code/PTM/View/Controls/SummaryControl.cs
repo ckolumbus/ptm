@@ -17,28 +17,22 @@ namespace PTM.View.Controls
 	/// Summary description for Summary.
 	/// </summary>
 	internal class SummaryControl : AddinTabPage
-	{
-		private TreeListView taskList;
+    {
 		private GroupBox groupBox1;
-		private GroupBox groupBox3;
-		private ColumnHeader PercentHeader;
-		private IndicatorControl indicator1;
-		private ColumnHeader TaskHeader;
+        private GroupBox groupBox3;
+        private IndicatorControl indicator1;
 		private Label label2;
 		private ComboBox parentTaskComboBox;
 		private IContainer components;
 		private Button browseButton;
 		private GroupBox groupBox2;
-		private IndicatorControl indicator2;
-		private Panel panel1;
+        private IndicatorControl indicator2;
 		private ToolBar toolBar;
 		private ToolBarButton toolBarButton1;
 		private ToolBarButton toolBarButton2;
 		private ImageList toolBarImages;
 
-		private ArrayList recentParentTasksList = new ArrayList();
-		private ColumnHeader PercentGoalHeader;
-		private ColumnHeader TimeHeader;
+        private ArrayList recentParentTasksList = new ArrayList();
 		private DateTimePicker fromDateTimePicker;
 		private DateTimePicker toDateTimePicker;
 		private RadioButton fromRadioButton;
@@ -48,8 +42,22 @@ namespace PTM.View.Controls
 		private GroupBox groupBox4;
 		private IndicatorControl indicator3;
         private IndicatorControl indicator4;
-        private ColumnHeader GoalHeader;
         private GroupBox groupBox5;
+        private BrightIdeasSoftware.ObjectListView taskList;
+        private BrightIdeasSoftware.OLVColumn TaskHeader;
+        private BrightIdeasSoftware.OLVColumn TimeHeader;
+        private BrightIdeasSoftware.OLVColumn PercentHeader;
+        private BrightIdeasSoftware.OLVColumn GoalHeader;
+        private BrightIdeasSoftware.OLVColumn PercentGoalHeader;
+        private BrightIdeasSoftware.ListViewPrinter listViewPrinter1;
+        private ToolStrip toolStrip1;
+        private ToolStripButton saveToolStripButton;
+        private ToolStripButton printToolStripButton;
+        private ToolStripSeparator toolStripSeparator;
+        private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButton2;
+        private ToolStripLabel toolStripLabel1;
+        private ToolStripComboBox toolStripComboBox1;
         private BackgroundWorker worker;
 
 		internal SummaryControl()
@@ -124,22 +132,28 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryControl));
-            this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-            this.TaskHeader = new System.Windows.Forms.ColumnHeader();
-            this.TimeHeader = new System.Windows.Forms.ColumnHeader();
-            this.PercentHeader = new System.Windows.Forms.ColumnHeader();
-            this.GoalHeader = new System.Windows.Forms.ColumnHeader();
-            this.PercentGoalHeader = new System.Windows.Forms.ColumnHeader();
             this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.taskList = new BrightIdeasSoftware.ObjectListView();
+            this.TaskHeader = new BrightIdeasSoftware.OLVColumn();
+            this.TimeHeader = new BrightIdeasSoftware.OLVColumn();
+            this.PercentHeader = new BrightIdeasSoftware.OLVColumn();
+            this.GoalHeader = new BrightIdeasSoftware.OLVColumn();
+            this.PercentGoalHeader = new BrightIdeasSoftware.OLVColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
             this.browseButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.toolBar = new System.Windows.Forms.ToolBar();
             this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
             this.toolBarButton2 = new System.Windows.Forms.ToolBarButton();
@@ -150,61 +164,11 @@ namespace PTM.View.Controls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.listViewPrinter1 = new BrightIdeasSoftware.ListViewPrinter();
             this.groupBox3.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.taskList)).BeginInit();
             this.SuspendLayout();
-            // 
-            // taskList
-            // 
-            this.taskList.Alignment = System.Windows.Forms.ListViewAlignment.Default;
-            this.taskList.AllowColumnReorder = true;
-            this.taskList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.TaskHeader,
-            this.TimeHeader,
-            this.PercentHeader,
-            this.GoalHeader,
-            this.PercentGoalHeader});
-            treeListViewItemCollectionComparer1.Column = 0;
-            treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.taskList.Comparer = treeListViewItemCollectionComparer1;
-            this.taskList.HideSelection = false;
-            this.taskList.Location = new System.Drawing.Point(8, 16);
-            this.taskList.MultiSelect = false;
-            this.taskList.Name = "taskList";
-            this.taskList.Size = new System.Drawing.Size(376, 184);
-            this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
-            this.taskList.TabIndex = 0;
-            this.taskList.UseCompatibleStateImageBehavior = false;
-            // 
-            // TaskHeader
-            // 
-            this.TaskHeader.Text = "Description";
-            this.TaskHeader.Width = 150;
-            // 
-            // TimeHeader
-            // 
-            this.TimeHeader.Text = "Time Elapsed";
-            this.TimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // PercentHeader
-            // 
-            this.PercentHeader.Text = "%";
-            this.PercentHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.PercentHeader.Width = 50;
-            // 
-            // GoalHeader
-            // 
-            this.GoalHeader.Text = "Estimated";
-            this.GoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // PercentGoalHeader
-            // 
-            this.PercentGoalHeader.Text = "% Elapsed";
-            this.PercentGoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.PercentGoalHeader.Width = 50;
             // 
             // fromDateTimePicker
             // 
@@ -231,6 +195,7 @@ namespace PTM.View.Controls
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.toolStrip1);
             this.groupBox3.Controls.Add(this.taskList);
             this.groupBox3.ForeColor = System.Drawing.Color.Blue;
             this.groupBox3.Location = new System.Drawing.Point(8, 144);
@@ -239,6 +204,134 @@ namespace PTM.View.Controls
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Tasks";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToolStripButton,
+            this.printToolStripButton,
+            this.toolStripSeparator,
+            this.toolStripLabel1,
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripComboBox1});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(386, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // saveToolStripButton
+            // 
+            this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
+            this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveToolStripButton.Name = "saveToolStripButton";
+            this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.saveToolStripButton.Text = "&Save";
+            // 
+            // printToolStripButton
+            // 
+            this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
+            this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.printToolStripButton.Name = "printToolStripButton";
+            this.printToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.printToolStripButton.Text = "&Print";
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(36, 22);
+            this.toolStripLabel1.Text = "Level:";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(24, 22);
+            this.toolStripButton1.Text = "Up";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(38, 22);
+            this.toolStripButton2.Text = "Down";
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(190, 25);
+            // 
+            // taskList
+            // 
+            this.taskList.AllColumns.Add(this.TaskHeader);
+            this.taskList.AllColumns.Add(this.TimeHeader);
+            this.taskList.AllColumns.Add(this.PercentHeader);
+            this.taskList.AllColumns.Add(this.GoalHeader);
+            this.taskList.AllColumns.Add(this.PercentGoalHeader);
+            this.taskList.AllowColumnReorder = true;
+            this.taskList.AlternateRowBackColor = System.Drawing.Color.Empty;
+            this.taskList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.TaskHeader,
+            this.TimeHeader,
+            this.PercentHeader,
+            this.GoalHeader,
+            this.PercentGoalHeader});
+            this.taskList.FullRowSelect = true;
+            this.taskList.GridLines = true;
+            this.taskList.HideSelection = false;
+            this.taskList.Location = new System.Drawing.Point(6, 44);
+            this.taskList.MultiSelect = false;
+            this.taskList.Name = "taskList";
+            this.taskList.ShowGroups = false;
+            this.taskList.Size = new System.Drawing.Size(380, 158);
+            this.taskList.TabIndex = 0;
+            this.taskList.UseCompatibleStateImageBehavior = false;
+            this.taskList.View = System.Windows.Forms.View.Details;
+            // 
+            // TaskHeader
+            // 
+            this.TaskHeader.AspectName = null;
+            this.TaskHeader.Text = "Description";
+            this.TaskHeader.Width = 150;
+            // 
+            // TimeHeader
+            // 
+            this.TimeHeader.AspectName = null;
+            this.TimeHeader.Text = "Time Elapsed";
+            this.TimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // PercentHeader
+            // 
+            this.PercentHeader.AspectName = null;
+            this.PercentHeader.Text = "%";
+            this.PercentHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.PercentHeader.Width = 50;
+            // 
+            // GoalHeader
+            // 
+            this.GoalHeader.AspectName = null;
+            this.GoalHeader.Text = "Estimated";
+            this.GoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // PercentGoalHeader
+            // 
+            this.PercentGoalHeader.AspectName = null;
+            this.PercentGoalHeader.Text = "% Elapsed";
+            this.PercentGoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.PercentGoalHeader.Width = 50;
             // 
             // label2
             // 
@@ -277,25 +370,16 @@ namespace PTM.View.Controls
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "% Active";
             // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.toolBar);
-            this.panel1.Location = new System.Drawing.Point(352, 120);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(48, 24);
-            this.panel1.TabIndex = 14;
-            // 
             // toolBar
             // 
             this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
             this.toolBarButton1,
             this.toolBarButton2});
             this.toolBar.Divider = false;
-            this.toolBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolBar.Dock = System.Windows.Forms.DockStyle.None;
             this.toolBar.DropDownArrows = true;
             this.toolBar.ImageList = this.toolBarImages;
-            this.toolBar.Location = new System.Drawing.Point(0, 0);
+            this.toolBar.Location = new System.Drawing.Point(352, 53);
             this.toolBar.Name = "toolBar";
             this.toolBar.ShowToolTips = true;
             this.toolBar.Size = new System.Drawing.Size(48, 26);
@@ -377,12 +461,90 @@ namespace PTM.View.Controls
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "% Elapsed";
             // 
+            // listViewPrinter1
+            // 
+            // 
+            // 
+            // 
+            this.listViewPrinter1.CellFormat.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.CellFormat.BottomBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.listViewPrinter1.CellFormat.BottomBorderWidth = 0.5F;
+            this.listViewPrinter1.CellFormat.CanWrap = true;
+            this.listViewPrinter1.CellFormat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.listViewPrinter1.CellFormat.LeftBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.listViewPrinter1.CellFormat.LeftBorderWidth = 0.5F;
+            this.listViewPrinter1.CellFormat.MinimumTextHeight = 0F;
+            this.listViewPrinter1.CellFormat.RightBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.listViewPrinter1.CellFormat.RightBorderWidth = 0.5F;
+            this.listViewPrinter1.CellFormat.TextColor = System.Drawing.Color.Empty;
+            this.listViewPrinter1.CellFormat.TopBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.listViewPrinter1.CellFormat.TopBorderWidth = 0.5F;
+            this.listViewPrinter1.DocumentName = "Tasks Summary Report";
+            this.listViewPrinter1.Footer = "{1:F}\t\tPage: {0}";
+            // 
+            // 
+            // 
+            this.listViewPrinter1.FooterFormat.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.FooterFormat.BottomBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.FooterFormat.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Italic);
+            this.listViewPrinter1.FooterFormat.LeftBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.FooterFormat.MinimumTextHeight = 0F;
+            this.listViewPrinter1.FooterFormat.RightBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.FooterFormat.TextColor = System.Drawing.Color.Black;
+            this.listViewPrinter1.FooterFormat.TopBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.listViewPrinter1.FooterFormat.TopBorderWidth = 0.5F;
+            // 
+            // 
+            // 
+            this.listViewPrinter1.GroupHeaderFormat.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.GroupHeaderFormat.BottomBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.GroupHeaderFormat.BottomBorderWidth = 3F;
+            this.listViewPrinter1.GroupHeaderFormat.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold);
+            this.listViewPrinter1.GroupHeaderFormat.LeftBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.GroupHeaderFormat.MinimumTextHeight = 0F;
+            this.listViewPrinter1.GroupHeaderFormat.RightBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.GroupHeaderFormat.TextColor = System.Drawing.Color.Black;
+            this.listViewPrinter1.GroupHeaderFormat.TopBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.Header = "Tasks Summary Report";
+            // 
+            // 
+            // 
+            this.listViewPrinter1.HeaderFormat.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.HeaderFormat.BottomBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.HeaderFormat.Font = new System.Drawing.Font("Verdana", 24F);
+            this.listViewPrinter1.HeaderFormat.LeftBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.HeaderFormat.MinimumTextHeight = 0F;
+            this.listViewPrinter1.HeaderFormat.RightBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.HeaderFormat.TextColor = System.Drawing.Color.WhiteSmoke;
+            this.listViewPrinter1.HeaderFormat.TopBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewPrinter1.IsListHeaderOnEachPage = false;
+            this.listViewPrinter1.ListFont = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.listViewPrinter1.ListGridColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            // 
+            // 
+            // 
+            this.listViewPrinter1.ListHeaderFormat.BackgroundColor = System.Drawing.Color.LightGray;
+            this.listViewPrinter1.ListHeaderFormat.BottomBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.listViewPrinter1.ListHeaderFormat.BottomBorderWidth = 1.5F;
+            this.listViewPrinter1.ListHeaderFormat.CanWrap = true;
+            this.listViewPrinter1.ListHeaderFormat.Font = new System.Drawing.Font("Verdana", 12F);
+            this.listViewPrinter1.ListHeaderFormat.LeftBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.listViewPrinter1.ListHeaderFormat.LeftBorderWidth = 1.5F;
+            this.listViewPrinter1.ListHeaderFormat.MinimumTextHeight = 0F;
+            this.listViewPrinter1.ListHeaderFormat.RightBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.listViewPrinter1.ListHeaderFormat.RightBorderWidth = 1.5F;
+            this.listViewPrinter1.ListHeaderFormat.TextColor = System.Drawing.Color.Black;
+            this.listViewPrinter1.ListHeaderFormat.TopBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.listViewPrinter1.ListHeaderFormat.TopBorderWidth = 1.5F;
+            this.listViewPrinter1.ListView = this.taskList;
+            this.listViewPrinter1.WatermarkColor = System.Drawing.Color.Empty;
+            // 
             // SummaryControl
             // 
+            this.Controls.Add(this.toolBar);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.fromDateTimePicker);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.browseButton);
             this.Controls.Add(this.label2);
@@ -395,9 +557,12 @@ namespace PTM.View.Controls
             this.Name = "SummaryControl";
             this.Size = new System.Drawing.Size(408, 360);
             this.groupBox3.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.groupBox3.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.taskList)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
@@ -473,7 +638,7 @@ namespace PTM.View.Controls
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            TasksHierarchyForm tgForm = new TasksHierarchyForm();
+            TaskSelectForm tgForm = new TaskSelectForm();
             if (tgForm.ShowDialog(this) == DialogResult.OK)
                 SetParent(tgForm.SelectedTaskId);
 

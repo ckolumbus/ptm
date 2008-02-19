@@ -81,6 +81,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -162,6 +163,11 @@
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="View\API\APIsComctl32.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -188,6 +194,12 @@
     </Compile>
     <Compile Include="View\Controls\IndicatorControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Controls\ObjectListViewComponents\ListViewPrinter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Controls\ObjectListViewComponents\ObjectListView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\Controls\StatisticsControl.cs">
       <SubType>UserControl</SubType>
@@ -249,13 +261,13 @@
     <Compile Include="View\Forms\SplashForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Forms\TaskLogForm.cs">
+    <Compile Include="View\Forms\TaskSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\Forms\TaskPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Forms\TasksHierarchyForm.cs">
+    <Compile Include="View\Forms\TasksExplorerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\Forms\UpdateForm.cs">
@@ -283,6 +295,11 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\Icons.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -298,6 +315,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\SummaryControl.resx">
       <DependentUpon>SummaryControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\TasksLogControl.resx">
       <DependentUpon>TasksLogControl.cs</DependentUpon>
@@ -330,21 +348,20 @@
     <EmbeddedResource Include="View\Forms\SplashForm.resx">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Forms\TaskLogForm.resx">
-      <DependentUpon>TaskLogForm.cs</DependentUpon>
+    <EmbeddedResource Include="View\Forms\TaskSelectForm.resx">
+      <DependentUpon>TaskSelectForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\TaskPropertiesForm.resx">
       <DependentUpon>TaskPropertiesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Forms\TasksHierarchyForm.resx">
-      <DependentUpon>TasksHierarchyForm.cs</DependentUpon>
+    <EmbeddedResource Include="View\Forms\TasksExplorerForm.resx">
+      <DependentUpon>TasksExplorerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
