@@ -79,6 +79,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -160,6 +161,11 @@
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="View\API\APIsComctl32.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +192,12 @@
     </Compile>
     <Compile Include="View\Controls\IndicatorControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Controls\ObjectListViewComponents\ListViewPrinter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Controls\ObjectListViewComponents\ObjectListView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\Controls\StatisticsControl.cs">
       <SubType>UserControl</SubType>
@@ -281,6 +293,11 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\Icons.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -296,6 +313,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\SummaryControl.resx">
       <DependentUpon>SummaryControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Controls\TasksLogControl.resx">
       <DependentUpon>TasksLogControl.cs</DependentUpon>
@@ -342,9 +360,6 @@
     <EmbeddedResource Include="View\Forms\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
