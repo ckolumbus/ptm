@@ -148,7 +148,9 @@ namespace PTM.Framework
 			{
 				if(((Task)tasks[i]).Id == task.Id)
 				{
-					tasks[i] = task;
+                    tasks[i] = task;
+                    if (currentTask != null && currentTask.Id == task.Id)
+                        currentTask = task;
 					break;
 				}
 			}

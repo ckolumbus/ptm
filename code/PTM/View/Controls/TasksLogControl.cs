@@ -869,6 +869,8 @@ namespace PTM.View.Controls
 					}
 				}
 			}
+            if(e.Task.Id == Tasks.CurrentTask.Id)
+		        UpdateNotifyIcon();
 			CreateNotifyMenu();
 			CreateRigthClickMenu();
 		    DisplaySelectedItemStatus();
@@ -944,6 +946,8 @@ namespace PTM.View.Controls
                         taskList.Items.Insert(0, itemA);
                     }
                 }
+                if(e.Log.Id == Logs.CurrentLog.Id)
+                    UpdateNotifyIcon();
                 DisplaySelectedItemStatus();
             }
 		}
@@ -970,13 +974,6 @@ namespace PTM.View.Controls
                     }
                 }
 
-                if (notifyIcon.Tag == null || (int)notifyIcon.Tag != Tasks.CurrentTask.Id)
-                {
-                    notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
-                    notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
-                    notifyIcon.Tag = Tasks.CurrentTask.Id;
-                }
-
                 //update cache
                 if (taskExecutedTimeCache.Contains(Tasks.CurrentTask.Id))
                     taskExecutedTimeCache[Tasks.CurrentTask.Id] = (int) taskExecutedTimeCache[Tasks.CurrentTask.Id]+1;
@@ -988,7 +985,14 @@ namespace PTM.View.Controls
             }
         }
 
-		private void CheckCurrentDayChanged()
+	    private void UpdateNotifyIcon()
+	    {
+	        notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
+	        notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
+	        notifyIcon.Tag = Tasks.CurrentTask.Id;
+	    }
+
+	    private void CheckCurrentDayChanged()
 		{
 			if (currentDay != DateTime.Today)
 			{
