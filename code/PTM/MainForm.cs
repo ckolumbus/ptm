@@ -34,7 +34,6 @@ namespace PTM
 		private MenuItem aboutMenuItem;
 		private MenuItem menuItem4;
 		private IContainer components;
-		private bool systemShutdown = false;
 		private MenuItem menuItem5;
 		private MenuItem menuItem6;
 		private MenuItem menuItem3;
@@ -131,7 +130,7 @@ namespace PTM
 	    }
 
 
-	    private void UpdateStartUpPath()
+	    private static void UpdateStartUpPath()
 		{
 			try
 			{
@@ -365,63 +364,50 @@ namespace PTM
 			pageAddinTabPage.OnTabPageSelected();
 		} //tabControl_SelectedIndexChanged
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            try
+            {
+                if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    e.Cancel = true;
+                    //this.AnimateWindow();
+                    this.Visible = false;                   
+                }
+                else
+                {
+                    e.Cancel = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } //try-cacth
 
-		protected override void WndProc(ref Message m)
-		{
-			// Once the program recieves WM_QUERYENDSESSION message, set the boolean systemShutdown.
+            base.OnFormClosing(e);
+        }
 
-			if (m.Msg == ViewHelper.WM_QUERYENDSESSION)
-			{
-				systemShutdown = true;
-			}
+        //private void AnimateWindow()
+        //{
+        //    // if the user has not disabled animating windows...
+        //    if (!this.AnimationDisabled)
+        //    {
+        //        ViewHelper.RECT animateFrom = new ViewHelper.RECT();
+        //        ViewHelper.GetWindowRect(this.Handle, ref animateFrom);
 
-			base.WndProc(ref m);
-		} //WndProc
+        //        ViewHelper.RECT animateTo = new ViewHelper.RECT();
+        //        IntPtr notifyAreaHandle = ViewHelper.GetNotificationAreaHandle();
 
-		protected override void OnClosing(CancelEventArgs e)
-		{
-			try
-			{
-				if (systemShutdown)
-				{
-					e.Cancel = false;
-				}
-				else
-				{
-					e.Cancel = true;
-					this.AnimateWindow();
-					this.Visible = false;
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace + "\n\n" + "Application Exiting...", "Exception thrown",
-				                MessageBoxButtons.OK, MessageBoxIcon.Error);
-			} //try-cacth
-
-			base.OnClosing(e);
-		} //OnClosing
-
-		private void AnimateWindow()
-		{
-			// if the user has not disabled animating windows...
-			if (!this.AnimationDisabled)
-			{
-				ViewHelper.RECT animateFrom = new ViewHelper.RECT();
-				ViewHelper.GetWindowRect(this.Handle, ref animateFrom);
-
-				ViewHelper.RECT animateTo = new ViewHelper.RECT();
-				IntPtr notifyAreaHandle = ViewHelper.GetNotificationAreaHandle();
-
-				if (notifyAreaHandle != IntPtr.Zero)
-				{
-					if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo))
-					{
-						ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
-					} //if
-				} //if
-			} //if
-		} //AnimateWindow
+        //        if (notifyAreaHandle != IntPtr.Zero)
+        //        {
+        //            if (ViewHelper.GetWindowRect(notifyAreaHandle, ref animateTo))
+        //            {
+        //                ViewHelper.DrawAnimatedRects(this.Handle, ViewHelper.IDANI_CAPTION, ref animateFrom, ref animateTo);
+        //            } //if
+        //        } //if
+        //    } //if
+        //} //AnimateWindow
 
 		#endregion
 
