@@ -139,8 +139,7 @@ namespace PTM.View.Controls.TreeListViewComponents
 				case (int) APIsEnums.WindowMessages.KILLFOCUS:
 					if(OnKillFocus(m))
 					{
-						//EndEdit(!(_control is ComboBox && _treelistview.EditedItem.Label != _control.Text));
-                        EndEdit(_treelistview.EditedItem.Label == _control.Text);
+						EndEdit(!(_control is ComboBox && _treelistview.EditedItem.Label != _control.Text));
 						return;
 					}
 					break;

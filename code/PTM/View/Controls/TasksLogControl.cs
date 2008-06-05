@@ -316,7 +316,7 @@ namespace PTM.View.Controls
 		internal void NewTaskLog(bool mustAddATask)
 		{
 			notifyTimer.Stop();
-			TaskSelectForm tasklog = new TaskSelectForm();
+			TaskLogForm tasklog = new TaskLogForm();
 			if (tasklog.ShowDialog(this) == DialogResult.OK)
 			{
 				AddTaskLog(tasklog.SelectedTaskId,
@@ -355,13 +355,13 @@ namespace PTM.View.Controls
 				return;
 			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
 
-			TaskSelectForm taskSelectForm = new TaskSelectForm(taskId);
-			if (taskSelectForm.ShowDialog(this.Parent) == DialogResult.OK)
+			TaskLogForm taskLogForm = new TaskLogForm(taskId);
+			if (taskLogForm.ShowDialog(this.Parent) == DialogResult.OK)
 			{
 				for (int i = 0; i < taskList.SelectedItems.Count; i++)
 				{
 					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					Logs.UpdateLogTaskId(taskLogId, taskSelectForm.SelectedTaskId);
+					Logs.UpdateLogTaskId(taskLogId, taskLogForm.SelectedTaskId);
 				}
 			}
 		}
@@ -621,8 +621,6 @@ namespace PTM.View.Controls
 			{
                 if (task.Id == Tasks.IdleTask.Id)
                     continue;
-                if (task.Hidden) continue;
-			    
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
 				menuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
@@ -802,8 +800,6 @@ namespace PTM.View.Controls
 			{
                 if (task.Id == Tasks.IdleTask.Id)
                     continue;
-                if(task.Hidden)
-                    continue;
 				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
 				menuItem.Text = task.Description;
 				menuItem.Pick += new EventHandler(mnuTaskAdd_Click);
@@ -869,8 +865,6 @@ namespace PTM.View.Controls
 					}
 				}
 			}
-            if(e.Task.Id == Tasks.CurrentTask.Id)
-		        UpdateNotifyIcon();
 			CreateNotifyMenu();
 			CreateRigthClickMenu();
 		    DisplaySelectedItemStatus();
@@ -946,8 +940,6 @@ namespace PTM.View.Controls
                         taskList.Items.Insert(0, itemA);
                     }
                 }
-                if(e.Log.Id == Logs.CurrentLog.Id)
-                    UpdateNotifyIcon();
                 DisplaySelectedItemStatus();
             }
 		}
@@ -974,6 +966,13 @@ namespace PTM.View.Controls
                     }
                 }
 
+                if (notifyIcon.Tag == null || (int)notifyIcon.Tag != Tasks.CurrentTask.Id)
+                {
+                    notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
+                    notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
+                    notifyIcon.Tag = Tasks.CurrentTask.Id;
+                }
+
                 //update cache
                 if (taskExecutedTimeCache.Contains(Tasks.CurrentTask.Id))
                     taskExecutedTimeCache[Tasks.CurrentTask.Id] = (int) taskExecutedTimeCache[Tasks.CurrentTask.Id]+1;
@@ -985,14 +984,7 @@ namespace PTM.View.Controls
             }
         }
 
-	    private void UpdateNotifyIcon()
-	    {
-	        notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
-	        notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
-	        notifyIcon.Tag = Tasks.CurrentTask.Id;
-	    }
-
-	    private void CheckCurrentDayChanged()
+		private void CheckCurrentDayChanged()
 		{
 			if (currentDay != DateTime.Today)
 			{

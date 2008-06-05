@@ -85,7 +85,7 @@ namespace PTM.Addin
 		}
 
 
-		public delegate void StatusChangedDelegate(object sender, StatusChangedEventArgs e);
+		public delegate void StatusChangedDelegate(StatusChangedEventArgs e);
 
 		public event StatusChangedDelegate StatusChanged;
 
@@ -94,7 +94,7 @@ namespace PTM.Addin
 			if (this.StatusChanged != null)
 			{
                 StatusChangedDelegate del = new StatusChangedDelegate(StatusChanged);
-                this.Invoke(del, new object[] {this, new StatusChangedEventArgs(status) });
+                this.Invoke(del, new object[] { new StatusChangedEventArgs(status) });
 			}
             //    StatusChanged(new StatusChangedEventArgs(status));
             //Application.DoEvents();

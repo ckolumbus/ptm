@@ -337,11 +337,7 @@ namespace PTM.Framework
 		{
 			if (loggingThread != null && loggingThread.IsAlive)
 			{
-                try
-                {
-                    loggingThread.Join(100);
-                }
-				catch(ThreadStateException){} //catch exception
+				loggingThread.Join(100);
 			} //if-else
 		} //JoinLoggingThread
 
