@@ -1016,6 +1016,34 @@ namespace PTM.View.Controls.TreeListViewComponents
 			}
 			g.Dispose();
 		}
+
+        public void DrawInsertionLine()
+        {
+            Graphics g = Graphics.FromHwnd(TreeListView.Handle);
+            if (Visible)
+            {
+                Rectangle entireitemrect = GetBounds(ItemBoundsPortion.Entire);
+                int X1 = entireitemrect.Left;
+                int X2 = entireitemrect.Right;
+                int Y = entireitemrect.Bottom;
+                g.DrawLine(Pens.Red, X1, Y, X2 - 1, Y);
+
+                Point[] leftTriangle = new Point[3] {
+                            new Point(X1,      Y-4),
+                            new Point(X1 + 7,  Y),
+                            new Point(X1,      Y+4)
+                        };
+                Point[] rightTriangle = new Point[3] {
+                            new Point(X2,     Y-4),
+                            new Point(X2 - 8, Y),
+                            new Point(X2,     Y+4)
+                        };
+                g.FillPolygon(Brushes.Red, leftTriangle);
+                g.FillPolygon(Brushes.Red, rightTriangle);
+            }
+
+        }
+
 		#endregion
 		#region DrawIntermediateState
 		internal void DrawIntermediateState()

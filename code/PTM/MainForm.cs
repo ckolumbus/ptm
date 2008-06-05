@@ -454,15 +454,16 @@ namespace PTM
 
 		private void menuItem7_Click(object sender, EventArgs e)
 		{
-			TasksHierarchyForm taskHForm = new TasksHierarchyForm();
+			TasksExplorerForm taskHForm = new TasksExplorerForm();
 			taskHForm.ShowDialog(this);
 		}
 
 		#endregion
 
-		private void tabPage_StatusChanged(AddinTabPage.StatusChangedEventArgs e)
+		private void tabPage_StatusChanged(object sender, AddinTabPage.StatusChangedEventArgs e)
 		{
-			this.statusBar.Text = e.Status;
+            if(((AddinTabPage)sender).Visible)
+			    this.statusBar.Text = e.Status;
 		}
 	} //MainForm
 } //end of namespace

@@ -50,6 +50,8 @@ namespace PTM.View.Controls
         private IndicatorControl indicator4;
         private ColumnHeader GoalHeader;
         private GroupBox groupBox5;
+        private ColumnHeader ActiveTimeHeader;
+        private ColumnHeader InactiveTimeHeader;
         private BackgroundWorker worker;
 
 		internal SummaryControl()
@@ -135,6 +137,8 @@ namespace PTM.View.Controls
             this.fromDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ActiveTimeHeader = new System.Windows.Forms.ColumnHeader();
+            this.InactiveTimeHeader = new System.Windows.Forms.ColumnHeader();
             this.label2 = new System.Windows.Forms.Label();
             this.parentTaskComboBox = new System.Windows.Forms.ComboBox();
             this.browseButton = new System.Windows.Forms.Button();
@@ -166,7 +170,9 @@ namespace PTM.View.Controls
             this.TimeHeader,
             this.PercentHeader,
             this.GoalHeader,
-            this.PercentGoalHeader});
+            this.PercentGoalHeader,
+            this.ActiveTimeHeader,
+            this.InactiveTimeHeader});
             treeListViewItemCollectionComparer1.Column = 0;
             treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
             this.taskList.Comparer = treeListViewItemCollectionComparer1;
@@ -206,6 +212,19 @@ namespace PTM.View.Controls
             this.PercentGoalHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.PercentGoalHeader.Width = 50;
             // 
+            // ActiveTimeHeader
+            // 
+            this.ActiveTimeHeader.Text = "Active Time";
+            this.ActiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+
+
+
+
+            // 
+            // InactiveTimeHeader
+            // 
+            this.InactiveTimeHeader.Text = "Inactive Time";
+            this.InactiveTimeHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // fromDateTimePicker
             // 
             this.fromDateTimePicker.CustomFormat = "";
@@ -473,7 +492,7 @@ namespace PTM.View.Controls
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            TasksHierarchyForm tgForm = new TasksHierarchyForm();
+            TaskSelectForm tgForm = new TaskSelectForm();
             if (tgForm.ShowDialog(this) == DialogResult.OK)
                 SetParent(tgForm.SelectedTaskId);
 
@@ -571,26 +590,19 @@ namespace PTM.View.Controls
 					if (summary.IsActive)
 						totalActiveTime += summary.TotalActiveTime;
 
-					//TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
-					//TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalInactiveTime));
-                    TimeSpan elapsedTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime + summary.TotalInactiveTime));
-                    TimeSpan estimationTimeSpan = new TimeSpan(0, Convert.ToInt32(summary.TotalEstimation), 0);
-				    string estimation;
-                    if (summary.TotalEstimation == 0)
-                        estimation = "Not estimated";
-                    else
-                        estimation = ViewHelper.TimeSpanToTimeString(estimationTimeSpan);
-					TreeListViewItem lvi =
-						new TreeListViewItem(summary.Description,
-						                     new string[]
-						                     	{
-						                     		ViewHelper.TimeSpanToTimeString(elapsedTimeSpan),
-						                     		0.ToString("0.0%", CultureInfo.InvariantCulture),
-                                                    estimation,
-						                     		0.ToString("0.0%", CultureInfo.InvariantCulture),
-						                     	});
-					
-					lvi.ImageIndex = summary.IconId;
+                    TreeListViewItem lvi =
+                        new TreeListViewItem(summary.Description,
+                                             new string[]
+                                                {
+                                                    String.Empty,
+                                                    0.ToString("0.0%", CultureInfo.InvariantCulture),
+                                                    String.Empty,
+                                                    0.ToString("0.0%", CultureInfo.InvariantCulture),
+                                                    String.Empty,
+                                                    String.Empty
+                                                });
+
+                    lvi.ImageIndex = summary.IconId;
 
 					lvi.Tag = summary;
 					this.taskList.Items.Add(lvi);
@@ -612,14 +624,28 @@ namespace PTM.View.Controls
 				double percent = 0;
 			    double goalPercent = 0;
 
-				TaskSummary sum = (TaskSummary) item.Tag;
+				TaskSummary summary = (TaskSummary) item.Tag;
 
 				if (totalTime > 0)
-				    percent = (sum.TotalActiveTime + sum.TotalInactiveTime)/totalTime;
+				    percent = (summary.TotalActiveTime + summary.TotalInactiveTime)/totalTime;
 
-                if (sum.TotalEstimation > 0)
-                    goalPercent = sum.TotalTimeOverEstimation / (sum.TotalEstimation*60);
+                if (summary.TotalEstimation > 0)
+                    goalPercent = summary.TotalTimeOverEstimation / (summary.TotalEstimation*60);
 
+                TimeSpan activeTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime));
+                TimeSpan inactiveTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalInactiveTime));
+                TimeSpan elapsedTimeSpan = new TimeSpan(0, 0, Convert.ToInt32(summary.TotalActiveTime + summary.TotalInactiveTime));
+                TimeSpan estimationTimeSpan = new TimeSpan(0, Convert.ToInt32(summary.TotalEstimation), 0);
+                string estimation;
+                if (summary.TotalEstimation == 0)
+                    estimation = "Not estimated";
+                else
+                    estimation = ViewHelper.TimeSpanToTimeString(estimationTimeSpan);
+
+                item.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(elapsedTimeSpan);
+                item.SubItems[ActiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(activeTimeSpan);
+                item.SubItems[InactiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(inactiveTimeSpan);
+                item.SubItems[GoalHeader.Index].Text = estimation;
 				item.SubItems[PercentHeader.Index].Text = percent.ToString("0.0%", CultureInfo.InvariantCulture);
                 item.SubItems[PercentGoalHeader.Index].Text = goalPercent.ToString("0.0%", CultureInfo.InvariantCulture);
 

@@ -118,6 +118,46 @@ namespace PTM.View.Controls.TreeListViewComponents
 			{
 				if(AfterCollapse != null) AfterCollapse(this, e);
 			}
+
+	        private bool _dragging = false;
+            protected override void OnItemDrag(ItemDragEventArgs e)
+            {
+                if(InEdit) return;
+                if(_skipMouseDownEvent) return;
+                _dragging = true;
+                base.OnItemDrag(e);                                
+            }
+
+            protected override void OnDragOver(DragEventArgs drgevent)
+            {
+                if (InEdit) return;
+                base.OnDragOver(drgevent);
+            }
+
+            protected override void OnDragDrop(DragEventArgs drgevent)
+            {
+                _dragging = false;
+                base.OnDragDrop(drgevent);
+            }
+
+            protected override void OnDragEnter(DragEventArgs drgevent)
+            {
+                _dragging = true;
+                base.OnDragEnter(drgevent);
+            }
+
+            protected override void OnDragLeave(EventArgs e)
+            {
+                _dragging = false;
+                base.OnDragLeave(e);
+            }
+
+            protected override void OnMouseUp(MouseEventArgs e)
+            {
+                _dragging = false;
+                base.OnMouseUp(e);
+            }
+
 			#endregion
 			#region Internal calls
 			internal void RaiseBeforeExpand(TreeListViewCancelEventArgs e)
@@ -663,6 +703,8 @@ namespace PTM.View.Controls.TreeListViewComponents
 								cancel = true;
 							}
 							#endregion
+                            if (_dragging)
+                                cancel=true;
 							if(cancel)
 							{
 								m.Result = (IntPtr)1;
@@ -1261,11 +1303,10 @@ namespace PTM.View.Controls.TreeListViewComponents
 				_skipMouseDownEvent = false;
 				if(!Cancel)
 				{
-					TreeListViewLabelEditEventArgs e = new TreeListViewLabelEditEventArgs(EditedItem.Item, EditedItem.ColumnIndex, Text);
+					TreeListViewLabelEditEventArgs e = new TreeListViewLabelEditEventArgs(editedItem.Item, editedItem.ColumnIndex, Text);
 					OnAfterLabelEdit(e);
 					if(!e.Cancel)
-						editedItem.Item.SubItems[
-							editedItem.ColumnIndex].Text = Text;
+						editedItem.Item.SubItems[editedItem.ColumnIndex].Text = Text;
 				}
 				_inedit = false;
 				_editeditem = new EditItemInformations(null, 0, "");
