@@ -92,7 +92,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.manifest" />
     <Compile Include="Addin\AddinTabPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -352,7 +351,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(SolutionDir)database\ptm.mdb $(TargetDir)
-copy $(ProjectDir)app.manifest $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>copy $(SolutionDir)database\ptm.mdb $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>
