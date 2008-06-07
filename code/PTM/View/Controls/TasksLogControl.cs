@@ -344,6 +344,7 @@ namespace PTM.View.Controls
 		{
 			notifyTimer.Stop();
 		    notifyTimer.Interval = 1000*60*defaultMins;
+            notifyTimer.Interval = 1000 * 20;
 			notifyTimer.Start();
 		}
 
@@ -737,7 +738,7 @@ namespace PTM.View.Controls
 		private void notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			notifyForm = new NotifyForm(this.notifyIcon.Text);
-			notifyForm.Show();
+			notifyForm.ShowNoActivate();
             notifyForm.Closed += new EventHandler(notifyForm_Closed);
 		}
 

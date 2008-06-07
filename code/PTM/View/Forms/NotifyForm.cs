@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.APIs;
 using System.Windows.Forms;
 using PTM.Framework.Helpers;
@@ -72,7 +73,9 @@ namespace PTM.View.Forms
             // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.SystemColors.Info;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.CausesValidation = false;
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.noButton);
             this.panel1.Controls.Add(this.yesButton);
@@ -93,22 +96,30 @@ namespace PTM.View.Forms
             // 
             // noButton
             // 
+            this.noButton.BackColor = System.Drawing.SystemColors.Control;
+            this.noButton.CausesValidation = false;
             this.noButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.noButton.Location = new System.Drawing.Point(11, 55);
             this.noButton.Name = "noButton";
             this.noButton.Size = new System.Drawing.Size(104, 23);
             this.noButton.TabIndex = 3;
+            this.noButton.TabStop = false;
             this.noButton.Text = "Select from list";
+            this.noButton.UseVisualStyleBackColor = false;
             this.noButton.Click += new System.EventHandler(this.noButton_Click);
             // 
             // yesButton
             // 
+            this.yesButton.BackColor = System.Drawing.SystemColors.Control;
+            this.yesButton.CausesValidation = false;
             this.yesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.yesButton.Location = new System.Drawing.Point(11, 25);
             this.yesButton.Name = "yesButton";
             this.yesButton.Size = new System.Drawing.Size(66, 23);
             this.yesButton.TabIndex = 2;
+            this.yesButton.TabStop = false;
             this.yesButton.Text = "Continue";
+            this.yesButton.UseVisualStyleBackColor = false;
             this.yesButton.Click += new System.EventHandler(this.yesButton_Click);
             // 
             // currentTaskLabel
@@ -118,7 +129,7 @@ namespace PTM.View.Forms
             this.currentTaskLabel.Location = new System.Drawing.Point(83, 30);
             this.currentTaskLabel.Name = "currentTaskLabel";
             this.currentTaskLabel.Size = new System.Drawing.Size(102, 16);
-            this.currentTaskLabel.TabIndex = 1;
+            this.currentTaskLabel.TabIndex = 10;
             this.currentTaskLabel.Text = "last task";
             // 
             // timer
@@ -129,17 +140,19 @@ namespace PTM.View.Forms
             // NotifyForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(195, 88);
+            this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NotifyForm";
+            this.Opacity = 0.9;
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "NotifyForm";
-            this.TopMost = true;
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -186,7 +199,7 @@ namespace PTM.View.Forms
 
 		static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
 
-		public new void Show()
+        public void ShowNoActivate()
 		{
 			int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
 			int screenHeight = Screen.PrimaryScreen.WorkingArea.Height;
@@ -200,11 +213,24 @@ namespace PTM.View.Forms
 
 			this.timer.Start();
 
-            // Show the window without activating it.
+            //// Show the window without activating it.
             APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
 
-            // Equivalent to setting TopMost = true, except don't activate the window.
-            APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 4);
+            //// Equivalent to setting TopMost = true, except don't activate the window.
+            APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 10);    
+            //SetWindowPos((int)this.Handle, 0, Left, Top, Width, Height, System.Convert.ToUInt16(SWP.FRAMECHANGED | SWP.NOACTIVATE | SWP.NOCOPYBITS | SWP.NOMOVE | SWP.NOOWNERZORDER | SWP.NOSENDCHANGING | SWP.NOSIZE | SWP.NOZORDER));
 		}
+               
+
+        protected override void SetVisibleCore(bool value)
+        {
+            if (value)
+            {
+                APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
+            }
+            else base.SetVisibleCore(value);
+        }
+
+
 	}
 }
