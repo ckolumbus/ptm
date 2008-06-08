@@ -33,6 +33,8 @@ namespace PTM.Framework
 			Application.DoEvents();
 			DataMaintenanceHelper.GroupLogs(false);
 			Application.DoEvents();
+            DataMaintenanceHelper.FixPossibleNullDurations();
+            Application.DoEvents();
 
 			Logs.Initialize();
 			Application.DoEvents();

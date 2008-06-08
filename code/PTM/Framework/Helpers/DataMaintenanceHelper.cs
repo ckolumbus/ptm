@@ -32,9 +32,18 @@ namespace PTM.Framework.Helpers
 			                         new object[] {limitDate});
 		}
 
+        /// <summary>
+        /// See bug 1917606
+        /// </summary>
+        public static void FixPossibleNullDurations()
+        {
+            DbHelper.ExecuteNonQuery("Update TasksLog Set Duration = 0 Where Duration is NULL");
+            DbHelper.ExecuteNonQuery("Update ApplicationsLog Set ActiveTime = 0 Where ActiveTime is NULL");
+        }
+
 		public static void DeleteZeroActiveTimeApplicationsEntries()
 		{
-			DbHelper.ExecuteNonQuery("Delete from ApplicationsLog where ActiveTime = 0");
+            DbHelper.ExecuteNonQuery("Delete from ApplicationsLog where ActiveTime is NULL or ActiveTime = 0");
 		}
 		public static void GroupLogs(bool fullCheck)
 		{
