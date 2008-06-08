@@ -376,6 +376,11 @@ namespace PTM.Data
 			ExecuteNonQuery("ALTER TABLE " + tableName + " ADD PRIMARY KEY (" + columnName + ")");
 		}
 
+        public static void AddIndex(string tableName, string columnName)
+        {
+            ExecuteNonQuery("CREATE INDEX " + columnName + "Index ON " + tableName + "(" + columnName + ")");
+        }
+
 		public static void CreateTable(string tableName)
 		{
 			ExecuteNonQuery("CREATE TABLE " + tableName);

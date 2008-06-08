@@ -49,12 +49,16 @@ namespace PTM.Framework.Helpers
                     continue;
                 if (UpdateFromV_0_9_10_ToV_1_0_0(oldVersion))
                     continue;
+                if (UpdateFromV_1_0_0ToV_1_0_1(oldVersion))
+                    continue;
 				findNextUpdate = false;
                 RegisterAddins();
 			}
 		}
 
-        private static void RegisterAddins()
+	    
+
+	    private static void RegisterAddins()
         {
             try
             {
@@ -71,6 +75,25 @@ namespace PTM.Framework.Helpers
             {
                 Logger.WriteException(ex);
             }
+        }
+
+        private static bool UpdateFromV_1_0_0ToV_1_0_1(Configuration oldVersion)
+        {
+            if (string.Compare(oldVersion.Value.ToString().Trim(), "1.0.0") == 0)
+            {
+                try
+                {
+                    DbHelper.AddIndex("TasksLog", "InsertTime");
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "1.0.1"));
+                    return true;
+                }
+                catch (OleDbException ex)
+                {
+                    Logger.WriteException(ex);
+                    return false;
+                }
+            }
+            return false;
         }
 
         private static bool UpdateFromV_0_9_10_ToV_1_0_0(Configuration oldVersion)
