@@ -128,6 +128,7 @@
     <Compile Include="Framework\Infos\ApplicationSummary.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\Infos\DateRange.cs" />
     <Compile Include="Framework\Infos\Log.cs">
       <SubType>Code</SubType>
     </Compile>

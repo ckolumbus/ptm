@@ -7,6 +7,7 @@ using NUnit.Framework;
 using PTM.Framework;
 using PTM.Data;
 using PTM.Framework.Infos;
+using PTM.Test.Framework.Helpers;
 
 namespace PTM.Test.Framework
 {
@@ -200,6 +201,46 @@ namespace PTM.Test.Framework
 			list = Logs.GetLogsByTask(taskrow1.Id);
 			Assert.AreEqual(0, list.Count);
 		}
+
+        [Test]
+        public void GetTaskLogDateRangeTest()
+        {
+            Task task = Tasks.AddTask("GetTaskLogDateRangeTest1", Tasks.RootTask.Id);
+
+            DateRange range;
+            range = Logs.GetTaskLogDateRange(task.Id);
+            Assert.AreEqual(DateTime.MaxValue, range.StartDate);
+            Assert.AreEqual(DateTime.MinValue, range.EndDate);
+
+            //just one entry
+            DateTime curTime = DateTime.Today.AddDays(-1);
+            DataMaintenanceTest.InsertLog(task.Id, curTime, 10);
+            range = Logs.GetTaskLogDateRange(task.Id);
+            Assert.AreEqual(curTime, range.StartDate);
+            Assert.AreEqual(curTime, range.EndDate);
+            
+            //range
+            DateTime startDate = DateTime.Today.AddDays(-5);
+            DateTime endDate = DateTime.Today;
+            DataMaintenanceTest.InsertLog(task.Id,startDate, 10);
+            DataMaintenanceTest.InsertLog(task.Id, endDate, 10);
+            range = Logs.GetTaskLogDateRange(task.Id);
+            Assert.AreEqual(startDate, range.StartDate);
+            Assert.AreEqual(endDate, range.EndDate);
+            
+            //child range
+            Task child1 = Tasks.AddTask("GetTaskLogDateRangeTest2", task.Id);
+            Task child2 = Tasks.AddTask("GetTaskLogDateRangeTest3", task.Id);
+            Task child3 = Tasks.AddTask("GetTaskLogDateRangeTest4", child1.Id);
+            startDate = DateTime.Today.AddDays(-9);
+            endDate = DateTime.Today.AddDays(2);
+            DataMaintenanceTest.InsertLog(child3.Id, startDate, 10);
+            DataMaintenanceTest.InsertLog(child2.Id, endDate, 10);
+            DataMaintenanceTest.InsertLog(child1.Id, DateTime.Today.AddDays(-2), 10);
+            range = Logs.GetTaskLogDateRange(task.Id);
+            Assert.AreEqual(startDate, range.StartDate);
+            Assert.AreEqual(endDate, range.EndDate);
+        }
 		
 		[TearDown]
 		public void TearDown()

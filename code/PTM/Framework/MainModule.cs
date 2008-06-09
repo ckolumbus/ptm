@@ -29,13 +29,11 @@ namespace PTM.Framework
 
 			DataMaintenanceHelper.DeleteIdleEntries();
 			Application.DoEvents();
-			DataMaintenanceHelper.DeleteZeroActiveTimeApplicationsEntries();
+			DataMaintenanceHelper.DeleteZeroOrNullActiveTimeEntries();
 			Application.DoEvents();
 			DataMaintenanceHelper.GroupLogs(false);
 			Application.DoEvents();
-            DataMaintenanceHelper.FixPossibleNullDurations();
-            Application.DoEvents();
-
+            
 			Logs.Initialize();
 			Application.DoEvents();
 			Logs.FillMissingTimeUntilNow();

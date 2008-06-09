@@ -229,6 +229,39 @@ namespace PTM.Framework
 			//DbHelper.ExecuteNonQuery("Update TasksLog Set TaskId = " + newTaskId + " Where TaskId = oldTaskId");
 		}
 
+        public static DateRange GetTaskLogDateRange(int taskId)
+        {
+            Queue queue = new Queue();
+            queue.Enqueue(taskId);
+            DateRange range;
+            range.StartDate = DateTime.MaxValue;
+            range.EndDate = DateTime.MinValue;
+            while(queue.Count>0)
+            {
+                int curTaskId = (int)queue.Dequeue();
+                object retValue = DbHelper.ExecuteScalar("Select Min(InsertTime) From TasksLog Where TaskId = ?", new string[] { "TaskId" },
+                       new object[] { curTaskId });
+                if(retValue==null || retValue == DBNull.Value)
+                    continue;
+
+                DateTime curStartTime = (DateTime) retValue;
+
+                DateTime curEndTime = (DateTime)DbHelper.ExecuteScalar("Select Max(InsertTime) From TasksLog Where TaskId = ?", new string[] { "TaskId" },
+               new object[] { curTaskId });
+
+                if (curStartTime < range.StartDate) range.StartDate = curStartTime;
+                if (curEndTime > range.EndDate) range.EndDate = curEndTime;
+
+                Task[] childs;
+                childs = Tasks.GetChildTasks(curTaskId);
+                foreach (Task child in childs)
+                {
+                    queue.Enqueue(child.Id);
+                }
+            }
+            return range;
+        }
+
 		#endregion
 
 		#region Private Methods
