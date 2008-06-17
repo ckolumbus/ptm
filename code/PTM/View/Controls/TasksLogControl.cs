@@ -379,9 +379,6 @@ namespace PTM.View.Controls
 
 		private void DeleteSelectedTaskLog()
 		{
-            //if (!isValidEditableLog())
-            //    return;
-
 			for (int i = 0; i < taskList.SelectedItems.Count; i++)
 			{
                 if (!isValidEditableLog(taskList.SelectedItems[i]))
@@ -390,6 +387,31 @@ namespace PTM.View.Controls
 				Logs.DeleteLog(taskLogId);
 			}
 		}
+
+	    private int copiedTaskId = -1;
+        private void CopySelectedTaskLog()
+        {
+            for (int i = 0; i < taskList.SelectedItems.Count; i++)
+            {
+                if (!isValidEditableLog(taskList.SelectedItems[i]))
+                    continue;
+                copiedTaskId = ((Log)taskList.SelectedItems[i].Tag).TaskId;
+                break;
+            }
+        }
+        private void PasteSelectedTaskLog()
+        {
+            if(copiedTaskId==-1)
+                return;
+            for (int i = 0; i < taskList.SelectedItems.Count; i++)
+            {
+                if (!isValidEditableLog(taskList.SelectedItems[i]))
+                    continue;
+                int taskLogId = ((Log)taskList.SelectedItems[i].Tag).Id;
+                Logs.UpdateLogTaskId(taskLogId, copiedTaskId);
+            }
+        }
+
 
         private void DeleteSelectedAppLog()
         {
@@ -577,12 +599,25 @@ namespace PTM.View.Controls
 			DeleteSelectedTaskLog();
 		}
 
+        private void mnuCopy_Click(object sender, EventArgs e)
+        {
+            CopySelectedTaskLog();
+        }
+
+        private void mnuPaste_Click(object sender, EventArgs e)
+        {
+            PasteSelectedTaskLog();
+        }
+
 		private void CreateRigthClickMenu()
 		{
 			MenuItem mnuEdit = new MenuItem();
 			MenuItem mnuShowProperties = new MenuItem();
 			MenuItem mnuDelete = new MenuItem();
+            MenuItem mnuCopy = new MenuItem();
+            MenuItem mnuPaste = new MenuItem();
 			MenuItem menuItem11 = new MenuItem();
+            
             TaskMenuItem idleMenuItem = new TaskMenuItem(Tasks.IdleTask.Id);
             idleMenuItem.Text = Tasks.IdleTask.Description;
             idleMenuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
@@ -593,6 +628,8 @@ namespace PTM.View.Controls
 			                                       		mnuEdit,
 			                                       		mnuShowProperties,
 			                                       		mnuDelete,
+                                                        mnuCopy,
+                                                        mnuPaste,
 			                                       		menuItem11,
                                                         idleMenuItem
 			                                       	});
@@ -612,7 +649,17 @@ namespace PTM.View.Controls
 			mnuDelete.Text = "Delete";
 			mnuDelete.Click += new EventHandler(this.mnuDelete_Click);
 
-			menuItem11.Index = 3;
+            mnuCopy.Index = 3;
+            mnuCopy.Shortcut = Shortcut.CtrlC;
+            mnuCopy.Text = "Copy";
+            mnuCopy.Click += new EventHandler(this.mnuCopy_Click);
+
+            mnuPaste.Index = 4;
+            mnuPaste.Shortcut = Shortcut.CtrlV;
+            mnuPaste.Text = "Paste";
+            mnuPaste.Click += new EventHandler(this.mnuPaste_Click);
+
+			menuItem11.Index = 5;
 			menuItem11.Text = "-";
 
 			ArrayList a = new ArrayList();
