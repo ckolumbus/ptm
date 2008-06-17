@@ -11,7 +11,6 @@ using PTM.Data;
 using PTM.Framework.Infos;
 using PTM.Util;
 using PTM.View;
-using Timer=System.Timers.Timer;
 
 namespace PTM.Framework
 {
@@ -34,10 +33,6 @@ namespace PTM.Framework
 		/// </summary>
 		private static IntPtr lastProcess;
 		/// <summary>
-		/// Internal application timmer.
-		/// </summary>
-		private static Timer applicationsTimer;
-		/// <summary>
 		/// TimeStamp of the last logged time .
 		/// </summary>
 		private static DateTime lastCallTime;
@@ -54,14 +49,12 @@ namespace PTM.Framework
 		{
 			loggingThread = null;
 			lastProcess = IntPtr.Zero;
-			applicationsTimer = new Timer(1000);
 			currentApplicationsLog = new ArrayList();
 
-			//Event Handling Initialization
-			applicationsTimer.Elapsed += new ElapsedEventHandler(ApplicationsTimer_Elapsed);
+            Logs.CurrentLogDurationChanged += new ElapsedEventHandler(Logs_CurrentLogDurationChanged);
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			Logs.AfterStopLogging += new EventHandler(TasksLog_AfterStopLogging);
-		} //Initialize
+		}
 
 		/// <summary>
 		/// Updates the database with the information refered to the managed 
@@ -74,8 +67,9 @@ namespace PTM.Framework
 			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ? WHERE (Id = ?)";
             lock (currentApplicationsLog)
             {
-                foreach (ApplicationLog applicationLog in currentApplicationsLog)
+                for (int i = 0; i< currentApplicationsLog.Count;i++)
                 {
+                    ApplicationLog applicationLog = (ApplicationLog) currentApplicationsLog[i];
                     DbHelper.ExecuteNonQuery(cmd,
                                              new string[] {"ActiveTime", "Id"},
                                              new object[]
@@ -157,8 +151,7 @@ namespace PTM.Framework
 			try
 			{
 				DateTime initCallTime = DateTime.Now;
-				applicationsTimer.Stop();
-
+				
 				//currentProcess = GetCurrentHWnd();
 				IntPtr hwnd = GetCurrentHWnd();
 				if (hwnd == IntPtr.Zero)
@@ -226,7 +219,6 @@ namespace PTM.Framework
 			{
 				lastProcess = processId;
 				lastCallTime = DateTime.Now;
-				applicationsTimer.Start();
 			} //try-catch-finally
 		} //UpdateActiveProcess
 
@@ -318,7 +310,6 @@ namespace PTM.Framework
 		{
 			if (e.Action == DataRowAction.Add)
 			{
-				applicationsTimer.Stop();
 				JoinLoggingThread();
 				if (currentApplicationsLog.Count > 0)
 				{
@@ -329,6 +320,11 @@ namespace PTM.Framework
 				//UpdateActiveProcess();
 			} //if
 		} //TasksLog_LogChanged
+
+        static void Logs_CurrentLogDurationChanged(object sender, ElapsedEventArgs e)
+        {
+            InvokeLoggingThread();
+        }
 
 		/// <summary>
 		/// Join Loggin Thread (5000)
@@ -344,16 +340,6 @@ namespace PTM.Framework
 				catch(ThreadStateException){} //catch exception
 			} //if-else
 		} //JoinLoggingThread
-
-		/// <summary>
-		/// Application Timer Elapsed Event
-		/// </summary>
-		private static void ApplicationsTimer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			//UpdateActiveProcess();
-			InvokeLoggingThread();
-		} //ApplicationsTimer_Elapsed
-
 
 		/// <summary>
 		/// If The loggin thread is not initialized, initializes it.
@@ -375,7 +361,6 @@ namespace PTM.Framework
 		/// </summary>
 		private static void TasksLog_AfterStopLogging(object sender, EventArgs e)
 		{
-			applicationsTimer.Stop();
 			JoinLoggingThread();
 			UpdateCurrentApplicationsLog();
 		} //TasksLog_AfterStopLogging
