@@ -239,6 +239,13 @@ namespace PTM.Framework
             while(queue.Count>0)
             {
                 int curTaskId = (int)queue.Dequeue();
+                Task[] childs;
+                childs = Tasks.GetChildTasks(curTaskId);
+                foreach (Task child in childs)
+                {
+                    if(child.Id != Tasks.IdleTask.Id)
+                        queue.Enqueue(child.Id);
+                }
                 object retValue = DbHelper.ExecuteScalar("Select Min(InsertTime) From TasksLog Where TaskId = ?", new string[] { "TaskId" },
                        new object[] { curTaskId });
                 if(retValue==null || retValue == DBNull.Value)
@@ -251,13 +258,6 @@ namespace PTM.Framework
 
                 if (curStartTime < range.StartDate) range.StartDate = curStartTime;
                 if (curEndTime > range.EndDate) range.EndDate = curEndTime;
-
-                Task[] childs;
-                childs = Tasks.GetChildTasks(curTaskId);
-                foreach (Task child in childs)
-                {
-                    queue.Enqueue(child.Id);
-                }
             }
             return range;
         }
