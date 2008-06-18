@@ -214,11 +214,12 @@ namespace PTM.View.Forms
 			this.timer.Start();
 
             //// Show the window without activating it.
-            APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
+            APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNA);
 
             //// Equivalent to setting TopMost = true, except don't activate the window.
-            APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 10);    
+            //APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 10);    
             //SetWindowPos((int)this.Handle, 0, Left, Top, Width, Height, System.Convert.ToUInt16(SWP.FRAMECHANGED | SWP.NOACTIVATE | SWP.NOCOPYBITS | SWP.NOMOVE | SWP.NOOWNERZORDER | SWP.NOSENDCHANGING | SWP.NOSIZE | SWP.NOZORDER));
+            APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, Convert.ToUInt16(APIsEnums.SWP.FRAMECHANGED | APIsEnums.SWP.NOACTIVATE | APIsEnums.SWP.NOCOPYBITS | APIsEnums.SWP.NOMOVE | APIsEnums.SWP.NOOWNERZORDER | APIsEnums.SWP.NOSENDCHANGING | APIsEnums.SWP.NOSIZE | APIsEnums.SWP.NOZORDER));
 		}
                
 
@@ -226,7 +227,7 @@ namespace PTM.View.Forms
         {
             if (value)
             {
-                APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
+                APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNA);
             }
             else base.SetVisibleCore(value);
         }

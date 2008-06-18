@@ -343,8 +343,8 @@ namespace PTM.View.Controls
 		private void ResetNotifyTimer(int defaultMins)
 		{
 			notifyTimer.Stop();
-		    notifyTimer.Interval = 1000*60*defaultMins;
-            //notifyTimer.Interval = 1000 * 20;
+		    //notifyTimer.Interval = 1000*60*defaultMins;
+            notifyTimer.Interval = 1000 * 20;
 			notifyTimer.Start();
 		}
 
