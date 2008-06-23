@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM\PTM.csproj"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Addin.Charts", "code\PTM.Addin.Charts\PTM.Addin.Charts.csproj", "{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CPSystemHotkey", "..\ptm\code\CPSystemHotkey\CPSystemHotkey.csproj", "{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

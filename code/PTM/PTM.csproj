@@ -346,6 +346,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ptm\code\CPSystemHotkey\CPSystemHotkey.csproj">
+      <Project>{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}</Project>
+      <Name>CPSystemHotkey</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

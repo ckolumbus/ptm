@@ -41,11 +41,16 @@ namespace PTM.View.Controls
 		private CheckBox pathCheckBox;
 		private DateTime currentDay;
         private BackgroundWorker worker = new BackgroundWorker();
+        private CodeProject.SystemHotkey.SystemHotkey hotKey;
 
         internal TasksLogControl()
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+
+            hotKey = new CodeProject.SystemHotkey.SystemHotkey(this.components);
+            hotKey.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftT;
+            hotKey.Pressed += new System.EventHandler(hotKey_Pressed);
 
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
@@ -80,6 +85,11 @@ namespace PTM.View.Controls
 			CreateRigthClickMenu();
 			CreateNotifyMenu();
 		}
+
+        private void hotKey_Pressed(object sender, System.EventArgs e)
+        {
+            NewTaskLog(false);
+        }
 
 	    private DateTime dateBeforeDropDown;
         void logDate_DropDown(object sender, EventArgs e)
