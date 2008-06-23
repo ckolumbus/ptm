@@ -75,6 +75,10 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PopupControl, Version=1.3.0.13592, Culture=neutral, PublicKeyToken=04c10344d6495b18, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\PopupControl\PopupControl.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -244,7 +248,7 @@
       <DependentUpon>ExceptionMessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Forms\NotifyForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="View\Forms\SplashForm.cs">
       <SubType>Form</SubType>

@@ -4,13 +4,14 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.APIs;
 using System.Windows.Forms;
 using PTM.Framework.Helpers;
+using PopupControl;
 
 namespace PTM.View.Forms
 {
 	/// <summary>
 	/// Summary description for NotifyForm.
 	/// </summary>
-	internal class NotifyForm : Form
+	internal class NotifyForm : UserControl
 	{
 		private Panel panel1;
 		private Timer timer;
@@ -139,19 +140,10 @@ namespace PTM.View.Forms
             // 
             // NotifyForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(195, 88);
-            this.ControlBox = false;
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "NotifyForm";
-            this.Opacity = 0.9;
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "NotifyForm";
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -170,31 +162,30 @@ namespace PTM.View.Forms
 		private void timer_Tick(object sender, EventArgs e)
 		{
     		this.timer.Stop();
-			this.Close();
+            (Parent as Popup).Close();
 		}
 
 		private void noButton_Click(object sender, EventArgs e)
 		{
 			result = NotifyResult.No;
 			this.timer.Stop();
-			this.Close();
+            (Parent as Popup).Close();
 		}
 
 		private void yesButton_Click(object sender, EventArgs e)
 		{
 			result = NotifyResult.Yes;
 			this.timer.Stop();
-			this.Close();
+            (Parent as Popup).Close();
 		}
 
-		protected override void OnClosed(EventArgs e)
+		protected void OnClosed(EventArgs e)
 		{
 			if (result == NotifyResult.Waiting)
 			{
 				result = NotifyResult.Cancel;
 			}
 			this.timer.Stop();
-			base.OnClosed(e);
 		}
 
 		static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
@@ -214,20 +205,38 @@ namespace PTM.View.Forms
 			this.timer.Start();
 
             //// Show the window without activating it.
-            APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNA);
+            APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
 
             //// Equivalent to setting TopMost = true, except don't activate the window.
-            //APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 10);    
+            APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, 10);    
             //SetWindowPos((int)this.Handle, 0, Left, Top, Width, Height, System.Convert.ToUInt16(SWP.FRAMECHANGED | SWP.NOACTIVATE | SWP.NOCOPYBITS | SWP.NOMOVE | SWP.NOOWNERZORDER | SWP.NOSENDCHANGING | SWP.NOSIZE | SWP.NOZORDER));
-            APIsUser32.SetWindowPos(this.Handle, HWND_TOPMOST, Left, Top, Width, Height, Convert.ToUInt16(APIsEnums.SWP.FRAMECHANGED | APIsEnums.SWP.NOACTIVATE | APIsEnums.SWP.NOCOPYBITS | APIsEnums.SWP.NOMOVE | APIsEnums.SWP.NOOWNERZORDER | APIsEnums.SWP.NOSENDCHANGING | APIsEnums.SWP.NOSIZE | APIsEnums.SWP.NOZORDER));
 		}
-               
+
+        public void reset()
+        {
+            this.timer.Stop();
+        }
+
+        public void Prepare()
+        {
+//            int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+//            int screenHeight = Screen.PrimaryScreen.WorkingArea.Height;
+//            this.Left = screenWidth - this.Width;
+//            this.Top = screenHeight - this.Height;
+
+            Configuration c;
+            c = ConfigurationHelper.GetConfiguration(ConfigurationKey.PlaySoundOnReminder);
+            if (Convert.ToInt32(c.Value) == 1)
+                System.Media.SystemSounds.Asterisk.Play();
+
+            this.timer.Start();
+        }      
 
         protected override void SetVisibleCore(bool value)
         {
             if (value)
             {
-                APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNA);
+                APIsUser32.ShowWindow(this.Handle, APIsEnums.ShowWindowStyles.SHOWNOACTIVATE);
             }
             else base.SetVisibleCore(value);
         }
