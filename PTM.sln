@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM", "code\PTM\PTM.csproj"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Addin.Charts", "code\PTM.Addin.Charts\PTM.Addin.Charts.csproj", "{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.Addin.Twitter", "twitter-notify\PTM.Addin.Twitter.csproj", "{CB176C86-6468-41A9-BD29-34EA7CA43351}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,10 +40,6 @@ Global
 		{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A5FA555-FCFB-448E-9859-F8FCD0E6D8A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CB176C86-6468-41A9-BD29-34EA7CA43351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CB176C86-6468-41A9-BD29-34EA7CA43351}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CB176C86-6468-41A9-BD29-34EA7CA43351}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CB176C86-6468-41A9-BD29-34EA7CA43351}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
