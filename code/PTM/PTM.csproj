@@ -186,6 +186,10 @@
     <Compile Include="View\API\MouseHookEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="View\API\SystemHotkey.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\API\Win32.cs" />
     <Compile Include="View\Controls\IndicatorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
