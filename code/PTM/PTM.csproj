@@ -186,6 +186,10 @@
     <Compile Include="View\API\MouseHookEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="View\API\SystemHotkey.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\API\Win32.cs" />
     <Compile Include="View\Controls\IndicatorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -344,12 +348,6 @@
     <EmbeddedResource Include="View\Forms\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\ptm\code\CPSystemHotkey\CPSystemHotkey.csproj">
-      <Project>{E34F5348-8D10-4F07-A7C3-32F2C812F8CC}</Project>
-      <Name>CPSystemHotkey</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
