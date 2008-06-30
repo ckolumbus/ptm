@@ -193,6 +193,14 @@
     <Compile Include="View\Controls\IndicatorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="View\Controls\PopupControl\GripBounds.cs" />
+    <Compile Include="View\Controls\PopupControl\NativeMethods.cs" />
+    <Compile Include="View\Controls\PopupControl\Popup.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Controls\PopupControl\Popup.Designer.cs">
+      <DependentUpon>Popup.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\StatisticsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -248,7 +256,7 @@
       <DependentUpon>ExceptionMessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Forms\NotifyForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="View\Forms\SplashForm.cs">
       <SubType>Form</SubType>

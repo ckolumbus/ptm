@@ -13,6 +13,7 @@ using PTM.Framework.Helpers;
 using PTM.Framework.Infos;
 using PTM.View.Controls.TreeListViewComponents;
 using PTM.View.Forms;
+using PopupControl;
 using Timer=System.Timers.Timer;
 
 namespace PTM.View.Controls
@@ -42,6 +43,7 @@ namespace PTM.View.Controls
 		private DateTime currentDay;
         private BackgroundWorker worker = new BackgroundWorker();
         private CodeProject.SystemHotkey.SystemHotkey hotKey;
+        private Popup popup;
 
         internal TasksLogControl()
 		{
@@ -794,14 +796,31 @@ namespace PTM.View.Controls
 
 		private void notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			notifyForm = new NotifyForm(this.notifyIcon.Text);
-			notifyForm.ShowNoActivate();
-            notifyForm.Closed += new EventHandler(notifyForm_Closed);
+//			notifyForm = new NotifyForm(this.notifyIcon.Text);
+//			notifyForm.ShowNoActivate();
+//			notifyForm.Closed += new EventHandler(notifyForm_Closed);
+            notifyForm = new NotifyForm(this.notifyIcon.Text);
+
+            int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+            int screenHeight = Screen.PrimaryScreen.WorkingArea.Height;
+            int clientWidth = notifyForm.Width;
+            int clientHeight = notifyForm.Height;
+            Rectangle area = new Rectangle(screenWidth - clientWidth, screenHeight - clientHeight,
+                clientWidth, clientHeight);
+
+            popup = new Popup(this.notifyForm);
+            popup.Top = screenHeight - clientHeight;
+            popup.Left = screenWidth - clientWidth;
+
+            popup.Closed += new ToolStripDropDownClosedEventHandler(notifyPopup_Closed);
+            notifyForm.Prepare();
+            popup.Show(new Point(screenWidth - clientWidth, screenHeight - clientHeight));
 		}
 
-        void notifyForm_Closed(object sender, EventArgs e)
+        void notifyPopup_Closed(object sender, EventArgs e)
         {
-            if (notifyForm.Result == NotifyForm.NotifyResult.Cancel)
+            if (notifyForm.Result == NotifyForm.NotifyResult.Cancel || 
+                notifyForm.Result == NotifyForm.NotifyResult.Waiting)
             {
                 this.AddIdleTaskLog();
             }
