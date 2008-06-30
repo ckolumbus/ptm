@@ -127,7 +127,7 @@ namespace PTM.View.Controls
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer2 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
+            PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryControl));
             this.taskList = new PTM.View.Controls.TreeListViewComponents.TreeListView();
             this.TaskHeader = new System.Windows.Forms.ColumnHeader();
@@ -175,9 +175,9 @@ namespace PTM.View.Controls
             this.PercentGoalHeader,
             this.ActiveTimeHeader,
             this.InactiveTimeHeader});
-            treeListViewItemCollectionComparer2.Column = 0;
-            treeListViewItemCollectionComparer2.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.taskList.Comparer = treeListViewItemCollectionComparer2;
+            treeListViewItemCollectionComparer1.Column = 0;
+            treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.taskList.Comparer = treeListViewItemCollectionComparer1;
             this.taskList.HideSelection = false;
             this.taskList.Location = new System.Drawing.Point(8, 16);
             this.taskList.MultiSelect = false;
@@ -393,7 +393,7 @@ namespace PTM.View.Controls
             this.groupBox5.Size = new System.Drawing.Size(72, 80);
             this.groupBox5.TabIndex = 19;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "% Elapsed";
+            this.groupBox5.Text = "%Elapsed";
             // 
             // allRadioButton
             // 
