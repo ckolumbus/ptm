@@ -25,7 +25,17 @@ namespace PTM.Framework.Infos
 		/// </summary>
 		public string Caption
 		{
-			get { return caption; }
+			get
+			{
+                if (caption != null)
+                {
+                    if (caption.Length != 0)
+                        return caption;
+                    else
+		                return name;
+                }
+			    return caption;
+			}
 			set { caption = value; }
 		} //Caption
 

@@ -1116,7 +1116,7 @@ namespace PTM.View.Controls
             {
                 TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
                 activeTime = ViewHelper.TimeSpanToTimeString(active);
-                caption = applicationLog.Caption.Length != 0 ? applicationLog.Caption : applicationLog.Name;                
+                caption = applicationLog.Caption;
             }
 
 			foreach (TreeListViewItem logItem in this.taskList.Items)

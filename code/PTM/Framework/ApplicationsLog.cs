@@ -64,17 +64,18 @@ namespace PTM.Framework
 		{
 			if (currentApplicationsLog == null)
 				return;
-			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ? WHERE (Id = ?)";
+			string cmd = "UPDATE ApplicationsLog SET ActiveTime = ?, Caption = ? WHERE (Id = ?)";
             lock (currentApplicationsLog)
             {
                 for (int i = 0; i< currentApplicationsLog.Count;i++)
                 {
                     ApplicationLog applicationLog = (ApplicationLog) currentApplicationsLog[i];
                     DbHelper.ExecuteNonQuery(cmd,
-                                             new string[] {"ActiveTime", "Id"},
+                                             new string[] {"ActiveTime", "Caption", "Id"},
                                              new object[]
                                                  {
                                                      applicationLog.ActiveTime,
+                                                     GetLast255Chars(applicationLog.Caption),
                                                      applicationLog.Id
                                                  });
                 } //foreach
@@ -89,7 +90,7 @@ namespace PTM.Framework
 		{
 			ArrayList resultsHT =
 				DbHelper.ExecuteGetRows(
-				"SELECT Id, Name, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
+				"SELECT Id, Name, Caption, ApplicationFullPath, ActiveTime FROM ApplicationsLog WHERE TaskLogId = " +
 				taskLogId);
 			ArrayList results = new ArrayList();
 			foreach (IDictionary dictionary in resultsHT)
@@ -97,7 +98,10 @@ namespace PTM.Framework
 				ApplicationLog applicationLog = new ApplicationLog();
 				applicationLog.Id = (int) dictionary["Id"];
 				applicationLog.Name = (string) dictionary["Name"];
-				applicationLog.Caption = String.Empty;
+                if (dictionary["Caption"]==DBNull.Value)
+                    applicationLog.Caption = String.Empty;
+                else
+                    applicationLog.Caption = (string)dictionary["Caption"];
 				applicationLog.ApplicationFullPath = (string) dictionary["ApplicationFullPath"];
 				applicationLog.ActiveTime = (int) dictionary["ActiveTime"];
 				applicationLog.TaskLogId = taskLogId;
@@ -228,24 +232,32 @@ namespace PTM.Framework
 		private static void InsertApplicationLog(ApplicationLog applicationLog)
 		{
 			string cmd =
-				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Name, TaskLogId) VALUES (?, ?, ?, ?)";
-			applicationLog.Id =
-				DbHelper.ExecuteInsert(cmd,
-				new string[]
-										{
-											"ActiveTime", "ApplicationFullPath", "Name", "TaskLogId"
-										},
-				new object[]
-										{
-											applicationLog.ActiveTime,
-											applicationLog.ApplicationFullPath.Substring(
-											Math.Max(0, applicationLog.ApplicationFullPath.Length - 255),
-											Math.Min(applicationLog.ApplicationFullPath.Length, 255)),
+				"INSERT INTO ApplicationsLog(ActiveTime, ApplicationFullPath, Name, TaskLogId, Caption) VALUES (?, ?, ?, ?, ?)";
+		    applicationLog.Id =
+		        DbHelper.ExecuteInsert(cmd,
+		                               new string[]
+		                                   {
+		                                       "ActiveTime", "ApplicationFullPath", "Name", "TaskLogId", "Caption"
+		                                   },
+		                               new object[]
+		                                   {
+	                                       applicationLog.ActiveTime,
+                                           GetLast255Chars(applicationLog.ApplicationFullPath),
 											applicationLog.Name,
-											applicationLog.TaskLogId
+											applicationLog.TaskLogId, 
+                                            GetLast255Chars(applicationLog.Caption)
 										});
 			currentApplicationsLog.Add(applicationLog);
 		} //InsertApplicationLog
+
+        private static string GetLast255Chars(string text)
+        {
+            if (text == null) return null;
+
+            return text.Substring(
+                Math.Max(0, text.Length - 255),
+                Math.Min(text.Length, 255));
+        }
 
 		/// <summary>
 		/// Search for an Application Log by processId inside inner Array of
@@ -270,7 +282,7 @@ namespace PTM.Framework
 		static extern int GetWindowTextLength(IntPtr hWnd);
 		[DllImport("user32.dll")] 
 		private static extern IntPtr GetWindowThreadProcessId(IntPtr hwnd, out IntPtr lpdwProcessId);
-
+        
 		private static string GetText(IntPtr hWnd)
 		{
 			// Allocate correct string length first
