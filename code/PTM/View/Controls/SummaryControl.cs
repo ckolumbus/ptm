@@ -518,6 +518,12 @@ namespace PTM.View.Controls
 
         void fromDateTimePicker_CloseUp(object sender, EventArgs e)
         {
+            if (this.fromRadioButton.Checked)
+            {
+                this.toDateTimePicker.ValueChanged -= new EventHandler(dateTimePicker_ValueChanged);
+                this.toDateTimePicker.Value = this.fromDateTimePicker.Value;
+                this.toDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
+            }
             this.fromDateTimePicker.ValueChanged += new EventHandler(dateTimePicker_ValueChanged);
             if (!fromDateTimePicker.Value.Equals(timeBeforeDropDown_fromDateTimePicker))
                 LaunchSummarySearch();
@@ -770,7 +776,7 @@ namespace PTM.View.Controls
 
 
 		}    
-		       
+		       			
 		private Task FindOnRecentParentTaskById(int taskId)
 		{
 			for(int i = 0;i<recentParentTasksList.Count;i++)
