@@ -699,8 +699,11 @@ namespace PTM.View.Controls
 			TaskMenuItem mnu = (TaskMenuItem) sender;
 			foreach (ListViewItem item in this.taskList.SelectedItems)
 			{
-				Log log = (Log) item.Tag;
-				Logs.UpdateLogTaskId(log.Id, mnu.TaskId);
+                if (item.Tag is Log) //see bug 2253519
+                {
+                    Log log = (Log)item.Tag;
+                    Logs.UpdateLogTaskId(log.Id, mnu.TaskId);                   
+                }
 			}
 		}
 
