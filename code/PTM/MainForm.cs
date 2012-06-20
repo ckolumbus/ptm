@@ -50,6 +50,9 @@ namespace PTM
 			UpdateStartUpPath();
 			Application.DoEvents();
 
+            // ckol.3
+            InitalizePowerEvent();
+
 			LoadAddins();
 			Application.DoEvents();
 		}
@@ -109,7 +112,25 @@ namespace PTM
 			this.ResumeLayout();
 		}
 
-//MainForm
+//MainForm 
+        // ckol.3-start
+        private void InitalizePowerEvent()
+        {
+            SystemEvents.PowerModeChanged += OnPowerChange;
+        }
+
+        private void OnPowerChange(Object sender, PowerModeChangedEventArgs e) {
+          switch ( e.Mode ) {
+            case PowerModes.Resume:
+                  Logs.FillMissingTimeUntilNow();
+                  Logs.StartLogging();
+              break; 
+            case PowerModes.Suspend:
+              Logs.StopLogging();
+              break;
+          }
+        }
+        // ckol.3-end
 
 		private void LoadAddins()
 		{

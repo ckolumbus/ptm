@@ -21,34 +21,35 @@ namespace PTM.View.Controls
 	/// <summary>
 	/// Summary description for TasksLog.
 	/// </summary>
-	internal class TasksLogControl : AddinTabPage
-	{
-		private Button editButton;
-		private Button addTaskButton;
-		private ColumnHeader TaskDescriptionHeader;
+    internal class TasksLogControl : AddinTabPage
+    {
+        private Button editButton;
+        private Button addTaskButton;
+        private ColumnHeader TaskDescriptionHeader;
         private ColumnHeader DurationTaskHeader;
-		private ContextMenu notifyContextMenu;
-		private Timer notifyTimer;
-		private NotifyIcon notifyIcon;
-		private IContainer components;
-		private TreeListView taskList;
-		private Button propertiesButton;
-		private Button deleteButton;
-		private ColumnHeader StartTimeHeader;
-		private DateTimePicker logDate;
-		private Label label1;
-		private ContextMenu rigthClickMenu;
-		private ToolTip shortcutToolTip;
-		private CheckBox pathCheckBox;
-		private DateTime currentDay;
+        private ContextMenu notifyContextMenu;
+        private Timer notifyTimer;
+        private NotifyIcon notifyIcon;
+        private IContainer components;
+        private TreeListView taskList;
+        private Button propertiesButton;
+        private Button deleteButton;
+        private ColumnHeader StartTimeHeader;
+        private DateTimePicker logDate;
+        private Label label1;
+        private ContextMenu rigthClickMenu;
+        private ToolTip shortcutToolTip;
+        private CheckBox pathCheckBox;
+        private DateTime currentDay;
         private BackgroundWorker worker = new BackgroundWorker();
         private CodeProject.SystemHotkey.SystemHotkey hotKey;
+        private CheckBox showAppsLog;
         private Popup popup;
 
         internal TasksLogControl()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
             hotKey = new CodeProject.SystemHotkey.SystemHotkey(this.components);
             hotKey.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftT;
@@ -56,44 +57,44 @@ namespace PTM.View.Controls
 
             worker.DoWork += new DoWorkEventHandler(worker_DoWork);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-            notifyIcon.MouseDown+=new MouseEventHandler(notifyIcon_MouseDown);
-			notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
-            notifyIcon.Click+=new EventHandler(notifyIcon_Click);
-			addTaskButton.Click += new EventHandler(addTaskButton_Click);
-			this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
+            notifyIcon.MouseDown += new MouseEventHandler(notifyIcon_MouseDown);
+            notifyTimer.Elapsed += new ElapsedEventHandler(notifyTimer_Elapsed);
+            notifyIcon.Click += new EventHandler(notifyIcon_Click);
+            addTaskButton.Click += new EventHandler(addTaskButton_Click);
+            this.taskList.DoubleClick += new EventHandler(taskList_DoubleClick);
             this.logDate.CloseUp += new EventHandler(logDate_CloseUp);
             this.logDate.DropDown += new EventHandler(logDate_DropDown);
 
-			Tasks.TaskChanged += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
-			Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Tasks.TaskDeleted += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
-			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+            Tasks.TaskChanged += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
+            Tasks.TaskDeleting += new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
+            Tasks.TaskDeleted += new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
+            Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
             Logs.CurrentLogDurationChanged += new ElapsedEventHandler(Logs_CurrentLogDurationChanged);
-			ApplicationsLog.ApplicationsLogChanged +=
-				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
-			this.taskList.SmallImageList = IconsManager.IconsList;
-			this.Load += new EventHandler(TasksLogControl_Load);
+            ApplicationsLog.ApplicationsLogChanged +=
+                new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+            this.taskList.SmallImageList = IconsManager.IconsList;
+            this.Load += new EventHandler(TasksLogControl_Load);
 
-			Configuration config;
-			config = ConfigurationHelper.GetConfiguration(ConfigurationKey.ShowTasksFullPath);
+            Configuration config;
+            config = ConfigurationHelper.GetConfiguration(ConfigurationKey.ShowTasksFullPath);
 
-			if (config.Value.ToString().CompareTo("1") == 0)
-				this.pathCheckBox.Checked = true;
-			else
-				this.pathCheckBox.Checked = false;
+            if (config.Value.ToString().CompareTo("1") == 0)
+                this.pathCheckBox.Checked = true;
+            else
+                this.pathCheckBox.Checked = false;
 
-			this.Status = String.Empty;
+            this.Status = String.Empty;
 
-			CreateRigthClickMenu();
-			CreateNotifyMenu();
-		}
+            CreateRigthClickMenu();
+            CreateNotifyMenu();
+        }
 
         private void hotKey_Pressed(object sender, System.EventArgs e)
         {
             NewTaskLog(false);
         }
 
-	    private DateTime dateBeforeDropDown;
+        private DateTime dateBeforeDropDown;
         void logDate_DropDown(object sender, EventArgs e)
         {
             dateBeforeDropDown = logDate.Value;
@@ -106,41 +107,41 @@ namespace PTM.View.Controls
             if (!logDate.Value.Equals(dateBeforeDropDown))
                 GetLogsAsync();
         }
-        
-		protected override void OnHandleDestroyed(EventArgs e)
-		{
-			Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
-			Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
-			Tasks.TaskDeleted -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
-			Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            Tasks.TaskChanged -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowChanged);
+            Tasks.TaskDeleting -= new Tasks.TaskChangeEventHandler(TasksDataTable_TasksRowDeleting);
+            Tasks.TaskDeleted -= new Tasks.TaskChangeEventHandler(Tasks_TasksRowDeleted);
+            Logs.LogChanged -= new Logs.LogChangeEventHandler(TasksLog_LogChanged);
             Logs.CurrentLogDurationChanged -= new ElapsedEventHandler(Logs_CurrentLogDurationChanged);
-			ApplicationsLog.ApplicationsLogChanged -=
-				new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
-			base.OnHandleDestroyed(e);
-		}
+            ApplicationsLog.ApplicationsLogChanged -=
+                new ApplicationsLog.ApplicationLogChangeEventHandler(ApplicationsLog_ApplicationsLogChanged);
+            base.OnHandleDestroyed(e);
+        }
 
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				this.notifyIcon.Dispose();
-				if (components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.notifyIcon.Dispose();
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
+        #region Component Designer generated code
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TasksLogControl));
             PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer treeListViewItemCollectionComparer1 = new PTM.View.Controls.TreeListViewComponents.TreeListViewItemCollection.TreeListViewItemCollectionComparer();
@@ -160,6 +161,7 @@ namespace PTM.View.Controls
             this.label1 = new System.Windows.Forms.Label();
             this.shortcutToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.pathCheckBox = new System.Windows.Forms.CheckBox();
+            this.showAppsLog = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -208,7 +210,6 @@ namespace PTM.View.Controls
             // 
             this.notifyIcon.ContextMenu = this.notifyContextMenu;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Tag = null;
             this.notifyIcon.Text = "PTM";
             this.notifyIcon.Visible = true;
             // 
@@ -228,9 +229,9 @@ namespace PTM.View.Controls
             this.taskList.Comparer = treeListViewItemCollectionComparer1;
             this.taskList.ContextMenu = this.rigthClickMenu;
             this.taskList.HideSelection = false;
-            this.taskList.Location = new System.Drawing.Point(8, 32);
+            this.taskList.Location = new System.Drawing.Point(8, 58);
             this.taskList.Name = "taskList";
-            this.taskList.Size = new System.Drawing.Size(376, 240);
+            this.taskList.Size = new System.Drawing.Size(376, 214);
             this.taskList.Sorting = System.Windows.Forms.SortOrder.None;
             this.taskList.TabIndex = 1;
             this.taskList.UseCompatibleStateImageBehavior = false;
@@ -285,8 +286,18 @@ namespace PTM.View.Controls
             this.pathCheckBox.Text = "Show path";
             this.pathCheckBox.CheckedChanged += new System.EventHandler(this.pathCheckBox_CheckedChanged);
             // 
+            // showAppsLog
+            // 
+            this.showAppsLog.Location = new System.Drawing.Point(304, 28);
+            this.showAppsLog.Name = "showAppsLog";
+            this.showAppsLog.Size = new System.Drawing.Size(80, 24);
+            this.showAppsLog.TabIndex = 9;
+            this.showAppsLog.Text = "AppsLog";
+            this.showAppsLog.CheckedChanged += new System.EventHandler(this.showAppsLog_CheckedChanged);
+            // 
             // TasksLogControl
             // 
+            this.Controls.Add(this.showAppsLog);
             this.Controls.Add(this.pathCheckBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.logDate);
@@ -301,15 +312,15 @@ namespace PTM.View.Controls
             ((System.ComponentModel.ISupportInitialize)(this.notifyTimer)).EndInit();
             this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region TaskLog
+        #region TaskLog
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            SetLogDay((GetLogsResult) e.Result);
+            SetLogDay((GetLogsResult)e.Result);
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
@@ -317,67 +328,67 @@ namespace PTM.View.Controls
             e.Result = GetLogs();
         }
 
-		private void TasksLogControl_Load(object sender, EventArgs e)
-		{
-			this.currentDay = DateTime.Today;
+        private void TasksLogControl_Load(object sender, EventArgs e)
+        {
+            this.currentDay = DateTime.Today;
             GetLogsResult result = this.GetLogs();
             SetLogDay(result);
-			AddIdleTaskLog();
-		}
+            AddIdleTaskLog();
+        }
 
-		internal void NewTaskLog(bool mustAddATask)
-		{
-			notifyTimer.Stop();
-			TaskSelectForm tasklog = new TaskSelectForm();
-			if (tasklog.ShowDialog(this) == DialogResult.OK)
-			{
-				AddTaskLog(tasklog.SelectedTaskId,
-				           (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
-			}
-			else if (mustAddATask)
-			{
-				AddIdleTaskLog();
-			}
-		}
+        internal void NewTaskLog(bool mustAddATask)
+        {
+            notifyTimer.Stop();
+            TaskSelectForm tasklog = new TaskSelectForm();
+            if (tasklog.ShowDialog(this) == DialogResult.OK)
+            {
+                AddTaskLog(tasklog.SelectedTaskId,
+                           (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+            }
+            else if (mustAddATask)
+            {
+                AddIdleTaskLog();
+            }
+        }
 
-		private void AddIdleTaskLog()
-		{
-			Logs.AddIdleTaskLog();
-			ResetNotifyTimer((int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
-		}
+        private void AddIdleTaskLog()
+        {
+            Logs.AddIdleTaskLog();
+            ResetNotifyTimer((int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+        }
 
-		private void AddTaskLog(int taskId, int defaultMins)
-		{
-			Logs.AddLog(taskId);
-			ResetNotifyTimer(defaultMins);
-		}
+        private void AddTaskLog(int taskId, int defaultMins)
+        {
+            Logs.AddLog(taskId);
+            ResetNotifyTimer(defaultMins);
+        }
 
-		private void ResetNotifyTimer(int defaultMins)
-		{
-			notifyTimer.Stop();
-		    notifyTimer.Interval = 1000*60*defaultMins;
+        private void ResetNotifyTimer(int defaultMins)
+        {
+            notifyTimer.Stop();
+            notifyTimer.Interval = 1000 * 60 * defaultMins;
             //notifyTimer.Interval = 1000 * 20;
-			notifyTimer.Start();
-		}
+            notifyTimer.Start();
+        }
 
-		private void EditSelectedTaskLog()
-		{
+        private void EditSelectedTaskLog()
+        {
             if (taskList.SelectedItems.Count == 0)
                 return;
             if (!isValidEditableLog(taskList.SelectedItems[0]))
-				return;
-			int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+                return;
+            int taskId = ((Log)taskList.SelectedItems[0].Tag).TaskId;
 
-			TaskSelectForm taskSelectForm = new TaskSelectForm(taskId);
-			if (taskSelectForm.ShowDialog(this.Parent) == DialogResult.OK)
-			{
-				for (int i = 0; i < taskList.SelectedItems.Count; i++)
-				{
-					int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-					Logs.UpdateLogTaskId(taskLogId, taskSelectForm.SelectedTaskId);
-				}
-			}
-		}
+            TaskSelectForm taskSelectForm = new TaskSelectForm(taskId);
+            if (taskSelectForm.ShowDialog(this.Parent) == DialogResult.OK)
+            {
+                for (int i = 0; i < taskList.SelectedItems.Count; i++)
+                {
+                    int taskLogId = ((Log)taskList.SelectedItems[i].Tag).Id;
+                    Logs.UpdateLogTaskId(taskLogId, taskSelectForm.SelectedTaskId);
+                }
+            }
+        }
 
         private void ShowTaskProperties()
         {
@@ -389,18 +400,18 @@ namespace PTM.View.Controls
             pf.ShowDialog(this);
         }
 
-		private void DeleteSelectedTaskLog()
-		{
-			for (int i = 0; i < taskList.SelectedItems.Count; i++)
-			{
+        private void DeleteSelectedTaskLog()
+        {
+            for (int i = 0; i < taskList.SelectedItems.Count; i++)
+            {
                 if (!isValidEditableLog(taskList.SelectedItems[i]))
                     continue;
-				int taskLogId = ((Log) taskList.SelectedItems[i].Tag).Id;
-				Logs.DeleteLog(taskLogId);
-			}
-		}
+                int taskLogId = ((Log)taskList.SelectedItems[i].Tag).Id;
+                Logs.DeleteLog(taskLogId);
+            }
+        }
 
-	    private int copiedTaskId = -1;
+        private int copiedTaskId = -1;
         private void CopySelectedTaskLog()
         {
             for (int i = 0; i < taskList.SelectedItems.Count; i++)
@@ -413,7 +424,7 @@ namespace PTM.View.Controls
         }
         private void PasteSelectedTaskLog()
         {
-            if(copiedTaskId==-1)
+            if (copiedTaskId == -1)
                 return;
             for (int i = 0; i < taskList.SelectedItems.Count; i++)
             {
@@ -429,95 +440,95 @@ namespace PTM.View.Controls
         {
             for (int i = 0; i < taskList.SelectedItems.Count; i++)
             {
-                if (taskList.SelectedItems[i].Parent==null)
+                if (taskList.SelectedItems[i].Parent == null)
                     continue;
                 int appId = ((ApplicationLog)taskList.SelectedItems[i].Tag).Id;
                 try
                 {
                     ApplicationsLog.DeleteApplicationLog(appId);
                 }
-                catch(ApplicationException aex)
+                catch (ApplicationException aex)
                 {
                     MessageBox.Show(aex.Message, this.ParentForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-	    private void addTaskButton_Click(object sender, EventArgs e)
-		{
-			NewTaskLog(false);
-		}
+        private void addTaskButton_Click(object sender, EventArgs e)
+        {
+            NewTaskLog(false);
+        }
 
-		private void editButton_Click(object sender, EventArgs e)
-		{
-			EditSelectedTaskLog();
-		}
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            EditSelectedTaskLog();
+        }
 
-		private void taskList_DoubleClick(object sender, EventArgs e)
-		{
-			EditSelectedTaskLog();
-		}
+        private void taskList_DoubleClick(object sender, EventArgs e)
+        {
+            EditSelectedTaskLog();
+        }
 
-		private void deleteButton_Click(object sender, EventArgs e)
-		{
-			DeleteSelectedTaskLog();
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedTaskLog();
             DeleteSelectedAppLog();
-		}
+        }
 
-		private static bool isValidEditableLog(TreeListViewItem item)
-		{
+        private static bool isValidEditableLog(TreeListViewItem item)
+        {
             if (item.Parent != null)
-				return false;
+                return false;
 
-			return true;
-		}
+            return true;
+        }
 
-		private void switchToButton_Click(object sender, EventArgs e)
-		{
+        private void switchToButton_Click(object sender, EventArgs e)
+        {
             ShowTaskProperties();
-		}
+        }
 
-		private void taskList_SelectedIndexChanged(object sender, EventArgs e)
-		{
+        private void taskList_SelectedIndexChanged(object sender, EventArgs e)
+        {
             DisplaySelectedItemStatus();
 
-			if (this.taskList.SelectedItems.Count <= 0)
-			{
-				SetNoEditable();
-			    return;
-			}
+            if (this.taskList.SelectedItems.Count <= 0)
+            {
+                SetNoEditable();
+                return;
+            }
 
-		    if (this.taskList.SelectedItems.Count == 1)
-			{
-				if (taskList.SelectedItems[0].Parent == null)
-				{
-					SetEditable();
-				}
-				else
-				{
-					SetNoEditable();
-				}
-			}
-			else
-			{
-				if (taskList.SelectedItems[0].Parent != null)
-				{
-					SetNoEditable();
-					return;
-				}
-				for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
-				{
-					if (taskList.SelectedItems[i].Parent != null)
-					{
-						SetNoEditable();
-						return;
-					}
-				}
-				SetEditable();
-			}
-		}
+            if (this.taskList.SelectedItems.Count == 1)
+            {
+                if (taskList.SelectedItems[0].Parent == null)
+                {
+                    SetEditable();
+                }
+                else
+                {
+                    SetNoEditable();
+                }
+            }
+            else
+            {
+                if (taskList.SelectedItems[0].Parent != null)
+                {
+                    SetNoEditable();
+                    return;
+                }
+                for (int i = 1; i < this.taskList.SelectedItems.Count; i++)
+                {
+                    if (taskList.SelectedItems[i].Parent != null)
+                    {
+                        SetNoEditable();
+                        return;
+                    }
+                }
+                SetEditable();
+            }
+        }
 
-	    private IDictionary taskExecutedTimeCache = new HybridDictionary();
+        private IDictionary taskExecutedTimeCache = new HybridDictionary();
         private int GetCachedExecutedTime(int taskId)
         {
             if (taskExecutedTimeCache.Contains(taskId))
@@ -529,17 +540,17 @@ namespace PTM.View.Controls
                 int executedTime = TasksSummaries.GetExecutedTime(taskId);
                 taskExecutedTimeCache.Add(taskId, executedTime);
                 return executedTime;
-            }            
+            }
         }
 
 
-	    private void DisplaySelectedItemStatus()
-	    {
-	        if (this.taskList.SelectedItems.Count <= 0)
-	        {
-	            this.Status = String.Empty;
-	            return;
-	        }
+        private void DisplaySelectedItemStatus()
+        {
+            if (this.taskList.SelectedItems.Count <= 0)
+            {
+                this.Status = String.Empty;
+                return;
+            }
             if (taskList.SelectedItems[0].Parent != null)
             {
                 this.Status = String.Empty;
@@ -547,9 +558,9 @@ namespace PTM.View.Controls
             }
             else
             {
-                int taskId = ((Log) taskList.SelectedItems[0].Tag).TaskId;
+                int taskId = ((Log)taskList.SelectedItems[0].Tag).TaskId;
 
-                if(taskId == Tasks.IdleTask.Id)
+                if (taskId == Tasks.IdleTask.Id)
                 {
                     this.Status = String.Empty;
                     return;
@@ -560,10 +571,10 @@ namespace PTM.View.Controls
 
                 Task task = Tasks.FindById(taskId);
 
-                if(task.Estimation>0)
+                if (task.Estimation > 0)
                 {
                     TimeSpan estimatedTimeSpan = new TimeSpan(0, task.Estimation, 0);
-                    double percentGoal = executedTime / (task.Estimation*60.0);
+                    double percentGoal = executedTime / (task.Estimation * 60.0);
                     this.Status = "Time elapsed: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
                         "     Estimated:" + ViewHelper.TimeSpanToTimeString(estimatedTimeSpan) +
                     "     % Elapsed:" + percentGoal.ToString("0.0%", CultureInfo.InvariantCulture);
@@ -573,43 +584,43 @@ namespace PTM.View.Controls
                     this.Status = "Time elapsed: " + ViewHelper.TimeSpanToTimeString(executedTimeSpan) +
                     "     Not estimated.";
                 }
-                
+
             }
-	    }
+        }
 
-	    private void SetEditable()
-		{
-			this.editButton.Enabled = true;
-			this.propertiesButton.Enabled = true;
-			this.taskList.ContextMenu = this.rigthClickMenu;
-		}
+        private void SetEditable()
+        {
+            this.editButton.Enabled = true;
+            this.propertiesButton.Enabled = true;
+            this.taskList.ContextMenu = this.rigthClickMenu;
+        }
 
-		private void SetNoEditable()
-		{
-			this.editButton.Enabled = false;
-			this.propertiesButton.Enabled = false;
-			this.taskList.ContextMenu = null;
-		}
+        private void SetNoEditable()
+        {
+            this.editButton.Enabled = false;
+            this.propertiesButton.Enabled = false;
+            this.taskList.ContextMenu = null;
+        }
 
-		private void logDate_ValueChanged(object sender, EventArgs e)
-		{
-		    GetLogsAsync();
-		}
+        private void logDate_ValueChanged(object sender, EventArgs e)
+        {
+            GetLogsAsync();
+        }
 
-	    private void mnuEdit_Click(object sender, EventArgs e)
-		{
-			EditSelectedTaskLog();
-		}
+        private void mnuEdit_Click(object sender, EventArgs e)
+        {
+            EditSelectedTaskLog();
+        }
 
-		private void mnuShowProperties_Click(object sender, EventArgs e)
-		{
-			ShowTaskProperties();
-		}
+        private void mnuShowProperties_Click(object sender, EventArgs e)
+        {
+            ShowTaskProperties();
+        }
 
-		private void mnuDelete_Click(object sender, EventArgs e)
-		{
-			DeleteSelectedTaskLog();
-		}
+        private void mnuDelete_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedTaskLog();
+        }
 
         private void mnuCopy_Click(object sender, EventArgs e)
         {
@@ -621,21 +632,21 @@ namespace PTM.View.Controls
             PasteSelectedTaskLog();
         }
 
-		private void CreateRigthClickMenu()
-		{
-			MenuItem mnuEdit = new MenuItem();
-			MenuItem mnuShowProperties = new MenuItem();
-			MenuItem mnuDelete = new MenuItem();
+        private void CreateRigthClickMenu()
+        {
+            MenuItem mnuEdit = new MenuItem();
+            MenuItem mnuShowProperties = new MenuItem();
+            MenuItem mnuDelete = new MenuItem();
             MenuItem mnuCopy = new MenuItem();
             MenuItem mnuPaste = new MenuItem();
-			MenuItem menuItem11 = new MenuItem();
-            
+            MenuItem menuItem11 = new MenuItem();
+
             TaskMenuItem idleMenuItem = new TaskMenuItem(Tasks.IdleTask.Id);
             idleMenuItem.Text = Tasks.IdleTask.Description;
             idleMenuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
 
-			this.rigthClickMenu.MenuItems.Clear();
-			this.rigthClickMenu.MenuItems.AddRange(new MenuItem[]
+            this.rigthClickMenu.MenuItems.Clear();
+            this.rigthClickMenu.MenuItems.AddRange(new MenuItem[]
 			                                       	{
 			                                       		mnuEdit,
 			                                       		mnuShowProperties,
@@ -646,20 +657,20 @@ namespace PTM.View.Controls
                                                         idleMenuItem
 			                                       	});
 
-			mnuEdit.DefaultItem = true;
-			mnuEdit.Index = 0;
-			mnuEdit.Text = "Edit...";
-			mnuEdit.Click += new EventHandler(this.mnuEdit_Click);
+            mnuEdit.DefaultItem = true;
+            mnuEdit.Index = 0;
+            mnuEdit.Text = "Edit...";
+            mnuEdit.Click += new EventHandler(this.mnuEdit_Click);
 
-			mnuShowProperties.Index = 1;
-			mnuShowProperties.Shortcut = Shortcut.CtrlP;
-			mnuShowProperties.Text = "Show task properties...";
-			mnuShowProperties.Click += new EventHandler(this.mnuShowProperties_Click);
+            mnuShowProperties.Index = 1;
+            mnuShowProperties.Shortcut = Shortcut.CtrlP;
+            mnuShowProperties.Text = "Show task properties...";
+            mnuShowProperties.Click += new EventHandler(this.mnuShowProperties_Click);
 
-			mnuDelete.Index = 2;
-			mnuDelete.Shortcut = Shortcut.Del;
-			mnuDelete.Text = "Delete";
-			mnuDelete.Click += new EventHandler(this.mnuDelete_Click);
+            mnuDelete.Index = 2;
+            mnuDelete.Shortcut = Shortcut.Del;
+            mnuDelete.Text = "Delete";
+            mnuDelete.Click += new EventHandler(this.mnuDelete_Click);
 
             mnuCopy.Index = 3;
             mnuCopy.Shortcut = Shortcut.CtrlC;
@@ -671,137 +682,142 @@ namespace PTM.View.Controls
             mnuPaste.Text = "Paste";
             mnuPaste.Click += new EventHandler(this.mnuPaste_Click);
 
-			menuItem11.Index = 5;
-			menuItem11.Text = "-";
+            menuItem11.Index = 5;
+            menuItem11.Text = "-";
 
-			ArrayList a = new ArrayList();
-			Task[] tasks;
-			tasks = Tasks.GetChildTasks(Tasks.RootTask.Id);
-			foreach (Task task in tasks)
-			{
+            ArrayList a = new ArrayList();
+            Task[] tasks;
+            tasks = Tasks.GetChildTasks(Tasks.RootTask.Id);
+            foreach (Task task in tasks)
+            {
                 if (task.Id == Tasks.IdleTask.Id)
                     continue;
                 if (task.Hidden) continue;
-			    
-				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
-				menuItem.Text = task.Description;
-				menuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
 
-				a.Add(menuItem);
-				AddSubTasks(task, menuItem, new EventHandler(mnuTaskSetTo_Click));
-			}
-			ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
-			this.rigthClickMenu.MergeMenu(defaultTasksMenu);
-		}
+                TaskMenuItem menuItem = new TaskMenuItem(task.Id);
+                menuItem.Text = task.Description;
+                menuItem.Pick += new EventHandler(mnuTaskSetTo_Click);
 
-		private void mnuTaskSetTo_Click(object sender, EventArgs e)
-		{
-			TaskMenuItem mnu = (TaskMenuItem) sender;
-			foreach (ListViewItem item in this.taskList.SelectedItems)
-			{
+                a.Add(menuItem);
+                AddSubTasks(task, menuItem, new EventHandler(mnuTaskSetTo_Click));
+            }
+            ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[])a.ToArray(typeof(TaskMenuItem)));
+            this.rigthClickMenu.MergeMenu(defaultTasksMenu);
+        }
+
+        private void mnuTaskSetTo_Click(object sender, EventArgs e)
+        {
+            TaskMenuItem mnu = (TaskMenuItem)sender;
+            foreach (ListViewItem item in this.taskList.SelectedItems)
+            {
                 if (item.Tag is Log) //see bug 2253519
                 {
                     Log log = (Log)item.Tag;
-                    Logs.UpdateLogTaskId(log.Id, mnu.TaskId);                   
+                    Logs.UpdateLogTaskId(log.Id, mnu.TaskId);
                 }
-			}
-		}
+            }
+        }
 
 
-		private void taskList_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyData == Keys.Enter)
-			{
-				EditSelectedTaskLog();
-			}
-			if (e.KeyData == Keys.Insert)
-			{
-				NewTaskLog(false);
-			}
-		}
+        private void taskList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                EditSelectedTaskLog();
+            }
+            if (e.KeyData == Keys.Insert)
+            {
+                NewTaskLog(false);
+            }
+        }
 
-		private void pathCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				Cursor.Current = Cursors.WaitCursor;
-				for (int i = 0; i < this.taskList.Items.Count; i++)
-				{
-					TreeListViewItem item = this.taskList.Items[i];
-					if (((Log) item.Tag).TaskId == Tasks.IdleTask.Id)
-						continue;
-					if (this.pathCheckBox.Checked)
-					{
-						item.Text = Tasks.GetFullPath(((Log) item.Tag).TaskId);
-					}
-					else
-					{
-						item.Text = Tasks.FindById(((Log) item.Tag).TaskId).Description;
-					}
-				}
-				Configuration config;
-				config = ConfigurationHelper.GetConfiguration(ConfigurationKey.ShowTasksFullPath);
-				if (this.pathCheckBox.Checked)
-					config.Value = "1";
-				else
-					config.Value = "0";
-				ConfigurationHelper.SaveConfiguration(config);
-			}
-			finally
-			{
-				Cursor.Current = Cursors.Default;
-			}
-		}
+        private void pathCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                for (int i = 0; i < this.taskList.Items.Count; i++)
+                {
+                    TreeListViewItem item = this.taskList.Items[i];
+                    if (((Log)item.Tag).TaskId == Tasks.IdleTask.Id)
+                        continue;
+                    if (this.pathCheckBox.Checked)
+                    {
+                        item.Text = Tasks.GetFullPath(((Log)item.Tag).TaskId);
+                    }
+                    else
+                    {
+                        item.Text = Tasks.FindById(((Log)item.Tag).TaskId).Description;
+                    }
+                }
+                Configuration config;
+                config = ConfigurationHelper.GetConfiguration(ConfigurationKey.ShowTasksFullPath);
+                if (this.pathCheckBox.Checked)
+                    config.Value = "1";
+                else
+                    config.Value = "0";
+                ConfigurationHelper.SaveConfiguration(config);
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private void showAppsLog_CheckedChanged(object sender, EventArgs e)
+        {
+            GetLogsAsync();
+        }
 
         private void SetLogDay(GetLogsResult result)
-		{
-			try
-			{
-				taskList.BeginUpdate();
+        {
+            try
+            {
+                taskList.BeginUpdate();
                 foreach (Log log in result.LogList)
-				{
-					Task taskRow = Tasks.FindById(log.TaskId);
-					TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
-					SetListItemValues(itemA, log, taskRow);
-					taskList.Items.Insert(0, itemA);
-					foreach (ApplicationLog applicationLog in log.ApplicationsLog)
-					{
-						UpdateApplicationsList(applicationLog, DataRowAction.Add);
-					}
-				}
-			}
-			finally
-			{
-				taskList.EndUpdate();
-				SetReadyState();
-			}
-		}
+                {
+                    Task taskRow = Tasks.FindById(log.TaskId);
+                    TreeListViewItem itemA = new TreeListViewItem("", new string[] { "", "" });
+                    SetListItemValues(itemA, log, taskRow);
+                    taskList.Items.Insert(0, itemA);
+                    foreach (ApplicationLog applicationLog in log.ApplicationsLog)
+                    {
+                        UpdateApplicationsList(applicationLog, DataRowAction.Add);
+                    }
+                }
+            }
+            finally
+            {
+                taskList.EndUpdate();
+                SetReadyState();
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Notifications
+        #region Notifications
 
-		private NotifyForm notifyForm;
+        private NotifyForm notifyForm;
 
-		private void notifyIcon_MouseDown(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Left)
-			{
-				if (this.Visible == false)
-				{
-					this.ParentForm.Activate();
-					this.ParentForm.Visible = true;
-				}
-				if (this.ParentForm.WindowState == FormWindowState.Minimized)
-					this.ParentForm.WindowState = FormWindowState.Normal;
-			}
-		}
+        private void notifyIcon_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (this.Visible == false)
+                {
+                    this.ParentForm.Activate();
+                    this.ParentForm.Visible = true;
+                }
+                if (this.ParentForm.WindowState == FormWindowState.Minimized)
+                    this.ParentForm.WindowState = FormWindowState.Normal;
+            }
+        }
 
-		private void notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-//			notifyForm = new NotifyForm(this.notifyIcon.Text);
-//			notifyForm.ShowNoActivate();
-//			notifyForm.Closed += new EventHandler(notifyForm_Closed);
+        private void notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //			notifyForm = new NotifyForm(this.notifyIcon.Text);
+            //			notifyForm.ShowNoActivate();
+            //			notifyForm.Closed += new EventHandler(notifyForm_Closed);
             notifyForm = new NotifyForm(this.notifyIcon.Text);
 
             int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
@@ -818,11 +834,11 @@ namespace PTM.View.Controls
             popup.Closed += new ToolStripDropDownClosedEventHandler(notifyPopup_Closed);
             notifyForm.Prepare();
             popup.Show(new Point(screenWidth - clientWidth, screenHeight - clientHeight));
-		}
+        }
 
         void notifyPopup_Closed(object sender, EventArgs e)
         {
-            if (notifyForm.Result == NotifyForm.NotifyResult.Cancel || 
+            if (notifyForm.Result == NotifyForm.NotifyResult.Cancel ||
                 notifyForm.Result == NotifyForm.NotifyResult.Waiting)
             {
                 this.AddIdleTaskLog();
@@ -842,145 +858,145 @@ namespace PTM.View.Controls
             }
         }
 
-		private void notifyIcon_Click(object sender, EventArgs e)
-		{
-			this.ParentForm.Activate();
-		}
+        private void notifyIcon_Click(object sender, EventArgs e)
+        {
+            this.ParentForm.Activate();
+        }
 
-		#endregion
+        #endregion
 
-		#region NotifyContextMenu
+        #region NotifyContextMenu
 
-		internal event EventHandler Exit;
+        internal event EventHandler Exit;
 
-		private void CreateNotifyMenu()
-		{
-			MenuItem exitContextMenuItem = new MenuItem();
-			MenuItem menuItem1 = new MenuItem();
+        private void CreateNotifyMenu()
+        {
+            MenuItem exitContextMenuItem = new MenuItem();
+            MenuItem menuItem1 = new MenuItem();
             menuItem1.Text = "-";
             TaskMenuItem idleMenuItem = new TaskMenuItem(Tasks.IdleTask.Id);
             idleMenuItem.Text = Tasks.IdleTask.Description;
             idleMenuItem.Pick += new EventHandler(mnuTaskAdd_Click);
 
-			this.notifyContextMenu = new ContextMenu();
-			this.notifyContextMenu.MenuItems.AddRange(new MenuItem[]
+            this.notifyContextMenu = new ContextMenu();
+            this.notifyContextMenu.MenuItems.AddRange(new MenuItem[]
 			                                          	{
 			                                          		exitContextMenuItem,
 			                                          		menuItem1,
                                                             idleMenuItem
 			                                          	});
 
-			exitContextMenuItem.Index = 0;
-			exitContextMenuItem.Text = "Exit";
-			exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);			
+            exitContextMenuItem.Index = 0;
+            exitContextMenuItem.Text = "Exit";
+            exitContextMenuItem.Click += new EventHandler(exitContextMenuItem_Click);
 
 
-			ArrayList a = new ArrayList();
-			Task[] tasks;
-			tasks = Tasks.GetChildTasks(Tasks.RootTask.Id);
-			foreach (Task task in tasks)
-			{
+            ArrayList a = new ArrayList();
+            Task[] tasks;
+            tasks = Tasks.GetChildTasks(Tasks.RootTask.Id);
+            foreach (Task task in tasks)
+            {
                 if (task.Id == Tasks.IdleTask.Id)
                     continue;
-                if(task.Hidden)
+                if (task.Hidden)
                     continue;
-				TaskMenuItem menuItem = new TaskMenuItem(task.Id);
-				menuItem.Text = task.Description;
-				menuItem.Pick += new EventHandler(mnuTaskAdd_Click);
-				a.Add(menuItem);
-				AddSubTasks(task, menuItem, new EventHandler(mnuTaskAdd_Click));
-			}
+                TaskMenuItem menuItem = new TaskMenuItem(task.Id);
+                menuItem.Text = task.Description;
+                menuItem.Pick += new EventHandler(mnuTaskAdd_Click);
+                a.Add(menuItem);
+                AddSubTasks(task, menuItem, new EventHandler(mnuTaskAdd_Click));
+            }
 
-			ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
-			this.notifyContextMenu.MergeMenu(defaultTasksMenu);
-			this.notifyIcon.ContextMenu = this.notifyContextMenu;
-		}
+            ContextMenu defaultTasksMenu = new ContextMenu((TaskMenuItem[])a.ToArray(typeof(TaskMenuItem)));
+            this.notifyContextMenu.MergeMenu(defaultTasksMenu);
+            this.notifyIcon.ContextMenu = this.notifyContextMenu;
+        }
 
-		private void AddSubTasks(Task parentTask, TaskMenuItem menuItem, EventHandler handler)
-		{
-			//ArrayList a = new ArrayList();
-			Task[] tasks;
-			tasks = Tasks.GetChildTasks(parentTask.Id);
-			if (tasks.Length == 0)
-				return;
-			foreach (Task task in tasks)
-			{
-				TaskMenuItem subMenu = new TaskMenuItem(task.Id);
-				subMenu.Text = task.Description;
+        private void AddSubTasks(Task parentTask, TaskMenuItem menuItem, EventHandler handler)
+        {
+            //ArrayList a = new ArrayList();
+            Task[] tasks;
+            tasks = Tasks.GetChildTasks(parentTask.Id);
+            if (tasks.Length == 0)
+                return;
+            foreach (Task task in tasks)
+            {
+                TaskMenuItem subMenu = new TaskMenuItem(task.Id);
+                subMenu.Text = task.Description;
 
-				subMenu.Pick += handler;
-				//a.Add(subMenu);
-				menuItem.MenuItems.Add(subMenu);
-				AddSubTasks(task, subMenu, handler);
-			}
-			//menuItem.MenuItems.AddRange((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
-		}
+                subMenu.Pick += handler;
+                //a.Add(subMenu);
+                menuItem.MenuItems.Add(subMenu);
+                AddSubTasks(task, subMenu, handler);
+            }
+            //menuItem.MenuItems.AddRange((TaskMenuItem[]) a.ToArray(typeof (TaskMenuItem)));
+        }
 
-		private void exitContextMenuItem_Click(object sender, EventArgs e)
-		{
-			this.notifyTimer.Stop();
-			this.notifyIcon.Visible = false;
-			this.Exit(this, e);
-		}
+        private void exitContextMenuItem_Click(object sender, EventArgs e)
+        {
+            this.notifyTimer.Stop();
+            this.notifyIcon.Visible = false;
+            this.Exit(this, e);
+        }
 
-		private void mnuTaskAdd_Click(object sender, EventArgs e)
-		{
-			TaskMenuItem mnu = (TaskMenuItem) sender;
-			AddTaskLog(mnu.TaskId, (int) ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
-		}
+        private void mnuTaskAdd_Click(object sender, EventArgs e)
+        {
+            TaskMenuItem mnu = (TaskMenuItem)sender;
+            AddTaskLog(mnu.TaskId, (int)ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration).Value);
+        }
 
-		#endregion
+        #endregion
 
-		#region Framework events
+        #region Framework events
 
-		private void TasksDataTable_TasksRowChanged(Tasks.TaskChangeEventArgs e)
-		{
-			if (e.Action == DataRowAction.Change)
-			{
-				foreach (ListViewItem item in this.taskList.Items)
-				{
-					if (((Log) item.Tag).TaskId == e.Task.Id)
-					{
+        private void TasksDataTable_TasksRowChanged(Tasks.TaskChangeEventArgs e)
+        {
+            if (e.Action == DataRowAction.Change)
+            {
+                foreach (ListViewItem item in this.taskList.Items)
+                {
+                    if (((Log)item.Tag).TaskId == e.Task.Id)
+                    {
                         if (this.pathCheckBox.Checked)
                             item.SubItems[TaskDescriptionHeader.Index].Text = Tasks.GetFullPath(e.Task.Id);
                         else
-						    item.SubItems[TaskDescriptionHeader.Index].Text = e.Task.Description;
-						item.ImageIndex = e.Task.IconId;
-					}
-				}
-			}
-            if(e.Task.Id == Tasks.CurrentTask.Id)
-		        UpdateNotifyIcon();
-			CreateNotifyMenu();
-			CreateRigthClickMenu();
-		    DisplaySelectedItemStatus();
-		}
-
-		private void TasksDataTable_TasksRowDeleting(Tasks.TaskChangeEventArgs e)
-		{
-			if (e.Action == DataRowAction.Delete)
-			{
-				for (int i =0; i<this.taskList.Items.Count;i++)
-				{
-					if (((Log) this.taskList.Items[i].Tag).TaskId == e.Task.Id)
-					{
-						this.taskList.Items.RemoveAt(i);
-						return;
-					}
-				}
-			}
-		}
-
-		private void Tasks_TasksRowDeleted(Tasks.TaskChangeEventArgs e)
-		{
-			CreateNotifyMenu();
-			CreateRigthClickMenu();
+                            item.SubItems[TaskDescriptionHeader.Index].Text = e.Task.Description;
+                        item.ImageIndex = e.Task.IconId;
+                    }
+                }
+            }
+            if (e.Task.Id == Tasks.CurrentTask.Id)
+                UpdateNotifyIcon();
+            CreateNotifyMenu();
+            CreateRigthClickMenu();
             DisplaySelectedItemStatus();
-		}
+        }
+
+        private void TasksDataTable_TasksRowDeleting(Tasks.TaskChangeEventArgs e)
+        {
+            if (e.Action == DataRowAction.Delete)
+            {
+                for (int i = 0; i < this.taskList.Items.Count; i++)
+                {
+                    if (((Log)this.taskList.Items[i].Tag).TaskId == e.Task.Id)
+                    {
+                        this.taskList.Items.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void Tasks_TasksRowDeleted(Tasks.TaskChangeEventArgs e)
+        {
+            CreateNotifyMenu();
+            CreateRigthClickMenu();
+            DisplaySelectedItemStatus();
+        }
 
         delegate void TasksLog_LogChangedDelegate(Logs.LogChangeEventArgs e);
-		private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
-		{
+        private void TasksLog_LogChanged(Logs.LogChangeEventArgs e)
+        {
             if (this.InvokeRequired)
             {
                 TasksLog_LogChangedDelegate d = new TasksLog_LogChangedDelegate(TasksLog_LogChanged);
@@ -997,7 +1013,7 @@ namespace PTM.View.Controls
                     taskRow = Tasks.FindById(e.Log.TaskId);
                     foreach (TreeListViewItem item in this.taskList.Items)
                     {
-                        if (((Log) item.Tag).Id == e.Log.Id)
+                        if (((Log)item.Tag).Id == e.Log.Id)
                         {
                             SetListItemValues(item, e.Log, taskRow);
                             break;
@@ -1020,19 +1036,19 @@ namespace PTM.View.Controls
                         }
 
                         taskRow = Tasks.FindById(e.Log.TaskId);
-                        TreeListViewItem itemA = new TreeListViewItem("", new string[] {"", ""});
+                        TreeListViewItem itemA = new TreeListViewItem("", new string[] { "", "" });
                         itemA.Font = new Font(itemA.Font, FontStyle.Bold);
                         SetListItemValues(itemA, e.Log, taskRow);
                         taskList.Items.Insert(0, itemA);
                     }
                 }
-                if(e.Log.Id == Logs.CurrentLog.Id)
+                if (e.Log.Id == Logs.CurrentLog.Id)
                     UpdateNotifyIcon();
                 DisplaySelectedItemStatus();
             }
-		}
+        }
 
-	    private delegate void Logs_CurrentLogDurationChangedDelegate(object sender, ElapsedEventArgs e);
+        private delegate void Logs_CurrentLogDurationChangedDelegate(object sender, ElapsedEventArgs e);
         private void Logs_CurrentLogDurationChanged(object sender, ElapsedEventArgs e)
         {
             if (this.InvokeRequired)
@@ -1049,14 +1065,14 @@ namespace PTM.View.Controls
                     {
                         item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(Logs.CurrentLog.Duration);
                         if (!item.Font.Bold)
-                            item.Font = new Font(item.Font, FontStyle.Bold);                        
+                            item.Font = new Font(item.Font, FontStyle.Bold);
                         break;
                     }
                 }
 
                 //update cache
                 if (taskExecutedTimeCache.Contains(Tasks.CurrentTask.Id))
-                    taskExecutedTimeCache[Tasks.CurrentTask.Id] = (int) taskExecutedTimeCache[Tasks.CurrentTask.Id]+1;
+                    taskExecutedTimeCache[Tasks.CurrentTask.Id] = (int)taskExecutedTimeCache[Tasks.CurrentTask.Id] + 1;
 
                 if (this.taskList.SelectedItems.Count > 0 && this.taskList.SelectedItems[0].Parent == null
                     && ((Log)this.taskList.SelectedItems[0].Tag).TaskId == Tasks.CurrentTask.Id)
@@ -1065,27 +1081,27 @@ namespace PTM.View.Controls
             }
         }
 
-	    private void UpdateNotifyIcon()
-	    {
-	        notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
-	        notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
-	        notifyIcon.Tag = Tasks.CurrentTask.Id;
-	    }
+        private void UpdateNotifyIcon()
+        {
+            notifyIcon.Text = Tasks.CurrentTask.Description.Substring(0, Math.Min(Tasks.CurrentTask.Description.Length, 63)); //notifyIcon supports 64 chars
+            notifyIcon.Icon = (Icon)IconsManager.CommonTaskIconsTable[Tasks.CurrentTask.IconId];
+            notifyIcon.Tag = Tasks.CurrentTask.Id;
+        }
 
-	    private void CheckCurrentDayChanged()
-		{
-			if (currentDay != DateTime.Today)
-			{
-				this.taskList.Items.Clear();
-				currentDay = DateTime.Today;
-				this.logDate.Value = currentDay;
-			}
-		}
+        private void CheckCurrentDayChanged()
+        {
+            if (currentDay != DateTime.Today)
+            {
+                this.taskList.Items.Clear();
+                currentDay = DateTime.Today;
+                this.logDate.Value = currentDay;
+            }
+        }
 
-		private void SetListItemValues(ListViewItem item, Log log, Task taskRow)
-		{
-			item.Tag = log;
-            if (taskRow!=null)
+        private void SetListItemValues(ListViewItem item, Log log, Task taskRow)
+        {
+            item.Tag = log;
+            if (taskRow != null)
             {
                 if (this.pathCheckBox.Checked && taskRow.Id != Tasks.IdleTask.Id)
                     item.Text = Tasks.GetFullPath(taskRow.Id);
@@ -1095,37 +1111,37 @@ namespace PTM.View.Controls
                 item.ImageIndex = taskRow.IconId;
             }
 
-			item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
-			//item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
-			CultureInfo cultureInfo;
-			cultureInfo = (CultureInfo) CultureInfo.CurrentCulture.Clone();
-			cultureInfo.DateTimeFormat.ShortTimePattern = "hh:mm tt";
-			cultureInfo.DateTimeFormat.AMDesignator = "a.m.";
-			cultureInfo.DateTimeFormat.PMDesignator = "p.m.";
-			item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);		
-		}
+            item.SubItems[DurationTaskHeader.Index].Text = ViewHelper.Int32ToTimeString(log.Duration);
+            //item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToShortTimeString();
+            CultureInfo cultureInfo;
+            cultureInfo = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+            cultureInfo.DateTimeFormat.ShortTimePattern = "hh:mm tt";
+            cultureInfo.DateTimeFormat.AMDesignator = "a.m.";
+            cultureInfo.DateTimeFormat.PMDesignator = "p.m.";
+            item.SubItems[StartTimeHeader.Index].Text = log.InsertTime.ToString("t", cultureInfo);
+        }
 
-		private void UpdateApplicationsList(ApplicationLog applicationLog, DataRowAction action)
-		{
-			if (applicationLog == null)
-			{
-				return;
-			}
+        private void UpdateApplicationsList(ApplicationLog applicationLog, DataRowAction action)
+        {
+            if (applicationLog == null)
+            {
+                return;
+            }
 
             string activeTime = null;
             string caption = null;
 
-            if(action == DataRowAction.Add || action == DataRowAction.Change)
+            if (action == DataRowAction.Add || action == DataRowAction.Change)
             {
                 TimeSpan active = new TimeSpan(0, 0, applicationLog.ActiveTime);
                 activeTime = ViewHelper.TimeSpanToTimeString(active);
                 caption = applicationLog.Caption;
             }
 
-			foreach (TreeListViewItem logItem in this.taskList.Items)
-			{
-				if (((Log) logItem.Tag).Id == applicationLog.TaskLogId)
-				{
+            foreach (TreeListViewItem logItem in this.taskList.Items)
+            {
+                if (((Log)logItem.Tag).Id == applicationLog.TaskLogId)
+                {
                     if (action == DataRowAction.Add)
                     {
                         TreeListViewItem lvi = new TreeListViewItem(caption,
@@ -1156,28 +1172,28 @@ namespace PTM.View.Controls
                             }
                         }
                     }
-				}
-			}
-		}
+                }
+            }
+        }
 
         delegate void ApplicationsLog_ApplicationsLogChangedDelegate(ApplicationsLog.ApplicationLogChangeEventArgs e);
-		private void ApplicationsLog_ApplicationsLogChanged(ApplicationsLog.ApplicationLogChangeEventArgs e)
-		{
+        private void ApplicationsLog_ApplicationsLogChanged(ApplicationsLog.ApplicationLogChangeEventArgs e)
+        {
             if (this.InvokeRequired)
             {
                 ApplicationsLog_ApplicationsLogChangedDelegate d = new ApplicationsLog_ApplicationsLogChangedDelegate(ApplicationsLog_ApplicationsLogChanged);
-                this.Invoke(d, new object[] { e});
+                this.Invoke(d, new object[] { e });
             }
             else
             {
                 this.UpdateApplicationsList(e.ApplicationLog, e.Action);
-            }            
-		}
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region AsyncWork
-        
+        #region AsyncWork
+
         private void GetLogsAsync()
         {
             if (logDate.Value.Date != DateTime.Today)
@@ -1196,46 +1212,53 @@ namespace PTM.View.Controls
         }
 
         private GetLogsResult GetLogs()
-		{
+        {
             GetLogsResult result = new GetLogsResult();
-            			result.LogList = Logs.GetLogsByDay(this.currentDay.Date);
-            foreach (Log log in result.LogList)
-			{
-				ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
-				log.ApplicationsLog = applicationLogs;
-			}
+            result.LogList = Logs.GetLogsByDay(this.currentDay.Date);
+#if !NO_APPSLOG
+            if (this.showAppsLog.Checked)
+            {
+                foreach (Log log in result.LogList)
+                {
+                    ArrayList applicationLogs = ApplicationsLog.GetApplicationsLog(log.Id);
+                    log.ApplicationsLog = applicationLogs;
+                }
+            }
+#endif
             return result;
-		}
+        }
 
-		private void SetWaitState()
-		{
-			this.Status = "Retrieving data...";
-			this.logDate.Enabled = false;
-			taskList.Items.Clear();
-			this.Refresh();
-			this.Cursor = Cursors.WaitCursor;
-			foreach (Control control in this.Controls)
-			{
-				control.Cursor = Cursors.WaitCursor;
-			}
-		}
+        private void SetWaitState()
+        {
+            this.Status = "Retrieving data...";
+            this.logDate.Enabled = false;
+            taskList.Items.Clear();
+            this.Refresh();
+            this.Cursor = Cursors.WaitCursor;
+            foreach (Control control in this.Controls)
+            {
+                control.Cursor = Cursors.WaitCursor;
+            }
+        }
 
-		private void SetReadyState()
-		{
-			this.Status = "";
-			this.Cursor = Cursors.Default;
-			foreach (Control control in this.Controls)
-			{
-				control.Cursor = Cursors.Default;
-			}
-			this.logDate.Enabled = true;
-		}
+        private void SetReadyState()
+        {
+            this.Status = "";
+            this.Cursor = Cursors.Default;
+            foreach (Control control in this.Controls)
+            {
+                control.Cursor = Cursors.Default;
+            }
+            this.logDate.Enabled = true;
+        }
 
         public class GetLogsResult
         {
             public ArrayList LogList;
         }
 
-		#endregion
-	}
+        #endregion
+
+
+    }
 }

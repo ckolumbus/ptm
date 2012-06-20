@@ -86,13 +86,13 @@ namespace PTM.View.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskSelectForm));
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.tasksTree = new PTM.View.Controls.TasksTreeViewControl();
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.newButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.propertiesButton = new System.Windows.Forms.Button();
             this.showHiddenCheckBox = new System.Windows.Forms.CheckBox();
+            this.tasksTree = new PTM.View.Controls.TasksTreeViewControl();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,7 +100,7 @@ namespace PTM.View.Forms
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(298, 314);
+            this.okButton.Location = new System.Drawing.Point(216, 436);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 6;
@@ -110,27 +110,16 @@ namespace PTM.View.Forms
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(386, 314);
+            this.cancelButton.Location = new System.Drawing.Point(304, 436);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 7;
             this.cancelButton.Text = "Cancel";
             // 
-            // tasksTree
-            // 
-            this.tasksTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tasksTree.Location = new System.Drawing.Point(6, 18);
-            this.tasksTree.Name = "tasksTree";
-            this.tasksTree.ShowHidden = false;
-            this.tasksTree.Size = new System.Drawing.Size(360, 278);
-            this.tasksTree.TabIndex = 0;
-            // 
             // editButton
             // 
             this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.editButton.Location = new System.Drawing.Point(386, 94);
+            this.editButton.Location = new System.Drawing.Point(304, 94);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(75, 23);
             this.editButton.TabIndex = 4;
@@ -140,7 +129,7 @@ namespace PTM.View.Forms
             // deleteButton
             // 
             this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteButton.Location = new System.Drawing.Point(386, 134);
+            this.deleteButton.Location = new System.Drawing.Point(304, 134);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 23);
             this.deleteButton.TabIndex = 5;
@@ -150,7 +139,7 @@ namespace PTM.View.Forms
             // newButton
             // 
             this.newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.newButton.Location = new System.Drawing.Point(386, 54);
+            this.newButton.Location = new System.Drawing.Point(304, 54);
             this.newButton.Name = "newButton";
             this.newButton.Size = new System.Drawing.Size(75, 23);
             this.newButton.TabIndex = 3;
@@ -162,11 +151,12 @@ namespace PTM.View.Forms
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox1.Controls.Add(this.tasksTree);
             this.groupBox1.ForeColor = System.Drawing.Color.Blue;
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(372, 302);
+            this.groupBox1.Size = new System.Drawing.Size(290, 424);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Choose a task";
@@ -174,7 +164,7 @@ namespace PTM.View.Forms
             // propertiesButton
             // 
             this.propertiesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertiesButton.Location = new System.Drawing.Point(386, 174);
+            this.propertiesButton.Location = new System.Drawing.Point(304, 174);
             this.propertiesButton.Name = "propertiesButton";
             this.propertiesButton.Size = new System.Drawing.Size(75, 23);
             this.propertiesButton.TabIndex = 9;
@@ -185,20 +175,33 @@ namespace PTM.View.Forms
             // 
             this.showHiddenCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.showHiddenCheckBox.AutoSize = true;
-            this.showHiddenCheckBox.Location = new System.Drawing.Point(386, 214);
+            this.showHiddenCheckBox.Location = new System.Drawing.Point(302, 214);
             this.showHiddenCheckBox.Name = "showHiddenCheckBox";
-            this.showHiddenCheckBox.Size = new System.Drawing.Size(88, 17);
+            this.showHiddenCheckBox.Size = new System.Drawing.Size(90, 17);
             this.showHiddenCheckBox.TabIndex = 10;
             this.showHiddenCheckBox.Text = "Show Hidden";
             this.showHiddenCheckBox.UseVisualStyleBackColor = true;
             this.showHiddenCheckBox.CheckedChanged += new System.EventHandler(this.showHiddenCheckBox_CheckedChanged);
             // 
+            // tasksTree
+            // 
+            this.tasksTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tasksTree.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tasksTree.Location = new System.Drawing.Point(6, 18);
+            this.tasksTree.Name = "tasksTree";
+            this.tasksTree.ShowHidden = false;
+            this.tasksTree.Size = new System.Drawing.Size(278, 400);
+            this.tasksTree.TabIndex = 0;
+            // 
             // TaskSelectForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(474, 351);
+            this.ClientSize = new System.Drawing.Size(392, 476);
             this.Controls.Add(this.showHiddenCheckBox);
             this.Controls.Add(this.propertiesButton);
             this.Controls.Add(this.editButton);
@@ -209,7 +212,7 @@ namespace PTM.View.Forms
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(471, 381);
+            this.MinimumSize = new System.Drawing.Size(400, 350);
             this.Name = "TaskSelectForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

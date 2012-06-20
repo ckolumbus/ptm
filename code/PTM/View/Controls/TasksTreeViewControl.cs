@@ -108,14 +108,14 @@ namespace PTM.View.Controls
             this.treeView.MultiSelect = false;
             this.treeView.Name = "treeView";
             this.treeView.ShowGroups = false;
-            this.treeView.Size = new System.Drawing.Size(359, 215);
+            this.treeView.Size = new System.Drawing.Size(274, 215);
             this.treeView.TabIndex = 0;
             this.treeView.UseCompatibleStateImageBehavior = false;
             // 
             // tasksColumnHeader
             // 
             this.tasksColumnHeader.Text = "Tasks";
-            this.tasksColumnHeader.Width = 294;
+            this.tasksColumnHeader.Width = 209;
             // 
             // priorityColumnHeader
             // 
@@ -126,7 +126,7 @@ namespace PTM.View.Controls
             // 
             this.Controls.Add(this.treeView);
             this.Name = "TasksTreeViewControl";
-            this.Size = new System.Drawing.Size(359, 215);
+            this.Size = new System.Drawing.Size(274, 215);
             this.ResumeLayout(false);
 
 		}

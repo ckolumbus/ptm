@@ -91,7 +91,12 @@ namespace PTM.Framework.Helpers
 
 		public static string GetVersionString()
 		{
-			return "v. 1.4.5";
+            string version = "v. 1.4.5-ckol.4";
+#if NO_APPSLOG
+            version += " (NO AppsLog)";
+#endif
+
+			return version;
 		} //GetVersionString
 
 		public static string GetInternalVersionString()

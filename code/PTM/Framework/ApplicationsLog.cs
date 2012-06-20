@@ -49,11 +49,16 @@ namespace PTM.Framework
 		{
 			loggingThread = null;
 			lastProcess = IntPtr.Zero;
-			currentApplicationsLog = new ArrayList();
+
+#if NO_APPSLOG
+            currentApplicationsLog = null;
+#else
+            currentApplicationsLog = new ArrayList();
 
             Logs.CurrentLogDurationChanged += new ElapsedEventHandler(Logs_CurrentLogDurationChanged);
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 			Logs.AfterStopLogging += new EventHandler(TasksLog_AfterStopLogging);
+#endif
 		}
 
 		/// <summary>

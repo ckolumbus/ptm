@@ -171,16 +171,16 @@ namespace PTM
 			splash.Refresh();
 			Application.DoEvents();
 
-			UpdaterHelper.UpdateInfo info;
-			info = UpdaterHelper.CheckFromUpdates();
-			Application.DoEvents();
-			if (info.UpdateAvailable)
-			{
-				UpdateForm updateForm;
-				updateForm = new UpdateForm(info);
-				updateForm.ShowDialog();
-				Application.DoEvents();
-			}
+            //UpdaterHelper.UpdateInfo info;
+            //info = UpdaterHelper.CheckFromUpdates();
+            //Application.DoEvents();
+            //if (info.UpdateAvailable)
+            //{
+            //    UpdateForm updateForm;
+            //    updateForm = new UpdateForm(info);
+            //    updateForm.ShowDialog();
+            //    Application.DoEvents();
+            //}
 
 			splash.SetLoadProgress(60);
 			splash.Refresh();

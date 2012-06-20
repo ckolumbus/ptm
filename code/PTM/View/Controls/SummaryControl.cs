@@ -293,7 +293,10 @@ namespace PTM.View.Controls
             this.groupBox2.Size = new System.Drawing.Size(72, 80);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "% Active";
+            // ckol.4-start
+            this.groupBox2.Text = "Act. Time";
+            //this.groupBox2.Text = "% Active";
+            // ckol.4-end
             // 
             // panel1
             // 
@@ -733,20 +736,28 @@ namespace PTM.View.Controls
 				                                                                                                 	InvariantCulture) +
 				" hrs.";
 
-			if (totalTime > 0)
-			{
-				int percentActiveTime = Convert.ToInt32(this.totalActiveTime*100/totalTime);
-				indicator2.Value = percentActiveTime;
-				indicator2.TextValue = percentActiveTime + "%";
-				string activeTime = new TimeSpan(0, 0, Convert.ToInt32(totalActiveTime, CultureInfo.InvariantCulture)).TotalHours.
-				                    	ToString("0.00",
-				                    	         CultureInfo.
-				                    	         	InvariantCulture) +
-				                    " hrs.";
-				toolTip.SetToolTip(this.indicator2, activeTime);
-				toolTip.SetToolTip(this.groupBox2, activeTime);
-			}
+            // ckol.4-start
+            indicator2.Value = Convert.ToInt32(Math.Min(30600, totalActiveTime));
+            indicator2.TextValue =
+                new TimeSpan(0, 0, Convert.ToInt32(totalActiveTime, CultureInfo.InvariantCulture)).TotalHours.ToString("0.00",
+                                                                                                                 CultureInfo.
+                                                                                                                    InvariantCulture) +
+                " hrs.";
 
+            //if (totalTime > 0)
+            //{
+            //    int percentActiveTime = Convert.ToInt32(this.totalActiveTime*100/totalTime);
+            //    indicator2.Value = percentActiveTime;
+            //    indicator2.TextValue = percentActiveTime + "%";
+            //    string activeTime = new TimeSpan(0, 0, Convert.ToInt32(totalActiveTime, CultureInfo.InvariantCulture)).TotalHours.
+            //                            ToString("0.00",
+            //                                     CultureInfo.
+            //                                        InvariantCulture) +
+            //                        " hrs.";
+            //    toolTip.SetToolTip(this.indicator2, activeTime);
+            //    toolTip.SetToolTip(this.groupBox2, activeTime);
+            //}
+            // ckol.4-end
 			if(workedDays>0)
 			{
 				indicator3.Value = Convert.ToInt32(Math.Min(30600, totalTime/workedDays));
@@ -948,9 +959,15 @@ namespace PTM.View.Controls
 			indicator1.TextValue = "0.00 hrs.";
 			indicator1.ForeColor = Color.Lime;
 
-			indicator2.Maximum = 100;
-			indicator2.Value = 0;
-			indicator2.TextValue = "0%";
+            // ckol.4-start
+            indicator2.Maximum = 30600;
+            indicator2.Value = 0;
+            indicator2.TextValue = "0.00 hrs.";
+            indicator1.ForeColor = Color.Lime;
+            //indicator2.Maximum = 100;
+            //indicator2.Value = 0;
+            //indicator2.TextValue = "0%";
+            //ckol.4-start
 
 			indicator3.Maximum = 30600; //8.5 hrs.
 			indicator3.Value = 0;
