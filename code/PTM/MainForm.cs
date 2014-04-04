@@ -130,6 +130,7 @@ namespace PTM
                 logger.Trace("Power Resume start");
                 Logs.FillMissingTimeUntilNow();
                 Logs.StartLogging();
+                this.tasksLogControl.Sync();
                 logger.Trace("Power Resume end");
                 break; 
             case PowerModes.Suspend:

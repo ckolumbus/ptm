@@ -89,6 +89,11 @@ namespace PTM.View.Controls
             CreateNotifyMenu();
         }
 
+        public void Sync()
+        {
+            GetLogsAsync();
+        }
+
         private void hotKey_Pressed(object sender, System.EventArgs e)
         {
             NewTaskLog(false);
