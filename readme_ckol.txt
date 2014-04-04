@@ -2,6 +2,10 @@ Changelog
 =========
 Changes after PTM 1.4.5
 
+ckol.5
+  - DEV: added NLog support (via NuGet)
+  - BUGFIX: fixed suspend behavior
+
 ckol.4
   - replace "% Active" display on Summary page with total "Active Time"
 
