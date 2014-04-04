@@ -6,6 +6,7 @@ ckol.5
   - DEV: added NLog support (via NuGet)
   - BUGFIX: fixed suspend behavior
   - BGUFIX: update display after suspend
+  - IMPROVE: increased max DB maintenance from 30 to 60 days
 
 ckol.4
   - replace "% Active" display on Summary page with total "Active Time"

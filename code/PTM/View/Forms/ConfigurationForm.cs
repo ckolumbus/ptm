@@ -158,7 +158,7 @@ namespace PTM.View.Forms
             // 
             this.numericUpDown.Location = new System.Drawing.Point(8, 24);
             this.numericUpDown.Maximum = new decimal(new int[] {
-            30,
+            60,
             0,
             0,
             0});
