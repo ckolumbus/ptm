@@ -11,6 +11,7 @@ using PTM.Framework.Helpers;
 using PTM.View;
 using PTM.View.Controls;
 using PTM.View.Forms;
+using NLog;
 
 namespace PTM
 {
@@ -19,6 +20,8 @@ namespace PTM
 	/// </summary>
 	internal class MainForm : Form
 	{
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 		private MainMenu mainMenu;
 		private TabControl tabControl;
 		private MenuItem menuItem1;
@@ -116,18 +119,29 @@ namespace PTM
         // ckol.3-start
         private void InitalizePowerEvent()
         {
-            SystemEvents.PowerModeChanged += OnPowerChange;
+            SystemEvents.PowerModeChanged += //OnPowerChange;
+                new PowerModeChangedEventHandler(OnPowerChange);
         }
 
         private void OnPowerChange(Object sender, PowerModeChangedEventArgs e) {
+          logger.Debug("PowerEvent received");
           switch ( e.Mode ) {
             case PowerModes.Resume:
-                  Logs.FillMissingTimeUntilNow();
-                  Logs.StartLogging();
-              break; 
+                logger.Trace("Power Resume start");
+                Logs.FillMissingTimeUntilNow();
+                Logs.StartLogging();
+                logger.Trace("Power Resume end");
+                break; 
             case PowerModes.Suspend:
-              Logs.StopLogging();
-              break;
+                logger.Trace("Power Suspend start");
+                Save();
+                Application.DoEvents();
+                Logs.AddIdleTaskLog();
+                Application.DoEvents();
+                Logs.StopLogging();
+                Application.DoEvents();
+                logger.Trace("Power Suspend end");
+                break;
           }
         }
         // ckol.3-end
