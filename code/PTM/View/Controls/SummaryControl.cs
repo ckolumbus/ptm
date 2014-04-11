@@ -712,7 +712,7 @@ namespace PTM.View.Controls
                 if (summary.TotalEstimation == 0)
                     estimation = "Not estimated";
                 else
-                    estimation = ViewHelper.TimeSpanToTimeString(estimationTimeSpan);
+                    estimation = ViewHelper.TimeSpanToTimeStringDec(estimationTimeSpan);
 
                 item.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeStringDec(elapsedTimeSpan);
                 item.SubItems[ActiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeStringDec(activeTimeSpan);
