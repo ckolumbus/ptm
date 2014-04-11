@@ -121,6 +121,15 @@ namespace PTM.View
 //			       ":" + ts.Seconds.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
 		} //TimeSpanToTimeString
 
+        /// <summary>
+        /// TimeSpanToTimeStringDec, returns a timeSpan as a formated string
+        /// "[hours].[deciam Hourfraction]" (e.g "25.75")
+        /// </summary>
+        internal static string TimeSpanToTimeStringDec(TimeSpan ts)
+        {
+            return String.Format("{0:N2}", ts.TotalHours);
+        } //TimeSpanToTimeStringDec
+
 
 		/// <summary>
 		/// Int32ToTimeString, returns a time Span conversion of the amount 

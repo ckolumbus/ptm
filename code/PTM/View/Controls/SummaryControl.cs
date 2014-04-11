@@ -714,9 +714,9 @@ namespace PTM.View.Controls
                 else
                     estimation = ViewHelper.TimeSpanToTimeString(estimationTimeSpan);
 
-                item.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(elapsedTimeSpan);
-                item.SubItems[ActiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(activeTimeSpan);
-                item.SubItems[InactiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeString(inactiveTimeSpan);
+                item.SubItems[TimeHeader.Index].Text = ViewHelper.TimeSpanToTimeStringDec(elapsedTimeSpan);
+                item.SubItems[ActiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeStringDec(activeTimeSpan);
+                item.SubItems[InactiveTimeHeader.Index].Text = ViewHelper.TimeSpanToTimeStringDec(inactiveTimeSpan);
                 item.SubItems[GoalHeader.Index].Text = estimation;
 				item.SubItems[PercentHeader.Index].Text = percent.ToString("0.0%", CultureInfo.InvariantCulture);
                 item.SubItems[PercentGoalHeader.Index].Text = goalPercent.ToString("0.0%", CultureInfo.InvariantCulture);
