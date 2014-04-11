@@ -121,10 +121,9 @@
   <data name="backButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAG9JREFUOE+1kssN
-        ACEIRC3d0uhMwyqCih8wS2I8yDyHCSH8WzE98FHsBsSE5QQUMQB4ACxmBzTK6m4p9WJ0QE5WtxjRLhYZ
-        sbXTj+N7ddDPJptKw+l8GeiQSzGlOEP2AHVHNbvmZR4hZoDMxCW2iTJhhR7GP+q8vQAAAABJRU5ErkJg
-        gg==
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAGJJREFUOE+1jgEO
+        wCAIA3m6T+NnLp1mrMwoYnYJwYA9lZ8ptR8yIJwWlAqSghZW1YzAwqAJVvXA4Uh/CfbDoAvsOyAaRv8I
+        vMTvxnXDQ2AvzIrgJfAzriHhizOOBeAovIPIBWGFHsZuGklzAAAAAElFTkSuQmCC
 </value>
   </data>
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -133,9 +132,9 @@
   <data name="forwardButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAG5JREFUOE+1k1sK
-        ACEIRV26S3NnhpTcGKYcbRLCj7zHR0Z031iJ7JSMVUQGoARhNbMKAEpVAqGBAoj3+u5NvIF00RzkwSs/
-        DRZ9RqLn/YCgz+MKOjE9g/3wHBgOcJX5tz0orjNeKLV/CD76SN9yNlfXKUvw7I+nAAAAAElFTkSuQmCC
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAGtJREFUOE+9kMkN
+        wDAIBCmd0uiMaBVbkGB88PBIKz7M+qALsL4pwSoiraBUwgq+RUeYCBYl/ZrjQJ6UxKXVdCX2TrAj99lK
+        7J2z5f9sMrAbzJLIIC6PksggLvsAzERe4cVjGfj/KVE+eReiB1fXKUsVc5C4AAAAAElFTkSuQmCC
 </value>
   </data>
 </root>

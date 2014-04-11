@@ -5,11 +5,16 @@ using System.Windows.Forms;
 using Calendar;
 using PTM.Framework;
 using PTM.Framework.Infos;
+using System.Globalization;
+using NLog;
+
 
 namespace PTM.Addin.WeekView
 {
 	public class WeekReport : AddinTabPage
 	{
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
 		private Calendar.DayView dayView;
 		private Button backButton;
         private Button forwardButton;
@@ -19,6 +24,7 @@ namespace PTM.Addin.WeekView
         private Button curWeekButton;
         private Button refreshButton;
 		private int currentWeek;
+        private Day firstDayOfWeek = Day.Monday; // Forms.Day.Monday == 0 but need 1 based here
 
 		public WeekReport()
 		{
@@ -56,40 +62,16 @@ namespace PTM.Addin.WeekView
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            Calendar.DrawTool drawTool3 = new Calendar.DrawTool();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WeekReport));
-            this.dayView = new Calendar.DayView();
+            Calendar.DrawTool drawTool1 = new Calendar.DrawTool();
             this.backButton = new System.Windows.Forms.Button();
             this.forwardButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.monthCalendar = new System.Windows.Forms.MonthCalendar();
             this.curWeekButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.dayView = new Calendar.DayView();
             this.SuspendLayout();
-            // 
-            // dayView
-            // 
-            drawTool3.DayView = this.dayView;
-            this.dayView.ActiveTool = drawTool3;
-            this.dayView.AllowInplaceEditing = false;
-            this.dayView.AllowNew = false;
-            this.dayView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dayView.DaysToShow = 7;
-            this.dayView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.dayView.HalfHourHeight = 34;
-            this.dayView.Location = new System.Drawing.Point(186, 3);
-            this.dayView.Name = "dayView";
-            this.dayView.SelectionEnd = new System.DateTime(((long)(0)));
-            this.dayView.SelectionStart = new System.DateTime(((long)(0)));
-            this.dayView.Size = new System.Drawing.Size(190, 333);
-            this.dayView.StartDate = new System.DateTime(((long)(0)));
-            this.dayView.TabIndex = 0;
-            this.dayView.WorkingHourEnd = 23;
-            this.dayView.WorkingHourStart = 0;
-            this.dayView.WorkingMinuteEnd = 59;
-            this.dayView.WorkingMinuteStart = 0;
             // 
             // backButton
             // 
@@ -122,11 +104,11 @@ namespace PTM.Addin.WeekView
             // monthCalendar
             // 
             this.monthCalendar.Enabled = false;
-            this.monthCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Sunday;
             this.monthCalendar.Location = new System.Drawing.Point(6, 17);
             this.monthCalendar.Name = "monthCalendar";
             this.monthCalendar.ShowTodayCircle = false;
             this.monthCalendar.TabIndex = 4;
+            this.monthCalendar.FirstDayOfWeek = this.firstDayOfWeek; // from System.Windows.Forms.Day
             // 
             // curWeekButton
             // 
@@ -147,6 +129,30 @@ namespace PTM.Addin.WeekView
             this.refreshButton.Text = "Refresh Data";
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
+            // dayView
+            // 
+            drawTool1.DayView = this.dayView;
+            this.dayView.ActiveTool = drawTool1;
+            this.dayView.AllowInplaceEditing = false;
+            this.dayView.AllowNew = false;
+            this.dayView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dayView.DaysToShow = 7;
+            this.dayView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.dayView.HalfHourHeight = 34;
+            this.dayView.Location = new System.Drawing.Point(186, 3);
+            this.dayView.Name = "dayView";
+            this.dayView.SelectionEnd = new System.DateTime(((long)(0)));
+            this.dayView.SelectionStart = new System.DateTime(((long)(0)));
+            this.dayView.Size = new System.Drawing.Size(190, 333);
+            this.dayView.StartDate = new System.DateTime(((long)(0)));
+            this.dayView.TabIndex = 0;
+            this.dayView.WorkingHourEnd = 23;
+            this.dayView.WorkingHourStart = 0;
+            this.dayView.WorkingMinuteEnd = 59;
+            this.dayView.WorkingMinuteStart = 0;
             // 
             // WeekReport
             // 
@@ -230,7 +236,15 @@ namespace PTM.Addin.WeekView
 			try
 			{
 				Cursor.Current = Cursors.WaitCursor;
-                DateTime startDate = DateTime.Today.AddDays(-Convert.ToInt32(DateTime.Today.DayOfWeek) + week * 7);
+                logger.Debug("current FirstDayOfWeek {0}, UI {1}",
+                    CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
+                    CultureInfo.CurrentUICulture.DateTimeFormat.FirstDayOfWeek
+                    );
+
+                DateTime startDate = DateTime.Today.AddDays( 
+                    Convert.ToInt32(this.firstDayOfWeek) + 1 // Forms.Day.Monday == 0 but need 1 based here
+                    - Convert.ToInt32(DateTime.Today.DayOfWeek) 
+                    + week * 7 );
 			    this.monthCalendar.BoldedDates = new DateTime[] { startDate, startDate.AddDays(1), startDate.AddDays(2), startDate.AddDays(3), startDate.AddDays(4), startDate.AddDays(5), startDate.AddDays(6) };
                 this.monthCalendar.SetDate(startDate);
                 this.monthCalendar.UpdateBoldedDates();
