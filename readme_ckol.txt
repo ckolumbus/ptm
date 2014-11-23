@@ -2,6 +2,11 @@ Changelog
 =========
 Changes after PTM 1.4.5
 
+ckol.6b
+  - NEW: AddIns can acces TaskSelector from now
+  - IMPROVE: new GetNewCommandParam that allows to create OleDbCommands with
+    parameters
+
 ckol.5
   - DEV: added NLog support (via NuGet)
   - BUGFIX: fixed suspend behavior
