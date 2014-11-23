@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using PTM.View.Forms;
 
 namespace PTM.Addin
 {
@@ -54,6 +55,17 @@ namespace PTM.Addin
 		#endregion
 
 		private string status = String.Empty;
+
+        public int getTask()
+        {                
+            TaskSelectForm tgForm = new TaskSelectForm();
+            int t = -1;
+            if (tgForm.ShowDialog(this) == DialogResult.OK)
+            {
+                t = tgForm.SelectedTaskId;
+            }
+            return t;
+        }
 
 		public string Status
 		{
