@@ -167,6 +167,20 @@ namespace PTM.Data
 			}
 		}
 
+        public static OleDbCommand GetNewCommandParam(string cmdText, string[] paramNames, object[] paramValues)
+        {
+            OleDbCommand cmd;
+            cmd = GetNewCommand(cmdText);
+            for (int i = 0; i < paramValues.Length; i++)
+            {
+                OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
+                param.Value = paramValues[i];
+                param.SourceColumn = paramNames[i];
+                cmd.Parameters.Add(param);
+            }
+            return cmd;
+        }
+
 		public static ArrayList ExecuteGetRows(string cmdText, string[] paramNames, object[] paramValues)
 		{
 			OleDbCommand cmd;
