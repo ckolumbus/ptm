@@ -3,6 +3,7 @@ Changelog
 Changes after PTM 1.4.5
 
 ckol.6b
+  - NEW: option to disable popup notifications
   - NEW: AddIns can acces TaskSelector from now
   - IMPROVE: new GetNewCommandParam that allows to create OleDbCommands with
     parameters

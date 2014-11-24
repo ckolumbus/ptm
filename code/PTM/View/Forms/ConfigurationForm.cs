@@ -24,6 +24,7 @@ namespace PTM.View.Forms
 		private Label durationLabel;
 		private CheckBox checkBox1;
         private CheckBox checkBox2;
+        private CheckBox checkNotifyOff;
 
 		private Container components = null;
 
@@ -62,6 +63,7 @@ namespace PTM.View.Forms
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkNotifyOff = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -112,7 +114,7 @@ namespace PTM.View.Forms
             this.trackBar.Maximum = 30;
             this.trackBar.Minimum = 5;
             this.trackBar.Name = "trackBar";
-            this.trackBar.Size = new System.Drawing.Size(152, 42);
+            this.trackBar.Size = new System.Drawing.Size(152, 45);
             this.trackBar.SmallChange = 5;
             this.trackBar.TabIndex = 0;
             this.trackBar.TickFrequency = 5;
@@ -213,12 +215,23 @@ namespace PTM.View.Forms
             this.checkBox1.TabIndex = 6;
             this.checkBox1.Text = "Check for newer versions automatically";
             // 
+            // checkNotifyOff
+            // 
+            this.checkNotifyOff.AutoSize = true;
+            this.checkNotifyOff.Location = new System.Drawing.Point(160, 52);
+            this.checkNotifyOff.Name = "checkNotifyOff";
+            this.checkNotifyOff.Size = new System.Drawing.Size(70, 17);
+            this.checkNotifyOff.TabIndex = 7;
+            this.checkNotifyOff.Text = "Notify Off";
+            this.checkNotifyOff.UseVisualStyleBackColor = true;
+            // 
             // ConfigurationForm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(273, 345);
+            this.Controls.Add(this.checkNotifyOff);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
@@ -240,6 +253,7 @@ namespace PTM.View.Forms
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
@@ -271,6 +285,11 @@ namespace PTM.View.Forms
             else
                 this.checkBox2.Checked = false;
 
+            c = ConfigurationHelper.GetConfiguration(ConfigurationKey.NotificationOff);
+            if (Convert.ToInt32(c.Value) == 1)
+                this.checkNotifyOff.Checked = true;
+            else
+                this.checkNotifyOff.Checked = false;
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
@@ -347,6 +366,11 @@ namespace PTM.View.Forms
                 c = new Configuration(ConfigurationKey.PlaySoundOnReminder, 1);
             else
                 c = new Configuration(ConfigurationKey.PlaySoundOnReminder, 0);
+
+            if (this.checkNotifyOff.Checked)
+                c = new Configuration(ConfigurationKey.NotificationOff, 1);
+            else
+                c = new Configuration(ConfigurationKey.NotificationOff, 0);
             ConfigurationHelper.SaveConfiguration(c);
 
 			this.Close();

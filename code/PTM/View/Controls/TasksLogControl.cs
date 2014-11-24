@@ -820,6 +820,11 @@ namespace PTM.View.Controls
 
         private void notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            Configuration c;
+            c = ConfigurationHelper.GetConfiguration(ConfigurationKey.NotificationOff);
+            if (Convert.ToInt32(c.Value) == 1)
+                return;
+
             //			notifyForm = new NotifyForm(this.notifyIcon.Text);
             //			notifyForm.ShowNoActivate();
             //			notifyForm.Closed += new EventHandler(notifyForm_Closed);

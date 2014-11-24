@@ -16,7 +16,8 @@ namespace PTM.Framework.Helpers
 		DataMaintenanceDays = 2,
 		CheckForUpdates = 3,
 		ShowTasksFullPath = 4,
-	    PlaySoundOnReminder = 5
+	    PlaySoundOnReminder = 5,
+        NotificationOff = 6
 	} //ConfigurationKey enum
 
 	/// <summary>
