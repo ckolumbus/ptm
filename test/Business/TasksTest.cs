@@ -65,7 +65,7 @@ namespace PTM.Test.Framework
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "Task already exist")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "Task already exist")]
 		public void AddTaskAlreadyExists()
 		{
 			Tasks.AddTask("AddTaskAlreadyExists", Tasks.RootTask.Id);
@@ -73,14 +73,14 @@ namespace PTM.Test.Framework
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "Description can't be null")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "Description can't be null")]
 		public void AddTaskDescripcionNull()
 		{
 			Tasks.AddTask(null, Tasks.RootTask.Id);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "Description can't be empty")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "Description can't be empty")]
 		public void AddTaskDescripcionEmpty()
 		{
 			Tasks.AddTask(string.Empty, Tasks.RootTask.Id);
@@ -116,14 +116,14 @@ namespace PTM.Test.Framework
 		
 		
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "This task can't be updated.")]
 		public void UpdateRootTaskTest()
 		{
 			Tasks.UpdateTask(Tasks.RootTask);
 		}
 		
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "This task can't be updated.")]
 		public void UpdateIdleTaskTest()
 		{
 			Tasks.UpdateTask(Tasks.IdleTask);
@@ -170,7 +170,7 @@ namespace PTM.Test.Framework
 		}
 		
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "This task can't be updated.")]
 		public void UpdateParentTaskRootTaskTest()
 		{
 			Task task;
@@ -179,7 +179,7 @@ namespace PTM.Test.Framework
 		}
 		
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "This task can't be updated.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "This task can't be updated.")]
 		public void UpdateParentTaskIdleTaskTest()
 		{
 			Task task;
@@ -202,7 +202,7 @@ namespace PTM.Test.Framework
 		[Test]
 		[
 			ExpectedException(typeof (ApplicationException),
-				"This task can't be deleted now. You are currently working on it or in a part of it.")]
+                ExpectedMessage = "This task can't be deleted now. You are currently working on it or in a part of it.")]
 		public void DeleteCurrentTaskTest()
 		{
 			Task task;
@@ -212,14 +212,14 @@ namespace PTM.Test.Framework
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "This task can't be deleted.")]
 		public void DeleteRootTaskTest()
 		{
 			Tasks.DeleteTask(Tasks.RootTask.Id);
 		}
 		
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "This task can't be deleted.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "This task can't be deleted.")]
 		public void DeleteIdleTaskTest()
 		{
 			Tasks.DeleteTask(Tasks.IdleTask.Id);
@@ -228,7 +228,7 @@ namespace PTM.Test.Framework
 		[Test]
 		[
 			ExpectedException(typeof (ApplicationException),
-				"This task can't be deleted now. You are currently working on it or in a part of it.")]
+                ExpectedMessage = "This task can't be deleted now. You are currently working on it or in a part of it.")]
 		public void DeleteChildOfCurrentTaskTest()
 		{
 			Task task1;

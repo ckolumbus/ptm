@@ -39,7 +39,7 @@ namespace PTM.Test.Framework.Helpers
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "The log duration can't be less than 1 min. and more than 60 min.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "The log duration can't be less than 1 min. and more than 60 min.")]
 		public void SaveLogDurationLessThanPermitedTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
@@ -48,7 +48,7 @@ namespace PTM.Test.Framework.Helpers
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "The log duration can't be less than 1 min. and more than 60 min.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "The log duration can't be less than 1 min. and more than 60 min.")]
 		public void SaveLogDurationMoreThanPermitedTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.TasksLogDuration);
@@ -69,7 +69,7 @@ namespace PTM.Test.Framework.Helpers
 
 
 		[Test]
-		[ExpectedException(typeof (ApplicationException), "Data maintenance days can't be less than 0.")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "Data maintenance days can't be less than 0.")]
 		public void SaveDataMaintenanceLessThanPermitedTest()
 		{
 			Configuration config = ConfigurationHelper.GetConfiguration(ConfigurationKey.DataMaintenanceDays);
