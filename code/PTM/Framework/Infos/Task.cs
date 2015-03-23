@@ -18,6 +18,7 @@ namespace PTM.Framework.Infos
 	    private bool hidden;
 	    private int priority;
 	    private string notes = String.Empty;
+        private string accountID = String.Empty;
 
 	    public int Id
 		{
@@ -73,6 +74,12 @@ namespace PTM.Framework.Infos
             set { notes = value; }
         }
 
+        public string AccountID
+        {
+            get { return accountID; }
+            set { accountID = value; }
+        }
+
 		public Task Clone()
 		{
 			Task task = new Task();
@@ -85,6 +92,7 @@ namespace PTM.Framework.Infos
 		    task.hidden = this.hidden;
 		    task.priority = this.priority;
 		    task.notes = this.notes;
+            task.accountID = this.accountID;
 			return task;
 		}
 

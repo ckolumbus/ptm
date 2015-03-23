@@ -140,9 +140,9 @@ namespace PTM.Framework
 			}
 
 			DbHelper.ExecuteNonQuery(
-                "UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ?, Hidden = ?, Priority = ?, Notes = ? WHERE (Id = ?)"
-				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Hidden", "Priority", "Notes", "Id"},
-				new object[]{task.Description, task.IconId, task.IsActive, task.ParentId,task.Estimation, task.Hidden, task.Priority, task.Notes, task.Id});
+                "UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ?, Hidden = ?, Priority = ?, Notes = ?, AccountID = ? WHERE (Id = ?)"
+				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Hidden", "Priority", "Notes", "AccountID", "Id"},
+                new object[]{task.Description, task.IconId, task.IsActive, task.ParentId, task.Estimation, task.Hidden, task.Priority, task.Notes, task.AccountID, task.Id});
 
 			for(int i = 0;i <tasks.Count;i++)
 			{
@@ -329,6 +329,11 @@ namespace PTM.Framework
                 else
                     task.Notes = (string)row["Notes"];
 
+                if (row["AccountID"] == DBNull.Value)
+                    task.AccountID = String.Empty;
+                else
+                    task.AccountID = (string)row["AccountID"];
+
 				tasks.Add(task);
 			}
 			if (tasks.Count == 0)
@@ -400,9 +405,9 @@ namespace PTM.Framework
 		private static void InsertTask(ref Task task)
 		{
 			task.Id = DbHelper.ExecuteInsert(
-                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                new string[] { "Description", "IconId", "IsActive", "ParentId", "Hidden", "Priority", "Notes" },
-				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId, task.Hidden, task.Priority, task.Notes});
+                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes, AccountID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                new string[] { "Description", "IconId", "IsActive", "ParentId", "Hidden", "Priority", "Notes", "AccountID" },
+				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId, task.Hidden, task.Priority, task.Notes, task.AccountID});
 		}
         
 		private static void ValidateTaskData(ref Task task)
@@ -413,7 +418,9 @@ namespace PTM.Framework
 			task.Description = task.Description.Trim();
 			if (task.Description.Length == 0)
 				throw new ApplicationException("Description can't be empty");
-			
+
+            task.AccountID = task.AccountID.Trim();
+	
 		}
 
 		private static Task InternalFindById(int taskId)

@@ -2,6 +2,13 @@ Changelog
 =========
 Changes after PTM 1.4.5
 
+ckol.7b
+  - TBD - NEW: materialized path updated when task is add/moved
+  - NEW: Account entry added to task properties
+  - NEW/IMPROVE: data base version pushed to version 1.0.3
+    - Tasks.AccountID : possibility to add a specific account id to a task
+    - Tasks.MatPath   : materialized path to speed up hierarchical queries
+
 ckol.6b
   - NEW: option to disable popup notifications
   - NEW: AddIns can acces TaskSelector from now

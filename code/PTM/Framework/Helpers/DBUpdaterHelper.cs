@@ -53,6 +53,8 @@ namespace PTM.Framework.Helpers
                     continue;
                 if (UpdateFromV_1_0_1ToV_1_0_2(oldVersion))
                     continue;
+                if (UpdateFromV_1_0_2ToV_1_0_3(oldVersion))
+                    continue;
 				findNextUpdate = false;
                 RegisterAddins();
 			}
@@ -75,6 +77,26 @@ namespace PTM.Framework.Helpers
             {
                 Logger.WriteException(ex);
             }
+        }
+
+        private static bool UpdateFromV_1_0_2ToV_1_0_3(Configuration oldVersion)
+        {
+            if (string.Compare(oldVersion.Value.ToString().Trim(), "1.0.2") == 0)
+            {
+                try
+                {
+                    DbHelper.AddColumn("Tasks", "AccountID", "VarChar(50)");
+                    DbHelper.AddColumn("Tasks", "MatPathID", "VarChar(255)"); 
+                    ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "1.0.3"));
+                    return true;
+                }
+                catch (OleDbException ex)
+                {
+                    Logger.WriteException(ex);
+                    return false;
+                }
+            }
+            return false;
         }
 
         private static bool UpdateFromV_1_0_1ToV_1_0_2(Configuration oldVersion)

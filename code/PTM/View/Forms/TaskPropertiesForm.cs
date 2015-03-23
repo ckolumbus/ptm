@@ -35,6 +35,8 @@ namespace PTM.View.Forms
         private Label label4;
         private Label label5;
         private TextBox notesTextBox;
+        private Label label6;
+        private TextBox txtAccountID;
 
 
 		private int taskId;
@@ -64,6 +66,12 @@ namespace PTM.View.Forms
 		{
 			get { return this.txtDescription.Text; }
 		}
+
+        private string AccountID
+        {
+            get { return this.txtAccountID.Text; }
+        }
+
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -106,6 +114,8 @@ namespace PTM.View.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.notesTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtAccountID = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hrsNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minsNumericUpDown)).BeginInit();
@@ -150,17 +160,19 @@ namespace PTM.View.Forms
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(102, 36);
+            this.txtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescription.Location = new System.Drawing.Point(102, 16);
             this.txtDescription.MaxLength = 80;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(279, 20);
+            this.txtDescription.Size = new System.Drawing.Size(258, 20);
             this.txtDescription.TabIndex = 11;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(306, 278);
+            this.cancelButton.Location = new System.Drawing.Point(285, 278);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 31);
             this.cancelButton.TabIndex = 13;
@@ -171,7 +183,7 @@ namespace PTM.View.Forms
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(218, 278);
+            this.okButton.Location = new System.Drawing.Point(197, 278);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 31);
             this.okButton.TabIndex = 12;
@@ -234,7 +246,7 @@ namespace PTM.View.Forms
             this.chkHidden.AutoSize = true;
             this.chkHidden.Location = new System.Drawing.Point(225, 252);
             this.chkHidden.Name = "chkHidden";
-            this.chkHidden.Size = new System.Drawing.Size(58, 17);
+            this.chkHidden.Size = new System.Drawing.Size(60, 17);
             this.chkHidden.TabIndex = 19;
             this.chkHidden.Text = "Hidden";
             this.chkHidden.UseVisualStyleBackColor = true;
@@ -273,20 +285,42 @@ namespace PTM.View.Forms
             // 
             this.notesTextBox.AcceptsReturn = true;
             this.notesTextBox.AcceptsTab = true;
+            this.notesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.notesTextBox.Location = new System.Drawing.Point(102, 148);
             this.notesTextBox.MaxLength = 255;
             this.notesTextBox.Multiline = true;
             this.notesTextBox.Name = "notesTextBox";
             this.notesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.notesTextBox.Size = new System.Drawing.Size(279, 87);
+            this.notesTextBox.Size = new System.Drawing.Size(258, 87);
             this.notesTextBox.TabIndex = 23;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(99, 43);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(58, 13);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "AccountID";
+            // 
+            // txtAccountID
+            // 
+            this.txtAccountID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAccountID.Location = new System.Drawing.Point(163, 40);
+            this.txtAccountID.Name = "txtAccountID";
+            this.txtAccountID.Size = new System.Drawing.Size(197, 20);
+            this.txtAccountID.TabIndex = 25;
             // 
             // TaskPropertiesForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(393, 318);
+            this.ClientSize = new System.Drawing.Size(372, 318);
+            this.Controls.Add(this.txtAccountID);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.notesTextBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -336,6 +370,7 @@ namespace PTM.View.Forms
 		    this.priorityUpDown.Value = task.Priority;
 		    this.notesTextBox.Text = task.Notes;
 		    this.chkHidden.Checked = task.Hidden;
+            this.txtAccountID.Text = task.AccountID;
 
             if(task.Id == Tasks.IdleTask.Id)
             {
@@ -387,6 +422,7 @@ namespace PTM.View.Forms
 			    task.Priority = Convert.ToInt32(this.priorityUpDown.Value);
 			    task.Notes = this.notesTextBox.Text;
 			    task.Hidden = this.chkHidden.Checked;
+                task.AccountID = this.AccountID;
 
 				Tasks.UpdateTask(task);
 			}

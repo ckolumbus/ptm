@@ -92,7 +92,7 @@ namespace PTM.Framework.Helpers
 
 		public static string GetVersionString()
 		{
-            string version = "v. 1.4.5-ckol.6b";
+            string version = "v. 1.4.5-ckol.7b";
 #if NO_APPSLOG
             version += " (NO AppsLog)";
 #endif
