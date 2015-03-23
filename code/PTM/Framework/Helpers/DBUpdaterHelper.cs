@@ -86,7 +86,7 @@ namespace PTM.Framework.Helpers
                 try
                 {
                     DbHelper.AddColumn("Tasks", "AccountID", "VarChar(50)");
-                    DbHelper.AddColumn("Tasks", "MatPathID", "VarChar(255)"); 
+                    DbHelper.AddColumn("Tasks", "MatPath", "VarChar(255)"); 
                     ConfigurationHelper.SaveConfiguration(new Configuration(ConfigurationKey.DataBaseVersion, "1.0.3"));
                     return true;
                 }

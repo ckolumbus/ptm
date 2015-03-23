@@ -19,6 +19,7 @@ namespace PTM.Framework.Infos
 	    private int priority;
 	    private string notes = String.Empty;
         private string accountID = String.Empty;
+        private string matPath = String.Empty;
 
 	    public int Id
 		{
@@ -78,6 +79,12 @@ namespace PTM.Framework.Infos
         {
             get { return accountID; }
             set { accountID = value; }
+        }
+
+        public string MatPath
+        {
+            get { return matPath; }
+            set { matPath = value; }
         }
 
 		public Task Clone()

@@ -68,10 +68,31 @@ namespace PTM.Framework
 			rootTask = null;
 			tasks = new ArrayList();
 			LoadAllTasks();
+            UpdateMatPath();
 			currentTask = null;
 			Logs.LogChanged += new Logs.LogChangeEventHandler(TasksLog_LogChanged);
 		}
 
+        private static void UpdateMatPath()
+        {
+            foreach (Task task in tasks)
+            {
+
+                if (task.MatPath == String.Empty)
+                {
+                    int taskId = task.Id;
+                    if (taskId != rootTask.Id && taskId != idleTask.Id)
+                    {
+                        task.MatPath = GetMaterializedPath(taskId);
+                        DbHelper.ExecuteNonQuery(
+                                        "UPDATE Tasks SET MatPath = ? WHERE (Id = ?)"
+				                        , new string[]{"MatPath", "Id"},
+                                        new object[]{task.MatPath, task.Id});
+
+                    }
+                }
+            }
+        }
 		public static Task FindById(int taskId)
 		{
 			Task task;
@@ -140,9 +161,9 @@ namespace PTM.Framework
 			}
 
 			DbHelper.ExecuteNonQuery(
-                "UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ?, Hidden = ?, Priority = ?, Notes = ?, AccountID = ? WHERE (Id = ?)"
-				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Hidden", "Priority", "Notes", "AccountID", "Id"},
-                new object[]{task.Description, task.IconId, task.IsActive, task.ParentId, task.Estimation, task.Hidden, task.Priority, task.Notes, task.AccountID, task.Id});
+                "UPDATE Tasks SET Description = ?, IconId = ?, IsActive = ?, ParentId = ?, Estimation = ?, Hidden = ?, Priority = ?, Notes = ?, AccountID = ?, MatPath = ? WHERE (Id = ?)"
+				, new string[]{"Description", "IconId", "IsActive", "ParentId", "Estimation", "Hidden", "Priority", "Notes", "AccountID", "MatPath", "Id"},
+                new object[]{task.Description, task.IconId, task.IsActive, task.ParentId, task.Estimation, task.Hidden, task.Priority, task.Notes, task.AccountID, task.MatPath, task.Id});
 
 			for(int i = 0;i <tasks.Count;i++)
 			{
@@ -227,17 +248,7 @@ namespace PTM.Framework
 
 		public static string GetFullPath(int taskId)
 		{
-			Task task;
-			task = InternalFindById(taskId);
-            ArrayList parents = new ArrayList();
-			Task cur = task;
-			while (true)
-			{
-				if (cur.ParentId==-1)
-					break;
-				parents.Insert(0, cur);
-				cur = InternalFindById(cur.ParentId);
-			}
+            ArrayList parents = GetFullParentList(taskId);
 			StringBuilder path = new StringBuilder();
 			foreach (Task tasksRow in parents)
 			{
@@ -248,6 +259,36 @@ namespace PTM.Framework
 			else
 				return String.Empty;
 		}
+
+        public static string GetMaterializedPath(int taskId)
+        {
+            ArrayList parents = GetFullParentList(taskId);
+            StringBuilder matpath = new StringBuilder();
+            foreach (Task tasksRow in parents)
+            {
+                matpath.Append(String.Format("{0:0000}", tasksRow.Id)+ @"/");
+            }
+            if (matpath.Length > 0)
+                return matpath.ToString(0, matpath.Length - 1);
+            else
+                return String.Empty;
+        }
+
+        private static ArrayList GetFullParentList(int taskId)
+        {
+            Task task;
+            task = InternalFindById(taskId);
+            ArrayList parents = new ArrayList();
+            Task cur = task;
+            while (true)
+            {
+                if (cur.ParentId == -1)
+                    break;
+                parents.Insert(0, cur);
+                cur = InternalFindById(cur.ParentId);
+            }
+            return parents;
+        }
 
 		public static int IsParent(int parentTaskId, int childTaskId)
 		{
@@ -334,6 +375,11 @@ namespace PTM.Framework
                 else
                     task.AccountID = (string)row["AccountID"];
 
+                if (row["MatPath"] == DBNull.Value)
+                    task.MatPath = String.Empty;
+                else
+                    task.MatPath= (string)row["MatPath"];
+
 				tasks.Add(task);
 			}
 			if (tasks.Count == 0)
@@ -405,9 +451,9 @@ namespace PTM.Framework
 		private static void InsertTask(ref Task task)
 		{
 			task.Id = DbHelper.ExecuteInsert(
-                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes, AccountID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                new string[] { "Description", "IconId", "IsActive", "ParentId", "Hidden", "Priority", "Notes", "AccountID" },
-				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId, task.Hidden, task.Priority, task.Notes, task.AccountID});
+                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes, AccountID, MatPath) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                new string[] { "Description", "IconId", "IsActive", "ParentId", "Hidden", "Priority", "Notes", "AccountID", "MatPath"},
+				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId, task.Hidden, task.Priority, task.Notes, task.AccountID, task.MatPath});
 		}
         
 		private static void ValidateTaskData(ref Task task)
@@ -419,6 +465,7 @@ namespace PTM.Framework
 			if (task.Description.Length == 0)
 				throw new ApplicationException("Description can't be empty");
 
+            task.MatPath = Tasks.GetMaterializedPath(task.Id);
             task.AccountID = task.AccountID.Trim();
 	
 		}
