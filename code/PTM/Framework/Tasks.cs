@@ -451,7 +451,7 @@ namespace PTM.Framework
 		private static void InsertTask(ref Task task)
 		{
 			task.Id = DbHelper.ExecuteInsert(
-                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes, AccountID, MatPath) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO Tasks(Description, IconId, IsActive, ParentId, Hidden, Priority, Notes, AccountID, MatPath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 new string[] { "Description", "IconId", "IsActive", "ParentId", "Hidden", "Priority", "Notes", "AccountID", "MatPath"},
 				new object[] {task.Description, task.IconId, task.IsActive, task.ParentId, task.Hidden, task.Priority, task.Notes, task.AccountID, task.MatPath});
 		}
