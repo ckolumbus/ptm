@@ -90,9 +90,9 @@ namespace PTM.View.Forms
             this.deleteButton = new System.Windows.Forms.Button();
             this.newButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tasksTree = new PTM.View.Controls.TasksTreeViewControl();
             this.propertiesButton = new System.Windows.Forms.Button();
             this.showHiddenCheckBox = new System.Windows.Forms.CheckBox();
-            this.tasksTree = new PTM.View.Controls.TasksTreeViewControl();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -148,9 +148,9 @@ namespace PTM.View.Forms
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox1.Controls.Add(this.tasksTree);
             this.groupBox1.ForeColor = System.Drawing.Color.Blue;
@@ -160,6 +160,18 @@ namespace PTM.View.Forms
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Choose a task";
+            // 
+            // tasksTree
+            // 
+            this.tasksTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tasksTree.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tasksTree.Location = new System.Drawing.Point(6, 18);
+            this.tasksTree.Name = "tasksTree";
+            this.tasksTree.ShowHidden = false;
+            this.tasksTree.Size = new System.Drawing.Size(278, 400);
+            this.tasksTree.TabIndex = 0;
             // 
             // propertiesButton
             // 
@@ -183,23 +195,10 @@ namespace PTM.View.Forms
             this.showHiddenCheckBox.UseVisualStyleBackColor = true;
             this.showHiddenCheckBox.CheckedChanged += new System.EventHandler(this.showHiddenCheckBox_CheckedChanged);
             // 
-            // tasksTree
-            // 
-            this.tasksTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tasksTree.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tasksTree.Location = new System.Drawing.Point(6, 18);
-            this.tasksTree.Name = "tasksTree";
-            this.tasksTree.ShowHidden = false;
-            this.tasksTree.Size = new System.Drawing.Size(278, 400);
-            this.tasksTree.TabIndex = 0;
-            // 
             // TaskSelectForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(392, 476);
             this.Controls.Add(this.showHiddenCheckBox);
