@@ -43,8 +43,9 @@ namespace PTM.View.Controls
             this.mnuRename = new System.Windows.Forms.MenuItem();
             this.mnuDelete = new System.Windows.Forms.MenuItem();
             this.treeView = new PTM.View.Controls.TreeListViewComponents.TreeListView();
-            this.tasksColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.priorityColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.tasksColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.priorityColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.accountColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // treeMenu
@@ -96,7 +97,8 @@ namespace PTM.View.Controls
             this.treeView.AllowDrop = true;
             this.treeView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.tasksColumnHeader,
-            this.priorityColumnHeader});
+            this.priorityColumnHeader,
+            this.accountColumnHeader});
             treeListViewItemCollectionComparer1.Column = 0;
             treeListViewItemCollectionComparer1.SortOrder = System.Windows.Forms.SortOrder.Ascending;
             this.treeView.Comparer = treeListViewItemCollectionComparer1;
@@ -115,12 +117,17 @@ namespace PTM.View.Controls
             // tasksColumnHeader
             // 
             this.tasksColumnHeader.Text = "Tasks";
-            this.tasksColumnHeader.Width = 209;
+            this.tasksColumnHeader.Width = 140;
             // 
             // priorityColumnHeader
             // 
             this.priorityColumnHeader.Text = "Priority";
             this.priorityColumnHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // accountColumnHeader
+            // 
+            this.accountColumnHeader.Text = "Account";
+            this.accountColumnHeader.Width = 64;
             // 
             // TasksTreeViewControl
             // 
@@ -144,6 +151,7 @@ namespace PTM.View.Controls
         private ColumnHeader priorityColumnHeader;
         private MenuItem mnuAdd;
 	    private bool showHidden;
+        private ColumnHeader accountColumnHeader;
         public const string NEW_TASK = "New Task";
 
 
@@ -363,7 +371,7 @@ namespace PTM.View.Controls
         {
             TreeListViewItem node; // = new TreeListViewItem(task.Description, task.IconId);
             string priority = task.Priority > 0 ? task.Priority.ToString() : String.Empty;
-            node = new TreeListViewItem(task.Description, new string[] { priority });
+            node = new TreeListViewItem(task.Description, new string[] { priority, task.AccountID });
             node.ImageIndex = task.IconId;
             node.Tag = task.Id;
             return node;
@@ -731,6 +739,7 @@ namespace PTM.View.Controls
                 node.Text = e.Task.Description;
                 node.ImageIndex = e.Task.IconId;
                 string priority = e.Task.Priority == 0 ? String.Empty : e.Task.Priority.ToString();
+                node.SubItems[accountColumnHeader.Index].Text = e.Task.AccountID;
                 node.SubItems[priorityColumnHeader.Index].Text = priority;
             }
         }
