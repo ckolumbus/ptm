@@ -121,13 +121,14 @@ namespace PTM.View.Controls
             // 
             // priorityColumnHeader
             // 
-            this.priorityColumnHeader.Text = "Priority";
+            this.priorityColumnHeader.Text = "Prio";
             this.priorityColumnHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.priorityColumnHeader.Width = 40;
             // 
             // accountColumnHeader
             // 
             this.accountColumnHeader.Text = "Account";
-            this.accountColumnHeader.Width = 64;
+            this.accountColumnHeader.Width = 90;
             // 
             // TasksTreeViewControl
             // 
