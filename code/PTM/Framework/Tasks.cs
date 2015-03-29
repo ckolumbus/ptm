@@ -280,12 +280,15 @@ namespace PTM.Framework
             task = InternalFindById(taskId);
             ArrayList parents = new ArrayList();
             Task cur = task;
-            while (true)
+            if (null != cur)
             {
-                if (cur.ParentId == -1)
-                    break;
-                parents.Insert(0, cur);
-                cur = InternalFindById(cur.ParentId);
+                while (true)
+                {
+                    if (cur.ParentId == -1)
+                        break;
+                    parents.Insert(0, cur);
+                    cur = InternalFindById(cur.ParentId);
+                }
             }
             return parents;
         }
