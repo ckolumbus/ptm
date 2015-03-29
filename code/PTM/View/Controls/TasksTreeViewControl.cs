@@ -708,8 +708,10 @@ namespace PTM.View.Controls
 			if(Tasks.RootTask.Id == (int) treeView.SelectedItems[0].Tag)
                 return;
             TaskPropertiesForm pf;
+            TreeListViewItem ti = treeView.SelectedItems[0];
 			pf = new TaskPropertiesForm((int) treeView.SelectedItems[0].Tag);
 			pf.ShowDialog(this);
+            ti.Selected = true;
 		}
 
 		private void mnuProperties_Click(object sender, EventArgs e)
