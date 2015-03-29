@@ -41,10 +41,11 @@ namespace PTM
 		private MenuItem menuItem6;
 		private MenuItem menuItem3;
 		private MenuItem menuItem7;
-		private bool AnimationDisabled = false;
+		//private bool AnimationDisabled = false;
 
 		internal MainForm()
 		{
+            components = null;
 			InitializeComponent();
 			Application.DoEvents();
 			InitializeTabPages();

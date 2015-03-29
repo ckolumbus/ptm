@@ -22,6 +22,7 @@ namespace PTM.View.Forms
 			//
 			// Required for Windows Form Designer support
 			//
+            components = null;
 			InitializeComponent();
 			lblVersion.Text += ConfigurationHelper.GetVersionString();
 

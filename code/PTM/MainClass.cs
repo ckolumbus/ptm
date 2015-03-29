@@ -27,7 +27,7 @@ namespace PTM
 		/// <summary>
 		/// MemoryMappedFile to share between instances
 		/// </summary>
-		internal static MemoryMappedFile sharedMemory;
+		//internal static MemoryMappedFile sharedMemory;
 
 
 		/// <summary>

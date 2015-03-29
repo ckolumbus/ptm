@@ -133,7 +133,9 @@ namespace Microsoft.Win32
                 m_hookType,
                 m_filterFunc,
                 IntPtr.Zero,
-                AppDomain.GetCurrentThreadId());
+                Thread.CurrentThread.ManagedThreadId
+                //AppDomain.GetCurrentThreadId()
+                );
 		}
 
 		// ************************************************************************

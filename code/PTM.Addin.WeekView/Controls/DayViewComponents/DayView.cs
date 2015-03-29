@@ -30,7 +30,7 @@ namespace Calendar
         private int hourLabelIndent = 2;
         private int dayHeadersHeight = 20;
         private int appointmentGripWidth = 5;
-        private int horizontalAppointmentHeight = 20;
+        //private int horizontalAppointmentHeight = 20;
 
         #endregion
 
@@ -1124,11 +1124,11 @@ namespace Calendar
 
         #region Internal Utility Classes
 
-        class HalfHourLayout
-        {
-            public int Count;
-            public Appointment[] Appointments;
-        }
+        //class HalfHourLayout
+        //{
+        //    public int Count;
+        //    public Appointment[] Appointments;
+        //}
 
 //        internal class AppointmentView
 //        {

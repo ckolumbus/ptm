@@ -312,6 +312,7 @@ namespace Microsoft.Win32
 
 		private struct Win32
 		{
+            [StructLayout(LayoutKind.Sequential)]
 			public struct MOUSEHOOKSTRUCT
 			{
 				public POINT pt;
@@ -320,7 +321,8 @@ namespace Microsoft.Win32
 				public IntPtr dwExtraInfo;
 			}
 
-			public struct POINT
+            [StructLayout(LayoutKind.Sequential)]
+            public struct POINT
 			{
 				public int x;
 				public int y;

@@ -22,6 +22,7 @@ namespace PTM.View.Forms
 
 		internal TasksExplorerForm()
 		{
+            components = null;
 			InitializeComponent();
 			tasksTreeViewControl.SelectedTaskChanged += new EventHandler(TreeView_AfterSelect);
             tasksTreeViewControl.DoubleClick += new EventHandler(tasksTreeViewControl_DoubleClick);

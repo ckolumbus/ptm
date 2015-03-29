@@ -133,7 +133,7 @@ namespace Calendar
         {
         }
 
-        internal int m_ConflictCount;
+        //internal int m_ConflictCount;
     	
     	 public Rectangle Rectangle;
     }

@@ -246,7 +246,7 @@ namespace System.Runtime.InteropServices.APIs
 	
 		#region NMHDR
 
-//		[StructLayout(LayoutKind.Sequential)]
+		[StructLayout(LayoutKind.Sequential)]
 		internal struct NMHDR
 		{
 			internal IntPtr hwndFrom;
