@@ -140,6 +140,36 @@ namespace PTM.Data
 			}
 		}
 
+        public static IDictionary ExecuteGetFirstRow(string cmdText, string[] paramNames, object[] paramValues)
+        {
+            OleDbCommand cmd;
+            cmd = GetNewCommand(cmdText);
+            for (int i = 0; i < paramValues.Length; i++)
+            {
+                OleDbParameter param = new OleDbParameter(paramNames[i], GetOleDbType(paramValues[i]));
+                param.Value = paramValues[i];
+                param.SourceColumn = paramNames[i];
+                cmd.Parameters.Add(param);
+            }
+            try
+            {
+                cmd.Connection.Open();
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (!reader.HasRows)
+                    return null;
+                ListDictionary listDictionary = new ListDictionary();
+                reader.Read();
+                for (int i = 0; i < reader.FieldCount; i++)
+                    listDictionary.Add(reader.GetName(i), reader[i]);
+                reader.Close();
+                return listDictionary;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
+        }
+
 		public static ArrayList ExecuteGetRows(string cmdText)
 		{
 			OleDbCommand cmd;
